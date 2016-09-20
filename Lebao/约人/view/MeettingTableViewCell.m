@@ -21,12 +21,15 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-    [self.contentView addSubview:self.asyncDisplayView];
-    [self.contentView addSubview:self.meetingBtn];
-    [self.contentView.layer addSublayer:self.cellline];
-    [self.contentView.layer addSublayer:self.line1];
-    [self.contentView.layer addSublayer:self.line2];
-       
+        [self.contentView addSubview:self.asyncDisplayView];
+        [self.contentView addSubview:self.meetingBtn];
+        [self.contentView addSubview:self.messageBtn];
+        [self.contentView addSubview:self.refuseBtn];
+        [self.contentView addSubview:self.agreeBtn];
+        [self.contentView.layer addSublayer:self.cellline];
+        [self.contentView.layer addSublayer:self.line1];
+        [self.contentView.layer addSublayer:self.line2];
+        
     }
     return self;
 }
@@ -38,6 +41,9 @@
     self.asyncDisplayView.frame = CGRectMake(0,0,SCREEN_WIDTH,self.cellLayout.cellHeight);
     self.cellline.frame = self.cellLayout.cellMarginsRect;
     self.meetingBtn.frame = self.cellLayout.meetBtnRect;
+    self.messageBtn.frame=self.cellLayout.messageBtnRect;
+    self.agreeBtn.frame=self.cellLayout.agreeBtnRect;
+    self.refuseBtn.frame=self.cellLayout.refuseBtnRect;
     self.line1.frame = self.cellLayout.line1Rect;
     self.line2.frame = self.cellLayout.line2Rect;
 }
@@ -83,6 +89,49 @@
     return _meetingBtn;
     
 }
+- (UIButton *)messageBtn
+{
+    if (!_messageBtn) {
+        _messageBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+        [_messageBtn setImage:[UIImage imageNamed:@"duihua"] forState:UIControlStateNormal];
+        _messageBtn.layer.cornerRadius=15;
+        [_messageBtn addTarget:self action:@selector(messageBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    
+    return _messageBtn;
+    
+}
+- (UIButton *)refuseBtn
+{
+    if (!_refuseBtn) {
+        _refuseBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+        _refuseBtn.titleLabel.font=[UIFont systemFontOfSize:13];
+        _refuseBtn.backgroundColor=[UIColor orangeColor];
+        [_refuseBtn setTitle:@"拒绝" forState:UIControlStateNormal];
+        [_refuseBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        _refuseBtn.layer.cornerRadius=12;
+        [_refuseBtn addTarget:self action:@selector(refuseBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    
+    return _refuseBtn;
+    
+}
+- (UIButton *)agreeBtn
+{
+    if (!_agreeBtn) {
+        _agreeBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+        _agreeBtn.titleLabel.font=[UIFont systemFontOfSize:13];
+        _agreeBtn.backgroundColor=AppMainColor;
+        [_agreeBtn setTitle:@"同意" forState:UIControlStateNormal];
+        [_agreeBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        _agreeBtn.layer.cornerRadius=12;
+        [_agreeBtn addTarget:self action:@selector(agreeBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    
+    return _agreeBtn;
+    
+}
+
 - (CALayer *)line1
 {
     if (!_line1) {
@@ -110,6 +159,24 @@
         [_delegate tableViewCellDidSeleteMeetingBtn:sender andIndexPath:_indexPath];
     }
 }
+- (void)messageBtnClick:(UIButton *)sender
+{
+    if ([_delegate conformsToProtocol:@protocol(MeettingTableViewDelegate)]&&[_delegate respondsToSelector:@selector(tableViewCellDidSeleteMeetingBtn: andIndexPath:)]) {
+        [_delegate tableViewCellDidSeleteMessageBtn:sender andIndexPath:_indexPath];
+    }
+}
+- (void)refuseBtnClick:(UIButton *)sender
+{
+    if ([_delegate conformsToProtocol:@protocol(MeettingTableViewDelegate)]&&[_delegate respondsToSelector:@selector(tableViewCellDidSeleteMeetingBtn: andIndexPath:)]) {
+        [_delegate tableViewCellDidSeleteRefuseBtn:sender andIndexPath:_indexPath];
+    }
+}
+- (void)agreeBtnClick:(UIButton *)sender
+{
+    if ([_delegate conformsToProtocol:@protocol(MeettingTableViewDelegate)]&&[_delegate respondsToSelector:@selector(tableViewCellDidSeleteMeetingBtn: andIndexPath:)]) {
+        [_delegate tableViewCellDidSeleteAgreeBtn:sender andIndexPath:_indexPath];
+    }
+}
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
@@ -117,7 +184,7 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
+    
     // Configure the view for the selected state
 }
 

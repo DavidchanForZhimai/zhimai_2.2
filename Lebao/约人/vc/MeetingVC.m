@@ -184,7 +184,7 @@
                     
                     
                     [self.CellSouceArr addObject:data];
-                    [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data]];
+                    [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andMessageBtn:NO andOprationBtn:NO]];
                     
                     if (data.imgurl!=nil) {
                         [self.headimgArr addObject:data.imgurl];

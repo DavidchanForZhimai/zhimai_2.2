@@ -14,7 +14,7 @@
 @implementation WantMeetLayout
 
 
-- (WantMeetLayout *)initCellLayoutWithModel:(MeetingData *)model andBtn:(BOOL )Btn andTelBtn:(BOOL)TelBtn
+- (WantMeetLayout *)initCellLayoutWithModel:(MeetingData *)model andMeetBtn:(BOOL)meetBtn andTelBtn:(BOOL)TelBtn
 {
     self = [super init];
     if (self) {
@@ -67,7 +67,7 @@
         industryTextStorage.font = Size(24.0);
         industryTextStorage.frame = CGRectMake(nameTextStorage.left, nameTextStorage.bottom + 8, nameTextStorage.width, CGFLOAT_MAX);
         
-        if (Btn) {
+        if (meetBtn) {
             //约见按钮
             _meetBtnRect = CGRectMake(APPWIDTH-70, 20, 60, 30);
         }

@@ -17,7 +17,7 @@
 #import "EjectView.h"
 #import "MeetPaydingVC.h"
 #import "NSString+Extend.h"
-#import "GzHyViewController.h"//关注行业
+
 @interface MyConnectionsVC ()<UITableViewDelegate,UITableViewDataSource,EjectViewDelegate,MeettingTableViewDelegate,UIAlertViewDelegate>
 {
     BOOL audioMark;
@@ -125,7 +125,7 @@
                     
                     
                     [self.CellSouceArr addObject:data];
-                    [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data]];
+                    [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andMessageBtn:YES andOprationBtn:NO]];
                     
                                   }
                 
@@ -156,7 +156,7 @@
 {
     _yrTab=[[UITableView alloc]init];
     //    [_yrTab registerClass:[MeetingTVCell class] forCellReuseIdentifier:@"yrCell"];
-    _yrTab.frame=CGRectMake(0,StatusBarHeight + NavigationBarHeight+10, APPWIDTH, APPHEIGHT-(StatusBarHeight + NavigationBarHeight + TabBarHeight-10));
+    _yrTab.frame=CGRectMake(0,StatusBarHeight + NavigationBarHeight, APPWIDTH, APPHEIGHT-(StatusBarHeight + NavigationBarHeight + TabBarHeight));
     _yrTab.delegate=self;
     _yrTab.dataSource=self;
     _yrTab.backgroundColor=[UIColor clearColor];
@@ -278,7 +278,10 @@
     alertV.title2Str=@"您需要打赏一定的约见费";
     alertV.indexth=indexPath;
 }
-
+//对话按钮的点击
+- (void)tableViewCellDidSeleteMessageBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath{
+    
+}
 
 #pragma mark - YXCustomAlertViewDelegate
 - (void) customAlertView:(EjectView *) customAlertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -349,7 +352,12 @@
     }
 }
 
-
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    
+    return 10;
+    
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

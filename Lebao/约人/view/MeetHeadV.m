@@ -37,64 +37,69 @@
 {
     
    
-    self.backgroundColor=[UIColor clearColor];
-    UIView *bgView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, APPWIDTH, 200)];
+//    self.backgroundColor=[UIColor clearColor];
+//    UIView *bgView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, APPWIDTH, 200)];
+//    
+//    [self addSubview:bgView];
     
-    [self addSubview:bgView];
-    
-    UIImageView *bgImgV=[[UIImageView alloc]initWithFrame:bgView.bounds];
-    bgImgV.image=[UIImage imageNamed:@"wodeBG"];
-    [bgView addSubview:bgImgV];
-    
+//    UIImageView *bgImgV=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, APPWIDTH, 200)];
+//    bgImgV.userInteractionEnabled=YES;
+//    bgImgV.image=[UIImage imageNamed:@"wodeBG"];
+//    [self addSubview:bgImgV];
+    CALayer *bgImgV=[[CALayer alloc]init];
+    bgImgV.contents=(id)[UIImage imageNamed:@"wodeBG"].CGImage;
+    bgImgV.frame=CGRectMake(0, 0, APPWIDTH, 200);
+    [self.layer addSublayer:bgImgV];
     
     CALayer *vlayer1=[[CALayer alloc]init];
     vlayer1.shouldRasterize=YES;
-    vlayer1.frame=CGRectMake((bgView.width-110)/2.0, (bgView.height-110)/2.0, 110, 110);
+    vlayer1.frame=CGRectMake((bgImgV.frame.size.width-110)/2.0, (bgImgV.frame.size.height-110)/2.0, 110, 110);
     vlayer1.backgroundColor=[UIColor colorWithWhite:1.000 alpha:0.18].CGColor;
     vlayer1.cornerRadius=vlayer1.frame.size.width/2.0;
-    [bgImgV.layer addSublayer:vlayer1];
+    [bgImgV addSublayer:vlayer1];
     _timer1 =[NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(shake:) userInfo:vlayer1 repeats:YES];
     [[NSRunLoop currentRunLoop] addTimer:_timer1 forMode:UITrackingRunLoopMode];
     CALayer *vlayer2=[[CALayer alloc]init];
     vlayer2.shouldRasterize=YES;
-    vlayer2.frame=CGRectMake((bgView.width-95)/2.0, (bgView.height-95)/2.0, 95, 95);
+    vlayer2.frame=CGRectMake((bgImgV.frame.size.width-95)/2.0, (bgImgV.frame.size.height-95)/2.0, 95, 95);
     vlayer2.backgroundColor=[UIColor colorWithWhite:1.000 alpha:0.18].CGColor;
     vlayer2.cornerRadius=vlayer2.frame.size.width/2.0;
-    [bgImgV.layer addSublayer:vlayer2];
+    [bgImgV addSublayer:vlayer2];
     _timer2 =[NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(shake:) userInfo:vlayer2 repeats:YES];
     [[NSRunLoop currentRunLoop] addTimer:_timer2 forMode:UITrackingRunLoopMode];
     CALayer *vlayer3=[[CALayer alloc]init];
     vlayer3.shouldRasterize=YES;
-    vlayer3.frame=CGRectMake((bgView.width-80)/2.0, (bgView.height-80)/2.0, 80, 80);
+    vlayer3.frame=CGRectMake((bgImgV.frame.size.width-80)/2.0, (bgImgV.frame.size.height-80)/2.0, 80, 80);
     vlayer3.backgroundColor=[UIColor colorWithWhite:1.000 alpha:0.18].CGColor;
     vlayer3.cornerRadius=vlayer3.frame.size.width/2.0;
-    [bgImgV.layer addSublayer:vlayer3];
+    [bgImgV addSublayer:vlayer3];
     _timer3 =[NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(shake:) userInfo:vlayer3 repeats:YES];
     [[NSRunLoop currentRunLoop] addTimer:_timer3 forMode:UITrackingRunLoopMode];
     
 
     
-    UIView *underView=[[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(bgView.frame), APPWIDTH, 44)];
-    underView.backgroundColor=[UIColor whiteColor];
-    [self addSubview:underView];
+    CALayer *underView=[[CALayer alloc]init];
+                   underView.frame=CGRectMake(0, CGRectGetMaxY(bgImgV.frame), APPWIDTH, 44);
+    underView.backgroundColor=[UIColor whiteColor].CGColor;
+    [self.layer addSublayer:underView];
     _nearManLab=[[UILabel alloc]init];
-    _nearManLab.frame=CGRectMake(15, 10, 160, 20);
+    _nearManLab.frame=CGRectMake(15, 210, 160, 20);
     _nearManLab.textColor=[UIColor colorWithRed:0.424 green:0.427 blue:0.431 alpha:1.000];
     _nearManLab.textAlignment=NSTextAlignmentLeft;
     _nearManLab.font=[UIFont systemFontOfSize:15];
     _nearManLab.text=@"最近有空 99999999人";
-    [underView addSubview:_nearManLab];
+    [self addSubview:_nearManLab];
     
     
     UIButton *genduoBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    genduoBtn.frame=CGRectMake(APPWIDTH-44, 0, 44, 44);
+    genduoBtn.frame=CGRectMake(APPWIDTH-44, 200, 44, 44);
     [genduoBtn setImage:[UIImage imageNamed:@"gengduo"] forState:UIControlStateNormal];
     [genduoBtn addTarget:self action:@selector(genduoAction:)  forControlEvents:UIControlEventTouchUpInside];
-    [underView addSubview:genduoBtn];
+    [self addSubview:genduoBtn];
     
     
     _wantMeBtn=[UIButton buttonWithType:UIButtonTypeSystem];
-    _wantMeBtn.frame=CGRectMake(20, bgImgV.height-80, 60, 60);
+    _wantMeBtn.frame=CGRectMake(20, bgImgV.frame.size.height-80, 60, 60);
     _wantMeBtn.layer.cornerRadius=30;
     _wantMeBtn.layer.borderWidth=2;
     
@@ -105,10 +110,10 @@
 
     [_wantMeBtn addTarget:self action:@selector(wantMeClick:) forControlEvents:UIControlEventTouchUpInside];
     _wantMeBtn.tag=1000;
-    [bgView addSubview:_wantMeBtn];
+    [self addSubview:_wantMeBtn];
     
     _meWantBtn=[UIButton buttonWithType:UIButtonTypeSystem];
-    _meWantBtn.frame=CGRectMake(APPWIDTH-80, bgImgV.height-80, 60, 60);
+    _meWantBtn.frame=CGRectMake(APPWIDTH-80, bgImgV.frame.size.height-80, 60, 60);
     _meWantBtn.layer.cornerRadius=30;
     _meWantBtn.layer.borderWidth=2;
     _meWantBtn.titleLabel.textColor=WhiteColor;
@@ -119,7 +124,7 @@
 
     [_meWantBtn addTarget:self action:@selector(IwantClick:) forControlEvents:UIControlEventTouchUpInside];
     _meWantBtn.tag=1001;
-    [bgView addSubview:_meWantBtn];
+    [self addSubview:_meWantBtn];
     
     
     CAShapeLayer*layer1=[[CAShapeLayer alloc]init];
@@ -133,7 +138,7 @@
     layer1.shouldRasterize=YES;
     UIBezierPath *bezier1=[UIBezierPath bezierPathWithOvalInRect:layer1.bounds];
     layer1.path=bezier1.CGPath;
-    [bgView.layer addSublayer:layer1];
+    [bgImgV addSublayer:layer1];
     
     CAShapeLayer*layer2=[[CAShapeLayer alloc]init];
     layer2.frame=_meWantBtn.frame;
@@ -147,11 +152,11 @@
     UIBezierPath *bezier2=[UIBezierPath bezierPathWithOvalInRect:layer2.bounds];
     layer2.path=bezier2.CGPath;
     
-    [bgView.layer addSublayer:layer2];
+    [bgImgV addSublayer:layer2];
     
     
       _midBtn=[UIButton buttonWithType:UIButtonTypeSystem];
-    _midBtn.frame=CGRectMake((bgView.width-105)/2.0, (bgView.height-105)/2.0, 105, 105);
+    _midBtn.frame=CGRectMake((bgImgV.frame.size.width-105)/2.0, (bgImgV.frame.size.height-105)/2.0, 105, 105);
     _midBtn.backgroundColor=[UIColor colorWithRed:0.835 green:0.937 blue:0.988 alpha:1.000];
     _midBtn.layer.cornerRadius=_midBtn.width/2.0;
     _midBtn.layer.borderWidth=10;
@@ -184,7 +189,7 @@
                         NSStringFromCGRect(CGRectMake(_midBtn.x-40, _midBtn.y+50, 17, 17))];
     
     
-    __weak UIBezierPath *apath=[UIBezierPath bezierPath];
+//    __weak UIBezierPath *apath=[UIBezierPath bezierPath];
     
     CAShapeLayer *shapelayer = [CAShapeLayer layer];
     //设置边框颜色

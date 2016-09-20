@@ -13,7 +13,7 @@
 #import "NSString+Extend.h"
 @implementation MeetingCellLayout
 
-- (MeetingCellLayout *)initCellLayoutWithModel:(MeetingData *)model
+- (MeetingCellLayout *)initCellLayoutWithModel:(MeetingData *)model andMeetBtn:(BOOL)meetBtn andMessageBtn:(BOOL)messageBtn andOprationBtn:(BOOL)oprationBtn
 {
     self = [super init];
     if (self) {
@@ -65,12 +65,20 @@
         industryTextStorage.textColor = [UIColor colorWithRed:0.549 green:0.5569 blue:0.5608 alpha:1.0];
         industryTextStorage.font = Size(24.0);
         industryTextStorage.frame = CGRectMake(nameTextStorage.left, nameTextStorage.bottom + 8, nameTextStorage.width, CGFLOAT_MAX);
-        
+        if(meetBtn){
         //约见按钮
         _meetBtnRect = CGRectMake(APPWIDTH-70, 20, 60, 30);
+        }
         _line1Rect  = CGRectMake(0, _avatarStorage.bottom + 10, APPWIDTH, 0.5);
         
+        if (messageBtn) {
+            _messageBtnRect=CGRectMake(APPWIDTH-108, 20, 30, 30);
+        }
         
+        if (oprationBtn) {
+            _refuseBtnRect=CGRectMake(APPWIDTH-120, 20, 50, 30);
+            _agreeBtnRect=CGRectMake(APPWIDTH-60, 20, 50, 30);
+        }
         LWTextStorage *productTextStorage=[[LWTextStorage alloc]init];
         productTextStorage.text=@"产品服务";
         productTextStorage.font=Size(26.0);

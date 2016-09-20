@@ -266,13 +266,13 @@
                
                 for (MeetingData *data in modal.datas) {
                     if ([state isEqualToString:@"10"]) {
-                        [arr addObject:[[WantMeetLayout alloc]initCellLayoutWithModel:data andBtn:YES andTelBtn:NO]];
+                        [arr addObject:[[WantMeetLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andTelBtn:NO]];
                         [self.oprationSourceArr addObject:data];
                     }else if ([state isEqualToString:@"20"]) {
-                        [arr addObject:[[WantMeetLayout alloc]initCellLayoutWithModel:data andBtn:NO andTelBtn:YES]];
+                        [arr addObject:[[WantMeetLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andTelBtn:YES]];
                         [self.agreeSourceArr addObject:data];
                     }else if ([state isEqualToString:@"90"]) {
-                        [arr addObject:[[WantMeetLayout alloc]initCellLayoutWithModel:data andBtn:NO andTelBtn:NO]];
+                        [arr addObject:[[WantMeetLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andTelBtn:NO]];
                     }
                     
                 }

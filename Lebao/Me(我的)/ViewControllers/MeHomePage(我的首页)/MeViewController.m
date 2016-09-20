@@ -21,6 +21,7 @@
 #import "MyDetialViewController.h"
 #import "AuthenticationHomeViewController.h"
 #import "OtherDynamicdViewController.h"
+#import "MeetSucceedVC.h"
 #define cellH  40
 #define PersonalURL [NSString stringWithFormat:@"%@user/index",HttpURL]
 @interface MeViewController ()<UITableViewDataSource,UITableViewDelegate>
@@ -239,12 +240,13 @@
         attention.didClickBtnBlock = ^
         {
             [[ToolManager shareInstance].drawerController closeDrawerAnimated:YES completion:^(BOOL finished) {
-                [[ToolManager shareInstance] showAlertMessage:@"暂未开放"];
-                //                UITabBarController *tabBar = (UITabBarController *)[ToolManager shareInstance].drawerController.centerViewController;
-                //                UINavigationController *nav =(UINavigationController *)tabBar.viewControllers[getAppDelegate().mainTab.selectedIndex];
-                //
-                //
-                //                [nav pushViewController:allocAndInit(MyGuanZhuVC)animated:YES];
+                
+                UITabBarController *tabBar = (UITabBarController *)[ToolManager shareInstance].drawerController.centerViewController;
+                UINavigationController *nav =(UINavigationController *)tabBar.viewControllers[getAppDelegate().mainTab.selectedIndex];
+                
+                MeetSucceedVC *otherDynamicdVC = allocAndInit(MeetSucceedVC);
+//
+                [nav pushViewController:otherDynamicdVC animated:YES];
                 
             }];
             

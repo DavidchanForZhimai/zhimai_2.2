@@ -54,6 +54,7 @@
     if (_cellLayout == cellLayout) {
         return;
     }
+    
     _cellLayout = cellLayout;
     self.asyncDisplayView.layout = self.cellLayout;
     
