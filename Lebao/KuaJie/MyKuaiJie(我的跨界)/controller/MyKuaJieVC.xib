@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MyKuaJieVC">
+            <connections>
+                <outlet property="bottomV" destination="NaR-9K-Iye" id="SWF-vN-Ptn"/>
+                <outlet property="myFabuBtn" destination="RNF-uA-v7d" id="AXz-yT-2KO"/>
+                <outlet property="myLinquBtn" destination="Wty-IX-Dcv" id="L5v-EK-6do"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NaR-9K-Iye">
+                    <rect key="frame" x="0.0" y="65" width="320" height="30"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RNF-uA-v7d">
+                            <rect key="frame" x="0.0" y="0.0" width="160" height="30"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <state key="normal" title="我的发布">
+                                <color key="titleColor" red="0.47843137254901963" green="0.47843137254901963" blue="0.47843137254901963" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
+                            <state key="selected">
+                                <color key="titleColor" red="0.29411764705882354" green="0.58039215686274515" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="fabuAction:" destination="-1" eventType="touchUpInside" id="dqb-lv-jRa"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wty-IX-Dcv">
+                            <rect key="frame" x="160" y="0.0" width="160" height="30"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <state key="normal" title="我的领取">
+                                <color key="titleColor" red="0.43529411764705883" green="0.43529411764705883" blue="0.43529411764705883" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
+                            <state key="selected">
+                                <color key="titleColor" red="0.30196078431372547" green="0.58039215686274515" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="linquAction:" destination="-1" eventType="touchUpInside" id="miE-K6-hvN"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="Wty-IX-Dcv" firstAttribute="leading" secondItem="RNF-uA-v7d" secondAttribute="trailing" id="7gK-de-C0j"/>
+                        <constraint firstAttribute="trailing" secondItem="Wty-IX-Dcv" secondAttribute="trailing" id="Wf4-Wc-9Ob"/>
+                        <constraint firstAttribute="height" constant="30" id="azr-Ii-ava"/>
+                        <constraint firstItem="RNF-uA-v7d" firstAttribute="top" secondItem="NaR-9K-Iye" secondAttribute="top" id="hfA-KT-hVn"/>
+                        <constraint firstItem="Wty-IX-Dcv" firstAttribute="height" secondItem="RNF-uA-v7d" secondAttribute="height" id="lzF-Wb-NSw"/>
+                        <constraint firstItem="Wty-IX-Dcv" firstAttribute="centerY" secondItem="RNF-uA-v7d" secondAttribute="centerY" id="n6n-7N-sAx"/>
+                        <constraint firstAttribute="bottom" secondItem="RNF-uA-v7d" secondAttribute="bottom" id="nn8-s9-YtR"/>
+                        <constraint firstItem="Wty-IX-Dcv" firstAttribute="width" secondItem="RNF-uA-v7d" secondAttribute="width" id="oZH-Qf-2FK"/>
+                        <constraint firstItem="RNF-uA-v7d" firstAttribute="leading" secondItem="NaR-9K-Iye" secondAttribute="leading" id="y1a-82-G0r"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="NaR-9K-Iye" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="9fN-9W-5y1"/>
+                <constraint firstItem="NaR-9K-Iye" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="64.5" id="SiC-Eu-PVS"/>
+                <constraint firstAttribute="trailing" secondItem="NaR-9K-Iye" secondAttribute="trailing" id="y7u-Np-mDE"/>
+            </constraints>
+            <point key="canvasLocation" x="204" y="367"/>
+        </view>
+    </objects>
+</document>

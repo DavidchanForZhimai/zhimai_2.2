@@ -1,0 +1,51 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "5C0373D08D6547EEDF73DF4AD04549DC39AEAA42",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "985CF1C47124FE3CF3C7CDBFBDE48819E8747045" : 0,
+    "88D76130E7EEF3F405FC9B903745B51430EA1F17" : 0,
+    "56CDAB7623D1703C5A1FC8D5575A73DFEB758443" : 0,
+    "5C0373D08D6547EEDF73DF4AD04549DC39AEAA42" : 0,
+    "781483BE7427AE9FAE952787F1C41718DCB8825F" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "DCD87906-714C-49D8-9D86-CE578318A3A7",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "985CF1C47124FE3CF3C7CDBFBDE48819E8747045" : "",
+    "88D76130E7EEF3F405FC9B903745B51430EA1F17" : "Zhimai_V2.1\/",
+    "56CDAB7623D1703C5A1FC8D5575A73DFEB758443" : "Zhimai_V2.0\/",
+    "5C0373D08D6547EEDF73DF4AD04549DC39AEAA42" : "zhimai_2.2\/",
+    "781483BE7427AE9FAE952787F1C41718DCB8825F" : "Lebao\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Lebao",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Lebao.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/DavidchanForZhimai\/Zhimai_V2.0.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "56CDAB7623D1703C5A1FC8D5575A73DFEB758443"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/DavidchanForZhimai\/zhimai_2.2",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "5C0373D08D6547EEDF73DF4AD04549DC39AEAA42"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/git.coding.net\/davidchan\/LeFu.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "781483BE7427AE9FAE952787F1C41718DCB8825F"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/DavidchanForZhimai\/Zhimai_V2.1",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "88D76130E7EEF3F405FC9B903745B51430EA1F17"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/DavidchanForZhimai\/Zhimai.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "985CF1C47124FE3CF3C7CDBFBDE48819E8747045"
+    }
+  ]
+}
