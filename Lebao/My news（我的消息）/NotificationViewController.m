@@ -10,7 +10,8 @@
 #import "MeCell.h"
 #import "XLDataService.h"
 #import "MessageCell.h"
-#import "CommunicationViewController.h"
+//#import "CommunicationViewController.h"
+#import "GJGCChatFriendViewController.h"
 #import "NotificationDetailViewController.h"
 #import "NotificationSettingViewController.h"
 #import "CustomerServiceViewController.h"
@@ -35,6 +36,8 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    
     if ([CoreArchive strForKey:@"isread"]) {
         [self.homePageBtn setImage:[UIImage imageNamed:@"icon_dicover_me_selected"] forState:UIControlStateNormal];
     }
@@ -44,6 +47,31 @@
         [self.homePageBtn setImage:[UIImage imageNamed:@"icon_dicover_me"] forState:UIControlStateNormal];
     }
     
+    if (GJCFSystemVersionIs7) {
+        self.edgesForExtendedLayout = UIRectEdgeBottom;
+    }
+    else
+    {
+        self.navigationController.navigationBar.translucent=YES;
+        [self.navigationController setNavigationBarHidden:YES animated:YES];
+    }
+
+
+    
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    if (GJCFSystemVersionIs7) {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
+    else
+    {
+        self.navigationController.navigationBar.translucent=NO;
+    }
+     [self.navigationController setNavigationBarHidden:NO animated:YES];
+
 }
 
 - (void)viewDidLoad {
@@ -65,6 +93,7 @@
 - (void)navView
 {
     [self navViewTitle:@"消息"];
+    
     _notificationArray = allocAndInit(NSMutableArray);
     _secondNotificationArray = allocAndInit(NSMutableArray);
      NSArray *_sectionOne =[NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"系统消息",@"name",@"icon_message_xitongxiaoxi",@"image",@"1",@"show",@"",@"viewController",nil],[NSDictionary dictionaryWithObjectsAndKeys:@"知脉头条",@"name",@"icon_message_toutiao",@"image" ,@"1",@"show",@"",@"viewController",nil] ,[NSDictionary dictionaryWithObjectsAndKeys:@"我的人脉",@"name",@"icon_message_woderenmai",@"image" ,@"0",@"show",@"MyConnectionsVC",@"viewController",nil],nil];
@@ -262,12 +291,24 @@
         
     }
     if (indexPath.section==1) {
-        CommunicationViewController *community = allocAndInit(CommunicationViewController);
+//        CommunicationViewController *community = allocAndInit(CommunicationViewController);
+//        NSArray * _sectionArray = _notificationArray[indexPath.section];
+//        NotificationData *data=   _sectionArray[indexPath.row];
+//        community.senderid = data.senderid;
+//        community.chatType = ChatMessageTpye;
+//        PushView(self, community);
+        
         NSArray * _sectionArray = _notificationArray[indexPath.section];
         NotificationData *data=   _sectionArray[indexPath.row];
-        community.senderid = data.senderid;
-        community.chatType = ChatMessageTpye;
-        PushView(self, community);
+        GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
+        talk.talkType = GJGCChatFriendTalkTypePrivate;
+        talk.toId = data.senderid;
+        talk.toUserName = data.realname;
+        
+        GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
+        
+        [self.navigationController pushViewController:privateChat animated:YES];
+
         MessageCell *cell  = [tableView cellForRowAtIndexPath:indexPath];
         cell.message.hidden = YES;
     }

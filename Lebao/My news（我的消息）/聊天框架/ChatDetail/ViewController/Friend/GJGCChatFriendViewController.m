@@ -57,8 +57,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    
+    // Do any additional setup after loading the view.s
     [self setRightButtonWithStateImage:@"title-icon-个人资料" stateHighlightedImage:nil stateDisabledImage:nil titleName:nil];
     
     /* 语音播放工具 */
@@ -157,11 +156,13 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
+
 }
 
 #pragma mark - GJCFAudioPlayer Delegate
 - (void)audioPlayer:(GJCFAudioPlayer *)audioPlay didFinishPlayAudio:(GJCFAudioModel *)audioFile
 {
+   
     dispatch_async(dispatch_get_main_queue(), ^{
        
         [self stopPlayCurrentAudio];
@@ -510,6 +511,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
 
 - (void)audioMessageCellDidTap:(GJGCChatBaseCell *)tapedCell
 {
+    
     NSIndexPath *indexPath = [self.chatListTable indexPathForCell:tapedCell];
     
     // 如果点击的是自己，那么停止了就不往下走了。如果
@@ -523,7 +525,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
         
         return;
     }
-    
+    NSLog(@"audioMessageCellDidTap");
     [self stopPlayCurrentAudio];
     self.playingAudioMsgId = contentModel.localMsgId;
     
@@ -681,8 +683,10 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
 
 #pragma mark - 语音播放
 
+
 - (void)downloadAndPlayAudioAtRowIndex:(NSIndexPath *)rowIndex
 {
+  
     GJGCChatFriendContentModel *contentModel = (GJGCChatFriendContentModel *)[self.dataSourceManager contentModelAtIndex:rowIndex.row];
     
     [GJCFAudioFileUitil setupAudioFileTempEncodeFilePath:contentModel.audioModel];
@@ -717,7 +721,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
     NSString *localStorePath = contentModel.audioModel.localStorePath;
 
     NSIndexPath *playingIndexPath = [NSIndexPath indexPathForRow:playingIndex inSection:0];
-    if (GJCFFileIsExist(localStorePath)) {
+        if (GJCFFileIsExist(localStorePath)) {
         
         [self.audioPlayer playAudioFile:contentModel.audioModel];
         contentModel.isPlayingAudio = YES;

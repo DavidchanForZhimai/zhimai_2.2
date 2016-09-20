@@ -42,7 +42,7 @@
 -(void)enter{
     
     if (![CoreArchive strForKey:@"once"]) {
-        [CoreArchive removeStrForKey:userName];
+        [CoreArchive removeStrForKey:KuserName];
         [CoreArchive removeStrForKey:passWord];
         
     }

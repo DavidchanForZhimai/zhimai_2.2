@@ -216,7 +216,7 @@ typedef enum {
         [sendcaptchaParam setObject:[CoreArchive strForKey:DeviceToken] forKey:@"channelid"];
        }
       
-          [sendcaptchaParam setObject:_userNametext.text forKey:userName];
+          [sendcaptchaParam setObject:_userNametext.text forKey:KuserName];
           [sendcaptchaParam setObject:[_passWordtext.text md5]   forKey:passWord];
           [sendcaptchaParam setObject:@"2" forKey:@"type"];
 //          NSLog(@"sendcaptchaParam =%@",sendcaptchaParam);
@@ -256,7 +256,7 @@ typedef enum {
                 [CoreArchive setStr:_userNametext.text key:rememberUserName];
                 [CoreArchive setBool:_isRemember key:isremember];
                 
-                [CoreArchive setStr:_userNametext.text key:userName];
+                [CoreArchive setStr:_userNametext.text key:KuserName];
                 [CoreArchive setStr:[_passWordtext.text md5] key:passWord];
            
                 [[ToolManager shareInstance] showSuccessWithStatus:@"登录成功！"];

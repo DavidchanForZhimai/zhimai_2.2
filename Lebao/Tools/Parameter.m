@@ -13,8 +13,8 @@
 + (NSMutableDictionary *)parameterWithSessicon
 {
     NSMutableDictionary  *parameter = allocAndInit(NSMutableDictionary);
-    if ([CoreArchive strForKey:userName]&&[CoreArchive strForKey:passWord]) {
-        [parameter setObject:[CoreArchive strForKey:userName] forKey:userName];
+    if ([CoreArchive strForKey:KuserName]&&[CoreArchive strForKey:passWord]) {
+        [parameter setObject:[CoreArchive strForKey:KuserName] forKey:KuserName];
         [parameter setObject:[CoreArchive strForKey:passWord] forKey:passWord];
     }
     
@@ -24,7 +24,7 @@
 //判断是否有用户名和密码
 + (BOOL)isSession
 {
-    if ([CoreArchive strForKey:userName]&&[CoreArchive strForKey:passWord]) {
+    if ([CoreArchive strForKey:KuserName]&&[CoreArchive strForKey:passWord]) {
         
         return YES;
     }

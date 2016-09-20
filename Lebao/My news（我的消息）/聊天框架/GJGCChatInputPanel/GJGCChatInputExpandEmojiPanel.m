@@ -92,7 +92,7 @@
     self.sendButton.layer.cornerRadius = 3.f;
     [self.sendButton setTitle:@"发送" forState:UIControlStateNormal];
     [self.sendButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.sendButton setBackgroundImage:GJCFQuickImageByColorWithSize([GJGCChatInputPanelStyle mainThemeColor], self.sendButton.gjcf_size) forState:UIControlStateNormal];
+    [self.sendButton setBackgroundImage:GJCFQuickImageByColorWithSize(AppMainColor, self.sendButton.gjcf_size) forState:UIControlStateNormal];
     [bottomBarBack addSubview:self.sendButton];
     [self.sendButton addTarget:self action:@selector(sendEmojiAction) forControlEvents:UIControlEventTouchUpInside];
     self.sendButton.gjcf_right = bottomBarBack.gjcf_width;

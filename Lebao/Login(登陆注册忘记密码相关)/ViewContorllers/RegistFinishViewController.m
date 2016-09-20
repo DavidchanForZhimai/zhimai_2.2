@@ -50,7 +50,7 @@
         NSMutableDictionary * sendcaptchaParam = allocAndInit(NSMutableDictionary);
         [sendcaptchaParam setObject:[Parameter industryForCode:_arrayTitle[_selectedindex]] forKey:Industry];
         [sendcaptchaParam setObject:_userName.text forKey:@"realname"];
-        [sendcaptchaParam setObject:_phoneNum forKey:userName];
+        [sendcaptchaParam setObject:_phoneNum forKey:KuserName];
         [sendcaptchaParam setObject:[_password md5]   forKey:passWord];
         [sendcaptchaParam setObject:_verCode forKey:captchaCode];
         if (_invCode.length>0) {
@@ -80,7 +80,7 @@
         switch ([msg[@"rtcode"] integerValue]) {
             case 1:
             {
-                [CoreArchive setStr:_phoneNum key:userName];
+                [CoreArchive setStr:_phoneNum key:KuserName];
                 [CoreArchive setStr:[_password md5] key:passWord];
                 [CoreArchive setStr:_phoneNum key:rememberUserName];
                 [[ToolManager shareInstance] showSuccessWithStatus:@"注册成功！"];

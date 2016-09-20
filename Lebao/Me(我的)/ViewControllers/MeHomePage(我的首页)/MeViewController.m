@@ -229,10 +229,10 @@
         line.backgroundColor = LineBg;
         [view addSubview:line];
         NSString *str = @"0";
-        BaseButton *attention = [[BaseButton alloc]initWithFrame:frame(0, 0, frameWidth(attentionAndfensView)/2.0, frameHeight(attentionAndfensView)) setTitle:[NSString stringWithFormat:@"%@\n约见成功",modal.follownum?modal.follownum:str] titleSize:24*SpacedFonts titleColor:AppMainColor textAlignment:NSTextAlignmentCenter backgroundColor:WhiteColor inView:attentionAndfensView];
+        BaseButton *attention = [[BaseButton alloc]initWithFrame:frame(0, 0, frameWidth(attentionAndfensView)/2.0, frameHeight(attentionAndfensView)) setTitle:[NSString stringWithFormat:@"%@\n约见成功",modal.invitednum?modal.invitednum:str] titleSize:24*SpacedFonts titleColor:AppMainColor textAlignment:NSTextAlignmentCenter backgroundColor:WhiteColor inView:attentionAndfensView];
         attention.titleLabel.numberOfLines = 0;
         NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:attention.titleLabel.text];
-        [attributedString addAttribute:NSFontAttributeName value:Size(28) range:[attention.titleLabel.text rangeOfString:modal.follownum?modal.follownum:str]];
+        [attributedString addAttribute:NSFontAttributeName value:Size(28) range:[attention.titleLabel.text rangeOfString:modal.invitednum?modal.invitednum:str]];
         //        [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:[attention.titleLabel.text rangeOfString:modal.follownum?modal.follownum:str]];
         attention.titleLabel.attributedText =attributedString;
         
@@ -252,13 +252,13 @@
             
         };
         
-        BaseButton *fens = [[BaseButton alloc]initWithFrame:frame(CGRectGetMaxX(attention.frame), frameY(attention), frameWidth(attention), frameHeight(attention)) setTitle:[NSString stringWithFormat:@"%@\n我的动态",modal.fansnum?modal.fansnum:str] titleSize:24*SpacedFonts titleColor:AppMainColor textAlignment:NSTextAlignmentCenter backgroundColor:WhiteColor inView:attentionAndfensView];
+        BaseButton *fens = [[BaseButton alloc]initWithFrame:frame(CGRectGetMaxX(attention.frame), frameY(attention), frameWidth(attention), frameHeight(attention)) setTitle:[NSString stringWithFormat:@"%@\n我的动态",modal.dynamicnum?modal.dynamicnum:str] titleSize:24*SpacedFonts titleColor:AppMainColor textAlignment:NSTextAlignmentCenter backgroundColor:WhiteColor inView:attentionAndfensView];
         fens.titleLabel.numberOfLines = 0;
         
         NSMutableAttributedString *attributedString1 = [[NSMutableAttributedString alloc]initWithString:fens.titleLabel.text];
         //        [attributedString1 addAttribute:NSForegroundColorAttributeName value:AppMainColor range:[fens.titleLabel.text rangeOfString:modal.fansnum?modal.fansnum:str]];
         
-        [attributedString1 addAttribute:NSFontAttributeName value:Size(28) range:[fens.titleLabel.text rangeOfString:modal.fansnum?modal.fansnum:str]];
+        [attributedString1 addAttribute:NSFontAttributeName value:Size(28) range:[fens.titleLabel.text rangeOfString:modal.dynamicnum?modal.dynamicnum:str]];
         fens.titleLabel.attributedText =attributedString1;
         
         fens.didClickBtnBlock = ^

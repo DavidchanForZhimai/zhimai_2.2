@@ -139,8 +139,8 @@
 {
     if (self.isFromSelf) {
         
-        self.bubbleBackImageView.image = [self bubbleImageByRole:@"聊天对话框-BG-绿色.png"];
-        self.bubbleBackImageView.highlightedImage = [self bubbleImageByRole:@"聊天对话框-BG-绿色-点击.png"];
+        self.bubbleBackImageView.image = [self bubbleImageByRole:@"chat_send_nor"];
+        self.bubbleBackImageView.highlightedImage = [self bubbleImageByRole:@"chat_send_press_pic"];
         
         /* 头像矫正 */
         self.headView.gjcf_right = GJCFSystemScreenWidth - self.contentBordMargin;
@@ -149,8 +149,8 @@
         
     }else{
         
-        self.bubbleBackImageView.image = [self bubbleImageByRole:@"聊天对话框-BG-白色.png"];
-        self.bubbleBackImageView.highlightedImage = [self bubbleImageByRole:@"聊天对话框-BG-白色-点击.png"];
+        self.bubbleBackImageView.image = [self bubbleImageByRole:@"chat_recive_nor"];
+        self.bubbleBackImageView.highlightedImage = [self bubbleImageByRole:@"chat_recive_press_pic"];
         
         /* 头像矫正 */
         self.headView.gjcf_left = self.contentBordMargin;

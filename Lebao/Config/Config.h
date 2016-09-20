@@ -35,7 +35,7 @@
 #define MeetCancelURL [NSString stringWithFormat:@"%@meet/cancel",HttpURL]
 //请求参数
 #define DeviceToken @"deviceToken"
-#define userName @"username"
+#define KuserName @"username"
 #define passWord @"password"
 #define newpassword @"newpassword"
 #define captchaCode @"captchacode"

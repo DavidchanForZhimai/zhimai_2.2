@@ -122,7 +122,7 @@
     self.chatListTable = [[UITableView alloc]init];
     self.chatListTable.dataSource = self;
     self.chatListTable.delegate = self;
-    self.chatListTable.backgroundColor = [GJGCChatInputPanelStyle mainBackgroundColor];
+    self.chatListTable.backgroundColor = AppViewBGColor;
     self.chatListTable.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.chatListTable.frame = (CGRect){0,0,GJCFSystemScreenWidth,GJCFSystemScreenHeight - originY - 50};
     [self.view addSubview:self.chatListTable];
@@ -131,9 +131,12 @@
     if (self.dataSourceManager.totalCount > 0) {
         [self.chatListTable scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.dataSourceManager.totalCount-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }
-    
     if (GJCFSystemVersionIs7) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
+    else
+    {
+        self.navigationController.navigationBar.translucent=NO;
     }
     
     /* 输入面板 */

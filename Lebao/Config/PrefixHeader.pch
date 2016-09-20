@@ -12,6 +12,7 @@
 //配置文件
 #import "Config.h"
 #import "Header.h"
+#import "chat_header.h"
 #endif
 
 // Include any system framework and library headers here that should be included in all compilation units.

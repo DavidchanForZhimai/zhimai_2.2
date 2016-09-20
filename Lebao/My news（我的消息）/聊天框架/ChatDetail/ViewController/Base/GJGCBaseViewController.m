@@ -28,22 +28,21 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.hidesBottomBarWhenPushed = YES;
+//    self.hidesBottomBarWhenPushed = YES;
     
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    self.navigationController.navigationBarHidden = NO;
+
     //非根视图默认添加返回按钮
     if ([self.navigationController.viewControllers count] > 0
         && self != [self.navigationController.viewControllers objectAtIndex:0])
     {
-        [self setLeftButtonWithImageName:@"title-icon-向左返回" bgImageName:nil];
+        [self setLeftButtonWithImageName:@"icon_back" bgImageName:nil];
     }
     [super viewWillAppear:animated];
 }
-
 
 
 - (void)leftButtonPressed:(UIButton *)sender
@@ -76,7 +75,7 @@
     self.titleLabel.backgroundColor = [UIColor clearColor];
     self.titleLabel.textAlignment = NSTextAlignmentCenter;
     self.titleLabel.font = [UIFont boldSystemFontOfSize:18];
-    self.titleLabel.textColor = [UIColor whiteColor];
+    self.titleLabel.textColor = BlackTitleColor;
     [self.titleLabel sizeToFit];
 }
 

@@ -211,7 +211,7 @@ typedef enum {
             case 1:
                 if (type == RequestTypeSubmit) {
                     [[ToolManager shareInstance] dismiss];
-                    [CoreArchive removeStrForKey:userName];
+                    [CoreArchive removeStrForKey:KuserName];
                     [CoreArchive removeStrForKey:passWord];
                     [self.navigationController pushViewController:allocAndInit(NSClassFromString(@"LoginViewController")) animated:NO];
                 }

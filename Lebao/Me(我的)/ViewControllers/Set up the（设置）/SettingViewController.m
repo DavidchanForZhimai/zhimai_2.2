@@ -131,7 +131,7 @@
     {
         [[ToolManager shareInstance] showAlertViewTitle:@"确定要退出登录？" contentText:nil showAlertViewBlcok:^{
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.35 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [CoreArchive removeStrForKey:userName];
+                [CoreArchive removeStrForKey:KuserName];
                 [CoreArchive removeStrForKey:passWord];
                 
                 [[ToolManager shareInstance] enterLoginView];

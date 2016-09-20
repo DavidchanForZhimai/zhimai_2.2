@@ -28,8 +28,8 @@ typedef NS_ENUM(int,AuthenType) {
 @property(nonatomic,strong)NSString *rtmsg;
 @property(nonatomic,assign)int rtcode;
 @property(nonatomic,assign)BOOL newmsg;
-@property(nonatomic,strong)NSString *follownum;
-@property(nonatomic,strong)NSString *fansnum;
+@property(nonatomic,strong)NSString *invitednum;
+@property(nonatomic,strong)NSString *dynamicnum;
 @property(nonatomic,strong)NSString *ID;
 @property(nonatomic,strong)NSString *demandline;
 @end

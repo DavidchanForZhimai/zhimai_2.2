@@ -150,9 +150,11 @@
     self.textView.contentInset    = UIEdgeInsetsMake(-4,0,-4,0);
     self.textView.opaque          = NO;
     self.textView.backgroundColor = [UIColor clearColor];
-    self.textView.showsHorizontalScrollIndicator = NO;
+    self.textView.showsHorizontalScrollIndicator = YES;
     self.textView.returnKeyType = UIReturnKeySend;
     self.textView.enablesReturnKeyAutomatically = YES;
+    self.textView.textContainer.maximumNumberOfLines = 1;
+    self.textView.textContainer.lineBreakMode = NSLineBreakByTruncatingHead;
     [self addSubview:self.textView];
     
     self.placeHolderLabel = [[UILabel alloc]init];
@@ -169,8 +171,8 @@
     self.recordButton.backgroundColor = [UIColor clearColor];
     self.recordButton.layer.cornerRadius = 2.f;
     self.recordButton.layer.masksToBounds = YES;
-    [self.recordButton setTitleColor:[GJGCChatInputPanelStyle mainThemeColor] forState:UIControlStateNormal];
-    [self.recordButton setTitleColor:[GJGCChatInputPanelStyle mainThemeColor] forState:UIControlStateHighlighted];
+    [self.recordButton setTitleColor:AppMainColor forState:UIControlStateNormal];
+    [self.recordButton setTitleColor:AppMainColor forState:UIControlStateHighlighted];
     [self.recordButton setBackgroundImage:GJCFQuickImageByColorWithSize([UIColor colorWithWhite:0 alpha:0.1], self.recordButton.gjcf_size) forState:UIControlStateHighlighted];
     [self addSubview:self.recordButton];
     

@@ -217,7 +217,7 @@ typedef enum {
         
         [[ToolManager shareInstance] showWithStatus:@"发起短信验证"];
          NSMutableDictionary * sendcaptchaParam = allocAndInit(NSMutableDictionary);
-        [sendcaptchaParam setObject:_userName.text forKey:userName];
+        [sendcaptchaParam setObject:_userName.text forKey:KuserName];
         [sendcaptchaParam setObject:sendtypeRegister forKey:sendType];
         
         [XLDataService postWithUrl:SendcaptchaURL param:sendcaptchaParam modelClass:nil responseBlock:^(id dataObj, NSError *error) {

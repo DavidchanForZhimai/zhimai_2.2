@@ -41,10 +41,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-  
-    [self setTabbarIndex:3];
     [self navViewTitle:@"发现" ];
-
+    [self setTabbarIndex:3];
     [self.view addSubview:self.collectionView];
     [self.view addSubview:self.fristSection];
     [self.view addSubview:self.secondSection];
