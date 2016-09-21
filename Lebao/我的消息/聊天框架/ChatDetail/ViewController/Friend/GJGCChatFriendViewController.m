@@ -155,8 +155,8 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
 #pragma mark - tableViewDelegate 重载
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-
+   
+   
 }
 
 #pragma mark - GJCFAudioPlayer Delegate

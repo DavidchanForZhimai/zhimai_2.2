@@ -315,7 +315,7 @@
         //                payVC.content = _contTex.text;
         //                payVC.industry = induStr;
         payVC.jineStr = @"1";
-        payVC.isAudio=audioMark;
+      
         [self.navigationController pushViewController:payVC animated:YES];
         
         

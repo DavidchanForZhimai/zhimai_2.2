@@ -447,7 +447,7 @@
 
         payVC.param=param;
         payVC.jineStr = customAlertView.money;
-        payVC.isAudio=customAlertView.isAudio;
+        payVC.audioData=customAlertView.audioData;
         
         [self.navigationController pushViewController:payVC animated:YES];
         

@@ -339,6 +339,48 @@ static MP3PlayerManager* mP3PlayerManager;
     
     
 }
+- (void)uploadAudioWithType:(NSString *)type audioData:(NSData *)audioData finishuploadBlock:(FinishuploadBlock)finishuploadBlock
+{
+    
+    XLFileConfig *fileConfig = allocAndInit(XLFileConfig);
+    fileConfig.fileData = audioData;
+    fileConfig.name = @"audioFile";
+    fileConfig.fileName =@"audio.mp3";
+    fileConfig.mimeType =@"audio/mp3";
+    NSMutableDictionary *parameter = [Parameter parameterWithSessicon];
+    [parameter setObject:type forKey:Type];
+    [parameter setObject:@"audioFile" forKey:@"name"];
+    //            [[ToolManager shareInstance] showWithStatus:@"上传音频中..."];
+    [XLNetworkRequest updateRequest:UploadAudioURL params:parameter fileConfig:fileConfig success:^(id responseObj) {
+        
+        //                NSLog(@"responseObj =%@ parameter= %@",responseObj,parameter);
+        
+        if (responseObj) {
+            
+            if ([responseObj[@"rtcode"]intValue] ==1) {
+                [[ToolManager shareInstance] dismiss];
+                
+                finishuploadBlock(YES,responseObj);
+                
+            }
+            else
+            {
+                [[ToolManager shareInstance] showInfoWithStatus:responseObj[@"rtmsg"]];
+            }
+            
+        }
+        else
+        {
+            [[ToolManager shareInstance] showInfoWithStatus];
+        }
+        
+        
+    } failure:^(NSError *error) {
+        
+        [[ToolManager shareInstance] showInfoWithStatus];
+    }];
+
+}
 //下载音频
 - (void)downLoadAudioWithUrl:(NSString *)url  finishDownLoadBloak:(FinishDownloadBlock)finishDownLoadBloak{
     

@@ -34,7 +34,6 @@
         self.middleView.frame = superView.frame;
         [superView addSubview:_middleView];
         
-        _isAudio=NO;
         self.money=@"100";
         self.backgroundColor = [UIColor whiteColor];
         self.layer.cornerRadius = 15;
@@ -208,7 +207,7 @@
     [play play];
     NSLog(@"yesssssssssss..........%f",play.duration);
     [_soundBtn setTitle:@"按住  说话" forState:UIControlStateNormal];
-    _isAudio=YES;
+    _audioData=voiceData;
 }
 
 

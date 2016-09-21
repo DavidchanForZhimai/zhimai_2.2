@@ -132,9 +132,9 @@ typedef enum {
 //                NSLog(@"audioDic =%@",audioDic);
 //                NSLog(@"%@%@",ImageURLS,audioDic[@"audiourl"]);
                 
-                NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:@"http://pic.lmlm.cn/record/201607/21/146908531456209.mp3"]];
-
-                [data writeToFile:@"/Users/yanwenbin/Desktop/mp3.mp3" atomically:YES];
+//                NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:@"http://pic.lmlm.cn/record/201607/21/146908531456209.mp3"]];
+//
+//                [data writeToFile:@"/Users/yanwenbin/Desktop/mp3.mp3" atomically:YES];
                 
                         [[XianSuoDetailInfo shareInstance]faBuKuaJieWithTitle:_titStr andContent:_content andIndustry:_industry andCost:_qwjeStr andPaytype:zhifuType audiosUrl:audioDic[@"audiourl"] andCallBack:^(BOOL issucced, NSString *info, NSDictionary *jsonDic) {
                 

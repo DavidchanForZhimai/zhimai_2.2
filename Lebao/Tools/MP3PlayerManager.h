@@ -33,6 +33,8 @@ typedef void (^FinishDownloadBlock)(BOOL succeed);
 
 //上传音频
 - (void)uploadAudioWithType:(NSString *)type finishuploadBlock:(FinishuploadBlock)finishuploadBlock;
+
+- (void)uploadAudioWithType:(NSString *)type audioData:(NSData *)audioData finishuploadBlock:(FinishuploadBlock)finishuploadBlock;
 //下载音频
 - (void)downLoadAudioWithUrl:(NSString *)url finishDownLoadBloak:(FinishDownloadBlock)finishDownLoadBloak;
 @end

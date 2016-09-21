@@ -129,148 +129,103 @@ typedef enum {
     {
         zhifuType  = @"app";
     }
+    [self.param setObject:zhifuType forKey:@"paytype"];
     MeWantMeetVC *iWantMeetVC =  allocAndInit(MeWantMeetVC);
-//    if (_zfymType == FaBuZhiFu) {
     
-//        if (_isAudio) {
-    
-            [[MP3PlayerManager shareInstance] uploadAudioWithType:@"mp3" finishuploadBlock:^(BOOL succeed,id  audioDic) {
-                //                NSLog(@"audioDic =%@",audioDic);
-                //                NSLog(@"%@%@",ImageURLS,audioDic[@"audiourl"]);
-                
-                NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:@"http://pic.lmlm.cn/record/201607/21/146908531456209.mp3"]];
-                
-                [data writeToFile:@"/Users/yanwenbin/Desktop/mp3.mp3" atomically:YES];
-            }];
-                NSLog(@"self.param=%@",self.param);
-        [self.param setObject:@"" forKey:@"audio"];
-            [self.param setObject:zhifuType forKey:@"paytype"];
-                        [XLDataService putWithUrl:MeetyouURL param:self.param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-                            if(dataObj){
-                
-                                MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
-                
-                
-                                if (model.rtcode==1) {
-                                    UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"恭喜您,约见成功!" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"对话",@"电话联系",@"继续约见他人", nil];
-                                    successAlertV.cancelButtonIndex=2;
-                                    PushView(self, iWantMeetVC);
-                                    [successAlertV show];
-                
-                                }
-                
-                                else
-                                {
-                                    [[ToolManager shareInstance] showAlertMessage:model.rtmsg];
-                                }
-                                NSLog(@"model.rtmsg=========dataobj=%@",model.rtmsg);
-                            }else
-                            {
-                                [[ToolManager shareInstance] showInfoWithStatus];
-//                                [_yrBtn setBackgroundImage:[UIImage imageNamed:@"youkong"] forState:UIControlStateNormal];
-                            }
-                
-                        }];
+    if (_audioData) {
+        
+        [[MP3PlayerManager shareInstance] uploadAudioWithType:@"mp3" audioData:_audioData  finishuploadBlock:^(BOOL succeed,id  audioDic)
+         {
+             NSLog(@"audioDic =%@",audioDic);
+             [self.param setValue:audioDic[@"audiourl"] forKey:@"audio"];
+             
+             [XLDataService putWithUrl:MeetyouURL param:self.param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+                 if(dataObj){
+                     
+                     MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
+                    
+                     if (model.rtcode==1) {
+                         
+                         if (_moneyType==weixinzhifuType) {
+                             [[WetChatPayManager shareInstance]wxPay:dataObj[@"datas"] succeedMeg:@"发布成功！" recharge:@"0" wetChatPaySucceed:^(NSString *payMoney) {
+                                 
+                                 UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"恭喜您,约见成功!" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"对话",@"电话联系",@"继续约见他人", nil];
+                                 successAlertV.cancelButtonIndex=2;
+                                 PushView(self, iWantMeetVC);
+                                 [successAlertV show];
+                             }];
+                             return ;
+                             
+                         }
 
+                         UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"恭喜您,约见成功!" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"对话",@"电话联系",@"继续约见他人", nil];
+                         successAlertV.cancelButtonIndex=2;
+                         PushView(self, iWantMeetVC);
+                         [successAlertV show];
+                         
+                     }
+                     
+                     else
+                     {
+                         [[ToolManager shareInstance] showAlertMessage:model.rtmsg];
+                     }
+                     NSLog(@"model.rtmsg=========dataobj=%@",model.rtmsg);
+                 }else
+                 {
+                     [[ToolManager shareInstance] showInfoWithStatus];
+                     
+                 }
+                 
+             }];
+    
+         }];
+        
+    }
+    else
+    {
+        [XLDataService putWithUrl:MeetyouURL param:self.param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+            if(dataObj){
                 
-//                [[XianSuoDetailInfo shareInstance]faBuKuaJieWithTitle:_titStr andContent:_content andIndustry:_industry andCost:_qwjeStr andPaytype:zhifuType audiosUrl:audioDic[@"audiourl"] andCallBack:^(BOOL issucced, NSString *info, NSDictionary *jsonDic) {
-//                    
-//                    if (issucced == YES) {
-//                        
-//                        if (_moneyType==weixinzhifuType) {
-//                            [[WetChatPayManager shareInstance]wxPay:jsonDic succeedMeg:@"发布成功！" recharge:@"0" wetChatPaySucceed:^(NSString *payMoney) {
-//                                
-//                                PushView(self, iWantMeetVC);
-//                            }];
-//                            return ;
-//                            
-//                        }
-//                        [[ToolManager shareInstance] showSuccessWithStatus:@"发布成功！"];
-//                        PushView(self, iWantMeetVC);
-//                    }
-//                    else
-//                    {
-//                        [[ToolManager shareInstance]showAlertMessage:info];
-//                    }
-//                    
-//                }];
+                MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
                 
-//            }];
-//        }
-//        else
-//        {
-//            [[XianSuoDetailInfo shareInstance]faBuKuaJieWithTitle:_titStr andContent:_content andIndustry:_industry andCost:_qwjeStr andPaytype:zhifuType audiosUrl:nil andCallBack:^(BOOL issucced, NSString *info, NSDictionary *jsonDic) {
-//                
-//                if (issucced == YES) {
-//                    
-//                    if (_moneyType==weixinzhifuType) {
-//                        [[WetChatPayManager shareInstance]wxPay:jsonDic succeedMeg:@"发布成功！" recharge:@"0" wetChatPaySucceed:^(NSString *payMoney) {
-//                            
-//                            PushView(self, iWantMeetVC);
-//                        }];
-//                        return ;
-//                        
-//                    }
-//                    [[ToolManager shareInstance] showSuccessWithStatus:@"发布成功！"];
-//                    PushView(self, iWantMeetVC);
-//                }
-//                else
-//                {
-//                    [[ToolManager shareInstance]showAlertMessage:info];
-//                }
-//                
-//            }];
+                if (model.rtcode==1) {
+                    
+                    if (_moneyType==weixinzhifuType) {
+                        [[WetChatPayManager shareInstance]wxPay:dataObj[@"datas"] succeedMeg:@"发布成功！" recharge:@"0" wetChatPaySucceed:^(NSString *payMoney) {
+                            
+                            UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"恭喜您,约见成功!" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"对话",@"电话联系",@"继续约见他人", nil];
+                            successAlertV.cancelButtonIndex=2;
+                            PushView(self, iWantMeetVC);
+                            [successAlertV show];
+                        }];
+                        return ;
+                        
+                    }
+
+                    UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"恭喜您,约见成功!" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"对话",@"电话联系",@"继续约见他人", nil];
+                    successAlertV.cancelButtonIndex=2;
+                    PushView(self, iWantMeetVC);
+                    [successAlertV show];
+                    
+                }
+                
+                else
+                {
+                    [[ToolManager shareInstance] showAlertMessage:model.rtmsg];
+                }
+                NSLog(@"model.rtmsg=========dataobj=%@",model.rtmsg);
+            }else
+            {
+                [[ToolManager shareInstance] showInfoWithStatus];
+                
+            }
             
-//        }
-        
-//    }else if(_zfymType == LingQuZhiFu){
+        }];
+    }
     
-//        [[XianSuoDetailInfo shareInstance]lqxsWithID:_xsID andRadio:[_bfb stringByReplacingOccurrencesOfString:@"%" withString:@""] andDeposit:_jineStr andPaytype:@"amount" andCallBack:^(BOOL issucced, NSString *info, NSDictionary *jsonDic) {
-////            iWantMeetVC.isLinquVC = YES;
-//            if (issucced == YES) {
-//                if (_moneyType==weixinzhifuType) {
-//                    [[WetChatPayManager shareInstance]wxPay:jsonDic succeedMeg:@"发布成功！" recharge:@"0" wetChatPaySucceed:^(NSString *payMoney) {
-//
-//                        PushView(self, iWantMeetVC);
-//                    }];
-//                    return ;
-//                }
-//                [[ToolManager shareInstance] showSuccessWithStatus:@"发布成功！"];
-//                PushView(self, iWantMeetVC);
-//            }
-//            else
-//            {
-//                [[ToolManager shareInstance]showAlertMessage:info];
-//            }
-//            
-//        }];
-        
-//        
-//    }else
-//    {
     
-//        [[XianSuoDetailInfo shareInstance]zfwkWithID:_xsID andFee:_jineStr andPaytype:zhifuType andCallBack:^(BOOL issucced, NSString *info, NSDictionary *jsonDic) {
-//            
-//            [[ToolManager shareInstance]showAlertMessage:info];
-//            if (issucced == YES) {
-//                
-//                if (_moneyType==weixinzhifuType) {
-//                    [[WetChatPayManager shareInstance]wxPay:jsonDic succeedMeg:@"发布成功！" recharge:@"0" wetChatPaySucceed:^(NSString *payMoney) {
-//                        PushView(self, iWantMeetVC);
-//                        
-//                    }];
-//                    return ;
-//                }
-//                [[ToolManager shareInstance] showSuccessWithStatus:@"发布成功！"];
-//                PushView(self, iWantMeetVC);
-//            }
-//            else
-//            {
-//                [[ToolManager shareInstance]showAlertMessage:info];
-//            }
-//            
-//        }];
-//    }
+    
+    
     
     
 }

@@ -9,11 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface MeetPaydingVC : UIViewController
-typedef enum {
-    FaBuZhiFu=0,//发布支付
-    LingQuZhiFu,//领取支付
-    WeiKuanZhiFu,//支付尾款
-} ZFYMTYPE;
+
 @property (weak, nonatomic) IBOutlet UILabel *dingjinLab;//定金
 @property (weak, nonatomic) IBOutlet UIImageView *zhimaiImg;//图片
 @property (weak, nonatomic) IBOutlet UILabel *yueLab;//余额
@@ -24,6 +20,6 @@ typedef enum {
 @property (weak, nonatomic) IBOutlet UIView *zhimaiV;
 @property (weak, nonatomic) IBOutlet UIView *weixinV;
 @property (assign,nonatomic)int zfymType;
+@property (strong,nonatomic) NSData *audioData;
 @property (nonatomic,strong)NSMutableDictionary *param;
-@property (nonatomic,assign)BOOL isAudio;
 @end
