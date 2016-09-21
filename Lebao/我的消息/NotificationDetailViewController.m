@@ -14,7 +14,6 @@
 #import "XianSuoDetailVC.h"
 #define cellH 94
 #define SystemMessageURL [NSString stringWithFormat:@"%@message/system",HttpURL]
-#define CorssMessageURL [NSString stringWithFormat:@"%@message/corss",HttpURL]
 @interface NotificationDetailViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic,strong)UITableView *notificationDetailView;
 @property(nonatomic,strong)NSMutableArray *notificationDetailArray;
@@ -48,14 +47,14 @@
     [super viewDidLoad];
      // Do any additional setup after loading the view.
 
-    [self navViewTitleAndBackBtn:_isSystempagetype?@"系统消息":@"跨界提醒"];
+    [self navViewTitleAndBackBtn:@"系统消息"];
     [self addTableView];
     _page =1;
     [self netWork:NO isFooter:NO isShouldClear:NO];
 }
 - (void)setIsSystempagetype:(BOOL)isSystempagetype
 {
-    self.navTitle.text = _isSystempagetype?@"系统消息":@"跨界提醒";
+    self.navTitle.text = @"系统消息";
     _page =1;
     [self netWork:NO isFooter:NO isShouldClear:NO];
 }
@@ -91,8 +90,8 @@
     if (_notificationDetailArray.count==0) {
         [[ToolManager shareInstance] showWithStatus];
     }
-    [XLDataService postWithUrl:_isSystempagetype?SystemMessageURL:CorssMessageURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-
+    [XLDataService postWithUrl:SystemMessageURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+      
         if (isRefresh) {
             [[ToolManager shareInstance]endHeaderWithRefreshing
              :_notificationDetailView];
@@ -183,8 +182,16 @@
         cell = [[SystemMessageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID cellHeight:cellH cellWidth:frameWidth(_notificationDetailView)];
         
     }
-
-    [cell setData:_notificationDetailArray[indexPath.section] showDetial:_isSystempagetype];
+    
+     SystemMessageData *data =  _notificationDetailArray[indexPath.section];
+    if (!_isSystempagetype&&data.ID&&![data.ID isEqualToString:@""]) {
+        [cell setData:data showDetial:NO];
+    }
+    else
+    {
+         [cell setData:data showDetial:YES];
+    }
+    
     
     return cell;
     
@@ -192,28 +199,32 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+   
     if (!_isSystempagetype) {
         
       SystemMessageData *data =  _notificationDetailArray[indexPath.section];
+         NSLog(@"data.ID =%@",data.ID);
+        if (data.ID&&![data.ID isEqualToString:@""]) {
+            if (data.iscoop) {
+                //跳转我的领取线索详情
+                MyLQDetailVC* myLqV =  [[MyLQDetailVC alloc]init];
+                myLqV.xiansuoID = data.ID;
+                [self.navigationController pushViewController:myLqV animated:YES];
+                return;
+            }
+            if (data.isself) {
+                //跳转我的发布线索详情
+                MyXSDetailVC* myxiansuoV =  [[MyXSDetailVC alloc]init];
+                myxiansuoV.xiansuoID = data.ID;
+                [self.navigationController pushViewController:myxiansuoV animated:YES];
+                
+                return;
+            }
+            XianSuoDetailVC * xiansuoV =  [[XianSuoDetailVC alloc]init];
+            xiansuoV.xs_id = data.ID;
+            [self.navigationController pushViewController:xiansuoV animated:YES];
+        }
         
-        if (data.iscoop) {
-            //跳转我的领取线索详情
-            MyLQDetailVC* myLqV =  [[MyLQDetailVC alloc]init];
-            myLqV.xiansuoID = data.ID;
-            [self.navigationController pushViewController:myLqV animated:YES];
-            return;
-        }
-        if (data.isself) {
-            //跳转我的发布线索详情
-            MyXSDetailVC* myxiansuoV =  [[MyXSDetailVC alloc]init];
-            myxiansuoV.xiansuoID = data.ID;
-            [self.navigationController pushViewController:myxiansuoV animated:YES];
-            
-            return;
-        }
-        XianSuoDetailVC * xiansuoV =  [[XianSuoDetailVC alloc]init];
-        xiansuoV.xs_id = data.ID;
-        [self.navigationController pushViewController:xiansuoV animated:YES];
     }
 }
 #pragma mark

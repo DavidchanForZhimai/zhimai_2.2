@@ -281,9 +281,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (indexPath.section==0&&indexPath.row!=2) {
+    if (indexPath.section==0&&indexPath.row==0) {
         NotificationDetailViewController *detail = allocAndInit(NotificationDetailViewController);
-        detail.isSystempagetype =indexPath.row==1?NO:YES;
+        detail.isSystempagetype =YES;
         PushView(self, detail);
 //        MeCell *cell  = [tableView cellForRowAtIndexPath:indexPath];
 //        cell.message.hidden = YES;
