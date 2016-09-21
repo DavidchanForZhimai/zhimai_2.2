@@ -22,9 +22,7 @@
 #import "GzHyViewController.h"//关注行业
 
 @interface MeetingVC ()<UITableViewDelegate,UITableViewDataSource,MeetHeadVDelegate,EjectViewDelegate,MeettingTableViewDelegate,UIAlertViewDelegate>
-{
-    BOOL audioMark;
-}
+
 @property (nonatomic,strong)UITableView *yrTab;
 @property (nonatomic,strong)UIButton *yrBtn;
 @property (nonatomic,strong)MeetHeadV *headView;
@@ -50,7 +48,7 @@
     
     self.homePageBtn.hidden = NO;
     [self shakeToShow:_yrBtn];
-    audioMark=NO;
+
     
 }
 
@@ -427,7 +425,7 @@
 {
     
     if (buttonIndex==0) {
-        audioMark=NO;
+
         [customAlertView dissMiss];
         customAlertView = nil;
         
@@ -442,19 +440,15 @@
         NSLog(@"model=%@",model);
         NSMutableDictionary *param=[Parameter parameterWithSessicon];
         [param setObject:model.userid forKey:@"userid"];
-        [param setObject:@"1" forKey:@"reward"];
-        [param setObject:@"" forKey:@"audio"];
-        [param setObject:@"" forKey:@"remark"];
+        [param setObject:customAlertView.money forKey:@"reward"];
+        
+        [param setObject:customAlertView.logField.text forKey:@"remark"];
         [param setObject:model.distance forKey:@"distance"];
-        [param setObject:@"wallet" forKey:@"paytype"];
+
         payVC.param=param;
-        //                payVC.zfymType = FaBuZhiFu;
-        //                payVC.qwjeStr = _bcTex.text;
-        //                payVC.titStr = _titTex.text;
-        //                payVC.content = _contTex.text;
-        //                payVC.industry = induStr;
-                        payVC.jineStr = @"1";
-        payVC.isAudio=audioMark;
+        payVC.jineStr = customAlertView.money;
+        payVC.isAudio=customAlertView.isAudio;
+        
         [self.navigationController pushViewController:payVC animated:YES];
         
 

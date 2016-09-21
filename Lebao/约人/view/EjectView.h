@@ -28,6 +28,9 @@
 @property (nonatomic,strong)NSIndexPath * indexth;
 @property(nonatomic, weak) id<EjectViewDelegate> delegate;
 @property(nonatomic,strong)D3RecordButton *soundBtn;
+@property(nonatomic,assign)BOOL isAudio;
+@property(nonatomic,copy)NSString *money;
+@property(nonatomic,strong)UITextField *logField;
 /**
  * 弹窗在视图中的中心点
  **/

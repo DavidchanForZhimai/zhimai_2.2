@@ -15,7 +15,7 @@
     UIButton *btn2;
     UIButton *btn3;
     
-    UITextField *logField;
+    
 }
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UILabel *titleLabel2;
@@ -34,7 +34,8 @@
         self.middleView.frame = superView.frame;
         [superView addSubview:_middleView];
         
-        
+        _isAudio=NO;
+        self.money=@"100";
         self.backgroundColor = [UIColor whiteColor];
         self.layer.cornerRadius = 15;
         self.center = CGPointMake([UIScreen mainScreen].bounds.size.width/2, _centerY);
@@ -92,27 +93,27 @@
         _soundBtn.layer.cornerRadius = 8;
         [self addSubview:_soundBtn];
         
-        logField = [[UITextField alloc] initWithFrame:CGRectMake(20,CGRectGetMaxY(btn1.frame)+15,self.frame.size.width-80, 32)];
-        logField.layer.borderColor = [[UIColor colorWithWhite:0.9 alpha:1] CGColor];
+        _logField = [[UITextField alloc] initWithFrame:CGRectMake(20,CGRectGetMaxY(btn1.frame)+15,self.frame.size.width-80, 32)];
+        _logField.layer.borderColor = [[UIColor colorWithWhite:0.9 alpha:1] CGColor];
         UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 8, 32)];
-        logField.leftViewMode = UITextFieldViewModeAlways;
-        logField.leftView = leftView;
-        logField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        logField.layer.borderWidth = 1;
-        logField.placeholder=@"请输入约见理由";
-        logField.layer.cornerRadius=8;
-        logField.backgroundColor=[UIColor whiteColor];
-        [self addSubview:logField];
+        _logField.leftViewMode = UITextFieldViewModeAlways;
+        _logField.leftView = leftView;
+        _logField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        _logField.layer.borderWidth = 1;
+        _logField.placeholder=@"请输入约见理由";
+        _logField.layer.cornerRadius=8;
+        _logField.backgroundColor=[UIColor whiteColor];
+        [self addSubview:_logField];
         
         UIButton *audioBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-        audioBtn.frame=CGRectMake(CGRectGetMaxX(logField.frame)+10, logField.y, logField.height, logField.height);
+        audioBtn.frame=CGRectMake(CGRectGetMaxX(_logField.frame)+10, _logField.y, _logField.height, _logField.height);
         [audioBtn setImage:[UIImage imageNamed:@"yuejian_luying"] forState:UIControlStateNormal];
         [audioBtn addTarget:self action:@selector(audioBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         audioBtn.tag=10;
         [self addSubview:audioBtn];
         
         
-        CGRect cancelFrame = CGRectMake(0, CGRectGetMaxY(logField.frame)+15, frame.size.width/2, 42);
+        CGRect cancelFrame = CGRectMake(0, CGRectGetMaxY(_logField.frame)+15, frame.size.width/2, 42);
         UIButton *cancelBtn = [self creatButtonWithFrame:cancelFrame title:@"取消"];
         [self addSubview:cancelBtn];
         [cancelBtn addTarget:self action:@selector(leftCancelClick) forControlEvents:UIControlEventTouchUpInside];
@@ -149,6 +150,7 @@
         sender.layer.borderColor=[UIColor colorWithRed:0.298 green:0.627 blue:0.996 alpha:1.000].CGColor;
         btn2.layer.borderColor=[UIColor grayColor].CGColor;
         btn3.layer.borderColor=[UIColor grayColor].CGColor;
+        self.money=@"100";
     }
     if (sender.tag==101) {
         sender.selected=YES;
@@ -157,6 +159,7 @@
          sender.layer.borderColor=[UIColor colorWithRed:0.298 green:0.627 blue:0.996 alpha:1.000].CGColor;
         btn1.layer.borderColor=[UIColor grayColor].CGColor;
         btn3.layer.borderColor=[UIColor grayColor].CGColor;
+        self.money=@"200";
     }
     if (sender.tag==102) {
         sender.selected=YES;
@@ -205,20 +208,24 @@
     [play play];
     NSLog(@"yesssssssssss..........%f",play.duration);
     [_soundBtn setTitle:@"按住  说话" forState:UIControlStateNormal];
+    _isAudio=YES;
 }
 
+
+#pragma mark
+#pragma mark private 方法
 -(void)audioBtnClick:(UIButton *)sender
 {
     NSLog(@"sender.tag=%ld",(long)sender.tag);
     if (sender.tag==10) {
         sender.tag=11;
         [sender setImage:[UIImage imageNamed:@"yuejian_jianpan"] forState:UIControlStateNormal];
-        logField.frame=CGRectMake(CGRectGetMaxX(logField.frame), CGRectGetMaxY(logField.frame), 0, 0);
+        _logField.frame=CGRectMake(CGRectGetMaxX(_logField.frame), CGRectGetMaxY(_logField.frame), 0, 0);
         
     }else if(sender.tag==11){
         sender.tag=10;
         [sender setImage:[UIImage imageNamed:@"yuejian_luying"] forState:UIControlStateNormal];
-       logField.frame=_soundBtn.frame;
+       _logField.frame=_soundBtn.frame;
     }
 }
 

@@ -25,11 +25,5 @@ typedef enum {
 @property (weak, nonatomic) IBOutlet UIView *weixinV;
 @property (assign,nonatomic)int zfymType;
 @property (nonatomic,strong)NSMutableDictionary *param;
-//@property (strong,nonatomic)NSString * titStr;//
-//@property (strong,nonatomic)NSString * content;
-//@property (strong,nonatomic)NSString * industry;
-//@property (strong,nonatomic)NSString * bfb;
-//@property (strong,nonatomic)NSString * xsID;
-//@property (strong,nonatomic)NSString * qwjeStr;
 @property (nonatomic,assign)BOOL isAudio;
 @end

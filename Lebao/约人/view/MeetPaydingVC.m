@@ -123,11 +123,11 @@ typedef enum {
 - (IBAction)zhifuAction:(id)sender {
     NSString * zhifuType ;
     if (_moneyType == zhimaizhifuType) {
-        zhifuType = @"amount";
+        zhifuType = @"wallet";
     }else
         
     {
-        zhifuType  = @"wx";
+        zhifuType  = @"app";
     }
     MeWantMeetVC *iWantMeetVC =  allocAndInit(MeWantMeetVC);
 //    if (_zfymType == FaBuZhiFu) {
@@ -142,8 +142,9 @@ typedef enum {
                 
                 [data writeToFile:@"/Users/yanwenbin/Desktop/mp3.mp3" atomically:YES];
             }];
-                
-
+                NSLog(@"self.param=%@",self.param);
+        [self.param setObject:@"" forKey:@"audio"];
+            [self.param setObject:zhifuType forKey:@"paytype"];
                         [XLDataService putWithUrl:MeetyouURL param:self.param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
                             if(dataObj){
                 
