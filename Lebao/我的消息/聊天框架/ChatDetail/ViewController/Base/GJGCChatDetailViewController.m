@@ -83,8 +83,16 @@
     [self.inputPanel inputBarRegsionFirstResponse];
     
     [self clearAllFirstResponse];
+    
+    self.navigationController.navigationBar.translucent=YES;
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
-
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBar.translucent=NO;
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+}
 - (void)clearAllFirstResponse
 {
     [self.inputPanel inputBarRegsionFirstResponse];
@@ -131,13 +139,7 @@
     if (self.dataSourceManager.totalCount > 0) {
         [self.chatListTable scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.dataSourceManager.totalCount-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }
-    if (GJCFSystemVersionIs7) {
-        self.edgesForExtendedLayout = UIRectEdgeNone;
-    }
-    else
-    {
-        self.navigationController.navigationBar.translucent=NO;
-    }
+
     
     /* 输入面板 */
     self.inputPanel = [[GJGCChatInputPanel alloc]initWithPanelDelegate:self];

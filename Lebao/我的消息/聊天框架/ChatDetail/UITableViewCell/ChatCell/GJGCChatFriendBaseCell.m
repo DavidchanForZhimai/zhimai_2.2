@@ -310,7 +310,8 @@
 - (void)startSendingAnimation
 {
     self.statusButton.gjcf_right = self.bubbleBackImageView.gjcf_left - 5 - self.statusButtonOffsetAudioDuration - 5;
-    [self.statusButton setImage:GJCFQuickImage(@"聊天-icon-发送中.png") forState:UIControlStateNormal];
+ 
+    [self.statusButton setImage:GJCFQuickImage(@"con_chat_jiazai") forState:UIControlStateNormal];
     self.statusButton.gjcf_width = 13.5;
     self.statusButton.gjcf_height = self.statusButton.gjcf_width;
     
@@ -334,7 +335,8 @@
 {
     [self.statusButton.layer removeAnimationForKey:@"rotationAnimation"];
     self.statusButton.gjcf_right = self.bubbleBackImageView.gjcf_left - 10 - self.statusButtonOffsetAudioDuration - 5;
-    [self.statusButton setImage:GJCFQuickImage(@"聊天-icon-发送失败.png") forState:UIControlStateNormal];
+
+    [self.statusButton setImage:GJCFQuickImage(@"icon_chat_jiazaishibai") forState:UIControlStateNormal];
     self.statusButton.gjcf_width = 20.f;
     self.statusButton.gjcf_height = 20.f;
     self.statusButton.gjcf_top = self.bubbleBackImageView.gjcf_top;

@@ -24,7 +24,15 @@
 #import "GJGCWebViewController.h"
 #import "GJCFAssetsPickerViewController.h"
 
+#import "MP3PlayerManager.h"
 
+//交流列表
+#define CommunicatelistURL [NSString stringWithFormat:@"%@message/chat",HttpURL]
+//发送交流
+#define CommunicateURL [NSString stringWithFormat:@"%@message/send",HttpURL]
+
+#import "XLDataService.h"
+#import "CommunityModal.h"
 #define GJGCActionSheetCallPhoneNumberTag 132134
 
 #define GJGCActionSheetShowMyFavoritePost 132135
@@ -54,6 +62,10 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
 @end
 
 @implementation GJGCChatFriendViewController
+{
+    int _page;//页吗
+    NSString *recevier;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -84,6 +96,82 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
     [GJCFNotificationCenter addObserver:self selector:@selector(observeChatInputPanelBeginRecord:) name:formateNoti object:nil];
     [GJCFNotificationCenter addObserver:self selector:@selector(observeApplicationResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
 
+    
+    
+    
+}
+#pragma mark
+#pragma mark - 初始化数据
+#pragma mark
+#pragma mark - netWork-
+- (void)netWork:(BOOL)isRefresh isFooter:(BOOL)isFooter isShouldClear:(BOOL)isShouldClear isSend:(BOOL)isSend
+{
+    
+    NSMutableDictionary *param = [Parameter parameterWithSessicon];
+
+    [param setObject:self.taklInfo.toId forKey:@"senderid"];
+    
+    [param setObject:@(_page) forKey:@"page"];
+    if (self.dataSourceManager.chatListArray.count==0) {
+        [[ToolManager shareInstance] showWithStatus];
+    }
+    
+    [XLDataService postWithUrl:CommunicatelistURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+        
+        if (isRefresh) {
+          
+            
+        }
+        
+        if (dataObj) {
+            CommunityModal *modal=[CommunityModal mj_objectWithKeyValues:dataObj];
+             recevier =  modal.receiver;
+            if (modal.rtcode ==1) {
+                [[ToolManager shareInstance] dismiss];
+                if (isShouldClear) {
+                    [self.dataSourceManager.chatListArray removeAllObjects];
+                    [self.dataSourceManager.timeShowSubArray removeAllObjects];
+                }
+               
+                for (CommunityDataModal *data  in modal.datas) {
+                    
+                        GJGCChatFriendContentModel *chatContentModel = [[GJGCChatFriendContentModel alloc]init];
+                        chatContentModel.baseMessageType = GJGCChatBaseMessageTypeChatMessage;
+                        chatContentModel.contentType = GJGCChatFriendContentTypeText;
+                        NSString *text = data.content;
+                        NSDictionary *parseTextDict = [GJGCChatFriendCellStyle formateSimpleTextMessage:text];
+                        chatContentModel.simpleTextMessage = [parseTextDict objectForKey:@"contentString"];
+                        chatContentModel.originTextMessage = text;
+                        chatContentModel.emojiInfoArray = [parseTextDict objectForKey:@"imageInfo"];
+                        chatContentModel.phoneNumberArray = [parseTextDict objectForKey:@"phone"];
+                        chatContentModel.toId = self.taklInfo.toId;
+                        chatContentModel.senderId = modal.receiver;
+                        chatContentModel.toUserName = self.taklInfo.toUserName;
+                        chatContentModel.sendTime = [data.createtime longLongValue];
+        
+                        chatContentModel.sendStatus = GJGCChatFriendSendMessageStatusSuccess;
+                        chatContentModel.isFromSelf = data.isself;
+                        chatContentModel.talkType = self.taklInfo.talkType;
+                        chatContentModel.headUrl = [NSString stringWithFormat:@"%@%@",ImageURLS,data.imgurl];
+                    
+                    [self.dataSourceManager mockSendAnMesssage:chatContentModel];
+                    
+                }
+                
+            }
+            else
+            {
+                [[ToolManager shareInstance] showInfoWithStatus:modal.rtmsg];
+            }
+            
+        }
+        else
+        {
+            [[ToolManager shareInstance] showInfoWithStatus];
+        }
+        
+    }];
+    
     
 }
 
@@ -133,7 +221,8 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
 {
     NSLog(@"self.talkInfo.toId:%@",self.taklInfo.toId);
     self.dataSourceManager = [[GJGCChatFriendDataSourceManager alloc]initWithTalk:self.taklInfo withDelegate:self];
-    
+    //初始化数据
+    [self netWork:NO isFooter:NO isShouldClear:YES isSend:NO ];
 }
 
 #pragma mark - DataSourceManager Delegate
@@ -525,6 +614,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
         
         return;
     }
+    NSLog(@" contentModel.localMsgId = %@", contentModel.localMsgId);
     NSLog(@"audioMessageCellDidTap");
     [self stopPlayCurrentAudio];
     self.playingAudioMsgId = contentModel.localMsgId;
@@ -686,7 +776,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
 
 - (void)downloadAndPlayAudioAtRowIndex:(NSIndexPath *)rowIndex
 {
-  
+   
     GJGCChatFriendContentModel *contentModel = (GJGCChatFriendContentModel *)[self.dataSourceManager contentModelAtIndex:rowIndex.row];
     
     [GJCFAudioFileUitil setupAudioFileTempEncodeFilePath:contentModel.audioModel];
@@ -998,6 +1088,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
     chatContentModel.baseMessageType = GJGCChatBaseMessageTypeChatMessage;
     chatContentModel.contentType = GJGCChatFriendContentTypeAudio;
     chatContentModel.audioModel = audioFile;
+
     chatContentModel.audioDuration = [GJGCChatFriendCellStyle formateAudioDuration:GJCFStringFromInt(audioFile.duration)];
     chatContentModel.toId = self.taklInfo.toId;
     chatContentModel.toUserName = self.taklInfo.toUserName;
@@ -1005,6 +1096,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
     chatContentModel.sendStatus = GJGCChatFriendSendMessageStatusSuccess;
     chatContentModel.isFromSelf = YES;
     chatContentModel.talkType = self.taklInfo.talkType;
+    chatContentModel.localMsgId = GJCFDateToString([NSDate date]);
     chatContentModel.headUrl = @"http://b.hiphotos.baidu.com/zhidao/wh%3D450%2C600/sign=38ecb37c54fbb2fb347e50167a7a0c92/d01373f082025aafc50dc5eafaedab64034f1ad7.jpg";
     NSDate *sendTime = GJCFDateFromStringByFormat(@"2015-7-15 08:22:11", @"Y-M-d HH:mm:ss");
     chatContentModel.sendTime = [sendTime timeIntervalSince1970];
@@ -1012,7 +1104,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
     /* 从talkInfo中绑定更多信息给待发送内容 */
     [self setSendChatContentModelWithTalkInfo:chatContentModel];
     
-    [self.dataSourceManager mockSendAnMesssage:chatContentModel];
+   
 }
 
 - (void)chatInputPanel:(GJGCChatInputPanel *)panel sendTextMessage:(NSString *)text
@@ -1032,18 +1124,18 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
     chatContentModel.toId = self.taklInfo.toId;
     chatContentModel.toUserName = self.taklInfo.toUserName;
     chatContentModel.timeString = [GJGCChatSystemNotiCellStyle formateTime:GJCFDateToString([NSDate date])];
-    chatContentModel.sendStatus = GJGCChatFriendSendMessageStatusSuccess;
+    chatContentModel.sendStatus = GJGCChatFriendSendMessageStatusSending;
     chatContentModel.isFromSelf = YES;
     chatContentModel.talkType = self.taklInfo.talkType;
-    NSDate *sendTime = GJCFDateFromStringByFormat(@"2015-7-15 08:22:11", @"Y-M-d HH:mm:ss");
+  
+    NSDate *date = [NSDate date];
+    NSDate *sendTime = GJCFDateFromStringByFormat(GJCFDateToStringByFormat(date,@"Y-M-d HH:mm:ss"), @"Y-M-d HH:mm:ss");
     chatContentModel.sendTime = [sendTime timeIntervalSince1970];
-    chatContentModel.headUrl = @"http://b.hiphotos.baidu.com/zhidao/wh%3D450%2C600/sign=38ecb37c54fbb2fb347e50167a7a0c92/d01373f082025aafc50dc5eafaedab64034f1ad7.jpg";
+    chatContentModel.headUrl = @"";
     
     /* 从talkInfo中绑定更多信息给待发送内容 */
     [self setSendChatContentModelWithTalkInfo:chatContentModel];
     
-    [self.dataSourceManager mockSendAnMesssage:chatContentModel];
-
 }
 
 - (void)chatInputPanel:(GJGCChatInputPanel *)panel sendGIFMessage:(NSString *)gifCode
@@ -1070,7 +1162,6 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
     /* 从talkInfo中绑定更多信息给待发送内容 */
     [self setSendChatContentModelWithTalkInfo:chatContentModel];
     
-    [self.dataSourceManager mockSendAnMesssage:chatContentModel];
     
 }
 
@@ -1316,10 +1407,67 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
         
     }
 }
-
+#pragma mark----------------------------------------------------
 #pragma mark - 绑定更多信息给待发送的内容
 - (void)setSendChatContentModelWithTalkInfo:(GJGCChatFriendContentModel *)contentModel
 {
+    
+    [self.dataSourceManager mockSendAnMesssage:contentModel];
+    
+    if (contentModel.contentType==GJGCChatFriendContentTypeText) {
+        NSMutableDictionary *param = [Parameter parameterWithSessicon];
+        [param setObject:recevier forKey:@"receiver"];
+        [param setObject:contentModel.originTextMessage forKey:@"content"];
+        
+        [XLDataService postWithUrl:CommunicateURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+            
+            if (dataObj) {
+                if ([dataObj[@"rtcode"] intValue] ==1) {
+                    [[ToolManager shareInstance] dismiss];
+                    NSLog(@"%@",dataObj);
+                    contentModel.sendStatus = GJGCChatFriendSendMessageStatusSuccess;
+                    contentModel.sendTime = [dataObj[@"datas"][@"createtime"] longLongValue];
+                    contentModel.headUrl =[NSString stringWithFormat:@"%@%@",ImageURLS,dataObj[@"datas"][@"imgurl"]] ;
+                  
+                   
+                    
+                }
+                else
+                {
+                    contentModel.sendStatus = GJGCChatFriendSendMessageStatusFaild;
+                    [self.dataSourceManager mockSendAnMesssage:contentModel];
+                    
+                }
+                
+            }
+            else
+            {
+                contentModel.sendStatus = GJGCChatFriendSendMessageStatusFaild;
+                 [self.dataSourceManager mockSendAnMesssage:contentModel];
+            }
+            
+            
+        }];
+
+        
+    }
+    else if(contentModel.contentType==GJGCChatFriendContentTypeAudio)
+    {
+       
+        NSLog(@"localStorePath =%@ \n tempEncodeFilePath=%@",contentModel.audioModel.localStorePath,contentModel.audioModel.tempEncodeFilePath);
+        NSData *audioData = [NSData dataWithContentsOfFile:contentModel.audioModel.localStorePath];
+        
+        [[MP3PlayerManager shareInstance] uploadAudioWithType:@"mp3" audioData:audioData finishuploadBlock:^(BOOL succeed, id audioDic) {
+            NSLog(@"ImageURLS=%@%@",ImageURLS,audioDic[@"audiourl"] );
+            
+            [self.dataSourceManager mockSendAnMesssage:contentModel];
+        }];
+        
+        
+        
+    }
+   
+    
     
 }
 

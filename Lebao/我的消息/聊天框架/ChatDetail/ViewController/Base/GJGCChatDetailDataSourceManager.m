@@ -1072,30 +1072,7 @@
     [self addChatContentModel:messageContent];
     
     [self updateTheNewMsgTimeString:messageContent];
-    
-    //模拟一条对方发来的消息
-    GJGCChatFriendContentModel *chatContentModel = [[GJGCChatFriendContentModel alloc]init];
-    chatContentModel.baseMessageType = GJGCChatBaseMessageTypeChatMessage;
-    chatContentModel.contentType = GJGCChatFriendContentTypeText;
-    NSString *text = @"其实我也很喜欢和你聊天，网址:http://www.163.com 个人QQ:1003081775";
-    NSDictionary *parseTextDict = [GJGCChatFriendCellStyle formateSimpleTextMessage:text];
-    chatContentModel.simpleTextMessage = [parseTextDict objectForKey:@"contentString"];
-    chatContentModel.originTextMessage = text;
-    chatContentModel.emojiInfoArray = [parseTextDict objectForKey:@"imageInfo"];
-    chatContentModel.phoneNumberArray = [parseTextDict objectForKey:@"phone"];
-    chatContentModel.toId = self.taklInfo.toId;
-    chatContentModel.toUserName = self.taklInfo.toUserName;
-    NSDate *sendTime = GJCFDateFromStringByFormat(@"2015-7-15 10:22:11", @"Y-M-d HH:mm:ss");
-    chatContentModel.sendTime = [sendTime timeIntervalSince1970];
-    chatContentModel.timeString = [GJGCChatSystemNotiCellStyle formateTime:GJCFDateToString(sendTime)];
-    chatContentModel.sendStatus = GJGCChatFriendSendMessageStatusSuccess;
-    chatContentModel.isFromSelf = NO;
-    chatContentModel.talkType = self.taklInfo.talkType;
-    chatContentModel.headUrl = @"http://v1.qzone.cc/avatar/201403/30/09/33/533774802e7c6272.jpg!200x200.jpg";
-
-    [self addChatContentModel:chatContentModel];
-
-    [self updateTheNewMsgTimeString:chatContentModel];
+//    [self resortAllChatContentBySendTime];
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(dataSourceManagerRequireUpdateListTable:)]) {
         

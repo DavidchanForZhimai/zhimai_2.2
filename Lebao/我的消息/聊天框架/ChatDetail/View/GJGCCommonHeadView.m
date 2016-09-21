@@ -68,15 +68,16 @@
 {
     switch (headViewType) {
         case GJGCCommonHeadViewTypePGGroup: {
-            [self.contentImageView setImage:GJCFQuickImage(@"群组头像占位-bg-3行列表")];
+            [self.contentImageView setImage:GJCFQuickImage(@"defaulthead")];
             break;
         }
         case GJGCCommonHeadViewTypeContact: {
-            [self.contentImageView setImage:GJCFQuickImage(@"好友头像占位-bg-列表")];
+            [self.contentImageView setImage:GJCFQuickImage(@"defaulthead")];
             break;
         }
+            
         case GJGCCommonHeadViewTypePostContact: {
-            [self.contentImageView setImage:GJCFQuickImage(@"IM头像")];
+            [self.contentImageView setImage:GJCFQuickImage(@"defaulthead")];
             break;
         }
         default:

@@ -10,7 +10,7 @@
 #import "MeCell.h"
 #import "XLDataService.h"
 #import "MessageCell.h"
-//#import "CommunicationViewController.h"
+#import "CommunicationViewController.h"
 #import "GJGCChatFriendViewController.h"
 #import "NotificationDetailViewController.h"
 #import "NotificationSettingViewController.h"
@@ -48,32 +48,9 @@
         [self.homePageBtn setImage:[UIImage imageNamed:@"icon_dicover_me"] forState:UIControlStateNormal];
     }
     
-    if (GJCFSystemVersionIs7) {
-        self.edgesForExtendedLayout = UIRectEdgeBottom;
-    }
-    else
-    {
-        self.navigationController.navigationBar.translucent=YES;
-        [self.navigationController setNavigationBarHidden:YES animated:YES];
-    }
-
-
     
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    if (GJCFSystemVersionIs7) {
-        self.edgesForExtendedLayout = UIRectEdgeNone;
-    }
-    else
-    {
-        self.navigationController.navigationBar.translucent=NO;
-    }
-     [self.navigationController setNavigationBarHidden:NO animated:YES];
-
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -309,9 +286,9 @@
         talk.talkType = GJGCChatFriendTalkTypePrivate;
         talk.toId = data.senderid;
         talk.toUserName = data.realname;
-        
+
         GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
-        
+ 
         [self.navigationController pushViewController:privateChat animated:YES];
 
         MessageCell *cell  = [tableView cellForRowAtIndexPath:indexPath];
