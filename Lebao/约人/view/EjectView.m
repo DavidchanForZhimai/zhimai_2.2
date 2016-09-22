@@ -7,15 +7,19 @@
 //
 
 #import "EjectView.h"
+#import "MP3PlayerManager.h"
 
-
-@interface EjectView()<D3RecordDelegate>
+@interface EjectView()<D3RecordDelegate,AVAudioPlayerDelegate,UITextFieldDelegate>
 {
     UIButton *btn1;
     UIButton *btn2;
     UIButton *btn3;
-    
-    
+    UIButton *audioBtn;//录音按键切换按钮
+    UITextField *otherMoneyField;
+    UIButton *cancelBtn;
+    UIButton *confirmBtn;
+    UIView *horLine;
+    UIView *verLine;
 }
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UILabel *titleLabel2;
@@ -82,6 +86,17 @@
         [self addSubview:btn3];
         
         
+        otherMoneyField=[[UITextField alloc]initWithFrame:CGRectMake(20,CGRectGetMaxY(btn1.frame)+15,self.frame.size.width-40, 0)];
+        otherMoneyField.layer.borderColor=[[UIColor colorWithWhite:0.9 alpha:1] CGColor];
+        otherMoneyField.layer.borderWidth = 1;
+        otherMoneyField.placeholder=@"请输入打赏的金额";
+        otherMoneyField.textAlignment=NSTextAlignmentCenter;
+        otherMoneyField.layer.cornerRadius=8;
+        otherMoneyField.delegate=self;
+        otherMoneyField.keyboardType=UIKeyboardTypePhonePad;
+        otherMoneyField.backgroundColor=[UIColor whiteColor];
+        [self addSubview:otherMoneyField];
+        
         _soundBtn=[D3RecordButton buttonWithType:UIButtonTypeSystem];
         _soundBtn.frame=CGRectMake(20,CGRectGetMaxY(btn1.frame)+15,self.frame.size.width-80, 32);
         _soundBtn.layer.borderColor= [[UIColor colorWithWhite:0.9 alpha:1] CGColor];
@@ -104,7 +119,7 @@
         _logField.backgroundColor=[UIColor whiteColor];
         [self addSubview:_logField];
         
-        UIButton *audioBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+        audioBtn=[UIButton buttonWithType:UIButtonTypeCustom];
         audioBtn.frame=CGRectMake(CGRectGetMaxX(_logField.frame)+10, _logField.y, _logField.height, _logField.height);
         [audioBtn setImage:[UIImage imageNamed:@"yuejian_luying"] forState:UIControlStateNormal];
         [audioBtn addTarget:self action:@selector(audioBtnClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -112,23 +127,30 @@
         [self addSubview:audioBtn];
         
         
-        CGRect cancelFrame = CGRectMake(0, CGRectGetMaxY(_logField.frame)+15, frame.size.width/2, 42);
-        UIButton *cancelBtn = [self creatButtonWithFrame:cancelFrame title:@"取消"];
+        cancelBtn =  [UIButton buttonWithType:UIButtonTypeCustom];
+        cancelBtn.frame =  CGRectMake(0, CGRectGetMaxY(_logField.frame)+15, frame.size.width/2, 42);
+        
+        [cancelBtn setTitleColor:rgb(0, 123, 251) forState:UIControlStateNormal];
+        [cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
+        cancelBtn.titleLabel.font = [UIFont boldSystemFontOfSize:18];
         [self addSubview:cancelBtn];
         [cancelBtn addTarget:self action:@selector(leftCancelClick) forControlEvents:UIControlEventTouchUpInside];
         
         
-        CGRect confirmF = CGRectMake(frame.size.width/2, cancelBtn.frame.origin.y, cancelBtn.frame.size.width, cancelBtn.frame.size.height);
-        UIButton *confirmBtn = [self creatButtonWithFrame:confirmF title:@"确定"];
+        confirmBtn =  [UIButton buttonWithType:UIButtonTypeCustom];
+        confirmBtn.frame =CGRectMake(frame.size.width/2, cancelBtn.frame.origin.y, cancelBtn.frame.size.width, cancelBtn.frame.size.height);
+        [confirmBtn setTitleColor:rgb(0, 123, 251) forState:UIControlStateNormal];
+        [confirmBtn setTitle:@"确定" forState:UIControlStateNormal];
+        confirmBtn.titleLabel.font = [UIFont boldSystemFontOfSize:18];
         [self addSubview:confirmBtn];
         [confirmBtn addTarget:self action:@selector(confirmBtnClick) forControlEvents:UIControlEventTouchUpInside];
         
         //两条分割线
-        UIView *horLine = [[UIView alloc] initWithFrame:CGRectMake(0, confirmF.origin.y-1, frame.size.width, 0.5)];
+        horLine = [[UIView alloc] initWithFrame:CGRectMake(0, confirmBtn.origin.y-1, frame.size.width, 0.5)];
         horLine.backgroundColor = rgb(213, 213, 215);
         [self addSubview:horLine];
         
-        UIView *verLine = [[UIView alloc] initWithFrame:CGRectMake(frame.size.width/2-1,confirmF.origin.y-1, 0.5, 43)];
+        verLine = [[UIView alloc] initWithFrame:CGRectMake(frame.size.width/2-1,confirmBtn.origin.y-1, 0.5, 43)];
         verLine.backgroundColor = horLine.backgroundColor;
         [self addSubview:verLine];
         self.frame=CGRectMake(0,0, frame.size.width, CGRectGetMaxY(confirmBtn.frame));
@@ -139,6 +161,28 @@
     
 }
 
+//重新设置Frame
+-(void)changeAllFrameWithHeight:(float)height
+{
+    otherMoneyField.frame=CGRectMake(20,CGRectGetMaxY(btn1.frame)+15,self.frame.size.width-40, 0+height);
+    if(height>0){
+        _soundBtn.frame=CGRectMake(20,CGRectGetMaxY(otherMoneyField.frame)+15,self.frame.size.width-80, 32);}
+    else{
+        _soundBtn.frame=CGRectMake(20,CGRectGetMaxY(btn1.frame)+15,self.frame.size.width-80, 32);
+    }
+    _logField.frame=_soundBtn.frame;
+    audioBtn.frame=CGRectMake(CGRectGetMaxX(_logField.frame)+10, _logField.y, _logField.height, _logField.height);
+    
+    cancelBtn.frame= CGRectMake(0, CGRectGetMaxY(_logField.frame)+15, self.frame.size.width/2, 42);
+    confirmBtn.frame = CGRectMake(self.frame.size.width/2, cancelBtn.frame.origin.y, cancelBtn.frame.size.width, cancelBtn.frame.size.height);
+    horLine.frame =CGRectMake(0, confirmBtn.origin.y-1, self.frame.size.width, 0.5);
+    verLine.frame =CGRectMake(self.frame.size.width/2-1,confirmBtn.origin.y-1, 0.5, 43);
+
+    self.frame=CGRectMake(self.frame.origin.x,self.frame.origin.y, self.frame.size.width, CGRectGetMaxY(confirmBtn.frame));
+
+}
+
+//赏金按钮
 -(void)btnClick:(UIButton *)sender
 {
     
@@ -150,6 +194,7 @@
         btn2.layer.borderColor=[UIColor grayColor].CGColor;
         btn3.layer.borderColor=[UIColor grayColor].CGColor;
         self.money=@"100";
+        [self changeAllFrameWithHeight:0];
     }
     if (sender.tag==101) {
         sender.selected=YES;
@@ -159,6 +204,7 @@
         btn1.layer.borderColor=[UIColor grayColor].CGColor;
         btn3.layer.borderColor=[UIColor grayColor].CGColor;
         self.money=@"200";
+        [self changeAllFrameWithHeight:0];
     }
     if (sender.tag==102) {
         sender.selected=YES;
@@ -167,19 +213,9 @@
          sender.layer.borderColor=[UIColor colorWithRed:0.298 green:0.627 blue:0.996 alpha:1.000].CGColor;
         btn2.layer.borderColor=[UIColor grayColor].CGColor;
         btn1.layer.borderColor=[UIColor grayColor].CGColor;
+        [self changeAllFrameWithHeight:32];
+        self.money=otherMoneyField.text;
     }
-}
-
-- (UIButton *) creatButtonWithFrame:(CGRect) frame title:(NSString *) title
-{
-    UIButton *cancelBtn =  [UIButton buttonWithType:UIButtonTypeCustom];
-    cancelBtn.frame = frame;
-    
-    [cancelBtn setTitleColor:rgb(0, 123, 251) forState:UIControlStateNormal];
-    [cancelBtn setTitle:title forState:UIControlStateNormal];
-    cancelBtn.titleLabel.font = [UIFont boldSystemFontOfSize:18];
-    
-    return cancelBtn;
 }
 
 
@@ -200,14 +236,12 @@
 }
 #pragma mark <D3RecordDelegate>
 -(void)endRecord:(NSData *)voiceData{
-    NSError *error;
-    play = [[AVAudioPlayer alloc]initWithData:voiceData error:&error];
-    NSLog(@"%@",error);
-    play.volume = 1.0f;
-    [play play];
-    NSLog(@"yesssssssssss..........%f",play.duration);
-    [_soundBtn setTitle:@"按住  说话" forState:UIControlStateNormal];
+
     _audioData=voiceData;
+     [audioBtn setImage:[UIImage imageNamed:@"yuejian_luyinhou"] forState:UIControlStateNormal];
+    audioBtn.tag=12;
+    _logField.frame=_soundBtn.frame;
+
 }
 
 
@@ -225,9 +259,54 @@
         sender.tag=10;
         [sender setImage:[UIImage imageNamed:@"yuejian_luying"] forState:UIControlStateNormal];
        _logField.frame=_soundBtn.frame;
+    }else if(sender.tag==12){
+        sender.tag=13;
+        [sender setImage:[UIImage imageNamed:@"yuejian_bofang"] forState:UIControlStateNormal];
+        NSError *error;
+        play = [[AVAudioPlayer alloc]initWithData:_audioData error:&error];
+//         NSLog(@"%@",error);
+        play.volume = 1.0f;
+        play.delegate=self;
+        [play play];
+    
+
+    }else if(sender.tag==13){
+        sender.tag=12;
+        [audioBtn setImage:[UIImage imageNamed:@"yuejian_luyinhou"] forState:UIControlStateNormal];
+        [play stop];
     }
 }
+#pragma mark
+#pragma mark textField 方法
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    return [self validateNumber:string];
+}
 
+- (BOOL)validateNumber:(NSString*)number {
+    BOOL res = YES;
+    NSCharacterSet* tmpSet = [NSCharacterSet characterSetWithCharactersInString:@"0123456789"];
+    int i = 0;
+    while (i < number.length) {
+        NSString * string = [number substringWithRange:NSMakeRange(i, 1)];
+        NSRange range = [string rangeOfCharacterFromSet:tmpSet];
+        if (range.length == 0) {
+            res = NO;
+            break;
+        }
+        i++;
+    }
+    return res;
+}
+#pragma mark - 播放器代理方法
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
+{   NSLog(@"播放完成!");
+    
+    audioBtn.tag=12;
+    [audioBtn setImage:[UIImage imageNamed:@"yuejian_luyinhou"] forState:UIControlStateNormal];
+    
+
+    
+}
 #pragma mark - 注销视图
 - (void) dissMiss
 {

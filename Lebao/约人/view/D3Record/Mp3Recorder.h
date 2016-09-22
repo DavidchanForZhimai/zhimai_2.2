@@ -6,6 +6,8 @@
 
 #import <Foundation/Foundation.h>
 
+
+
 @protocol Mp3RecorderDelegate <NSObject>
 - (void)failRecord;
 - (void)beginConvert;

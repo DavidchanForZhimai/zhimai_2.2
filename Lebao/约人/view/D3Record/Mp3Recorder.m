@@ -226,23 +226,27 @@
         NSError *error=nil;
         _audioPlayer=[[AVAudioPlayer alloc]initWithContentsOfURL:url error:&error];
         _audioPlayer.numberOfLoops=0;
+        _audioPlayer.delegate = self;
         [_audioPlayer prepareToPlay];
         if (error) {
             NSLog(@"创建播放器过程中发生错误，错误信息：%@",error.localizedDescription);
             return nil;
+            
         }
     }
+   
     return _audioPlayer;
 }
+
 - (NSString *)mp3Path
 {
     NSString *mp3Path = [NSTemporaryDirectory() stringByAppendingPathComponent:@"mp3.caf"];
     return mp3Path;
 }
 -(void)audioRecorderDidFinishRecording:(AVAudioRecorder *)recorder successfully:(BOOL)flag{
-    if (![self.audioPlayer isPlaying]) {
-        [self.audioPlayer play];
-    }
+//    if (![self.audioPlayer isPlaying]) {
+//        [self.audioPlayer play];
+//    }
     NSLog(@"录音完成!");
 }
 @end

@@ -54,11 +54,8 @@ static MP3PlayerManager* mP3PlayerManager;
 //播放
 - (void)audioPlayerWithURl:(NSString *)url
 {
-    
-    AVAudioSession *session = [AVAudioSession sharedInstance];
-    NSError *error;
-    [session setCategory:AVAudioSessionCategoryPlayback error:&error];
-//    NSLog(@"errrrr%@",error);
+         NSLog(@"file path:%@",url);
+   
     _url = url;
     [self setPlayer];
     [self.audioPlayer play];
