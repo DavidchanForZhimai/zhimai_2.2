@@ -38,6 +38,10 @@ typedef void (^progressBlock)(int64_t bytesWritten, int64_t totalBytesWritten, i
 #endif
 
 @interface XLNetworkRequest : NSObject
+/**
+ 监控网络状态
+ */
++ (BOOL)checkNetworkStatus;
 
 /**
  GET请求

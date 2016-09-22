@@ -244,7 +244,7 @@
             isNetworkUse = YES;
         } else if (status == AFNetworkReachabilityStatusNotReachable){
             // 网络异常操作
-            NSLog(@"网络异常操作");
+//            NSLog(@"网络异常操作");
             isNetworkUse = NO;
             [[ToolManager shareInstance] showErrorWithStatus];
         }

@@ -29,8 +29,11 @@ static id dataObj;
 + (void)postWithUrl:(NSString *)url param:(id)param modelClass:(Class)modelClass responseBlock:(responseBlock)responseDataBlock {
        
        [XLNetworkRequest postRequest:url params:param success:^(id responseObj) {
+           if (responseObj) {
+               dataObj = [self modelTransformationWithResponseObj:responseObj modelClass:modelClass];
+           }
         
-        dataObj = [self modelTransformationWithResponseObj:responseObj modelClass:modelClass];
+           
         responseDataBlock(dataObj, nil);
     } failure:^(NSError *error) {
         

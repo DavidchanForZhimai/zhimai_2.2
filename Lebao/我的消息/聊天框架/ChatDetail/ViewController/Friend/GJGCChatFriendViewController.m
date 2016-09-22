@@ -96,10 +96,9 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
     [GJCFNotificationCenter addObserver:self selector:@selector(observeChatInputPanelBeginRecord:) name:formateNoti object:nil];
     [GJCFNotificationCenter addObserver:self selector:@selector(observeApplicationResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
 
-    
-    
-    
+    [self startRefresh];
 }
+
 #pragma mark
 #pragma mark - 初始化数据
 #pragma mark
@@ -108,14 +107,9 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
 {
     
     NSMutableDictionary *param = [Parameter parameterWithSessicon];
-
     [param setObject:self.taklInfo.toId forKey:@"senderid"];
-    
     [param setObject:@(_page) forKey:@"page"];
-    if (self.dataSourceManager.chatListArray.count==0) {
-        [[ToolManager shareInstance] showWithStatus];
-    }
-    
+
     [XLDataService postWithUrl:CommunicatelistURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         
         if (isRefresh) {
@@ -222,6 +216,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
     NSLog(@"self.talkInfo.toId:%@",self.taklInfo.toId);
     self.dataSourceManager = [[GJGCChatFriendDataSourceManager alloc]initWithTalk:self.taklInfo withDelegate:self];
     //初始化数据
+ 
     [self netWork:NO isFooter:NO isShouldClear:YES isSend:NO ];
 }
 
@@ -692,17 +687,18 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
         }
     }
 }
-
+//重新发送
 - (void)chatCellDidChooseReSendMessage:(GJGCChatBaseCell *)tapedCell
 {
     NSIndexPath *tapIndexPath = [self.chatListTable indexPathForCell:tapedCell];
     GJGCChatFriendContentModel *contentModel = (GJGCChatFriendContentModel *)[self.dataSourceManager contentModelAtIndex:tapIndexPath.row];
+    [self setSendChatContentModelWithTalkInfo:contentModel isResend:YES];
 }
 
 - (void)chatCellDidTapOnHeadView:(GJGCChatBaseCell *)tapedCell
 {
     NSIndexPath *tapIndexPath = [self.chatListTable indexPathForCell:tapedCell];
-    GJGCChatFriendContentModel *contentModel = (GJGCChatFriendContentModel *)[self.dataSourceManager contentModelAtIndex:tapIndexPath.row];
+//    GJGCChatFriendContentModel *contentModel = (GJGCChatFriendContentModel *)[self.dataSourceManager contentModelAtIndex:tapIndexPath.row];
 
 //    GJGCPersonInformationViewController *personVC = [[GJGCPersonInformationViewController alloc]initWithUserId:[contentModel.senderId longLongValue] reportType:GJGCReportTypePerson];
 //    [[GJGCUIStackManager share]pushViewController:personVC animated:YES];
@@ -1123,11 +1119,11 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
     chatContentModel.phoneNumberArray = [parseTextDict objectForKey:@"phone"];
     chatContentModel.toId = self.taklInfo.toId;
     chatContentModel.toUserName = self.taklInfo.toUserName;
-    chatContentModel.timeString = [GJGCChatSystemNotiCellStyle formateTime:GJCFDateToString([NSDate date])];
+//    chatContentModel.timeString = [GJGCChatSystemNotiCellStyle formateTime:GJCFDateToString([NSDate date])];
     chatContentModel.sendStatus = GJGCChatFriendSendMessageStatusSending;
     chatContentModel.isFromSelf = YES;
     chatContentModel.talkType = self.taklInfo.talkType;
-  
+    chatContentModel.localMsgId =GJCFDateToString([NSDate date]);
     NSDate *date = [NSDate date];
     NSDate *sendTime = GJCFDateFromStringByFormat(GJCFDateToStringByFormat(date,@"Y-M-d HH:mm:ss"), @"Y-M-d HH:mm:ss");
     chatContentModel.sendTime = [sendTime timeIntervalSince1970];
@@ -1407,18 +1403,24 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
         
     }
 }
-#pragma mark----------------------------------------------------
 #pragma mark - 绑定更多信息给待发送的内容
 - (void)setSendChatContentModelWithTalkInfo:(GJGCChatFriendContentModel *)contentModel
 {
-    
-    [self.dataSourceManager mockSendAnMesssage:contentModel];
+    [self setSendChatContentModelWithTalkInfo:contentModel isResend:NO];
+}
+- (void)setSendChatContentModelWithTalkInfo:(GJGCChatFriendContentModel *)contentModel isResend:(BOOL)isResend
+{
+    if (!isResend) {
+        [self.dataSourceManager mockSendAnMesssage:contentModel];
+    }
+
+    NSInteger index = [self.dataSourceManager getContentModelIndexByLocalMsgId:contentModel.localMsgId];
     
     if (contentModel.contentType==GJGCChatFriendContentTypeText) {
+        
         NSMutableDictionary *param = [Parameter parameterWithSessicon];
         [param setObject:recevier forKey:@"receiver"];
         [param setObject:contentModel.originTextMessage forKey:@"content"];
-        
         [XLDataService postWithUrl:CommunicateURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
             
             if (dataObj) {
@@ -1428,22 +1430,25 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
                     contentModel.sendStatus = GJGCChatFriendSendMessageStatusSuccess;
                     contentModel.sendTime = [dataObj[@"datas"][@"createtime"] longLongValue];
                     contentModel.headUrl =[NSString stringWithFormat:@"%@%@",ImageURLS,dataObj[@"datas"][@"imgurl"]] ;
-                  
+                    [self.dataSourceManager updateContentModelValuesNotEffectRowHeight:contentModel atIndex:index];
                    
+                    [self.chatListTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
                     
                 }
                 else
                 {
                     contentModel.sendStatus = GJGCChatFriendSendMessageStatusFaild;
-                    [self.dataSourceManager mockSendAnMesssage:contentModel];
+                    [self.dataSourceManager updateContentModelValuesNotEffectRowHeight:contentModel atIndex:index];
+                    [self.chatListTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
                     
                 }
                 
             }
             else
             {
-                contentModel.sendStatus = GJGCChatFriendSendMessageStatusFaild;
-                 [self.dataSourceManager mockSendAnMesssage:contentModel];
+                  contentModel.sendStatus = GJGCChatFriendSendMessageStatusFaild;
+                  [self.dataSourceManager updateContentModelValuesNotEffectRowHeight:contentModel atIndex:index];
+                  [self.chatListTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
             }
             
             

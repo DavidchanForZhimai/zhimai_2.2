@@ -9,6 +9,7 @@
 #import "BaseButton.h"
 #import "UILabel+Extend.h"
 @implementation BaseButton
+
 - (UIButton *)initWithFrame:(CGRect)frame
 {
     _anmialTime = .15;
@@ -22,6 +23,7 @@
         [self addTarget:self action:@selector(didClickOutBtn:) forControlEvents:UIControlEventTouchUpOutside];
         [self addTarget:self action:@selector(didTouchBtn:) forControlEvents:UIControlEventTouchDown];
         [self addTarget:self action:@selector(didCancelBtn:) forControlEvents:UIControlEventTouchDragInside];
+        
     }
     return self;
 }

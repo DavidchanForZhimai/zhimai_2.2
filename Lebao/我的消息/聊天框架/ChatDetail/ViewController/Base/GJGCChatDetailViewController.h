@@ -56,7 +56,7 @@
 - (void)startRefresh;
 
 /**
- *  主动停止下拉刷新,子类调用
+ *  主动调用下拉刷新,子类调用
  */
 - (void)startLoadMore;
 
