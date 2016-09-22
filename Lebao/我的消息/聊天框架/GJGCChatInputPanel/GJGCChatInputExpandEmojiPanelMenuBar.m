@@ -68,7 +68,7 @@
 {
     if (self = [super init]) {
         
-        self.itemSourceArray = [GJGCChatInputExpandEmojiPanelMenuBarDataSource menuBarItems];
+        self.itemSourceArray = [GJGCChatInputExpandEmojiPanelMenuBarDataSource commentBarItems];
         self.delegate = aDelegate;
         
         self.gjcf_width = 62*self.itemSourceArray.count;

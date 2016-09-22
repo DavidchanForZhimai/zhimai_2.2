@@ -40,11 +40,11 @@
 static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionSheetAssociateKey";
 
 @interface GJGCChatFriendViewController ()<
-                                            GJCFAudioPlayerDelegate,
-                                            UIImagePickerControllerDelegate,
-                                            UINavigationControllerDelegate,
-                                            GJCFAssetsPickerViewControllerDelegate,
-                                            GJCUCaptureViewControllerDelegate>
+GJCFAudioPlayerDelegate,
+UIImagePickerControllerDelegate,
+UINavigationControllerDelegate,
+GJCFAssetsPickerViewControllerDelegate,
+GJCUCaptureViewControllerDelegate>
 
 @property (nonatomic,strong)GJCFAudioPlayer *audioPlayer;
 
@@ -78,7 +78,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
     
     [self setStrNavTitle:self.dataSourceManager.title];
     
-//    [self.inputPanel setLastMessageDraft:messageDraft];
+    //    [self.inputPanel setLastMessageDraft:messageDraft];
     
     /* 陌生人不可发语音 */
     if (self.dataSourceManager.taklInfo.talkType == GJGCChatFriendTalkTypePrivate) {
@@ -95,7 +95,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
     NSString *formateNoti = [GJGCChatInputConst panelNoti:GJGCChatInputPanelBeginRecordNoti formateWithIdentifier:self.inputPanel.panelIndentifier];
     [GJCFNotificationCenter addObserver:self selector:@selector(observeChatInputPanelBeginRecord:) name:formateNoti object:nil];
     [GJCFNotificationCenter addObserver:self selector:@selector(observeApplicationResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
-
+    
     [self startRefresh];
 }
 
@@ -109,47 +109,47 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
     NSMutableDictionary *param = [Parameter parameterWithSessicon];
     [param setObject:self.taklInfo.toId forKey:@"senderid"];
     [param setObject:@(_page) forKey:@"page"];
-
+    
     [XLDataService postWithUrl:CommunicatelistURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         
         if (isRefresh) {
-          
+            
             
         }
         
         if (dataObj) {
             CommunityModal *modal=[CommunityModal mj_objectWithKeyValues:dataObj];
-             recevier =  modal.receiver;
+            recevier =  modal.receiver;
             if (modal.rtcode ==1) {
                 [[ToolManager shareInstance] dismiss];
                 if (isShouldClear) {
                     [self.dataSourceManager.chatListArray removeAllObjects];
                     [self.dataSourceManager.timeShowSubArray removeAllObjects];
                 }
-               
-                for (CommunityDataModal *data  in modal.datas) {
+                
+                for (int i=0;i<modal.datas.count;i++) {
+                    CommunityDataModal *data =modal.datas[i];
+                    GJGCChatFriendContentModel *chatContentModel = [[GJGCChatFriendContentModel alloc]init];
+                    chatContentModel.baseMessageType = GJGCChatBaseMessageTypeChatMessage;
+                    chatContentModel.contentType = GJGCChatFriendContentTypeText;
+                    NSString *text = data.content;
+                    NSDictionary *parseTextDict = [GJGCChatFriendCellStyle formateSimpleTextMessage:text];
+                    chatContentModel.simpleTextMessage = [parseTextDict objectForKey:@"contentString"];
+                    chatContentModel.originTextMessage = text;
+                    chatContentModel.emojiInfoArray = [parseTextDict objectForKey:@"imageInfo"];
+                    chatContentModel.phoneNumberArray = [parseTextDict objectForKey:@"phone"];
+                    chatContentModel.toId = self.taklInfo.toId;
+                    chatContentModel.senderId = modal.receiver;
+                    chatContentModel.toUserName = self.taklInfo.toUserName;
+                    chatContentModel.sendTime = [data.createtime longLongValue];
                     
-                        GJGCChatFriendContentModel *chatContentModel = [[GJGCChatFriendContentModel alloc]init];
-                        chatContentModel.baseMessageType = GJGCChatBaseMessageTypeChatMessage;
-                        chatContentModel.contentType = GJGCChatFriendContentTypeText;
-                        NSString *text = data.content;
-                        NSDictionary *parseTextDict = [GJGCChatFriendCellStyle formateSimpleTextMessage:text];
-                        chatContentModel.simpleTextMessage = [parseTextDict objectForKey:@"contentString"];
-                        chatContentModel.originTextMessage = text;
-                        chatContentModel.emojiInfoArray = [parseTextDict objectForKey:@"imageInfo"];
-                        chatContentModel.phoneNumberArray = [parseTextDict objectForKey:@"phone"];
-                        chatContentModel.toId = self.taklInfo.toId;
-                        chatContentModel.senderId = modal.receiver;
-                        chatContentModel.toUserName = self.taklInfo.toUserName;
-                        chatContentModel.sendTime = [data.createtime longLongValue];
-        
-                        chatContentModel.sendStatus = GJGCChatFriendSendMessageStatusSuccess;
-                        chatContentModel.isFromSelf = data.isself;
-                        chatContentModel.talkType = self.taklInfo.talkType;
-                        chatContentModel.headUrl = [NSString stringWithFormat:@"%@%@",ImageURLS,data.imgurl];
+                    chatContentModel.sendStatus = GJGCChatFriendSendMessageStatusSuccess;
+                    chatContentModel.isFromSelf = data.isself;
+                    chatContentModel.talkType = self.taklInfo.talkType;
+                    chatContentModel.headUrl = [NSString stringWithFormat:@"%@%@",ImageURLS,data.imgurl];
                     
                     [self.dataSourceManager mockSendAnMesssage:chatContentModel];
-                    
+                    [self.dataSourceManager resortAllChatContentBySendTime];
                 }
                 
             }
@@ -193,9 +193,9 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
 
 - (void)rightButtonPressed:(id)sender
 {
-//    GJGCPersonInformationViewController *personInformation = [[GJGCPersonInformationViewController alloc]initWithUserId:[self.taklInfo.toId longLongValue] reportType:GJGCReportTypePerson];
-//    [[GJGCUIStackManager share]pushViewController:personInformation animated:YES];
-//    
+    //    GJGCPersonInformationViewController *personInformation = [[GJGCPersonInformationViewController alloc]initWithUserId:[self.taklInfo.toId longLongValue] reportType:GJGCReportTypePerson];
+    //    [[GJGCUIStackManager share]pushViewController:personInformation animated:YES];
+    //
     /* 收起输入键盘 */
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.26 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self reserveChatInputPanelState];
@@ -216,7 +216,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
     NSLog(@"self.talkInfo.toId:%@",self.taklInfo.toId);
     self.dataSourceManager = [[GJGCChatFriendDataSourceManager alloc]initWithTalk:self.taklInfo withDelegate:self];
     //初始化数据
- 
+    
     [self netWork:NO isFooter:NO isShouldClear:YES isSend:NO ];
 }
 
@@ -239,16 +239,16 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
 #pragma mark - tableViewDelegate 重载
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-   
-   
+    
+    
 }
 
 #pragma mark - GJCFAudioPlayer Delegate
 - (void)audioPlayer:(GJCFAudioPlayer *)audioPlay didFinishPlayAudio:(GJCFAudioModel *)audioFile
 {
-   
+    
     dispatch_async(dispatch_get_main_queue(), ^{
-       
+        
         [self stopPlayCurrentAudio];
         
         [self checkNextAudioMsgToPlay];
@@ -269,12 +269,12 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
     if (lastPlayIndex == [self.dataSourceManager totalCount] -1) {
         return;
     }
-
+    
     //是自己的但是接下来还是自己的，那么停止播放
     if(self.isLastPlayedMyAudio){
         
         GJGCChatFriendContentModel *contentModel = (GJGCChatFriendContentModel *)[self.dataSourceManager contentModelAtIndex:lastPlayIndex + 1];
-
+        
         if(contentModel.isFromSelf){
             return;
         }
@@ -321,9 +321,9 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
     dispatch_async(dispatch_get_main_queue(), ^{
         
         [self stopPlayCurrentAudio];
-
+        
     });
-
+    
 }
 - (void)audioPlayer:(GJCFAudioPlayer *)audioPlay didUpdateSoundMouter:(CGFloat)soundMouter
 {
@@ -385,12 +385,12 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
                         if ([playingCell isKindOfClass:[GJGCChatFriendAudioMessageCell class]]) {
                             
                             [playingCell playAudioAction];
-
+                            
                         }
                     }
                 }
             }
-
+            
         }
         
     }
@@ -633,7 +633,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
         if (itemModel.contentType == GJGCChatFriendContentTypeImage) {
             
             [imageUrls addObject:itemModel.imageMessageUrl];
-
+            
             if ([itemModel.imageMessageUrl isEqualToString:contentModel.imageMessageUrl]) {
                 
                 currentImageIndex = imageUrls.count - 1;
@@ -659,7 +659,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
 }
 
 - (void)textMessageCellDidTapOnUrl:(GJGCChatBaseCell *)tapedCell withUrl:(NSString *)url
-{    
+{
     GJGCWebViewController *webView = [[GJGCWebViewController alloc]init];
     [self.navigationController pushViewController:webView animated:YES];
     [webView setUrl:url];
@@ -669,7 +669,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
 {
     NSIndexPath *tapIndexPath = [self.chatListTable indexPathForCell:tapedCell];
     GJGCChatFriendContentModel *contentModel = (GJGCChatFriendContentModel *)[self.dataSourceManager contentModelAtIndex:tapIndexPath.row];
-
+    
     /* 下载任务也要退出 */
     [self cancelDownloadAtIndexPath:tapIndexPath];
     
@@ -698,17 +698,17 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
 - (void)chatCellDidTapOnHeadView:(GJGCChatBaseCell *)tapedCell
 {
     NSIndexPath *tapIndexPath = [self.chatListTable indexPathForCell:tapedCell];
-//    GJGCChatFriendContentModel *contentModel = (GJGCChatFriendContentModel *)[self.dataSourceManager contentModelAtIndex:tapIndexPath.row];
-
-//    GJGCPersonInformationViewController *personVC = [[GJGCPersonInformationViewController alloc]initWithUserId:[contentModel.senderId longLongValue] reportType:GJGCReportTypePerson];
-//    [[GJGCUIStackManager share]pushViewController:personVC animated:YES];
+    //    GJGCChatFriendContentModel *contentModel = (GJGCChatFriendContentModel *)[self.dataSourceManager contentModelAtIndex:tapIndexPath.row];
+    
+    //    GJGCPersonInformationViewController *personVC = [[GJGCPersonInformationViewController alloc]initWithUserId:[contentModel.senderId longLongValue] reportType:GJGCReportTypePerson];
+    //    [[GJGCUIStackManager share]pushViewController:personVC animated:YES];
 }
 
 - (void)chatCellDidTapOnDriftBottleCard:(GJGCChatBaseCell *)tappedCell
 {
     NSIndexPath *tapIndexPath = [self.chatListTable indexPathForCell:tappedCell];
     GJGCChatFriendContentModel *contentModel = (GJGCChatFriendContentModel *)[self.dataSourceManager contentModelAtIndex:tapIndexPath.row];
-
+    
     GJGCChatFriendDriftBottleCell *driftCell = (GJGCChatFriendDriftBottleCell *)tappedCell;
     
     GJGCDrfitBottleDetailViewController *driftVC = [[GJGCDrfitBottleDetailViewController alloc]initWithThumbImage:driftCell.contentImageView.image withImageUrl:contentModel.imageMessageUrl withContentString:contentModel.driftBottleContentString.string];
@@ -744,7 +744,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
             default:
                 break;
         }
-
+        
         return;
     }
 }
@@ -772,7 +772,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
 
 - (void)downloadAndPlayAudioAtRowIndex:(NSIndexPath *)rowIndex
 {
-   
+    
     GJGCChatFriendContentModel *contentModel = (GJGCChatFriendContentModel *)[self.dataSourceManager contentModelAtIndex:rowIndex.row];
     
     [GJCFAudioFileUitil setupAudioFileTempEncodeFilePath:contentModel.audioModel];
@@ -805,9 +805,9 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
     GJGCChatFriendContentModel *contentModel = (GJGCChatFriendContentModel *)[self.dataSourceManager contentModelAtIndex:playingIndex];
     
     NSString *localStorePath = contentModel.audioModel.localStorePath;
-
+    
     NSIndexPath *playingIndexPath = [NSIndexPath indexPathForRow:playingIndex inSection:0];
-        if (GJCFFileIsExist(localStorePath)) {
+    if (GJCFFileIsExist(localStorePath)) {
         
         [self.audioPlayer playAudioFile:contentModel.audioModel];
         contentModel.isPlayingAudio = YES;
@@ -821,7 +821,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
         return;
         
     }
-
+    
     /* 加载下载转圈等待特效 */
     GJGCChatFriendContentModel *friendContentModel = (GJGCChatFriendContentModel *)contentModel;
     friendContentModel.isDownloading = YES;
@@ -880,7 +880,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
     //漂流瓶图片下载
     if (imageContentModel.contentType == GJGCChatFriendContentTypeDriftBottle) {
         
-//        [self downloadDriftBottleImageFile:imageContentModel forIndexPath:indexPath];
+        //        [self downloadDriftBottleImageFile:imageContentModel forIndexPath:indexPath];
         
         return;
     }
@@ -899,7 +899,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
         if (![[GJCFCachePathManager shareManager] mainImageCacheFileIsExistForUrl:thumbImageUrl] && !GJCFStringIsNull(thumbImageUrl)) {
             
             NSLog(@"image url:%@",thumbImageUrl);
-
+            
             imageContentModel.imageLocalCachePath = [[GJCFCachePathManager shareManager] mainImageCacheFilePathForUrl:thumbImageUrl];
             NSLog(@"image local path:%@",imageContentModel.imageLocalCachePath);
             
@@ -921,13 +921,13 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
     if (GJCFFileIsExist(imageContentModel.imageLocalCachePath)) {
         return;
     }
-
+    
     CGSize imageSize = CGSizeMake(80, 234);
     
     CGFloat contentInnerMargin = 12.f;
     CGFloat bubbleToBordMargin = 56;
     CGFloat maxContentImageWidth = GJCFSystemScreenWidth - bubbleToBordMargin - 40 - 3 - 2*contentInnerMargin;
-
+    
     CGSize thumbSize = [GJGCImageResizeHelper getCutImageSizeWithScreenScale:imageSize maxSize:CGSizeMake(maxContentImageWidth, maxContentImageWidth)];
     NSString *thumbImageUrl = @"";
     
@@ -961,7 +961,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
     downloadTask.userInfo = @{@"type":@"gif",@"msgId":gifContentModel.localMsgId};
     
     [self addDownloadTask:downloadTask];
-
+    
 }
 
 #pragma mark - 取消下载
@@ -1027,7 +1027,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
                 isDeviceRequire = YES;
             }
             
-            /* 
+            /*
              * 条件满足就使用自定义相机解决黑屏问题
              * 否则继续使用系统相机
              */
@@ -1072,7 +1072,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
         
         //再触发一次，让UI改变
         [self.inputPanel recordRightStartLimit];
-
+        
         return;
     }
     
@@ -1084,7 +1084,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
     chatContentModel.baseMessageType = GJGCChatBaseMessageTypeChatMessage;
     chatContentModel.contentType = GJGCChatFriendContentTypeAudio;
     chatContentModel.audioModel = audioFile;
-
+    
     chatContentModel.audioDuration = [GJGCChatFriendCellStyle formateAudioDuration:GJCFStringFromInt(audioFile.duration)];
     chatContentModel.toId = self.taklInfo.toId;
     chatContentModel.toUserName = self.taklInfo.toUserName;
@@ -1100,7 +1100,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
     /* 从talkInfo中绑定更多信息给待发送内容 */
     [self setSendChatContentModelWithTalkInfo:chatContentModel];
     
-   
+    
 }
 
 - (void)chatInputPanel:(GJGCChatInputPanel *)panel sendTextMessage:(NSString *)text
@@ -1119,7 +1119,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
     chatContentModel.phoneNumberArray = [parseTextDict objectForKey:@"phone"];
     chatContentModel.toId = self.taklInfo.toId;
     chatContentModel.toUserName = self.taklInfo.toUserName;
-//    chatContentModel.timeString = [GJGCChatSystemNotiCellStyle formateTime:GJCFDateToString([NSDate date])];
+    //    chatContentModel.timeString = [GJGCChatSystemNotiCellStyle formateTime:GJCFDateToString([NSDate date])];
     chatContentModel.sendStatus = GJGCChatFriendSendMessageStatusSending;
     chatContentModel.isFromSelf = YES;
     chatContentModel.talkType = self.taklInfo.talkType;
@@ -1153,7 +1153,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
     chatContentModel.gifLocalId = gifCode;
     chatContentModel.talkType = self.taklInfo.talkType;
     chatContentModel.headUrl = @"http://b.hiphotos.baidu.com/zhidao/wh%3D450%2C600/sign=38ecb37c54fbb2fb347e50167a7a0c92/d01373f082025aafc50dc5eafaedab64034f1ad7.jpg";
-
+    
     
     /* 从talkInfo中绑定更多信息给待发送内容 */
     [self setSendChatContentModelWithTalkInfo:chatContentModel];
@@ -1202,7 +1202,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
         [self sendImages:images];
         
         dispatch_async(dispatch_get_main_queue(), ^{
-           
+            
             [self removeCropingImageOnView:captureViewController.view];
             
             [self dismissViewControllerAnimated:YES completion:nil];
@@ -1210,7 +1210,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
         });
         
     });
-
+    
 }
 
 - (void)captureViewControllerAccessCamerouNotAuthorized:(GJCUCaptureViewController *)captureViewController
@@ -1238,7 +1238,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
     [self showCropingImageOnView:picker.view];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-       
+        
         NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
         
         if ([mediaType isEqualToString:@"public.image"]){
@@ -1265,7 +1265,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
                 }else{
                     
                     originImage = [originImage fixOrietationWithScale:1.0];
-
+                    
                 }
                 
                 NSDictionary *originImageInfo = [self createOriginImageToCacheDiretory:originImage];
@@ -1360,7 +1360,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
             
         }
         
-
+        
         [self sendImages:images];
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -1372,7 +1372,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
         });
         
     });
-
+    
 }
 
 #pragma mark - 图片发送
@@ -1384,7 +1384,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
         NSString *thumbPath = [imageInfo objectForKey:@"thumb"];
         NSInteger originWidth = [[imageInfo objectForKey:@"originWidth"] intValue];
         NSInteger originHeight = [[imageInfo objectForKey:@"originHeight"] intValue];
-
+        
         /* 内容拼接 */
         GJGCChatFriendContentModel *chatContentModel = [[GJGCChatFriendContentModel alloc]init];
         chatContentModel.baseMessageType = GJGCChatBaseMessageTypeChatMessage;
@@ -1413,7 +1413,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
     if (!isResend) {
         [self.dataSourceManager mockSendAnMesssage:contentModel];
     }
-
+    
     NSInteger index = [self.dataSourceManager getContentModelIndexByLocalMsgId:contentModel.localMsgId];
     
     if (contentModel.contentType==GJGCChatFriendContentTypeText) {
@@ -1431,7 +1431,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
                     contentModel.sendTime = [dataObj[@"datas"][@"createtime"] longLongValue];
                     contentModel.headUrl =[NSString stringWithFormat:@"%@%@",ImageURLS,dataObj[@"datas"][@"imgurl"]] ;
                     [self.dataSourceManager updateContentModelValuesNotEffectRowHeight:contentModel atIndex:index];
-                   
+                    
                     [self.chatListTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
                     
                 }
@@ -1446,32 +1446,31 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
             }
             else
             {
-                  contentModel.sendStatus = GJGCChatFriendSendMessageStatusFaild;
-                  [self.dataSourceManager updateContentModelValuesNotEffectRowHeight:contentModel atIndex:index];
-                  [self.chatListTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+                contentModel.sendStatus = GJGCChatFriendSendMessageStatusFaild;
+                [self.dataSourceManager updateContentModelValuesNotEffectRowHeight:contentModel atIndex:index];
+                [self.chatListTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
             }
             
             
         }];
-
+        
         
     }
     else if(contentModel.contentType==GJGCChatFriendContentTypeAudio)
     {
-       
+        
         NSLog(@"localStorePath =%@ \n tempEncodeFilePath=%@",contentModel.audioModel.localStorePath,contentModel.audioModel.tempEncodeFilePath);
         NSData *audioData = [NSData dataWithContentsOfFile:contentModel.audioModel.localStorePath];
         
         [[MP3PlayerManager shareInstance] uploadAudioWithType:@"mp3" audioData:audioData finishuploadBlock:^(BOOL succeed, id audioDic) {
             NSLog(@"ImageURLS=%@%@",ImageURLS,audioDic[@"audiourl"] );
-            
-            [self.dataSourceManager mockSendAnMesssage:contentModel];
+        
         }];
         
         
         
     }
-   
+    
     
     
 }
@@ -1483,7 +1482,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
 - (void)showCropingImageOnView:(UIView *)destView
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-       
+        
         /* 添加一个等待Toast*/
         UILabel *toastLabel = (UILabel *)[destView viewWithTag:GJGCInputViewToastLabelTag];
         
@@ -1516,7 +1515,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
 - (void)removeCropingImageOnView:(UIView *)destView
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-       
+        
         UILabel *toastLabel = (UILabel *)[destView viewWithTag:GJGCInputViewToastLabelTag];
         
         if (!toastLabel) {
@@ -1540,7 +1539,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
     
     NSLog(@"thumbImageSize:%@",NSStringFromCGSize(thumbImage.size));
     
-   return [self createTumbWithImage:thumbImage withOriginImagePath:originImagePath];
+    return [self createTumbWithImage:thumbImage withOriginImagePath:originImagePath];
 }
 
 - (NSString *)createTumbWithImage:(UIImage *)thumbImage withOriginImagePath:(NSString *)originImagePath
@@ -1552,7 +1551,7 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
     BOOL saveThumbResult = GJCFFileWrite(imageData, thumbPath);
     
     NSLog(@"saveThumbResult:%d",saveThumbResult);
-
+    
     return thumbPath;
 }
 
@@ -1563,8 +1562,8 @@ static NSString * const GJGCActionSheetAssociateKey = @"GJIMSimpleCellActionShee
     NSString *filePath = [[GJCFCachePathManager shareManager]mainImageCacheFilePath:fileName];
     
     NSData *imageData = UIImageJPEGRepresentation(originImage, 0.8);
-
-   BOOL saveOriginResult = GJCFFileWrite(imageData, filePath);
+    
+    BOOL saveOriginResult = GJCFFileWrite(imageData, filePath);
     
     NSLog(@"saveOriginResult:%d",saveOriginResult);
     
