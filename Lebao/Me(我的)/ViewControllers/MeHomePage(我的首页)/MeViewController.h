@@ -22,7 +22,7 @@ typedef NS_ENUM(int,AuthenType) {
 
 @interface MeViewModal : NSObject
 @property(nonatomic,strong)NSString *amount;
-@property(nonatomic,assign)AuthenType authen;
+@property(nonatomic,assign)AuthenType authen;//认证
 @property(nonatomic,strong)NSString *imgurl;
 @property(nonatomic,strong)NSString *realname;
 @property(nonatomic,strong)NSString *rtmsg;

@@ -1,9 +1,6 @@
 {
   "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "5C0373D08D6547EEDF73DF4AD04549DC39AEAA42",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
-    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++6773" : {
-
-    },
     "c1b34985-89f7-4ad2-b6ed-32456ccb691a++1693" : {
 
     },
@@ -13,7 +10,6 @@
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
     "781483BE7427AE9FAE952787F1C41718DCB8825F" : 0,
-    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++6773" : 0,
     "88D76130E7EEF3F405FC9B903745B51430EA1F17" : 0,
     "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605" : 0,
     "5C0373D08D6547EEDF73DF4AD04549DC39AEAA42" : 0,
@@ -24,7 +20,6 @@
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "DCD87906-714C-49D8-9D86-CE578318A3A7",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
     "781483BE7427AE9FAE952787F1C41718DCB8825F" : "Lebao\/",
-    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++6773" : "Zhimai_2.2\/Lebao\/%E6%88%91%E7%9A%84%E6%B6%88%E6%81%AF\/%E8%81%8A%E5%A4%A9%E6%A1%86%E6%9E%B6\/Dependcy\/GJCFAssetsPicker\/GJCFAssetsPickerResourceBundle.bundle\/",
     "88D76130E7EEF3F405FC9B903745B51430EA1F17" : "Zhimai_V2.1\/",
     "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605" : "Zhimai_2.2\/Lebao\/My%20news%EF%BC%88%E6%88%91%E7%9A%84%E6%B6%88%E6%81%AF%EF%BC%89\/%E8%81%8A%E5%A4%A9%E6%A1%86%E6%9E%B6\/Dependcy\/GJCFAssetsPicker\/GJCFAssetsPickerResourceBundle.bundle\/",
     "5C0373D08D6547EEDF73DF4AD04549DC39AEAA42" : "zhimai_2.2\/",
@@ -69,7 +64,7 @@
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "http:\/\/192.168.64.5:8888\/svn\/Mobile",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "c1b34985-89f7-4ad2-b6ed-32456ccb691a++6773"
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605"
     },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "http:\/\/192.168.64.5:8888\/svn\/Mobile",

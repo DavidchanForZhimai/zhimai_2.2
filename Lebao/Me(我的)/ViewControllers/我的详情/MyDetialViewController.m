@@ -133,9 +133,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
+    if (self.isOther) {
+        [self navViewTitleAndBackBtn:@"个人详情"];
+        [self addBottomView];
+     }else{
      [self navViewTitleAndBackBtn:@"我的详情"];
-    [self.view addSubview:self.edit];
+        [self.view addSubview:self.edit];
+        
+    }
     [self.view addSubview:self.myDetailTV];
     
     HeaderModel *headerModel = [[HeaderModel alloc]init];
@@ -221,11 +226,16 @@
     return _edit;
 }
 
+
 - (UITableView *)myDetailTV
 {
     if (_myDetailTV) {
         return _myDetailTV;
     }
+    if (self.isOther) {
+        _myDetailTV = [[UITableView alloc]initWithFrame:CGRectMake(0, StatusBarHeight + NavigationBarHeight, APPWIDTH, APPHEIGHT - (StatusBarHeight + NavigationBarHeight+44)) style:UITableViewStyleGrouped];
+
+    }else
     _myDetailTV = [[UITableView alloc]initWithFrame:CGRectMake(0, StatusBarHeight + NavigationBarHeight, APPWIDTH, APPHEIGHT - (StatusBarHeight + NavigationBarHeight)) style:UITableViewStyleGrouped];
     _myDetailTV.delegate = self;
     _myDetailTV.dataSource = self;
@@ -489,7 +499,33 @@
     
     
 }
+#pragma mark --bottomView底部view
+-(void)addBottomView
+{
+    UIView *bottomView=allocAndInit(UIView);
+    bottomView.frame=CGRectMake(0, APPHEIGHT-44, APPWIDTH, 44);
+    float addConnectionsBtnW = APPWIDTH/3.6;
+    UIImage *image = [UIImage imageNamed:@"addConnections"];
+    
+    BaseButton *addConnectionsBtn=[[BaseButton alloc]initWithFrame:CGRectMake(0, 0,addConnectionsBtnW, 44) setTitle:@"加人脉" titleSize:12 titleColor:[UIColor grayColor] backgroundImage:nil iconImage:[UIImage imageNamed:@"addConnections"] highlightImage:nil setTitleOrgin:CGPointMake(bottomView.height - 17,(addConnectionsBtnW - 36)/2.0-image.size.width) setImageOrgin:CGPointMake(5,(addConnectionsBtnW -image.size.width)/2.0) inView:bottomView];
 
+    addConnectionsBtn.didClickBtnBlock = ^
+    {
+        
+    };
+  
+    UIButton *meetBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+    [meetBtn setTitle:@"立即约见" forState:UIControlStateNormal];
+    meetBtn.titleLabel.font = [UIFont systemFontOfSize:14];
+    [meetBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    meetBtn.backgroundColor=AppMainColor;
+    meetBtn.frame=CGRectMake(addConnectionsBtn.width, 0, APPWIDTH - addConnectionsBtn.width, 44);
+    [bottomView addSubview:meetBtn];
+    [self.view addSubview:bottomView];
+    
+    
+    
+}
 #pragma mark button aticons
 - (void)buttonAction:(UIButton *)sender
 {

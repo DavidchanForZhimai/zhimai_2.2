@@ -142,7 +142,7 @@
     UILabel * titLab = [[UILabel alloc]initWithFrame:CGRectMake((SCREEN_WIDTH-120)/2, 20, 120, 44)];
     titLab.textAlignment = NSTextAlignmentCenter;
     titLab.textColor = [UIColor blackColor];
-    titLab.text = @"我的跨界";
+    titLab.text = @"我的线索";
     titLab.font = [UIFont systemFontOfSize:16];
     [navView addSubview:titLab];
     UIView * hxV = [[UIView alloc]initWithFrame:CGRectMake(0, 64, SCREEN_WIDTH, 0.5)];

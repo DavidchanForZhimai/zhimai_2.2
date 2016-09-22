@@ -66,6 +66,18 @@
     }
     return _asyncDisplayView;
 }
+#pragma mark -  LWAsyncDisplayViewDelegate
+- (void)lwAsyncDisplayView:(LWAsyncDisplayView *)asyncDisplayView didCilickedImageStorage:(LWImageStorage *)imageStorage touch:(UITouch *)touch
+{
+//    NSLog(@"lwAsyncDisplayView.tag=%li",imageStorage.tag);
+    if (imageStorage.tag == 888) {
+        if ([_delegate respondsToSelector:@selector(tableViewCellDidSeleteHeadImg: andIndexPath:)] &&[_delegate conformsToProtocol:@protocol(MeettingTableViewDelegate)]) {
+            [_delegate tableViewCellDidSeleteHeadImg:imageStorage andIndexPath:_indexPath];
+        }
+    }
+
+    
+}
 - (CALayer *)cellline {
     if (!_cellline) {
         _cellline = [[CALayer alloc] init];

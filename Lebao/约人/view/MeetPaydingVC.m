@@ -141,7 +141,6 @@ typedef enum {
              
              [XLDataService putWithUrl:MeetyouURL param:self.param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
                  if(dataObj){
-                     
                      MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
                     
                      if (model.rtcode==1) {

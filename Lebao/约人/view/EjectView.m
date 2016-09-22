@@ -93,7 +93,7 @@
         otherMoneyField.textAlignment=NSTextAlignmentCenter;
         otherMoneyField.layer.cornerRadius=8;
         otherMoneyField.delegate=self;
-        otherMoneyField.keyboardType=UIKeyboardTypePhonePad;
+//        otherMoneyField.keyboardType=UIKeyboardTypePhonePad;
         otherMoneyField.backgroundColor=[UIColor whiteColor];
         [self addSubview:otherMoneyField];
         

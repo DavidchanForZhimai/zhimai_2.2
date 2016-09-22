@@ -17,7 +17,7 @@
 - (void)tableViewCellDidSeleteMessageBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath;
 - (void)tableViewCellDidSeleteAgreeBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath;
 - (void)tableViewCellDidSeleteRefuseBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath;
-
+- (void)tableViewCellDidSeleteHeadImg:(LWImageStorage *)imageStoragen andIndexPath:(NSIndexPath *)indexPath;
 @end
 @interface MeettingTableViewCell : UITableViewCell
 @property(nonatomic,strong)MeetingCellLayout *cellLayout;

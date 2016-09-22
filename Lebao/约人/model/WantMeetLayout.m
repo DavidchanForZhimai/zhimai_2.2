@@ -20,9 +20,9 @@
     if (self) {
         //用户头像
         LWImageStorage *_avatarStorage = [[LWImageStorage alloc]initWithIdentifier:@"avatar"];
+        _avatarStorage.tag = 888;
         _avatarStorage.frame = CGRectMake(10, 13, 44, 44);
         model.imgurl = [[ToolManager shareInstance] urlAppend:model.imgurl];
-        //        NSLog(@"model.imgurl  =%@",model.imgurl );
         _avatarStorage.contents = model.imgurl;
         _avatarStorage.placeholder = [UIImage imageNamed:@"defaulthead"];
         if ([model.imgurl isEqualToString:ImageURLS]) {
@@ -31,6 +31,9 @@
             
         }
         _avatarStorage.cornerRadius = _avatarStorage.width/2.0;
+        
+        
+        
         //用户名
         NSString *renzen;
         if ([model.authen intValue]==3) {

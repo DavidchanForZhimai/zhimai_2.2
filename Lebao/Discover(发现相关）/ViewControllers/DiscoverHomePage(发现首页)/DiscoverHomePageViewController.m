@@ -13,7 +13,8 @@
 #import "AlreadysentproductViewController.h"//已发产品
 #import "ReadMeMostViewController.h"//读我最多
 #import "CoreArchive.h"
-
+#import "ReleaseDocumentsPackagetViewController.h"//封装链接
+#import "EditArticlesViewController.h"//编辑文章
 @interface DiscoverHomePageViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 @property(nonatomic,strong)NSMutableArray *collections;
 @property(nonatomic,strong)UICollectionView *collectionView;
@@ -85,6 +86,20 @@
 {
     NSString *vcStr =_collections[indexPath.section][indexPath.row][@"viewController"];
     if (NSClassFromString(vcStr)) {
+        if([vcStr isEqualToString: @"EditArticlesViewController"]){
+            EditArticlesViewController *release =allocAndInit(EditArticlesViewController);
+            EditArticlesData *data = allocAndInit(EditArticlesData);
+            data.content = @"";
+            data.isAddress = YES ;
+            data.isgetclue = YES;
+            data.isRanking = YES;
+            data.amount = @"0.00";
+            data.isReleseArticle =YES;
+            release.data = data;
+            
+            [self.navigationController pushViewController:release animated:NO];
+
+        }else
          PushView(self, allocAndInit(NSClassFromString(vcStr)));
     }
     else
@@ -100,10 +115,12 @@
 {
     if (_collections) {
         return _collections;
+        
     }
     _collections = [NSMutableArray new];
-    NSArray *title1 = [NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"线索大厅",@"name",@"icon_discover_xiansuo",@"image",@"WBHomePageVC",@"viewController", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"红包转发",@"name",@"icon_discover_hongbao",@"image",@"RedpacketsforwardingViewController",@"viewController", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"封装链接",@"name",@"icon_discover_fengzhuanglianjie",@"image",@"",@"viewController", nil], nil];
-    NSArray *title2 =[NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"编辑文章",@"name",@"icon_discover_liaoku",@"image",@"",@"viewController", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"我的内容",@"name",@"icon_discover_wodewnzhang",@"image",@"",@"viewController", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"读我最多",@"name",@"icon_discover_duwozuiduo",@"image",@"ReadMeMostViewController",@"viewController", nil], [NSDictionary dictionaryWithObjectsAndKeys:@"文章数据",@"name",@"icon_discover_shuju",@"image",@"",@"viewController", nil],nil];
+    NSArray *title1 = [NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"线索大厅",@"name",@"icon_discover_xiansuo",@"image",@"WBHomePageVC",@"viewController", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"红包转发",@"name",@"icon_discover_hongbao",@"image",@"RedpacketsforwardingViewController",@"viewController", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"封装链接",@"name",@"icon_discover_fengzhuanglianjie",@"image",@"ReleaseDocumentsPackagetViewController",@"viewController", nil], nil];
+
+    NSArray *title2 =[NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"编辑文章",@"name",@"icon_discover_liaoku",@"image",@"EditArticlesViewController",@"viewController", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"我的内容",@"name",@"icon_discover_wodewnzhang",@"image",@"AlreadysentproductViewController",@"viewController", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"读我最多",@"name",@"icon_discover_duwozuiduo",@"image",@"ReadMeMostViewController",@"viewController", nil], [NSDictionary dictionaryWithObjectsAndKeys:@"文章数据",@"name",@"icon_discover_shuju",@"image",@"ReaderAttributesViewController",@"viewController", nil],nil];
     [_collections  addObject:title1];
     [_collections addObject:title2];
     return _collections;

@@ -21,7 +21,7 @@
         LWImageStorage *_avatarStorage = [[LWImageStorage alloc]initWithIdentifier:@"avatar"];
         _avatarStorage.frame = CGRectMake(10, 13, 44, 44);
         model.imgurl = [[ToolManager shareInstance] urlAppend:model.imgurl];
-
+        _avatarStorage.tag =888;
         _avatarStorage.contents = model.imgurl;
         _avatarStorage.placeholder = [UIImage imageNamed:@"defaulthead"];
         if ([model.imgurl isEqualToString:ImageURLS]) {
@@ -177,26 +177,25 @@
         
         
         _line2Rect  = CGRectMake(0, resourceTextStorageheight + 10, APPWIDTH, 0.5);
-        
-        LWTextStorage* woshouImg=[[LWTextStorage alloc]initWithFrame:CGRectMake(_avatarStorage.left,_line2Rect.origin.y+8, nameTextStorage.width, nameTextStorage.height)];
-        woshouImg.text=[NSString stringWithFormat:@"[pipeidu] %@",model.match];
-        [LWTextParser parseEmojiWithTextStorage:woshouImg];
-        
-        LWTextStorage* distanceAndtimerLab=[[LWTextStorage alloc]initWithFrame:CGRectMake(0, woshouImg.top, APPWIDTH-10, woshouImg.height)];
         float distance=[model.distance floatValue]/1000.00;
+        LWTextStorage* distanceLab=[[LWTextStorage alloc]initWithFrame:CGRectMake(_avatarStorage.left,_line2Rect.origin.y+8, nameTextStorage.width, nameTextStorage.height)];
+        distanceLab.text=[NSString stringWithFormat:@"%.2lfkm",distance];
+        distanceLab.textColor=[UIColor colorWithRed:0.482 green:0.486 blue:0.494 alpha:1.000];
+        LWTextStorage* timerLab=[[LWTextStorage alloc]initWithFrame:CGRectMake(0, distanceLab.top, APPWIDTH-10, distanceLab.height)];
         
-        distanceAndtimerLab.text=[NSString stringWithFormat:@"%.2lfkm·%@",distance,[model.time updateTime]];
+        
+        timerLab.text=[NSString stringWithFormat:@"%@有空",[model.time updateTime]];
 
-        distanceAndtimerLab.textAlignment=NSTextAlignmentRight;
-        distanceAndtimerLab.textColor=[UIColor colorWithRed:0.482 green:0.486 blue:0.494 alpha:1.000];
-        distanceAndtimerLab.font=Size(26.0);
+        timerLab.textAlignment=NSTextAlignmentRight;
+        timerLab.textColor=[UIColor colorWithRed:0.482 green:0.486 blue:0.494 alpha:1.000];
+        timerLab.font=Size(26.0);
         [self addStorage:_avatarStorage];
         [self addStorage:nameTextStorage];
         [self addStorage:industryTextStorage];
         [self addStorage:productTextStorage];
         [self addStorage:resourceTextStorage];
-        [self addStorage:woshouImg];
-        [self addStorage:distanceAndtimerLab];
+        [self addStorage:distanceLab];
+        [self addStorage:timerLab];
         self.cellHeight = [self suggestHeightWithBottomMargin:20];
         self.cellMarginsRect = frame(0, self.cellHeight - 10, APPWIDTH, 10);
         

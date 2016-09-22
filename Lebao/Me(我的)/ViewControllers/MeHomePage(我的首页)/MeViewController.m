@@ -22,6 +22,7 @@
 #import "AuthenticationHomeViewController.h"
 #import "OtherDynamicdViewController.h"
 #import "MeetSucceedVC.h"
+#import "VIPPrivilegeVC.h"
 #define cellH  40
 #define PersonalURL [NSString stringWithFormat:@"%@user/index",HttpURL]
 @interface MeViewController ()<UITableViewDataSource,UITableViewDelegate>
@@ -108,7 +109,7 @@
         return _datas;
     }
     
-    _datas =[NSMutableArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"会员特权",@"name",@"icon_me_VIP",@"image",@"1",@"show",@"",@"viewController",nil] ,[NSDictionary dictionaryWithObjectsAndKeys:@"我的钱包",@"name",@"icon_me_qianbao",@"image",@"1",@"show",@"EarnestMoneyViewController",@"viewController",nil],[NSDictionary dictionaryWithObjectsAndKeys:@"我的资料",@"name",@"icon_me_zhiliao",@"image",@"1",@"show",@"BasicInformationViewController",@"viewController",nil],[NSDictionary dictionaryWithObjectsAndKeys:@"身份认证",@"name",@"icon_me_renzheng",@"image",@"1",@"show",@"AuthenticationHomeViewController",@"viewController",nil],[NSDictionary dictionaryWithObjectsAndKeys:@"活跃值",@"name",@"icon_me_huoyuezhi",@"image",@"1",@"show",@"ActiveValueViewController",@"viewController",nil],[NSDictionary dictionaryWithObjectsAndKeys:@"好友印象",@"name",@"icon_me_yinxiang",@"image",@"1",@"show",@"FriendImpressionViewController",@"viewController",nil],[NSDictionary dictionaryWithObjectsAndKeys:@"邀请好友",@"name",@"icon_me_yaoqinghaoyou",@"image",@"1",@"show",@"InviteFriendsViewController",@"viewController",nil],[NSDictionary dictionaryWithObjectsAndKeys:@"我的客服",@"name",@"icon_me_kefu",@"image",@"0",@"show",@"",@"viewController",nil],nil];
+    _datas =[NSMutableArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"会员特权",@"name",@"icon_me_VIP",@"image",@"1",@"show",@"VIPPrivilegeVC",@"viewController",nil] ,[NSDictionary dictionaryWithObjectsAndKeys:@"我的钱包",@"name",@"icon_me_qianbao",@"image",@"1",@"show",@"EarnestMoneyViewController",@"viewController",nil],[NSDictionary dictionaryWithObjectsAndKeys:@"我的资料",@"name",@"icon_me_zhiliao",@"image",@"1",@"show",@"BasicInformationViewController",@"viewController",nil],[NSDictionary dictionaryWithObjectsAndKeys:@"身份认证",@"name",@"icon_me_renzheng",@"image",@"1",@"show",@"AuthenticationHomeViewController",@"viewController",nil],[NSDictionary dictionaryWithObjectsAndKeys:@"活跃值",@"name",@"icon_me_huoyuezhi",@"image",@"1",@"show",@"ActiveValueViewController",@"viewController",nil],[NSDictionary dictionaryWithObjectsAndKeys:@"好友印象",@"name",@"icon_me_yinxiang",@"image",@"1",@"show",@"FriendImpressionViewController",@"viewController",nil],[NSDictionary dictionaryWithObjectsAndKeys:@"邀请好友",@"name",@"icon_me_yaoqinghaoyou",@"image",@"1",@"show",@"InviteFriendsViewController",@"viewController",nil],[NSDictionary dictionaryWithObjectsAndKeys:@"我的客服",@"name",@"icon_me_kefu",@"image",@"0",@"show",@"",@"viewController",nil],nil];
     
     
     return _datas;
@@ -161,7 +162,7 @@
         
         if (dataObj) {
             MeViewModal * _modal =[MeViewModal mj_objectWithKeyValues:dataObj];
-            modal         = _modal;
+            modal = _modal;
             if (modal.rtcode ==1) {
                 
                 [[ToolManager shareInstance] imageView:userIcon setImageWithURL:modal.imgurl placeholderType:PlaceholderTypeUserHead];
@@ -367,13 +368,19 @@
         
         return;
     }
+    
     if (NSClassFromString(dict[@"viewController"])) {
         
         [[ToolManager shareInstance].drawerController closeDrawerAnimated:YES completion:^(BOOL finished) {
             
             UITabBarController *tabBar = (UITabBarController *)[ToolManager shareInstance].drawerController.centerViewController;
             UINavigationController *nav =(UINavigationController *)tabBar.viewControllers[getAppDelegate().mainTab.selectedIndex];
-            
+            if ([dict[@"viewController"] isEqualToString:@"VIPPrivilegeVC"]){
+                VIPPrivilegeVC *vipVC=allocAndInit(VIPPrivilegeVC);
+                vipVC.modal=modal;
+                [nav pushViewController:vipVC animated:YES];
+                return ;
+            }
             if ([dict[@"viewController"] isEqualToString:@"AuthenticationHomeViewController"]) {
                 AuthenticationHomeViewController *authen = allocAndInit(AuthenticationHomeViewController);
                 authen.authen = modal.authen;

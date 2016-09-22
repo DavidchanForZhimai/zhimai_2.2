@@ -5,7 +5,7 @@
 //  Created by adnim on 16/8/25.
 //  Copyright © 2016年 David. All rights reserved.
 //
-
+#import "MyDetialViewController.h"
 #import "MeetingVC.h"
 #import "MJRefresh.h"
 #import "MeettingTableViewCell.h"
@@ -418,6 +418,14 @@
     alertV.indexth=indexPath;
 }
 
+-(void)tableViewCellDidSeleteHeadImg:(LWImageStorage *)imageStoragen andIndexPath:(NSIndexPath *)indexPath
+{
+    MyDetialViewController *myDetialViewCT=allocAndInit(MyDetialViewController);
+    myDetialViewCT.isOther=YES;
+    MeetingData *data=self.CellSouceArr[indexPath.row];
+    myDetialViewCT.userID=data.userid;
+    [self.navigationController pushViewController:myDetialViewCT animated:YES];
+}
 
 #pragma mark - YXCustomAlertViewDelegate
 - (void) customAlertView:(EjectView *) customAlertView clickedButtonAtIndex:(NSInteger)buttonIndex

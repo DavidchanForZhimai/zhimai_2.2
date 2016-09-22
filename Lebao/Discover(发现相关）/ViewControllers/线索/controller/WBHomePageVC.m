@@ -21,13 +21,13 @@
 #import "CALayer+Transition.h"
 #import "ViewController.h"//选择地址
 #import "LoCationManager.h"
-
+#import "MyKuaJieVC.h"//我的跨界
 #import "LWImageBrowser.h"
 #import "TableViewCell.h"
 #import "GallopUtils.h"
 #import "StatusModel.h"
 #import "CellLayout.h"
-
+#import "FabuKuaJieVC.h"
 #define kToolBarH 44
 #define kTextFieldH 30
 #define xsTabTag  110
@@ -74,9 +74,11 @@
     [super viewDidLoad];
     
     UIButton *fabubTn=[UIButton buttonWithType:UIButtonTypeCustom];
-    fabubTn.frame=CGRectMake(APPWIDTH - 60, StatusBarHeight+2, 50, 40);
-    [fabubTn setTitle:@"发布" forState:UIControlStateNormal];
-    [fabubTn addTarget:self action:@selector(fabuAction) forControlEvents:UIControlEventTouchUpInside];
+    fabubTn.frame=CGRectMake(APPWIDTH - 90, StatusBarHeight+2, 90, 40);
+    [fabubTn setTitle:@"我的线索" forState:UIControlStateNormal];
+    fabubTn.titleLabel.font=[UIFont systemFontOfSize:14];
+    fabubTn.titleLabel.textAlignment=NSTextAlignmentRight;
+    [fabubTn addTarget:self action:@selector(myClueAction) forControlEvents:UIControlEventTouchUpInside];
     [fabubTn setTitleColor:BlackTitleColor forState:UIControlStateNormal];
     [self navViewTitleAndBackBtn:@"线索" rightBtn:fabubTn];
 
@@ -96,9 +98,9 @@
   
   
 }
--(void)fabuAction
+-(void)myClueAction
 {
-    [[ToolManager shareInstance]addReleseDctView:self];
+    [self.navigationController pushViewController:allocAndInit(MyKuaJieVC) animated:YES];
 }
 - (void)buttonAction:(UIButton *)sender
 {
@@ -161,7 +163,7 @@
     _xsTab.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreXS)];
     _xsTab.footer.automaticallyHidden = NO;
     [self.view addSubview:_xsTab];
-    
+    _xsTab.tableHeaderView=[self addIssueTopV];
     
     
 }
@@ -343,8 +345,27 @@
     xiansuoV.xs_id = [_xsJsonArr[sender.view.tag - 1000] objectForKey:@"id"];
     [self.navigationController pushViewController:xiansuoV animated:YES];
 }
-
-
+#pragma mark - 发布动态
+/**
+ *  发布动态
+ */
+-(UIView *)addIssueTopV
+{
+    UIView *topV = allocAndInitWithFrame(UIView , frame(SCREEN_WIDTH, 0, SCREEN_WIDTH, 45));
+    topV.backgroundColor = [UIColor clearColor];
+    
+    UIImage *image = [UIImage imageNamed:@"dongtai_bianjie"];
+    BaseButton *topBtn= [[BaseButton alloc]initWithFrame:frame(10, 10, SCREEN_WIDTH-20, 35) setTitle:@"发布新线索" titleSize:26*SpacedFonts titleColor:LightBlackTitleColor backgroundImage:nil iconImage:image highlightImage:image setTitleOrgin:CGPointMake((35 -26*SpacedFonts)/2.0 , 10 -image.size.width) setImageOrgin:CGPointMake((35 -image.size.height)/2.0 , SCREEN_WIDTH -image.size.width - 30) inView:topV];
+    topBtn.shouldAnmial = NO;
+    __weak typeof (self) weakSelf=self;
+    topBtn.didClickBtnBlock = ^{
+        [weakSelf.navigationController pushViewController:allocAndInit(FabuKuaJieVC) animated:YES];
+    };
+    topBtn.backgroundColor  = [UIColor whiteColor];
+    
+    return topV;
+    
+}
 
 
 - (void)didReceiveMemoryWarning {

@@ -10,4 +10,5 @@
 
 @interface MyDetialViewController : BaseViewController
 @property(nonatomic,strong)NSString *userID;
+@property(nonatomic,assign)BOOL isOther;
 @end
