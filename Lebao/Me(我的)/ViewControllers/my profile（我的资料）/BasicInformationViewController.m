@@ -458,6 +458,7 @@
         return _productTagsView;
     }
     _productTagsView = allocAndInitWithFrame(DWTagsView, CGRectZero);
+    _productTagsView.clipsToBounds = YES;
     _productTagsView.contentInsets = UIEdgeInsetsZero;
     _productTagsView.tagInsets = UIEdgeInsetsMake(5, 15, 5, 15);
     _productTagsView.tagcornerRadius = 2;

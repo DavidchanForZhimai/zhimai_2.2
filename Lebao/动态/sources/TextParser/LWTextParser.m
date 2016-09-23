@@ -92,7 +92,7 @@ static inline NSRegularExpression* TopicRegularExpression() {
         if (textStorage.text.length >= range.location + range.length) {
             UIImage *image = [UIImage imageNamed:content];
             float imageH = image.size.height;
-            float imageW = image.size.width ;
+            float imageW = image.size.width;
             [textStorage lw_replaceTextWithImage:image
                                      contentMode:UIViewContentModeScaleAspectFill
                                        imageSize:CGSizeMake(imageW, imageH)

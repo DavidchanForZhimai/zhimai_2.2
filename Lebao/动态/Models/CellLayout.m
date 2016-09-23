@@ -31,11 +31,11 @@
 
         NSString *renzen;
         if (statusModel.authen==3) {
-           renzen = @"[renzhen]";
+           renzen = @"[iconprofilerenzhen]";
         }
         else
         {
-           renzen=@"[weirenzhen]";
+           renzen=@"[iconprofileweirenzhen]";
         }
         //名字模型 nameTextStorage
         LWTextStorage* nameTextStorage = [[LWTextStorage alloc] init];

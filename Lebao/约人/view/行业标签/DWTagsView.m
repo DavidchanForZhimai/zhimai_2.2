@@ -317,7 +317,8 @@ static NSString * const kTagCellID = @"TagCellID";
     [self.collectionView reloadData];
     [self invalidateIntrinsicContentSize];
    
-
+   
+    
  
 }
 
@@ -360,9 +361,10 @@ static NSString * const kTagCellID = @"TagCellID";
 #pragma mark - ......::::::: CollectionView DataSource :::::::......
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+
+   
     return self.tagModels.count;
 }
-
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     DWTagCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kTagCellID forIndexPath:indexPath];
     
