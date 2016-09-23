@@ -7,14 +7,10 @@
 //
 
 #import "VIPPrivilegeVC.h"
-
+#import "VIPPrivilegeView.h"
 @interface VIPPrivilegeVC ()
-@property (weak, nonatomic) IBOutlet UIImageView *icoudImgV;
-@property (weak, nonatomic) IBOutlet UILabel *nameLab;
-@property (weak, nonatomic) IBOutlet UIImageView *renzhenImgV;
-@property (weak, nonatomic) IBOutlet UIImageView *VIPImgV;
-@property (weak, nonatomic) IBOutlet UILabel *boomlab;
-@property (weak, nonatomic) IBOutlet UIImageView *privilegeImgV;
+
+@property (weak, nonatomic) IBOutlet UIScrollView *mainScrollView;
 
 @end
 
@@ -22,26 +18,31 @@
 -(void)awakeFromNib
 {
     
-    _icoudImgV.clipsToBounds=YES;
-    _icoudImgV.layer.cornerRadius=_icoudImgV.width/2.0;
-    [[ToolManager shareInstance] imageView:_icoudImgV setImageWithURL:_modal.imgurl placeholderType:PlaceholderTypeUserHead];
-    _nameLab.text=_modal.realname;
-    if(_modal.authen==3){
-        _renzhenImgV.image=[UIImage imageNamed:@"[iconprofilerenzhen]"];
-    }else{
-        _renzhenImgV.image=[UIImage imageNamed:@"[iconprofileweirenzhen]"];
-    }
+  
     
-    _VIPImgV.image=[UIImage imageNamed:@"[iconprofilevipweikaitong]"];
-    _privilegeImgV.contentMode=UIViewContentModeScaleAspectFit;
+}
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:YES];
     
     
 }
+
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self navViewTitleAndBackBtn:@"会员特权"];
-    _privilegeImgV.image=[UIImage imageNamed:@"VIPprivilege.jpg"];
     
+    [self creatUI];
+}
+-(void)creatUI{
+    VIPPrivilegeView *vipView=[[[NSBundle mainBundle]loadNibNamed:@"VIPPrivilegeView" owner:nil options:nil]firstObject];
+    [vipView configWithModel:self.modal];
+    vipView.frame=CGRectMake(0, 0, self.view.width, vipView.height);
+
+    [self.mainScrollView addSubview:vipView];
+    self.mainScrollView.contentSize=CGSizeMake(0, vipView.height);
 }
 - (void)buttonAction:(UIButton *)sender
 {
