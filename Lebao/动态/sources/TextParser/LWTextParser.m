@@ -90,9 +90,12 @@ static inline NSRegularExpression* TopicRegularExpression() {
         NSRange range = [match range];
         NSString* content = [text substringWithRange:range];
         if (textStorage.text.length >= range.location + range.length) {
-            [textStorage lw_replaceTextWithImage:[UIImage imageNamed:content]
+            UIImage *image = [UIImage imageNamed:content];
+            float imageH = image.size.height;
+            float imageW = image.size.width ;
+            [textStorage lw_replaceTextWithImage:image
                                      contentMode:UIViewContentModeScaleAspectFill
-                                       imageSize:CGSizeMake(12, 12)
+                                       imageSize:CGSizeMake(imageW, imageH)
                                        alignment:LWTextAttachAlignmentTop
                                            range:range];
         }

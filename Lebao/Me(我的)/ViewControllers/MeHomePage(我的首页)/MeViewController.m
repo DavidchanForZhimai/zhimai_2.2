@@ -76,7 +76,6 @@
     imageView.autoresizingMask = UIViewAutoresizingFlexibleHeight| UIViewAutoresizingFlexibleWidth;
     imageView.clipsToBounds = YES;
     imageView.contentMode = UIViewContentModeScaleAspectFill;
-    
     [customView addSubview:imageView];
     
     [self addHeadView:customView];
@@ -140,6 +139,7 @@
     userIcon.layer.borderColor = rgba(255, 255, 255, 0.5).CGColor;
     userIcon.layer.masksToBounds =YES;
     userIcon.layer.cornerRadius = frameWidth(userIcon)/2.0;
+   
     [view addSubview:userIcon];
     UITapGestureRecognizer *tap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(userIconTap)];
     userIcon.image = [UIImage imageNamed:@"defaulthead"];
@@ -187,6 +187,7 @@
 #pragma mark
 - (void)userIconTap
 {
+    NSLog(@"userIconTap");
     [[ToolManager shareInstance].drawerController closeDrawerAnimated:YES completion:^(BOOL finished) {
         UITabBarController *tabBar = (UITabBarController *)[ToolManager shareInstance].drawerController.centerViewController;
         UINavigationController *nav =(UINavigationController *)tabBar.viewControllers[getAppDelegate().mainTab.selectedIndex];

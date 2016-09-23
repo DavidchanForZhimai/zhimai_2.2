@@ -94,14 +94,12 @@
 //        [str addAttribute:NSFontAttributeName value:Size(20.0) range:[industryTextStorage.text rangeOfString:range]];
 //        industryTextStorage.attributedText = str;
         industryTextStorage.textAlignment = NSTextAlignmentCenter;
-        
-        
         [LWTextParser parseEmojiWithTextStorage:industryTextStorage];
         
         [self addStorage:_avatarStorage];
         [self addStorage:nameTextStorage];
         [self addStorage:industryTextStorage];
-         self.height  = [self suggestHeightWithBottomMargin:50.0];
+        self.height  = [self suggestHeightWithBottomMargin:60.0];
     }
     return self;
 }
@@ -252,7 +250,10 @@
     _viewHeader = [[UIView alloc]initWithFrame:CGRectMake(0, 0, APPWIDTH, self.headerViewLayout.height)];
     _viewHeader.backgroundColor = WhiteColor;
     [_viewHeader addSubview:self.userView];
-
+    
+    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, APPWIDTH, 10)];
+    view.backgroundColor = self.view.backgroundColor;
+    [_viewHeader addSubview:view];
     //人脉
     BaseButton *renmai = [self addViewWithFrame:frame(0, self.userView.y + self.userView.height + 10, APPWIDTH/3, 40) andTitle:@"人脉" rangeText:@"10" andView:_viewHeader];
     renmai.didClickBtnBlock = ^
@@ -291,8 +292,7 @@
         return  _userView;
     }
     
-    _userView = [[LWAsyncDisplayView alloc]initWithFrame:frame(0, 0, APPWIDTH, self.headerViewLayout.height - 50)];
-//    _userView.delegate = self;
+    _userView = [[LWAsyncDisplayView alloc]initWithFrame:frame(0, 10, APPWIDTH, self.headerViewLayout.height - 60)];
     return _userView;
     
 }
@@ -551,8 +551,8 @@
     
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:btn.titleLabel.text];
     [attributedString addAttribute:NSFontAttributeName value:Size(28) range:[btn.titleLabel.text rangeOfString:rangeText?rangeText:str]];
-    
-    btn.titleLabel.attributedText =attributedString;
+    [btn setAttributedTitle:attributedString forState:UIControlStateNormal];
+ 
     
     return btn;
 }
