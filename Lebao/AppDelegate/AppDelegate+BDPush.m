@@ -8,7 +8,7 @@
 
 #import "AppDelegate+BDPush.h"
 #import "BPush.h"//推送
-#import "CommunicationViewController.h" //消息聊天
+#import "GJGCChatFriendViewController.h" //消息聊天
 #import "MeetingVC.h"
 #import "MyKuaJieVC.h"//我的跨界
 #import "CustomerServiceViewController.h"//我的客服
@@ -37,7 +37,7 @@ static BOOL isBackGroundActivateApplication;
     
     // 在 App 启动时注册百度云推送服务，需要提供 Apikey
     
-    [BPush registerChannel:launchOptions apiKey:K_API_KEY pushMode:BPushModeProduction withFirstAction:@"打开" withSecondAction:@"回复" withCategory:@"test" useBehaviorTextInput:YES isDebug:YES];
+    [BPush registerChannel:launchOptions apiKey:K_API_KEY pushMode:BPushModeDevelopment withFirstAction:@"打开" withSecondAction:@"回复" withCategory:@"test" useBehaviorTextInput:YES isDebug:YES];
     
     // 禁用地理位置推送 需要再绑定接口前调用。
     
@@ -180,12 +180,12 @@ static BOOL isBackGroundActivateApplication;
     if ([notifacion[@"api"][@"goto"] isEqualToString:@"msg"]) {
        
         //如果是当前控制器是我的消息控制器的话，刷新数据即可
-        
-        if([baseVC isKindOfClass:[CommunicationViewController class]])
+        if([baseVC isKindOfClass:[GJGCChatFriendViewController class]])
         {
-            CommunicationViewController *comm =(CommunicationViewController*)baseVC;
-            if ([notifacion[@"api"][@"bid"] intValue]==[comm.senderid intValue]) {
-                 comm.data = notifacion[@"api"][@"chat"];
+            GJGCChatFriendViewController *comm =(GJGCChatFriendViewController*)baseVC;
+            if ([notifacion[@"api"][@"bid"] intValue]==[comm.taklInfo.toId intValue]) {
+                
+                [comm reciverNotiWithData:notifacion[@"api"][@"chat"]];
             }
             else
             {
@@ -194,11 +194,16 @@ static BOOL isBackGroundActivateApplication;
                  }
                 else
                 {
-                    CommunicationViewController * messageVC = [[CommunicationViewController alloc] init];
-                    messageVC.senderid = notifacion[@"api"][@"bid"];
-                    messageVC.chatType = ChatMessageTpye;
-                    messageVC.isPopRoot = YES;
-                    [comm.navigationController pushViewController:messageVC animated:YES];
+                   
+                    GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
+                    talk.talkType = GJGCChatFriendTalkTypePrivate;
+                    talk.toId = notifacion[@"api"][@"bid"];
+                    talk.toUserName = notifacion[@"api"][@"realname"];
+                    
+                    GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
+                    privateChat.type = MessageTypeNormlPage;
+                    [comm.navigationController pushViewController:privateChat animated:YES];
+
                 }
 
             }
@@ -210,11 +215,14 @@ static BOOL isBackGroundActivateApplication;
         else
         {
             [[ToolManager shareInstance].drawerController closeDrawerAnimated:YES completion:^(BOOL finished) {
-            CommunicationViewController * messageVC = [[CommunicationViewController alloc] init];
-            messageVC.senderid = notifacion[@"api"][@"bid"];
-            messageVC.chatType = ChatMessageTpye;
-            messageVC.isPopRoot = YES;
-            [nav pushViewController:messageVC animated:YES];
+                GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
+                talk.talkType = GJGCChatFriendTalkTypePrivate;
+                talk.toId = notifacion[@"api"][@"bid"];
+                talk.toUserName = notifacion[@"api"][@"realname"];
+                
+                GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
+                privateChat.type = MessageTypeNormlPage;
+                [nav pushViewController:privateChat animated:YES];
             }];
         }
         

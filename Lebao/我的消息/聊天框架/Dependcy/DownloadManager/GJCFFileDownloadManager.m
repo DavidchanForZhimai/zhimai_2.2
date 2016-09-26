@@ -90,13 +90,13 @@ static dispatch_queue_t _gjcfFileDownloadManagerOperationQueue ;
 - (void)addTask:(GJCFFileDownloadTask *)task
 {
     if (!task) {
-        NSLog(@"GJFileDownloadManager 错误: 试图添加一个空的下载任务:%@",task);
+//        NSLog(@"GJFileDownloadManager 错误: 试图添加一个空的下载任务:%@",task);
         return;
     }
     
     /* 如果没有指定下载地址，那么就不开始了 */
     if (![task isValidateForDownload]) {
-        NSLog(@"GJCFFileDownloadManager 错误: 下载任务没有目标下载地址:%@",task.downloadUrl);
+//        NSLog(@"GJCFFileDownloadManager 错误: 下载任务没有目标下载地址:%@",task.downloadUrl);
         return;
     }
     
@@ -164,7 +164,7 @@ static dispatch_queue_t _gjcfFileDownloadManagerOperationQueue ;
         AFHTTPRequestOperation *downloadOperation = [[AFHTTPRequestOperation alloc]initWithRequest:downloadRequest];
         downloadOperation.userInfo = @{@"task": task};
         
-        NSLog(@"GJCFFileDownloadManager 开始下载 地址:%@",downloadRequest.URL.absoluteString);
+//        NSLog(@"GJCFFileDownloadManager 开始下载 地址:%@",downloadRequest.URL.absoluteString);
         
         /* 观察三个任务状态 */
         [downloadOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -231,7 +231,7 @@ static dispatch_queue_t _gjcfFileDownloadManagerOperationQueue ;
     NSArray *taskObservers = task.taskObservers;
     task.taskState = GJFileDownloadStateSuccess;
     
-    NSLog(@"GJCFFileDownloadManager 找到任务所有观察者:%@ for TaskUrl:%@",taskObservers,task.downloadUrl);
+//    NSLog(@"GJCFFileDownloadManager 找到任务所有观察者:%@ for TaskUrl:%@",taskObservers,task.downloadUrl);
     
     /* 如果任务设定了存储路径 */
     BOOL cacheState = NO;

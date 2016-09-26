@@ -9,7 +9,7 @@
 #import "RedpacketsforwardingViewController.h"
 #import "ExhibitionIndustryCell.h"
 #import "XLDataService.h"
-#import "CommunicationViewController.h"
+#import "GJGCChatFriendViewController.h"
 #import "CrossBorderTransmissionViewController.h"
 #import "WetChatShareManager.h"
 #import "MyProductDetailViewController.h"
@@ -181,12 +181,15 @@
         }
         ExhibitionIndustryRewarddatas *data = _exhibitionRedPaperArray[indexPath.row];
         [cell setData:data communityBlock:^(ExhibitionIndustryRewarddatas *data){
-            CommunicationViewController *vc = allocAndInit(CommunicationViewController);
-            vc.sourceid = [NSString stringWithFormat:@"%i",(int)data.ID];
-            vc.sourcetype = @"wallet";
-            vc.chatType = ChatRedEnvelopePTpye;
-            vc.receiver = data.uid;
-            PushView(self, vc);
+           
+            GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
+            talk.talkType = GJGCChatFriendTalkTypePrivate;
+            talk.toId = [NSString stringWithFormat:@"%i",(int)data.ID];
+            
+            GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
+            privateChat.type = MeeageTypeRedPage;
+            privateChat.receiver = data.uid;
+            [self.navigationController pushViewController:privateChat animated:YES];
         }];
         return cell;
     

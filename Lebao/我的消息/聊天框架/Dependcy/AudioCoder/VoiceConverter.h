@@ -10,13 +10,13 @@
 
 @interface VoiceConverter : NSObject
 
-+ (int)amrToWav:(NSString*)_amrPath wavSavePath:(NSString*)_savePath;
+//+ (int)amrToWav:(NSString*)_amrPath wavSavePath:(NSString*)_savePath;
+//
+//+ (int)wavToAmr:(NSString*)_wavPath amrSavePath:(NSString*)_savePath;
 
-+ (int)wavToAmr:(NSString*)_wavPath amrSavePath:(NSString*)_savePath;
++ (int)otherFormatToWav:(NSString*)path wavSavePath:(NSString*)_savePath;
 
-+ (int)mp3ToWav:(NSString*)_mp3Path wavSavePath:(NSString*)_savePath;
-
-+ (int)wavToMp3:(NSString*)_wavPath mp3SavePath:(NSString*)_savePath;
++ (int)wavToOtherFormat:(NSString*)path otherFormatSavePath:(NSString*)_savePath;
 
 + (int) changeStu;
 @end

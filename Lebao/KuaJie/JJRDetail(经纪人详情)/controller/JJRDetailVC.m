@@ -12,7 +12,7 @@
 #import "JJRDetailInfo.h"
 #import "ToolManager.h"
 #import "HomeInfo.h"
-#import "CommunicationViewController.h"
+#import "GJGCChatFriendViewController.h"
 
 #import "LWImageBrowser.h"
 //产品
@@ -150,10 +150,15 @@
 }
 -(void)duihuaAction
 {
-    CommunicationViewController * comunV = [[CommunicationViewController alloc]init];
-    comunV.senderid = [_jjrJsonDic objectForKey:@"id"];
-    comunV.chatType = ChatMessageTpye;
-    [self.navigationController pushViewController:comunV animated:YES];
+   
+    GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
+    talk.talkType = GJGCChatFriendTalkTypePrivate;
+    talk.toId = [_jjrJsonDic objectForKey:@"id"];
+    talk.toUserName = [_jjrJsonDic objectForKey:@"realname"];
+    
+    GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
+    privateChat.type = MessageTypeNormlPage;
+    [self.navigationController pushViewController:privateChat animated:YES];
   
 }
 -(void)addButtomScro

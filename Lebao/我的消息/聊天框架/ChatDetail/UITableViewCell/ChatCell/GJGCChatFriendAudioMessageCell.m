@@ -28,7 +28,7 @@
         self.audioTimeLabel.contentBaseWidth = self.audioTimeLabel.gjcf_width;
         self.audioTimeLabel.contentBaseHeight = self.audioTimeLabel.gjcf_height;
         self.audioTimeLabel.backgroundColor = [UIColor clearColor];
-        [self.contentView addSubview:self.audioTimeLabel];
+//        [self.contentView addSubview:self.audioTimeLabel];
         
         self.downloadIndicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         self.downloadIndicator.gjcf_size = CGSizeMake(10, 10);

@@ -9,7 +9,7 @@
 #import "CustomerServiceViewController.h"
 #import "XLDataService.h"
 #import "MessageCell.h"
-#import "CommunicationViewController.h"
+#import "GJGCChatFriendViewController.h"
 #define CustomerlistURL [NSString stringWithFormat:@"%@message/customerlist",HttpURL]
 @interface CustomerServiceViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic,strong)UITableView *customerServiceView;
@@ -171,13 +171,16 @@
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-      [tableView deselectRowAtIndexPath:indexPath animated:YES];
-        CommunicationViewController *community = allocAndInit(CommunicationViewController);
-        NotificationData *data=   _customerServiceArray[indexPath.row];
-        community.senderid = data.senderid;
-        community.sourcetype = @"customer";
-         community.chatType = ChatCustomerTpye;
-        PushView(self, community);
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+      NotificationData *data=   _customerServiceArray[indexPath.row];
+    GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
+    talk.talkType = GJGCChatFriendTalkTypePrivate;
+    talk.toId = data.senderid;
+    talk.toUserName = data.realname;
+    
+    GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
+    privateChat.type = MessageTypeCustomPage;
+    [self.navigationController pushViewController:privateChat animated:YES];
     
     MessageCell *cell  = [tableView cellForRowAtIndexPath:indexPath];
     

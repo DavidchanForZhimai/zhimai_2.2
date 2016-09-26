@@ -10,7 +10,6 @@
 #import "MeCell.h"
 #import "XLDataService.h"
 #import "MessageCell.h"
-#import "CommunicationViewController.h"
 #import "GJGCChatFriendViewController.h"
 #import "NotificationDetailViewController.h"
 #import "NotificationSettingViewController.h"
@@ -273,13 +272,7 @@
         
     }
     if (indexPath.section==1) {
-//        CommunicationViewController *community = allocAndInit(CommunicationViewController);
-//        NSArray * _sectionArray = _notificationArray[indexPath.section];
-//        NotificationData *data=   _sectionArray[indexPath.row];
-//        community.senderid = data.senderid;
-//        community.chatType = ChatMessageTpye;
-//        PushView(self, community);
-        
+
         NSArray * _sectionArray = _notificationArray[indexPath.section];
         NotificationData *data=   _sectionArray[indexPath.row];
         GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
@@ -288,7 +281,7 @@
         talk.toUserName = data.realname;
 
         GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
- 
+        privateChat.type = MessageTypeNormlPage;
         [self.navigationController pushViewController:privateChat animated:YES];
 
         MessageCell *cell  = [tableView cellForRowAtIndexPath:indexPath];

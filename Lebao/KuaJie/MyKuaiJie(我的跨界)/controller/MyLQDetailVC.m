@@ -15,7 +15,7 @@
 #import "PayDingJinVC.h"
 #import "JJRDetailVC.h"
 #import "ClueCommunityViewController.h"
-#import "CommunicationViewController.h"
+#import "GJGCChatFriendViewController.h"
 #import "MP3PlayerManager.h"
 @interface MyLQDetailVC ()
 {
@@ -852,10 +852,14 @@
 }
 -(void)duihuaAction
 {
-    CommunicationViewController * comunV = [[CommunicationViewController alloc]init];
-    comunV.senderid = [_xiansuoDic objectForKey:@"brokerid"];
-    comunV.chatType = ChatMessageTpye;
-    [self.navigationController pushViewController:comunV animated:YES];
+    GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
+    talk.talkType = GJGCChatFriendTalkTypePrivate;
+    talk.toId = [_xiansuoDic objectForKey:@"brokerid"];
+    talk.toUserName = [_xiansuoDic objectForKey:@"realname"];
+    
+    GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
+    privateChat.type = MessageTypeNormlPage;
+    [self.navigationController pushViewController:privateChat animated:YES];
 }
 -(void)customScro
 {

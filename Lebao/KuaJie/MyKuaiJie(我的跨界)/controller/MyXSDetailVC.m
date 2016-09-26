@@ -17,7 +17,7 @@
 #import "JJRDetailVC.h"
 #import "ClueCommunityViewController.h"
 #import "DXAlertView.h"
-#import "CommunicationViewController.h"
+#import "GJGCChatFriendViewController.h"
 #import "MP3PlayerManager.h"
 #define WHZTABTAG 110
 #define XTTJTABTAG 129
@@ -418,10 +418,16 @@
 }
 -(void)gentaduihuaAction
 {
-    CommunicationViewController * comunV = [[CommunicationViewController alloc]init];
-    comunV.senderid = [_coopArr[0] objectForKey:@"brokerid"];
-    comunV.chatType = ChatMessageTpye;
-    [self.navigationController pushViewController:comunV animated:YES];
+
+    GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
+    talk.talkType = GJGCChatFriendTalkTypePrivate;
+    talk.toId = [_coopArr[0] objectForKey:@"id"];
+    talk.toUserName = [_coopArr[0] objectForKey:@"realname"];
+    
+    GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
+    privateChat.type = MessageTypeNormlPage;
+    [self.navigationController pushViewController:privateChat animated:YES];
+
 }
 #pragma mark--领取人经纪人详情页面跳转
 -(void)jjrDetaolAction

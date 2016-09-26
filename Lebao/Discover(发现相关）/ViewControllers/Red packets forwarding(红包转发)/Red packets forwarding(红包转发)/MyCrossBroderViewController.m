@@ -14,7 +14,7 @@
 #import "CrossBorderTransmissionViewController.h"//跨界传播详情
 #import "MyProductDetailViewController.h"
 #import "WetChatShareManager.h"
-#import "CommunicationViewController.h"
+#import "GJGCChatFriendViewController.h"
 @interface MyCrossBroderViewController ()<UIScrollViewDelegate>
 @property(nonatomic,strong)UIScrollView *mainScrollView;
 @property(nonatomic,strong)BaseButton *hasEarnMoney;
@@ -135,12 +135,16 @@
         
         
     } communityBlock:^(MyCrossBroderRewardforwards*myCrossBroderRewardforwards,MyCrossBroderRelease *myCrossBroderRelease) {
-        CommunicationViewController *vc = allocAndInit(CommunicationViewController);
-        vc.sourceid = [NSString stringWithFormat:@"%i",(int)myCrossBroderRewardforwards.acid];
-        vc.sourcetype = @"wallet";
-        vc.chatType = ChatRedEnvelopePTpye;
-        vc.receiver = [NSString stringWithFormat:@"%i",(int)myCrossBroderRewardforwards.uid];
-        PushView(self, vc);
+       
+        
+        GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
+        talk.talkType = GJGCChatFriendTalkTypePrivate;
+        talk.toId = [NSString stringWithFormat:@"%i",(int)myCrossBroderRewardforwards.acid];
+        GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
+        privateChat.type = MeeageTypeRedPage;
+        privateChat.receiver = [NSString stringWithFormat:@"%i",(int)myCrossBroderRewardforwards.uid];
+        [self.navigationController pushViewController:privateChat animated:YES];
+
 
     }];
     
@@ -222,12 +226,14 @@
 
     } communityBlock:^(MyCrossBroderRewardforwards*myCrossBroderRewardforwards,MyCrossBroderRelease *myCrossBroderRelease) {
         
-        CommunicationViewController *vc = allocAndInit(CommunicationViewController);
-        vc.sourceid = [NSString stringWithFormat:@"%i",(int)myCrossBroderRelease.ID];
-        vc.sourcetype = @"wallet";
-        vc.chatType = ChatRedEnvelopePTpye;
-        vc.receiver = [NSString stringWithFormat:@"%i",(int)myCrossBroderRelease.uid];
-        PushView(self, vc);
+
+        GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
+        talk.talkType = GJGCChatFriendTalkTypePrivate;
+        talk.toId = [NSString stringWithFormat:@"%i",(int)myCrossBroderRelease.ID];
+        GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
+        privateChat.type = MeeageTypeRedPage;
+        privateChat.receiver =[NSString stringWithFormat:@"%i",(int)myCrossBroderRelease.uid];
+        [self.navigationController pushViewController:privateChat animated:YES];
 
         
     }];

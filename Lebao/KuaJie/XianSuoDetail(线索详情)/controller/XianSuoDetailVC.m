@@ -12,7 +12,7 @@
 #import "PayDingJinVC.h"
 #import "XianSuoDetailInfo.h"
 #import "ToolManager.h"
-#import "CommunicationViewController.h"
+#import "GJGCChatFriendViewController.h"
 #import "LinQuRenVC.h"
 #import "ClueCommunityViewController.h"
 #import "AuthenticationViewController.h"
@@ -833,10 +833,14 @@
 }
 -(void)duihuaAction
 {
-    CommunicationViewController * comunV = [[CommunicationViewController alloc]init];
-    comunV.senderid = [_xiansDic objectForKey:@"brokerid"];
-    comunV.chatType = ChatMessageTpye;
-    [self.navigationController pushViewController:comunV animated:YES];
+    GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
+    talk.talkType = GJGCChatFriendTalkTypePrivate;
+    talk.toId = [_xiansDic objectForKey:@"brokerid"];
+    talk.toUserName = [_xiansDic objectForKey:@"realname"];
+    
+    GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
+    privateChat.type = MessageTypeNormlPage;
+    [self.navigationController pushViewController:privateChat animated:YES];
 }
 -(void)setNav
 {

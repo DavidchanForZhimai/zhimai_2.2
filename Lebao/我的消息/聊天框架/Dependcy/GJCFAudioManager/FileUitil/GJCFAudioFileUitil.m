@@ -44,6 +44,7 @@ static NSString *  GJCFAudioFileRemoteLocalWavFileShipList = @"GJCFAudioFileRemo
 /* 创建一条新的录音文件存储路径 */
 + (NSString*)createAudioNewRecordLocalStorePath
 {
+    
     NSString *fileName = [NSString stringWithFormat:@"%@.wav",GJCFStringCurrentTimeStamp];
     
     return [[self cacheDirectory]stringByAppendingPathComponent:fileName];
@@ -54,7 +55,7 @@ static NSString *  GJCFAudioFileRemoteLocalWavFileShipList = @"GJCFAudioFileRemo
     if (!audioFile) {
         return;
     }
-    
+   
     NSString *fileName = [NSString stringWithFormat:@"%@.%@",GJCFStringCurrentTimeStamp,audioFile.extensionName];
 
     audioFile.fileName = fileName;

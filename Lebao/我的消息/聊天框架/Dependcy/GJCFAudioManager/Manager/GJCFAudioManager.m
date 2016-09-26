@@ -740,7 +740,7 @@
     /* 判断是不是需要转码的类型 */
     if (audioFile.isNeedConvertEncodeToSave) {
         
-        BOOL convertEncodeResult = [GJCFEncodeAndDecode convertAudioFileToWAV:audioFile];
+        BOOL convertEncodeResult = [GJCFEncodeAndDecode convertAudioFileToIosSystemFormat:audioFile];
         
         NSLog(@"GJCFAudioManager 转码结果:%d",convertEncodeResult);
         
@@ -863,8 +863,8 @@
 {
     self.currentRecordAudioFile = resultAudio;
     
-    /* 创建一份AMR转码文件 */
-    [GJCFEncodeAndDecode convertAudioFileToAMR:self.currentRecordAudioFile];
+    /* 创建一份其他格式转码文件 */
+    [GJCFEncodeAndDecode convertAudioFileToOtherFormat:self.currentRecordAudioFile];
     
     /* 获取录音时间 */
     if (self.recordFinishBlock) {

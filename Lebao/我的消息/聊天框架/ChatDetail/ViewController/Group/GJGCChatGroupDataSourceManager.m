@@ -254,7 +254,7 @@
         
         if ([contentModel.localMsgId longLongValue] == [localMsgId longLongValue]) {
             
-            NSLog(@"更新内存中语音的地址为:%@",audioUrl);
+//            NSLog(@"更新内存中语音的地址为:%@",audioUrl);
             contentModel.audioModel.localStorePath = [[GJCFCachePathManager shareManager]mainAudioCacheFilePathForUrl:audioUrl];
             
             break;

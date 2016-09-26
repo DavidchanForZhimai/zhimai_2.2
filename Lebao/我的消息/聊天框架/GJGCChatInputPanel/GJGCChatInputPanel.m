@@ -340,17 +340,17 @@
 
 - (void)audioRecord:(GJCFAudioRecord *)audioRecord didFaildByMinRecordDuration:(NSTimeInterval)minDuration
 {
-    NSLog(@"最小录音时间失败:%f",minDuration);
+//    NSLog(@"最小录音时间失败:%f",minDuration);
     [self showRecordTipView];
 }
 
 - (void)audioRecord:(GJCFAudioRecord *)audioRecord didOccusError:(NSError *)error
 {
-    NSLog(@"录音失败:%@",error);
+//    NSLog(@"录音失败:%@",error);
 }
 - (void)audioRecord:(GJCFAudioRecord *)audioRecord finishRecord:(GJCFAudioModel *)resultAudio
 {
-    NSLog(@"录音成功:%@",resultAudio.description);
+//    NSLog(@"录音成功:%@",resultAudio.description);
     
     NSString *formateNoti = [GJGCChatInputConst panelNoti:GJGCChatInputTextViewRecordTooLongNoti formateWithIdentifier:self.panelIndentifier];
 
@@ -361,11 +361,11 @@
      */
     [GJCFAudioFileUitil setupAudioFileTempEncodeFilePath:resultAudio];
     
-    if ([GJCFEncodeAndDecode convertAudioFileToAMR:resultAudio]) {
+    if ([GJCFEncodeAndDecode convertAudioFileToOtherFormat:resultAudio]) {
         
-        NSLog(@"ChatInputPanel 录音文件转码成功");
-        NSLog(@"%@",resultAudio);
-        
+//        NSLog(@"ChatInputPanel 录音文件转码成功");
+//        NSLog(@"%@",resultAudio);
+//        
         if (self.delegate && [self.delegate respondsToSelector:@selector(chatInputPanel:didFinishRecord:)]) {
             [self.delegate chatInputPanel:self didFinishRecord:resultAudio];
         }

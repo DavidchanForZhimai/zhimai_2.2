@@ -12,8 +12,8 @@
 
 @implementation GJCFEncodeAndDecode
 
-/* 将音频文件转为AMR格式，会为其创建AMR编码的临时文件 */
-+ (BOOL)convertAudioFileToAMR:(GJCFAudioModel *)audioFile
+/* 将音频文件转为其他格式，会为其创建其他格式编码的临时文件 */
++ (BOOL)convertAudioFileToOtherFormat:(GJCFAudioModel *)audioFile
 {
     /* 如果没有WAV的缓存路径，那么是不能转的 */
     if (!audioFile.localStorePath) {
@@ -23,7 +23,7 @@
         return NO;
     }
     
-    /* 设置一个amr临时编码文件的路径 */
+    /* 设置一个临时编码文件的路径 */
     if (!audioFile.tempEncodeFilePath) {
         
         [GJCFAudioFileUitil setupAudioFileTempEncodeFilePath:audioFile];
@@ -38,12 +38,11 @@
     }
     
     /* 开始转换 */
-//    int result = [VoiceConverter wavToAmr:audioFile.localStorePath amrSavePath:audioFile.tempEncodeFilePath];
-    int result = [VoiceConverter wavToMp3:audioFile.localStorePath mp3SavePath:audioFile.tempEncodeFilePath];
+    int result = [VoiceConverter wavToOtherFormat:audioFile.localStorePath otherFormatSavePath:audioFile.tempEncodeFilePath];
     
     if (result) {
         
-//        NSLog(@"GJCFEncodeAndDecode wavToAmr 成功:%@",audioFile.tempEncodeFilePath);
+//        NSLog(@"GJCFEncodeAndDecode wavTO 成功:%@",audioFile.tempEncodeFilePath);
         
     }else{
         
@@ -54,8 +53,8 @@
     return result;
 }
 
-/* 将音频文件转为WAV格式 */
-+ (BOOL)convertAudioFileToWAV:(GJCFAudioModel *)audioFile
+/* 将音频文件转为系统格式 */
++ (BOOL)convertAudioFileToIosSystemFormat:(GJCFAudioModel *)audioFile
 {
     /* 如果没有临时编码文件的缓存路径，那么是不能转的 */
     if (!audioFile.tempEncodeFilePath) {
@@ -81,13 +80,10 @@
     
     /* 开始转换 */
 //    int result = [VoiceConverter amrToWav:audioFile.tempEncodeFilePath wavSavePath:audioFile.localStorePath];
-     int result = [VoiceConverter mp3ToWav:audioFile.tempEncodeFilePath wavSavePath:audioFile.localStorePath];
+     int result = [VoiceConverter otherFormatToWav:audioFile.tempEncodeFilePath wavSavePath:audioFile.localStorePath];
     
     if (result) {
-        
-        
-//        NSLog(@"GJCFEncodeAndDecode amrToWav 转码成功:%@",audioFile.localStorePath);
-        
+//        NSLog(@"GJCFEncodeAndDecode ToWav 转码成功:%@",audioFile.localStorePath);
         /* 如果设置了转码完成之后将临时编码文件删除 */
         if (audioFile.isDeleteWhileFinishConvertToLocalFormate) {
             

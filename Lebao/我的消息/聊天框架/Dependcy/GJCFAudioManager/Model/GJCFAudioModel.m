@@ -23,8 +23,8 @@
         _uniqueIdentifier = [self currentTimeStamp];
         
         /* 设定默认文件后缀 */
-        self.extensionName = @"wav";
-        self.tempEncodeFileExtensionName = @"amr";
+        self.extensionName = @"caf";
+        self.tempEncodeFileExtensionName = @"mp3";
         
         self.mimeType = @"audio/amr";
     }
@@ -52,7 +52,8 @@
 
 - (NSString*)description
 {
-    return [NSString stringWithFormat:@"文件Wav路径:%@ 远程路径:%@ 临时转码文件路径:%@",self.localStorePath,self.remotePath,self.tempEncodeFilePath];
+//    return [NSString stringWithFormat:@"文件Wav路径:%@ 远程路径:%@ 临时转码文件路径:%@",self.localStorePath,self.remotePath,self.tempEncodeFilePath];
+    return @"";
 }
 
 /* 删除本地wav格式文件 */

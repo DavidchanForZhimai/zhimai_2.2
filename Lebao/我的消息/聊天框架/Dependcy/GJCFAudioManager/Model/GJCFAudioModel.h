@@ -68,7 +68,7 @@
 /* 是否上传本地转编码的格式文件，默认是YES,因为服务器需要的是转编码后的音频文件 */
 @property (nonatomic,assign)BOOL isUploadTempEncodeFile;
 
-/* 是否需要存储一分转成本地WAV编码格式的文件,默认是YES,因为现在我们主要业务需要，目前只支持AMR转WAV */
+/* 是否需要存储一分转成本地WAV编码格式的文件,默认是YES,因为现在我们主要业务需要，目前只支持AMR转WAV  新增mp3 */
 @property (nonatomic,assign)BOOL isNeedConvertEncodeToSave;
 
 /* 是否下载完就播放 */
