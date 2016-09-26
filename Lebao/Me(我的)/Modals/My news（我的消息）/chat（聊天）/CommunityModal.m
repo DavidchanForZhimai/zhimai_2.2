@@ -25,6 +25,10 @@
 @end
 
 @implementation CommunityDataModal
-
++ (NSDictionary *)mj_replacedKeyFromPropertyName
+{
+    return @{ @"msgId" : @"id",
+             };
+}
 
 @end

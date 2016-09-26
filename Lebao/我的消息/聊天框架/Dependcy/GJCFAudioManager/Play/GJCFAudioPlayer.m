@@ -233,7 +233,7 @@
     float soundLoudly = [self.audioPlayer peakPowerForChannel:0];
     _soundMouter = pow(10, (0.05 * soundLoudly));
     
-    NSLog(@"audio soundMouter :%f",_soundMouter);
+//    NSLog(@"audio soundMouter :%f",_soundMouter);
     
     if (self.delegate) {
         [self.delegate audioPlayer:self didUpdateSoundMouter:self.soundMouter];

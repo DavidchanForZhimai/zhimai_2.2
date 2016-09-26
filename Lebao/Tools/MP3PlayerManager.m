@@ -220,13 +220,8 @@ static MP3PlayerManager* mP3PlayerManager;
     return bCanRecord;
 }
 
-//转MP3
-- (void)convertMp3FinishBlock:(FinishBlock)finishBlock
+- (void)convertCafFilPath:(NSString *)cafFilePath mp3FilePath:(NSString *)mp3FilePath andfinishBlock:(FinishBlock)finishBlock
 {
-    
-    NSString *cafFilePath = [self getSavePathStr];
-    NSString *mp3FilePath = [self mp3Path];
-    
     @try {
         int read, write;
         
@@ -272,6 +267,16 @@ static MP3PlayerManager* mP3PlayerManager;
     if (finishBlock) {
         finishBlock(YES);
     }
+
+}
+//转MP3
+- (void)convertMp3FinishBlock:(FinishBlock)finishBlock
+{
+    
+    NSString *cafFilePath = [self getSavePathStr];
+    NSString *mp3FilePath = [self mp3Path];
+    [self convertCafFilPath:cafFilePath mp3FilePath:mp3FilePath andfinishBlock:finishBlock];
+    
 }
 - (NSString *)mp3Path
 {
@@ -336,8 +341,25 @@ static MP3PlayerManager* mP3PlayerManager;
     
     
 }
-- (void)uploadAudioWithType:(NSString *)type audioData:(NSData *)audioData finishuploadBlock:(FinishuploadBlock)finishuploadBlock
+- (void)uploadAudioWithType:(NSString *)type cafFilPath:(NSString *)cafFilePath mp3FilePath:(NSString *)mp3FilePath  finishuploadBlock:(FinishuploadBlock)finishuploadBlock
 {
+    [self convertCafFilPath:cafFilePath mp3FilePath:mp3FilePath andfinishBlock:^(BOOL succeed) {
+        if (succeed) {
+            
+            [self uploadAudioWithType:type audioData:[NSData dataWithContentsOfFile:mp3FilePath] finishuploadBlock:finishuploadBlock];
+        }
+        else
+        {
+            
+            
+            [[ToolManager shareInstance] showInfoWithStatus:@" 转化MP3格式错误"];
+        }
+    }];
+
+}
+- (void)uploadAudioWithType:(NSString *)type  audioData:(NSData *)audioData finishuploadBlock:(FinishuploadBlock)finishuploadBlock
+{
+    
     
     XLFileConfig *fileConfig = allocAndInit(XLFileConfig);
     fileConfig.fileData = audioData;

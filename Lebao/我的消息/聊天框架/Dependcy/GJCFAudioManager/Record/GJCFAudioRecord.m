@@ -56,12 +56,12 @@
     NSError *err = nil;
     [audioSession setCategory:AVAudioSessionCategoryRecord error:&err];
     if(err){
-        NSLog(@"GJCFAudioRecord audioSession: %@ %d %@", [err domain], [err code], [[err userInfo] description]);
+//        NSLog(@"GJCFAudioRecord audioSession: %@ %d %@", [err domain], [err code], [[err userInfo] description]);
         return;
     }
     [audioSession setActive:YES error:&err];
     if(err){
-        NSLog(@"GJCFAudioRecord audioSession: %@ %d %@", [err domain], [err code], [[err userInfo] description]);
+//        NSLog(@"GJCFAudioRecord audioSession: %@ %d %@", [err domain], [err code], [[err userInfo] description]);
         return;
     }
 
@@ -104,10 +104,10 @@
     }
     
     if (!self.currentRecordFile.localStorePath) {
-        NSLog(@"GJCFAudioRecord Create Error No cache path");
+//        NSLog(@"GJCFAudioRecord Create Error No cache path");
         return;
     }
-    NSLog(@"GJCFAudioRecord Create cache path :%@",self.currentRecordFile.localStorePath);
+//    NSLog(@"GJCFAudioRecord Create cache path :%@",self.currentRecordFile.localStorePath);
 
     NSError *createRecordError = nil;
     self.audioRecord = [[AVAudioRecorder alloc]initWithURL:[NSURL URLWithString:self.currentRecordFile.localStorePath] settings:self.recordSettings.settingDict error:&createRecordError];
@@ -116,7 +116,7 @@
     
     if (createRecordError) {
         
-        NSLog(@"GJCFAudioRecord Create AVAudioRecorder Error:%@",createRecordError);
+//        NSLog(@"GJCFAudioRecord Create AVAudioRecorder Error:%@",createRecordError);
         
         [self startRecordErrorDetail];
         
@@ -157,13 +157,13 @@
         
         if (_isRecording) {
             
-            NSLog(@"GJCFAudioRecord Limit start....");
+//            NSLog(@"GJCFAudioRecord Limit start....");
             
         }else{
             
             [self startRecordErrorDetail];
             
-            NSLog(@"GJCFAudioRecord Limit start error....");
+//            NSLog(@"GJCFAudioRecord Limit start error....");
         }
         
         return;
@@ -172,13 +172,13 @@
 
     if (_isRecording) {
         
-        NSLog(@"GJCFAudioRecord start....");
+//        NSLog(@"GJCFAudioRecord start....");
         
     }else{
         
         [self startRecordErrorDetail];
         
-        NSLog(@"GJCFAudioRecord start error....");
+//        NSLog(@"GJCFAudioRecord start error....");
     }
 }
 
@@ -190,7 +190,7 @@
     float soundLoudly = [self.audioRecord peakPowerForChannel:0];
     _soundMouter = pow(10, (0.05 * soundLoudly));
     
-    NSLog(@"audio soundMouter :%f",_soundMouter);
+//    NSLog(@"audio soundMouter :%f",_soundMouter);
     
     if (self.delegate) {
         [self.delegate audioRecord:self soundMeter:_soundMouter];

@@ -211,8 +211,8 @@
 		<string>052[凋谢]</string>
 	</dict>
 	<dict>
-		<key>[蜡烛]</key>
-		<string>053[蜡烛]</string>
+		<key>[蛋糕]</key>
+		<string>053[蛋糕]</string>
 	</dict>
 	<dict>
 		<key>[爱心]</key>
@@ -235,8 +235,8 @@
 		<string>058[月亮]</string>
 	</dict>
 	<dict>
-		<key>[蛋糕]</key>
-		<string>059[蛋糕]</string>
+		<key>[瓢虫]</key>
+		<string>059[瓢虫]</string>
 	</dict>
 	<dict>
 		<key>[闪电]</key>
@@ -275,8 +275,8 @@
 		<string>068[刀]</string>
 	</dict>
 	<dict>
-		<key>[喝彩]</key>
-		<string>069[喝彩]</string>
+		<key>[转圈]</key>
+		<string>069[转圈]</string>
 	</dict>
 	<dict>
 		<key>[篮球]</key>
@@ -307,16 +307,12 @@
 		<string>076[便便]</string>
 	</dict>
 	<dict>
-		<key>[飞机]</key>
-		<string>077[飞机]</string>
+		<key>[跳绳]</key>
+		<string>077[跳绳]</string>
 	</dict>
 	<dict>
-		<key>[金钱]</key>
-		<string>078[金钱]</string>
-	</dict>
-	<dict>
-		<key>[金钱]</key>
-		<string>078[金钱]</string>
+		<key>[跳跳]</key>
+		<string>078[跳跳]</string>
 	</dict>
 	<dict>
 		<key>[抱抱]</key>
@@ -405,26 +401,6 @@
 	<dict>
 		<key>[挥手帕]</key>
 		<string>103[挥手帕]</string>
-	</dict>
-	<dict>
-		<key>[激动]</key>
-		<string>104[激动]</string>
-	</dict>
-	<dict>
-		<key>[跳跳]</key>
-		<string>105[跳跳]</string>
-	</dict>
-	<dict>
-		<key>[左太极]</key>
-		<string>106[左太极]</string>
-	</dict>
-	<dict>
-		<key>[右太极]</key>
-		<string>107[右太极]</string>
-	</dict>
-	<dict>
-		<key>[打太极]</key>
-		<string>108[打太极]</string>
 	</dict>
 	<dict>
 		<key>删除</key>

@@ -18,7 +18,7 @@
     /* 如果没有WAV的缓存路径，那么是不能转的 */
     if (!audioFile.localStorePath) {
         
-        NSLog(@"GJCFEncodeAndDecode 错误:没有可转码的本地Wav文件路径");
+//        NSLog(@"GJCFEncodeAndDecode 错误:没有可转码的本地Wav文件路径");
         
         return NO;
     }
@@ -32,21 +32,22 @@
     
     if (!audioFile.tempEncodeFilePath) {
         
-        NSLog(@"GJCFEncodeAndDecode 错误:没有可以保存转码音频文件的路径");
+//        NSLog(@"GJCFEncodeAndDecode 错误:没有可以保存转码音频文件的路径");
         
         return NO;
     }
     
     /* 开始转换 */
-    int result = [VoiceConverter wavToAmr:audioFile.localStorePath amrSavePath:audioFile.tempEncodeFilePath];
+//    int result = [VoiceConverter wavToAmr:audioFile.localStorePath amrSavePath:audioFile.tempEncodeFilePath];
+    int result = [VoiceConverter wavToMp3:audioFile.localStorePath mp3SavePath:audioFile.tempEncodeFilePath];
     
     if (result) {
         
-        NSLog(@"GJCFEncodeAndDecode wavToAmr 成功:%@",audioFile.tempEncodeFilePath);
+//        NSLog(@"GJCFEncodeAndDecode wavToAmr 成功:%@",audioFile.tempEncodeFilePath);
         
     }else{
         
-        NSLog(@"GJCFEncodeAndDecode wavToAmr 失败:%@",audioFile.tempEncodeFilePath);
+//        NSLog(@"GJCFEncodeAndDecode wavToAmr 失败:%@",audioFile.tempEncodeFilePath);
         
     }
     
@@ -59,7 +60,7 @@
     /* 如果没有临时编码文件的缓存路径，那么是不能转的 */
     if (!audioFile.tempEncodeFilePath) {
         
-        NSLog(@"GJCFEncodeAndDecode 错误:没有可以用来转码的临时音频文件");
+//        NSLog(@"GJCFEncodeAndDecode 错误:没有可以用来转码的临时音频文件");
         
         return NO;
     }
@@ -73,18 +74,19 @@
     
     if (!audioFile.localStorePath) {
         
-        NSLog(@"GJCFEncodeAndDecode 错误:没有可以用来保存本地Wav文件的路径");
+//        NSLog(@"GJCFEncodeAndDecode 错误:没有可以用来保存本地Wav文件的路径");
 
         return NO;
     }
     
     /* 开始转换 */
-    int result = [VoiceConverter amrToWav:audioFile.tempEncodeFilePath wavSavePath:audioFile.localStorePath];
+//    int result = [VoiceConverter amrToWav:audioFile.tempEncodeFilePath wavSavePath:audioFile.localStorePath];
+     int result = [VoiceConverter mp3ToWav:audioFile.tempEncodeFilePath wavSavePath:audioFile.localStorePath];
     
     if (result) {
         
         
-        NSLog(@"GJCFEncodeAndDecode amrToWav 转码成功:%@",audioFile.localStorePath);
+//        NSLog(@"GJCFEncodeAndDecode amrToWav 转码成功:%@",audioFile.localStorePath);
         
         /* 如果设置了转码完成之后将临时编码文件删除 */
         if (audioFile.isDeleteWhileFinishConvertToLocalFormate) {
@@ -94,13 +96,13 @@
             
             if (removeTempError) {
                 
-                NSLog(@"删除临时转码文件失败");
+//                NSLog(@"删除临时转码文件失败");
                 
                 return YES;
                 
             }else{
                 
-                NSLog(@"删除临时转码文件成功");
+//                NSLog(@"删除临时转码文件成功");
 
                 return YES;
             }
@@ -111,7 +113,7 @@
         
     }else{
         
-        NSLog(@"GJCFEncodeAndDecode amrToWav faild");
+//        NSLog(@"GJCFEncodeAndDecode amrToWav faild");
         
         return NO;
         

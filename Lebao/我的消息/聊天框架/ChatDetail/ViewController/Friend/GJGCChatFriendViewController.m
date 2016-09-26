@@ -129,12 +129,14 @@ GJCUCaptureViewControllerDelegate>
                 
                 for (int i=0;i<modal.datas.count;i++) {
                     CommunityDataModal *data =modal.datas[i];
+        
                     GJGCChatFriendContentModel *chatContentModel = [[GJGCChatFriendContentModel alloc]init];
                     chatContentModel.baseMessageType = GJGCChatBaseMessageTypeChatMessage;
-                    chatContentModel.contentType = GJGCChatFriendContentTypeText;
+                    chatContentModel.contentType = data.msgtype;
                     NSString *text = data.content;
                     NSDictionary *parseTextDict = [GJGCChatFriendCellStyle formateSimpleTextMessage:text];
                     chatContentModel.simpleTextMessage = [parseTextDict objectForKey:@"contentString"];
+                    chatContentModel.localMsgId = data.msgId;
                     chatContentModel.originTextMessage = text;
                     chatContentModel.emojiInfoArray = [parseTextDict objectForKey:@"imageInfo"];
                     chatContentModel.phoneNumberArray = [parseTextDict objectForKey:@"phone"];
@@ -142,11 +144,12 @@ GJCUCaptureViewControllerDelegate>
                     chatContentModel.senderId = modal.receiver;
                     chatContentModel.toUserName = self.taklInfo.toUserName;
                     chatContentModel.sendTime = [data.createtime longLongValue];
-                    
                     chatContentModel.sendStatus = GJGCChatFriendSendMessageStatusSuccess;
                     chatContentModel.isFromSelf = data.isself;
                     chatContentModel.talkType = self.taklInfo.talkType;
                     chatContentModel.headUrl = [NSString stringWithFormat:@"%@%@",ImageURLS,data.imgurl];
+                    chatContentModel.audioModel.remotePath = [NSString stringWithFormat:@"%@%@",ImageURLS,data.audios];
+                    
                     
                     [self.dataSourceManager mockSendAnMesssage:chatContentModel];
                     [self.dataSourceManager resortAllChatContentBySendTime];
@@ -786,6 +789,7 @@ GJCUCaptureViewControllerDelegate>
     }
     
     NSString *taskIdentifier = nil;
+    
     GJCFFileDownloadTask *downloadTask = [GJCFFileDownloadTask taskWithDownloadUrl:contentModel.audioModel.remotePath withCachePath:contentModel.audioModel.tempEncodeFilePath withObserver:self getTaskIdentifer:&taskIdentifier];
     contentModel.downloadTaskIdentifier = taskIdentifier;
     downloadTask.userInfo = @{@"type":@"audio",@"msgId":contentModel.localMsgId};
@@ -1089,7 +1093,7 @@ GJCUCaptureViewControllerDelegate>
     chatContentModel.toId = self.taklInfo.toId;
     chatContentModel.toUserName = self.taklInfo.toUserName;
     chatContentModel.timeString = [GJGCChatSystemNotiCellStyle formateTime:GJCFDateToString([NSDate date])];
-    chatContentModel.sendStatus = GJGCChatFriendSendMessageStatusSuccess;
+    chatContentModel.sendStatus = GJGCChatFriendSendMessageStatusSending;
     chatContentModel.isFromSelf = YES;
     chatContentModel.talkType = self.taklInfo.talkType;
     chatContentModel.localMsgId = GJCFDateToString([NSDate date]);
@@ -1420,6 +1424,7 @@ GJCUCaptureViewControllerDelegate>
         
         NSMutableDictionary *param = [Parameter parameterWithSessicon];
         [param setObject:recevier forKey:@"receiver"];
+        [param setObject:@(GJGCChatFriendContentTypeText) forKey:@"msgtype"];
         [param setObject:contentModel.originTextMessage forKey:@"content"];
         [XLDataService postWithUrl:CommunicateURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
             
@@ -1427,9 +1432,11 @@ GJCUCaptureViewControllerDelegate>
                 if ([dataObj[@"rtcode"] intValue] ==1) {
                     [[ToolManager shareInstance] dismiss];
                     NSLog(@"%@",dataObj);
+                    
                     contentModel.sendStatus = GJGCChatFriendSendMessageStatusSuccess;
                     contentModel.sendTime = [dataObj[@"datas"][@"createtime"] longLongValue];
                     contentModel.headUrl =[NSString stringWithFormat:@"%@%@",ImageURLS,dataObj[@"datas"][@"imgurl"]] ;
+                     contentModel.localMsgId =[NSString stringWithFormat:@"%@%@",ImageURLS,dataObj[@"datas"][@"id"]] ;
                     [self.dataSourceManager updateContentModelValuesNotEffectRowHeight:contentModel atIndex:index];
                     
                     [self.chatListTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
@@ -1459,20 +1466,55 @@ GJCUCaptureViewControllerDelegate>
     else if(contentModel.contentType==GJGCChatFriendContentTypeAudio)
     {
         
-        NSLog(@"localStorePath =%@ \n tempEncodeFilePath=%@",contentModel.audioModel.localStorePath,contentModel.audioModel.tempEncodeFilePath);
-        NSData *audioData = [NSData dataWithContentsOfFile:contentModel.audioModel.localStorePath];
+        NSMutableDictionary *param = [Parameter parameterWithSessicon];
+        [param setObject:recevier forKey:@"receiver"];
+        [param setObject:@"语音消息" forKey:@"content"];
+        [param setObject:@(GJGCChatFriendContentTypeAudio) forKey:@"msgtype"];
         
-        [[MP3PlayerManager shareInstance] uploadAudioWithType:@"mp3" audioData:audioData finishuploadBlock:^(BOOL succeed, id audioDic) {
-            NSLog(@"ImageURLS=%@%@",ImageURLS,audioDic[@"audiourl"] );
+         [[MP3PlayerManager shareInstance] uploadAudioWithType:@"mp3" audioData:[NSData dataWithContentsOfFile:contentModel.audioModel.tempEncodeFilePath] finishuploadBlock:^(BOOL succeed, id audioDic) {
+            [param setObject:audioDic[@"audiourl"] forKey:@"audios"];
         
+            [XLDataService postWithUrl:CommunicateURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+                NSLog(@"data =%@",dataObj);
+                if (dataObj) {
+                    if ([dataObj[@"rtcode"] intValue] ==1) {
+                        [[ToolManager shareInstance] dismiss];
+                        NSLog(@"%@",[NSString stringWithFormat:@"%@%@",ImageURLS,dataObj[@"datas"][@"imgurl"]]);
+                        contentModel.sendStatus = GJGCChatFriendSendMessageStatusSuccess;
+                        contentModel.sendTime = [dataObj[@"datas"][@"createtime"] longLongValue];
+                        contentModel.headUrl =[NSString stringWithFormat:@"%@%@",ImageURLS,dataObj[@"datas"][@"imgurl"]];
+                        contentModel.localMsgId =[NSString stringWithFormat:@"%@%@",ImageURLS,dataObj[@"datas"][@"id"]] ;
+                        [self.dataSourceManager updateContentModelValuesNotEffectRowHeight:contentModel atIndex:index];
+                        
+                        [self.chatListTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+                        
+                    }
+                    else
+                    {
+                        contentModel.sendStatus = GJGCChatFriendSendMessageStatusFaild;
+                        [self.dataSourceManager updateContentModelValuesNotEffectRowHeight:contentModel atIndex:index];
+                        [self.chatListTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+                        
+                    }
+                    
+                }
+                else
+                {
+                    contentModel.sendStatus = GJGCChatFriendSendMessageStatusFaild;
+                    [self.dataSourceManager updateContentModelValuesNotEffectRowHeight:contentModel atIndex:index];
+                    [self.chatListTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+                }
+                
+                
+            }];
+
         }];
         
         
         
     }
     
-    
-    
+
 }
 
 #pragma mark - 图片处理UI方法

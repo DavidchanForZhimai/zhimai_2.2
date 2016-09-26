@@ -133,22 +133,22 @@
     /* 分割页面 */
     NSMutableArray *pagesArray = [NSMutableArray array];
     
-    self.pageCount = emojiArray.count%pageItemCount == 0? emojiArray.count/pageItemCount:emojiArray.count/pageItemCount+1;
+    NSInteger emojiCount =emojiArray.count- 1;
+    self.pageCount = emojiCount%pageItemCount == 0? emojiCount/pageItemCount:emojiCount/pageItemCount+1;
     self.pageControl.numberOfPages = self.pageCount;
-    NSInteger pageLastCount = emojiArray.count%pageItemCount;
+//    NSInteger pageLastCount = emojiCount%pageItemCount;
     
     for (int i = 0; i < self.pageCount; i++) {
         
         NSMutableArray *pageItemArray = [NSMutableArray array];
-        
-        
-        if (i != self.pageCount - 1) {
-            
+    
+//        if (i != self.pageCount - 1) {
+//            
             [pageItemArray addObjectsFromArray:[emojiArray subarrayWithRange:NSMakeRange(i*pageItemCount,pageItemCount)]];
             [pageItemArray addObject:@{@"删除":@"删除"}];
-        }else{
-            [pageItemArray addObjectsFromArray:[emojiArray subarrayWithRange:NSMakeRange(i*pageItemCount, pageLastCount)]];
-        }
+//        }else{
+//            [pageItemArray addObjectsFromArray:[emojiArray subarrayWithRange:NSMakeRange(i*pageItemCount, pageLastCount)]];
+//        }
         
         [pagesArray addObject:pageItemArray];
     }

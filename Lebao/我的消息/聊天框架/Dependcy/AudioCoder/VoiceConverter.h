@@ -14,5 +14,9 @@
 
 + (int)wavToAmr:(NSString*)_wavPath amrSavePath:(NSString*)_savePath;
 
++ (int)mp3ToWav:(NSString*)_mp3Path wavSavePath:(NSString*)_savePath;
+
++ (int)wavToMp3:(NSString*)_wavPath mp3SavePath:(NSString*)_savePath;
+
 + (int) changeStu;
 @end

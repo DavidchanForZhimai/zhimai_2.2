@@ -106,8 +106,8 @@
 	<string>051[玫瑰]</string>
 	<key>[凋谢]</key>
 	<string>052[凋谢]</string>
-	<key>[蜡烛]</key>
-	<string>053[蜡烛]</string>
+	<key>[蛋糕]</key>
+	<string>053[蛋糕]</string>
 	<key>[爱心]</key>
 	<string>054[爱心]</string>
 	<key>[心碎]</key>
@@ -118,8 +118,8 @@
 	<string>057[太阳]</string>
 	<key>[月亮]</key>
 	<string>058[月亮]</string>
-	<key>[蛋糕]</key>
-	<string>059[蛋糕]</string>
+	<key>[瓢虫]</key>
+	<string>059[瓢虫]</string>
 	<key>[闪电]</key>
 	<string>060[闪电]</string>
 	<key>[OK]</key>
@@ -138,8 +138,8 @@
 	<string>067[握手]</string>
 	<key>[刀]</key>
 	<string>068[刀]</string>
-	<key>[喝彩]</key>
-	<string>069[喝彩]</string>
+	<key>[转圈]</key>
+	<string>069[转圈]</string>
 	<key>[篮球]</key>
 	<string>070[篮球]</string>
 	<key>[足球]</key>
@@ -154,10 +154,10 @@
 	<string>075[啤酒]</string>
 	<key>[便便]</key>
 	<string>076[便便]</string>
-	<key>[飞机]</key>
-	<string>077[飞机]</string>
-	<key>[金钱]</key>
-	<string>078[金钱]</string>
+	<key>[跳绳]</key>
+	<string>077[跳绳]</string>
+	<key>[跳跳]</key>
+	<string>078[跳跳]</string>
 	<key>[抱抱]</key>
 	<string>079[抱抱]</string>
 	<key>[可爱]</key>
@@ -202,16 +202,6 @@
 	<string>102[回头]</string>
 	<key>[挥手帕]</key>
 	<string>103[挥手帕]</string>
-	<key>[激动]</key>
-	<string>104[激动]</string>
-	<key>[跳跳]</key>
-	<string>105[跳跳]</string>
-	<key>[左太极]</key>
-	<string>106[左太极]</string>
-	<key>[右太极]</key>
-	<string>107[右太极]</string>
-	<key>[打太极]</key>
-	<string>108[打太极]</string>
 	<key>删除</key>
 	<string>删除</string>
 </dict>

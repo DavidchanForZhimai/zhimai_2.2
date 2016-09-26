@@ -20,4 +20,7 @@
 @property(nonatomic,assign)int sex;
 @property(nonatomic,assign)int brokerid;
 @property(nonatomic,strong)NSString *realname;
+@property(nonatomic,strong)NSString *audios;
+@property(nonatomic,assign)int msgtype;
+@property(nonatomic,strong)NSString * msgId;
 @end
