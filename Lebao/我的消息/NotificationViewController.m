@@ -20,6 +20,9 @@
 #define cellH  40
 #define MessageURL [NSString stringWithFormat:@"%@message/index",HttpURL]
 @interface NotificationViewController ()<UITableViewDelegate, UITableViewDataSource>
+{
+    NSString * num;
+}
 @property(nonatomic,strong)UITableView *notificationView;
 @property(nonatomic,strong)NSMutableArray *notificationArray;
 @property(nonatomic,strong)NSMutableArray *secondNotificationArray;
@@ -46,7 +49,7 @@
         
         [self.homePageBtn setImage:[UIImage imageNamed:@"icon_dicover_me"] forState:UIControlStateNormal];
     }
-    
+    [self requestcountConnections];
     
 }
 
@@ -90,7 +93,9 @@
         _page =1;
         [self netWork:YES isFooter:NO isShouldClear:YES];
     }];
+    if(num){
     _notificationView.tableHeaderView = self.headerView;
+    }
     [self.view addSubview:_notificationView];
     
 //    //设置
@@ -102,6 +107,19 @@
 //    };
 
 }
+-(NSString *)requestcountConnections
+{
+    
+     NSMutableDictionary *param = [Parameter parameterWithSessicon];
+    [XLDataService putWithUrl:numbelConnectionsURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+        NSLog(@"ddddddd=%@",dataObj);
+        if (dataObj) {
+            num=dataObj[@"count"];
+        }
+    }];
+    
+    return num;
+}
 - (BaseButton *)headerView
 {
     if (_headerView) {
@@ -109,7 +127,7 @@
     }
     UIImage *image = [UIImage imageNamed:@"icon_message_toingzhi"];
     
-    _headerView = [[BaseButton alloc]initWithFrame:CGRectMake(0, 0, APPWIDTH, 30) setTitle:@"人脉添加请求 +3" titleSize:22*SpacedFonts titleColor:WhiteColor backgroundImage:nil iconImage:image highlightImage:image setTitleOrgin:CGPointMake((30 - 22*SpacedFonts)/2.0, APPWIDTH/3.0 + 10) setImageOrgin:CGPointMake((30 - image.size.height)/2.0, APPWIDTH/3.0) inView:nil];
+    _headerView = [[BaseButton alloc]initWithFrame:CGRectMake(0, 0, APPWIDTH, 30) setTitle:[NSString stringWithFormat:@"人脉添加请求 +%@",num] titleSize:22*SpacedFonts titleColor:WhiteColor backgroundImage:nil iconImage:image highlightImage:image setTitleOrgin:CGPointMake((30 - 22*SpacedFonts)/2.0, APPWIDTH/3.0 + 10) setImageOrgin:CGPointMake((30 - image.size.height)/2.0, APPWIDTH/3.0) inView:nil];
     _headerView.backgroundColor = [UIColor colorWithRed:0.9922 green:0.5961 blue:0.2 alpha:1.0];
     _headerView.shouldAnmial = NO;
     __weak typeof(self)weakself=self;

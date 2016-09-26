@@ -33,6 +33,17 @@
 #define MeetOperationURL [NSString stringWithFormat:@"%@meet/operation",HttpURL]
 //约见取消接口
 #define MeetCancelURL [NSString stringWithFormat:@"%@meet/cancel",HttpURL]
+//我的人脉
+#define myConnectionsURL [NSString stringWithFormat:@"%@connection/list",HttpURL]
+//添加人脉
+#define addConnectionsURL [NSString stringWithFormat:@"%@connection/add",HttpURL]
+//添加我的人脉操作列表
+#define requestcountConnectionsURL [NSString stringWithFormat:@"%@connection/requestlist",HttpURL]
+//添加我的人脉操作列表
+#define conductConnectionsURL [NSString stringWithFormat:@"%@connection/conduct",HttpURL]
+//添加我的人脉操作列表
+#define numbelConnectionsURL [NSString stringWithFormat:@"%@connection/requestcount",HttpURL]
+
 //请求参数
 #define DeviceToken @"deviceToken"
 #define KuserName @"username"

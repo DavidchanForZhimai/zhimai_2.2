@@ -75,26 +75,12 @@
 }
 - (void)netWorkRefresh:(BOOL)isRefresh andIsLoadMoreData:(BOOL)isMoreLoadMoreData isShouldClearData:(BOOL)isShouldClearData//加载数据
 {
-    
-    //    [[LoCationManager shareInstance] creatLocationManager];
-    //    [LoCationManager shareInstance].callBackLocation = ^(CLLocationCoordinate2D location)
-    //    {
-    //测试用,要删掉
-    
-    
-    
-    
-    CLLocationCoordinate2D location;
-    location.latitude=24.491534;
-    location.longitude=118.180851;
+
     NSMutableDictionary *param = [Parameter parameterWithSessicon];
-    
-    [param setObject:[NSString stringWithFormat:@"%.6f",location.latitude] forKey:@"latitude"];
-    [param setObject:[NSString stringWithFormat:@"%.6f",location.longitude] forKey:@"longitude"];
+
     [param setObject:@(_page) forKey:@"page"];
-    
-    [XLDataService putWithUrl:MeetMainURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        NSLog(@"param====%@",param);
+    NSLog(@"param====%@",param);
+    [XLDataService putWithUrl:myConnectionsURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         if (isRefresh) {
             
             
@@ -107,8 +93,9 @@
             [self.nearByManArr removeAllObjects];
             [self.CellSouceArr removeAllObjects];
                    }
+        NSLog(@"meetObj====%@",dataObj);
         if (dataObj) {
-            NSLog(@"meetObj====%@",dataObj);
+            
             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
             if (_page ==1) {
                 [[ToolManager shareInstance] moreDataStatus:_yrTab];
@@ -145,18 +132,13 @@
         }
         
     }];
-    
-    //    };
-    
-    
-    
+
 }
 
 -(void)addTabView
 {
-    _yrTab=[[UITableView alloc]init];
-    //    [_yrTab registerClass:[MeetingTVCell class] forCellReuseIdentifier:@"yrCell"];
-    _yrTab.frame=CGRectMake(0,StatusBarHeight + NavigationBarHeight, APPWIDTH, APPHEIGHT-(StatusBarHeight + NavigationBarHeight + TabBarHeight));
+    _yrTab=[[UITableView alloc]initWithFrame:CGRectMake(0,StatusBarHeight + NavigationBarHeight, APPWIDTH, APPHEIGHT-(StatusBarHeight + NavigationBarHeight)) style:UITableViewStyleGrouped];
+
     _yrTab.delegate=self;
     _yrTab.dataSource=self;
     _yrTab.backgroundColor=[UIColor clearColor];
@@ -203,7 +185,10 @@
 }
 
 #pragma mark----tableview代理
-
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 10;
+}
 -(CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 170;
@@ -291,60 +276,24 @@
         audioMark=NO;
         [customAlertView dissMiss];
         customAlertView = nil;
-        
-        NSLog(@"取消");
-        
     }else
     {
-        NSLog(@"确认");
-        
         MeetPaydingVC * payVC = [[MeetPaydingVC alloc]init];
         MeetingData *model=_CellSouceArr[customAlertView.indexth.row];
         NSLog(@"model=%@",model);
         NSMutableDictionary *param=[Parameter parameterWithSessicon];
         [param setObject:model.userid forKey:@"userid"];
-        [param setObject:@"1" forKey:@"reward"];
-        [param setObject:@"" forKey:@"audio"];
-        [param setObject:@"" forKey:@"remark"];
+        [param setObject:customAlertView.money forKey:@"reward"];
+        
+        [param setObject:customAlertView.logField.text forKey:@"remark"];
         [param setObject:model.distance forKey:@"distance"];
-        [param setObject:@"wallet" forKey:@"paytype"];
+        
         payVC.param=param;
-        //                payVC.zfymType = FaBuZhiFu;
-        //                payVC.qwjeStr = _bcTex.text;
-        //                payVC.titStr = _titTex.text;
-        //                payVC.content = _contTex.text;
-        //                payVC.industry = induStr;
-        payVC.jineStr = @"1";
-      
+        payVC.jineStr = customAlertView.money;
+        payVC.audioData=customAlertView.audioData;
+        
         [self.navigationController pushViewController:payVC animated:YES];
         
-        
-        //        [XLDataService putWithUrl:MeetyouURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        //            if(dataObj){
-        //
-        //                MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
-        //
-        //
-        //                if (model.rtcode==1) {
-        //                    UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"恭喜您,约见成功!" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"对话",@"电话联系",@"继续约见他人", nil];
-        //                    successAlertV.cancelButtonIndex=2;
-        //
-        //                    [successAlertV show];
-        //
-        //                }
-        //
-        //                else
-        //                {
-        //                    [[ToolManager shareInstance] showAlertMessage:model.rtmsg];
-        //                }
-        //                NSLog(@"model.rtmsg=========dataobj=%@",model.rtmsg);
-        //            }else
-        //            {
-        //                [[ToolManager shareInstance] showInfoWithStatus];
-        //                [_yrBtn setBackgroundImage:[UIImage imageNamed:@"youkong"] forState:UIControlStateNormal];
-        //            }
-        //
-        //        }];
         
         [customAlertView dissMiss];
         customAlertView = nil;
@@ -352,12 +301,6 @@
     }
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    
-    return 10;
-    
-}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

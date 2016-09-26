@@ -122,7 +122,8 @@
         [_refuseBtn setTitle:@"拒绝" forState:UIControlStateNormal];
         [_refuseBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _refuseBtn.layer.cornerRadius=12;
-        [_refuseBtn addTarget:self action:@selector(refuseBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        _refuseBtn.tag=2222;
+        [_refuseBtn addTarget:self action:@selector(agreeAndrefuseBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     
     return _refuseBtn;
@@ -137,7 +138,8 @@
         [_agreeBtn setTitle:@"同意" forState:UIControlStateNormal];
         [_agreeBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _agreeBtn.layer.cornerRadius=12;
-        [_agreeBtn addTarget:self action:@selector(agreeBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        _agreeBtn.tag=2221;
+        [_agreeBtn addTarget:self action:@selector(agreeAndrefuseBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     
     return _agreeBtn;
@@ -177,18 +179,19 @@
         [_delegate tableViewCellDidSeleteMessageBtn:sender andIndexPath:_indexPath];
     }
 }
-- (void)refuseBtnClick:(UIButton *)sender
+- (void)agreeAndrefuseBtnClick:(UIButton *)sender
 {
-    if ([_delegate conformsToProtocol:@protocol(MeettingTableViewDelegate)]&&[_delegate respondsToSelector:@selector(tableViewCellDidSeleteMeetingBtn: andIndexPath:)]) {
-        [_delegate tableViewCellDidSeleteRefuseBtn:sender andIndexPath:_indexPath];
+    NSLog(@"uibutttt===%ld",sender.tag);
+    if ([_delegate conformsToProtocol:@protocol(MeettingTableViewDelegate)]&&[_delegate respondsToSelector:@selector(tableViewCellDidSeleteAgreeAndRefuseBtn:andIndexPath:)]) {
+        [_delegate tableViewCellDidSeleteAgreeAndRefuseBtn:sender andIndexPath:_indexPath];
     }
 }
-- (void)agreeBtnClick:(UIButton *)sender
-{
-    if ([_delegate conformsToProtocol:@protocol(MeettingTableViewDelegate)]&&[_delegate respondsToSelector:@selector(tableViewCellDidSeleteMeetingBtn: andIndexPath:)]) {
-        [_delegate tableViewCellDidSeleteAgreeBtn:sender andIndexPath:_indexPath];
-    }
-}
+//- (void)agreeBtnClick:(UIButton *)sender
+//{
+//    if ([_delegate conformsToProtocol:@protocol(MeettingTableViewDelegate)]&&[_delegate respondsToSelector:@selector(tableViewCellDidSeleteMeetingBtn: andIndexPath:)]) {
+//        [_delegate tableViewCellDidSeleteAgreeBtn:sender andIndexPath:_indexPath];
+//    }
+//}
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code

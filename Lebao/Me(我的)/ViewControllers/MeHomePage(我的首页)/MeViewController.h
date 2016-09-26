@@ -32,4 +32,5 @@ typedef NS_ENUM(int,AuthenType) {
 @property(nonatomic,strong)NSString *dynamicnum;
 @property(nonatomic,strong)NSString *ID;
 @property(nonatomic,strong)NSString *demandline;
+@property(nonatomic,strong)NSString *vip;
 @end

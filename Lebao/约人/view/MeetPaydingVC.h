@@ -20,6 +20,7 @@
 @property (weak, nonatomic) IBOutlet UIView *zhimaiV;
 @property (weak, nonatomic) IBOutlet UIView *weixinV;
 @property (assign,nonatomic)int zfymType;
+@property (assign,nonatomic)int whatZfType;//什么页面的支付
 @property (strong,nonatomic) NSData *audioData;
 @property (nonatomic,strong)NSMutableDictionary *param;
 @end

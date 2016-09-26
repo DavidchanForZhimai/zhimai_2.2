@@ -435,12 +435,10 @@
 
         [customAlertView dissMiss];
         customAlertView = nil;
-        
-        NSLog(@"取消");
+
         
     }else
     {
-        NSLog(@"确认");
         
         MeetPaydingVC * payVC = [[MeetPaydingVC alloc]init];
         MeetingData *model=_CellSouceArr[customAlertView.indexth.row];
@@ -459,33 +457,6 @@
         [self.navigationController pushViewController:payVC animated:YES];
         
 
-        //        [XLDataService putWithUrl:MeetyouURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        //            if(dataObj){
-        //
-        //                MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
-        //
-        //
-        //                if (model.rtcode==1) {
-        //                    UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"恭喜您,约见成功!" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"对话",@"电话联系",@"继续约见他人", nil];
-        //                    successAlertV.cancelButtonIndex=2;
-        //
-        //                    [successAlertV show];
-        //
-        //                }
-        //
-        //                else
-        //                {
-        //                    [[ToolManager shareInstance] showAlertMessage:model.rtmsg];
-        //                }
-        //                NSLog(@"model.rtmsg=========dataobj=%@",model.rtmsg);
-        //            }else
-        //            {
-        //                [[ToolManager shareInstance] showInfoWithStatus];
-        //                [_yrBtn setBackgroundImage:[UIImage imageNamed:@"youkong"] forState:UIControlStateNormal];
-        //            }
-        //
-        //        }];
-        
         [customAlertView dissMiss];
         customAlertView = nil;
         

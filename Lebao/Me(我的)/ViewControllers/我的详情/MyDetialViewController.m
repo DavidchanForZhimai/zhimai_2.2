@@ -14,6 +14,10 @@
 #import "Parameter.h"
 #import "BasicInformationViewController.h"
 #import "OtherDynamicdViewController.h"
+#import "AddConnectionView.h"
+#import "MeetPaydingVC.h"
+#import "XLDataService.h"
+#import "MeetingModel.h"
 #define TagHeight 22
 #define MininumTagWidth (APPWIDTH - 120)/5.0
 #define MaxinumTagWidth (APPWIDTH - 20)
@@ -105,7 +109,7 @@
 }
 @end
 
-@interface MyDetialViewController ()<UITableViewDelegate,UITableViewDataSource,DWTagsViewDelegate>
+@interface MyDetialViewController ()<UITableViewDelegate,UITableViewDataSource,DWTagsViewDelegate,AddConnectionViewDelegate>
 
 @property(nonatomic,strong)UITableView *myDetailTV;
 @property(nonatomic,strong)LWAsyncDisplayView *userView;
@@ -511,7 +515,15 @@
 
     addConnectionsBtn.didClickBtnBlock = ^
     {
+        CGFloat dilX = 25;
+        CGFloat dilH = 250;
+        AddConnectionView *alertV = [[AddConnectionView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.navigationController.view];
+        alertV.center = CGPointMake(APPWIDTH/2, APPHEIGHT/2-30);
+        alertV.delegate = self;
+        alertV.titleStr = @"提示";
+        alertV.title2Str=@"打赏让加人脉更顺畅!";
         
+
     };
   
     UIButton *meetBtn=[UIButton buttonWithType:UIButtonTypeCustom];
@@ -531,6 +543,64 @@
 {
     PopView(self);
 }
+#pragma mark - YXCustomAlertViewDelegate
+- (void) customAlertView:(AddConnectionView *) customAlertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    
+    if (buttonIndex==0) {
+        NSMutableDictionary *param=[Parameter parameterWithSessicon];
+        [param setObject:_userID forKey:@"beinvited"];
+        [param setObject:customAlertView.money forKey:@"reward"];
+
+     
+        [XLDataService putWithUrl:addConnectionsURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+            if(dataObj){
+                
+                MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
+                
+                if (model.rtcode==1) {
+                            UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"恭喜您,约见成功!" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"对话",@"电话联系",@"继续约见他人", nil];
+                            successAlertV.cancelButtonIndex=2;
+                            [successAlertV show];
+                    }
+                
+                else
+                {
+                    [[ToolManager shareInstance] showAlertMessage:model.rtmsg];
+                }
+                NSLog(@"model.rtmsg=========dataobj=%@",model.rtmsg);
+            }else
+            {
+                [[ToolManager shareInstance] showInfoWithStatus];
+                
+            }
+            
+        }];
+        [customAlertView dissMiss];
+        customAlertView = nil;
+        
+        
+    }else
+    {
+        
+        MeetPaydingVC * payVC = [[MeetPaydingVC alloc]init];
+        NSMutableDictionary *param=[Parameter parameterWithSessicon];
+        [param setObject:_userID forKey:@"beinvited"];
+        [param setObject:customAlertView.money forKey:@"reward"];
+
+        payVC.param=param;
+        payVC.jineStr = customAlertView.money;
+        payVC.whatZfType=1;
+        
+        [self.navigationController pushViewController:payVC animated:YES];
+        
+        
+        [customAlertView dissMiss];
+        customAlertView = nil;
+        
+    }
+}
+
 
 
 #pragma mark
