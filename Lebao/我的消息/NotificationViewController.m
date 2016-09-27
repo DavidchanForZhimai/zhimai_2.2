@@ -50,7 +50,7 @@
         [self.homePageBtn setImage:[UIImage imageNamed:@"icon_dicover_me"] forState:UIControlStateNormal];
     }
     [self requestcountConnections];
-    
+    [self netWork:NO isFooter:NO isShouldClear:YES];
 }
 
 
@@ -60,7 +60,7 @@
     [self setTabbarIndex:2];
     _page = 1;
     [self navView];
-    [self netWork:NO isFooter:NO isShouldClear:NO];
+    
 }
 - (void)setIsRefresh:(BOOL)isRefresh
 {
@@ -85,6 +85,9 @@
     _notificationView.backgroundColor = [UIColor clearColor];
     _notificationView.delegate = self;
     _notificationView.dataSource = self;
+
+    _notificationView.tableHeaderView = self.headerView;
+
     [[ToolManager shareInstance] scrollView:_notificationView footerWithRefreshingBlock:^{
         _page =_nowPage + 1;
         [self netWork:NO isFooter:YES isShouldClear:NO];
@@ -93,9 +96,7 @@
         _page =1;
         [self netWork:YES isFooter:NO isShouldClear:YES];
     }];
-    if(num){
-    _notificationView.tableHeaderView = self.headerView;
-    }
+    
     [self.view addSubview:_notificationView];
     
 //    //设置
@@ -107,33 +108,43 @@
 //    };
 
 }
--(NSString *)requestcountConnections
+-(void)requestcountConnections
 {
     
      NSMutableDictionary *param = [Parameter parameterWithSessicon];
     [XLDataService putWithUrl:numbelConnectionsURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        NSLog(@"ddddddd=%@",dataObj);
         if (dataObj) {
             num=dataObj[@"count"];
+            [self.notificationView beginUpdates];
+            self.notificationView.tableHeaderView = self.headerView;
+            [self.notificationView endUpdates];
+        
         }
     }];
     
-    return num;
+   
 }
 - (BaseButton *)headerView
 {
     if (_headerView) {
-        return _headerView;
+        [_headerView removeFromSuperview];
+        _headerView =nil;
+        
     }
+    if (num.integerValue==0) {
+        _headerView = allocAndInitWithFrame(BaseButton, frame(0, 0, APPWIDTH, 0.1));
+    }
+    else
+    {
     UIImage *image = [UIImage imageNamed:@"icon_message_toingzhi"];
-    
-    _headerView = [[BaseButton alloc]initWithFrame:CGRectMake(0, 0, APPWIDTH, 30) setTitle:[NSString stringWithFormat:@"人脉添加请求 +%@",num] titleSize:22*SpacedFonts titleColor:WhiteColor backgroundImage:nil iconImage:image highlightImage:image setTitleOrgin:CGPointMake((30 - 22*SpacedFonts)/2.0, APPWIDTH/3.0 + 10) setImageOrgin:CGPointMake((30 - image.size.height)/2.0, APPWIDTH/3.0) inView:nil];
-    _headerView.backgroundColor = [UIColor colorWithRed:0.9922 green:0.5961 blue:0.2 alpha:1.0];
-    _headerView.shouldAnmial = NO;
-    __weak typeof(self)weakself=self;
-    _headerView.didClickBtnBlock=^{
-        PushView(weakself, allocAndInit(ConnectionsRequestVC));
-    };
+        _headerView = [[BaseButton alloc]initWithFrame:CGRectMake(0, 0, APPWIDTH, 30) setTitle:[NSString stringWithFormat:@"人脉添加请求 +%@",num] titleSize:22*SpacedFonts titleColor:WhiteColor backgroundImage:nil iconImage:image highlightImage:image setTitleOrgin:CGPointMake((30 - 22*SpacedFonts)/2.0, APPWIDTH/3.0 + 10) setImageOrgin:CGPointMake((30 - image.size.height)/2.0, APPWIDTH/3.0) inView:nil];
+        _headerView.backgroundColor = [UIColor colorWithRed:0.9922 green:0.5961 blue:0.2 alpha:1.0];
+        _headerView.shouldAnmial = NO;
+        __weak typeof(self)weakself=self;
+        _headerView.didClickBtnBlock=^{
+            PushView(weakself, allocAndInit(ConnectionsRequestVC));
+        };
+    }
     return _headerView;
 }
 #pragma mark
@@ -216,9 +227,17 @@
 {
     return 10.0f;
 }
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    return allocAndInit(UIView);
+}
 - (CGFloat) tableView:(UITableView *)tableView  heightForFooterInSection:(NSInteger)section
 {
     return 0.01f;
+}
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    return allocAndInit(UIView);
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
