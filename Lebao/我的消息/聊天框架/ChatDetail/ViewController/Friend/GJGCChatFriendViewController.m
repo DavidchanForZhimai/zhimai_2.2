@@ -183,7 +183,11 @@ GJCUCaptureViewControllerDelegate>
                     chatContentModel.audioDuration = [GJGCChatFriendCellStyle formateAudioDuration:GJCFStringFromInt(chatContentModel.audioModel.duration)];
                     
                     [self.dataSourceManager mockSendAnMesssage:chatContentModel];
-                    [self.dataSourceManager resortAllChatContentBySendTime];
+                     if (i==modal.datas.count-1) {
+                         [self.dataSourceManager resortAllChatContentBySendTime];
+                        
+                    }
+                   
                 }
                 
             }
@@ -1110,8 +1114,8 @@ GJCUCaptureViewControllerDelegate>
         return;
     }
     
-    /* 清除过早消息，减轻内存压力 */
-    [self clearAllEarlyMessage];
+//    /* 清除过早消息，减轻内存压力 */
+//    [self clearAllEarlyMessage];
     
     /* 创建内容 */
     GJGCChatFriendContentModel *chatContentModel = [[GJGCChatFriendContentModel alloc]init];
@@ -1139,8 +1143,8 @@ GJCUCaptureViewControllerDelegate>
 
 - (void)chatInputPanel:(GJGCChatInputPanel *)panel sendTextMessage:(NSString *)text
 {
-    /* 清除过早消息，减轻内存压力 */
-    [self clearAllEarlyMessage];
+//    /* 清除过早消息，减轻内存压力 */
+//    [self clearAllEarlyMessage];
     
     /* 创建内容 */
     GJGCChatFriendContentModel *chatContentModel = [[GJGCChatFriendContentModel alloc]init];
@@ -1449,8 +1453,6 @@ GJCUCaptureViewControllerDelegate>
         [self.dataSourceManager mockSendAnMesssage:contentModel];
     }
     
-    NSInteger index = [self.dataSourceManager getContentModelIndexByLocalMsgId:contentModel.localMsgId];
-    
     if (!_receiver) {
         [[ToolManager shareInstance] showInfoWithStatus:@"接受者不能为空"];
         return;
@@ -1472,41 +1474,11 @@ GJCUCaptureViewControllerDelegate>
         
         [param setObject:@(GJGCChatFriendContentTypeText) forKey:@"msgtype"];
         [param setObject:contentModel.originTextMessage forKey:@"content"];
+        
         [XLDataService postWithUrl:CommunicateURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
             
-            if (dataObj) {
-                if ([dataObj[@"rtcode"] intValue] ==1) {
-                    [[ToolManager shareInstance] dismiss];
-//                    NSLog(@"%@",dataObj);
-                    contentModel.sendStatus = GJGCChatFriendSendMessageStatusSuccess;
-                    contentModel.sendTime = [dataObj[@"datas"][@"createtime"] longLongValue];
-                    contentModel.headUrl =[NSString stringWithFormat:@"%@%@",ImageURLS,dataObj[@"datas"][@"imgurl"]] ;
-                     contentModel.localMsgId =[NSString stringWithFormat:@"%@%@",ImageURLS,dataObj[@"datas"][@"id"]] ;
-                    [self.dataSourceManager updateContentModelValuesNotEffectRowHeight:contentModel atIndex:index];
-                    
-                    [self.chatListTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-                    
-                }
-                else
-                {
-                    contentModel.sendStatus = GJGCChatFriendSendMessageStatusFaild;
-                    [self.dataSourceManager updateContentModelValuesNotEffectRowHeight:contentModel atIndex:index];
-                    [self.chatListTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-                    
-                }
-                
-            }
-            else
-            {
-                contentModel.sendStatus = GJGCChatFriendSendMessageStatusFaild;
-                [self.dataSourceManager updateContentModelValuesNotEffectRowHeight:contentModel atIndex:index];
-                [self.chatListTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-            }
-            
-            
+            [self dealData:dataObj andContentModel:contentModel ];
         }];
-        
-        
     }
     else if(contentModel.contentType==GJGCChatFriendContentTypeAudio)
     {
@@ -1517,48 +1489,53 @@ GJCUCaptureViewControllerDelegate>
          [[MP3PlayerManager shareInstance] uploadAudioWithType:@"mp3" audioData:[NSData dataWithContentsOfFile:contentModel.audioModel.tempEncodeFilePath] finishuploadBlock:^(BOOL succeed, id audioDic) {
              
             [param setObject:audioDic[@"audiourl"] forKey:@"audios"];
-//             NSLog(@"audiourl =%@%@",ImageURLS,audioDic[@"audiourl"]);
-            [XLDataService postWithUrl:CommunicateURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-//                NSLog(@"data =%@",dataObj);
-                if (dataObj) {
-                    if ([dataObj[@"rtcode"] intValue] ==1) {
-                        [[ToolManager shareInstance] dismiss];
-                        
-                        contentModel.sendStatus = GJGCChatFriendSendMessageStatusSuccess;
-                        contentModel.sendTime = [dataObj[@"datas"][@"createtime"] longLongValue];
-                        contentModel.headUrl =[NSString stringWithFormat:@"%@%@",ImageURLS,dataObj[@"datas"][@"imgurl"]];
-                        contentModel.localMsgId =[NSString stringWithFormat:@"%@%@",ImageURLS,dataObj[@"datas"][@"id"]] ;
-                        [self.dataSourceManager updateContentModelValuesNotEffectRowHeight:contentModel atIndex:index];
-                        
-                        [self.chatListTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-                        
-                    }
-                    else
-                    {
-                        contentModel.sendStatus = GJGCChatFriendSendMessageStatusFaild;
-                        [self.dataSourceManager updateContentModelValuesNotEffectRowHeight:contentModel atIndex:index];
-                        [self.chatListTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-                        
-                    }
-                    
-                }
-                else
-                {
-                    contentModel.sendStatus = GJGCChatFriendSendMessageStatusFaild;
-                    [self.dataSourceManager updateContentModelValuesNotEffectRowHeight:contentModel atIndex:index];
-                    [self.chatListTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-                }
-                
-                
-            }];
-
-        }];
+             [XLDataService postWithUrl:CommunicateURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+                 
+                 [self dealData:dataObj andContentModel:contentModel ];
+             }];
+         }];
         
         
         
     }
     
 
+}
+#pragma mark
+#pragma mark - deal data
+- (void)dealData:(NSDictionary *)dataObj andContentModel:(GJGCChatFriendContentModel*)contentModel
+{
+     NSInteger index = [self.dataSourceManager getContentModelIndexByLocalMsgId:contentModel.localMsgId];
+    
+    if (dataObj) {
+        if ([dataObj[@"rtcode"] intValue] ==1) {
+        
+            contentModel.sendStatus = GJGCChatFriendSendMessageStatusSuccess;
+            contentModel.sendTime = [dataObj[@"datas"][@"createtime"] longLongValue];
+            contentModel.headUrl =[NSString stringWithFormat:@"%@%@",ImageURLS,dataObj[@"datas"][@"imgurl"]];
+            contentModel.localMsgId =[NSString stringWithFormat:@"%@%@",ImageURLS,dataObj[@"datas"][@"id"]] ;
+           
+            
+        }
+        else
+        {
+            contentModel.sendStatus = GJGCChatFriendSendMessageStatusFaild;
+            
+        }
+        
+    }
+    else
+    {
+        contentModel.sendStatus = GJGCChatFriendSendMessageStatusFaild;
+       
+    }
+  
+    if (index<self.dataSourceManager.chatListArray.count) {
+        [self.dataSourceManager updateContentModelValuesNotEffectRowHeight:contentModel atIndex:index];
+        [self.chatListTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    }
+   
+ 
 }
 #pragma mark 接受消息
 
@@ -1590,7 +1567,7 @@ GJCUCaptureViewControllerDelegate>
     chatContentModel.audioDuration = [GJGCChatFriendCellStyle formateAudioDuration:GJCFStringFromInt(chatContentModel.audioModel.duration)];
     
     [self.dataSourceManager mockSendAnMesssage:chatContentModel];
-    [self.dataSourceManager resortAllChatContentBySendTime];
+   
     
 }
 #pragma mark - 图片处理UI方法

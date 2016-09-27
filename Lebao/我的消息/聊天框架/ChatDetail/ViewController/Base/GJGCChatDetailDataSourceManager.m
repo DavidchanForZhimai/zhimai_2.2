@@ -292,7 +292,9 @@
             [self updateAudioFinishRead:friendChatModel.localMsgId];
         }
     }
-    [self.chatListArray replaceObjectAtIndex:index withObject:contentModel];
+
+        [self.chatListArray replaceObjectAtIndex:index withObject:contentModel];
+
 }
 
 - (NSNumber *)addChatContentModel:(GJGCChatContentBaseModel *)contentModel
@@ -654,6 +656,7 @@
 
 - (NSInteger)getContentModelIndexByLocalMsgId:(NSString *)msgId
 {
+   
     NSInteger resultIndex = NSNotFound;
  
     if (GJCFStringIsNull(msgId)) {
@@ -1072,7 +1075,7 @@
     [self addChatContentModel:messageContent];
     
     [self updateTheNewMsgTimeString:messageContent];
-//    [self resortAllChatContentBySendTime];
+
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(dataSourceManagerRequireUpdateListTable:)]) {
         
