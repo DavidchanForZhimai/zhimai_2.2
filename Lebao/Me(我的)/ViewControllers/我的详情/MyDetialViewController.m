@@ -155,6 +155,7 @@
 
     _myDetailTV.tableHeaderView = self.viewHeader;
     _myDetailTV.tableFooterView = self.viewFooter;
+    [self netWork];
 }
 
 #pragma mark
@@ -600,8 +601,32 @@
         
     }
 }
+#pragma mark 网络请求
+-(void)netWork
+{
+    NSMutableDictionary *param=[Parameter parameterWithSessicon];
+    [param setObject:_userID forKey:@"id"];
+    NSLog(@"param=%@",param);
+    [XLDataService putWithUrl:detailManURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+        NSLog(@"data=%@",dataObj);
+              if (dataObj) {
+             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
+         if (modal.rtcode ==1) {
+             
+         }
+              else
+              {
+                  [[ToolManager shareInstance] showAlertMessage:modal.rtmsg];
+              }
+        
+    }
+     else
+     {
+         [[ToolManager shareInstance] showInfoWithStatus];
+     }
 
-
+    }];
+}
 
 #pragma mark
 #pragma mark 私有方法

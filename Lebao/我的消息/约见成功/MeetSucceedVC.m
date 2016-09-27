@@ -12,6 +12,7 @@
 #import "Parameter.h"
 #import "XLDataService.h"
 #import "MP3PlayerManager.h"
+#import "GJGCChatFriendViewController.h"
 @interface MeetSucceedVC ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,UITextFieldDelegate,MeettingTableViewDelegate>
 {
     UIScrollView * buttomScr;
@@ -71,7 +72,7 @@
 
     _iMeetPage=1;
     _meetMePage=1;
-    _state=@"10";
+    _state=@"20";
     
     [self setButtomScr];
     [self addTheBtnView];
@@ -107,7 +108,7 @@
     _meetMeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _meetMeBtn.frame = CGRectMake(0, 65, SCREEN_WIDTH/2, 35);
     [_meetMeBtn.titleLabel setFont:[UIFont systemFontOfSize:16]];
-    [_meetMeBtn setTitle:@"待操作" forState:UIControlStateNormal];
+    [_meetMeBtn setTitle:@"约我的" forState:UIControlStateNormal];
     [_meetMeBtn setTitleColor:[UIColor colorWithRed:0.298 green:0.627 blue:0.996 alpha:1.000] forState:UIControlStateSelected];
     [_meetMeBtn setTitleColor:[UIColor colorWithWhite:0.514 alpha:1.000] forState:UIControlStateNormal];
     _meetMeBtn.backgroundColor = [UIColor whiteColor];
@@ -118,7 +119,7 @@
     
     _iMeetBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _iMeetBtn.frame = CGRectMake(SCREEN_WIDTH/2, 65, SCREEN_WIDTH/2, 35);
-    [_iMeetBtn setTitle:@"已同意" forState:UIControlStateNormal];
+    [_iMeetBtn setTitle:@"我约的" forState:UIControlStateNormal];
     [_iMeetBtn.titleLabel setFont:[UIFont systemFontOfSize:16]];
     [_iMeetBtn setTitleColor:[UIColor colorWithRed:0.298 green:0.627 blue:0.996 alpha:1.000] forState:UIControlStateSelected];
     [_iMeetBtn setTitleColor:[UIColor colorWithWhite:0.514 alpha:1.000] forState:UIControlStateNormal];
@@ -144,12 +145,12 @@
     [[ToolManager shareInstance] scrollView:_meetMeTab headerWithRefreshingBlock:^{
         
         _meetMePage =1;
-        [self netWorkRefresh:YES andIsLoadMoreData:NO isShouldClearData:YES withState:@"10" andTabView:_meetMeTab andArr:_meetMeArr andPage:_meetMePage];
+        [self netWorkRefresh:YES andIsLoadMoreData:NO isShouldClearData:YES withState:@"20" andTabView:_meetMeTab andArr:_meetMeArr andPage:_meetMePage];
         
     }];
     [[ToolManager shareInstance] scrollView:_meetMeTab footerWithRefreshingBlock:^{
         _meetMePage ++;
-        [self netWorkRefresh:NO andIsLoadMoreData:YES isShouldClearData:NO withState:@"10" andTabView:_meetMeTab andArr:_meetMeArr andPage:_meetMePage];
+        [self netWorkRefresh:NO andIsLoadMoreData:YES isShouldClearData:NO withState:@"20" andTabView:_meetMeTab andArr:_meetMeArr andPage:_meetMePage];
         
     }];
     
@@ -189,8 +190,13 @@
     NSMutableDictionary *param=[Parameter parameterWithSessicon];
     [param setObject:state forKey:@"state"];
     [param setObject:@(page) forKey:@"page"];
-    
-    [XLDataService putWithUrl:IWantMeetURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+    NSString *url;
+    if (tabView==_meetMeTab) {
+        url=WantMeetMeURL;
+    }if (tabView==_iMeetTab) {
+        url=IWantMeetURL;
+    }
+    [XLDataService putWithUrl:url param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         if (isRefresh) {
             [[ToolManager shareInstance]endHeaderWithRefreshing:tabView];
             
@@ -198,10 +204,10 @@
             [[ToolManager shareInstance]endFooterWithRefreshing:tabView];
         }if (isShouldClearData) {
             [arr removeAllObjects];
-            if ([state isEqualToString:@"10"]) {
+            if (tabView==_meetMeTab) {
                 [self.meetMeSourceArr removeAllObjects];
             }
-            if ([state isEqualToString:@"20"]) {
+             if (tabView==_iMeetTab) {
                 [self.iMeetSourceArr removeAllObjects];
             }
             
@@ -222,16 +228,10 @@
             if (modal.rtcode ==1) {
                 
                 for (MeetingData *data in modal.datas) {
-                    if ([state isEqualToString:@"10"]) {
+
                         [arr addObject:[[WantMeetLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andTelBtn:NO]];
                         [self.meetMeSourceArr addObject:data];
-                    }else if ([state isEqualToString:@"20"]) {
-                        [arr addObject:[[WantMeetLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andTelBtn:YES]];
-                        [self.iMeetSourceArr addObject:data];
-                    }else if ([state isEqualToString:@"90"]) {
-                        [arr addObject:[[WantMeetLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andTelBtn:NO]];
-                    }
-                    
+            
                 }
                 [tabView reloadData];
                 
@@ -258,7 +258,7 @@
 {
     sender.selected = YES;
     _iMeetBtn.selected = NO;
-    _state=@"10";
+    _state=@"20";
     [UIView animateWithDuration:0.3f animations:^{
         [_underLineV setFrame:CGRectMake((SCREEN_WIDTH/2-50)/2, 65+35-2, 50, 2)];
         [buttomScr setContentOffset:CGPointMake(0, 0)];
@@ -346,7 +346,7 @@
         layout =self.iMeetArr[indexPath.row];
         
     }
-    
+    [cell.meetingBtn setTitle:@"待评价" forState:UIControlStateNormal];
     [cell setCellLayout:layout];
     [cell setIndexPath:indexPath];
     [cell setDelegate:self];
@@ -384,75 +384,7 @@
 {
     clickRow=indexPath;
     MeetingData *data=_meetMeSourceArr[indexPath.row];
-    UIAlertView *alertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"是否取消约见%@",data.realname] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-    alertV.tag=10000;
-    [alertV show];
     
-    
-}
-#pragma mark 约见电话点击事件
-- (void)tableViewCellDidSeleteTelBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath
-{
-    clickRow=indexPath;
-    MeetingData *data=_iMeetSourceArr[indexPath.row];
-    
-    if (data.tel&&data.tel!=nil) {
-        
-        UIAlertView *alertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"是否要拨打电话%@",data.tel] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-        alertV.tag=10001;
-        [alertV show];
-        
-    }
-}
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-
-{
-    
-    if (alertView.tag==10001) {
-        
-        if (buttonIndex==0) {
-            return;
-        }else if (buttonIndex==1) {
-            MeetingData *data=_iMeetSourceArr[clickRow.row];
-            NSString *str=[NSString stringWithFormat:@"tel://%@",data.tel];
-            
-            NSURL *url=[NSURL URLWithString:str];
-            [[UIApplication sharedApplication]openURL:url];
-            
-        }
-    }
-    if (alertView.tag==10000) {
-        if (buttonIndex==0) {
-            return;
-        }else if (buttonIndex==1) {
-            
-            MeetingData *data=self.meetMeSourceArr[clickRow.row];
-            NSMutableDictionary *param=[Parameter parameterWithSessicon];
-            [param setObject:data.meetId forKey:@"invitedid"];
-            [XLDataService putWithUrl:MeetCancelURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-                if (dataObj) {
-                    MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
-                    if (modal.rtcode ==1) {
-                        [self.meetMeArr removeObjectAtIndex:clickRow.row];
-                        [self.meetMeTab deleteRowsAtIndexPaths:[NSArray arrayWithObjects:clickRow, nil] withRowAnimation:UITableViewRowAnimationRight];
-                        [self.meetMeTab reloadData];
-                    }
-                    else
-                    {
-                        [[ToolManager shareInstance] showAlertMessage:modal.rtmsg];
-                    }
-                }
-                else
-                {
-                    [[ToolManager shareInstance] showInfoWithStatus];
-                }
-            }];
-        }
-    }
-}
-#pragma mark 消息点击事件
--(void)tableViewCellDidSeleteMessageBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath
-{
     
 }
 #pragma mark 语音按钮点击事件

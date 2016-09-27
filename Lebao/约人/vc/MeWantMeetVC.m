@@ -12,6 +12,7 @@
 #import "Parameter.h"
 #import "XLDataService.h"
 #import "MP3PlayerManager.h"
+#import "GJGCChatFriendViewController.h"
 @interface MeWantMeetVC ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,UITextFieldDelegate,MeettingTableViewDelegate>
 {
     UIScrollView * buttomScr;
@@ -52,6 +53,13 @@
         _agreeArr=[[NSMutableArray alloc]init];
     }
     return _agreeArr;
+}
+-(NSMutableArray *)agreeSourceArr
+{
+    if (!_agreeSourceArr) {
+        _agreeSourceArr=[[NSMutableArray alloc]init];
+    }
+    return _agreeSourceArr;
 }
 -(NSMutableArray *)oprationArr
 {
@@ -249,7 +257,7 @@
             }
             
         }
-
+        NSLog(@"dataobj=%@",dataObj);
         if (dataObj) {
             
             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
@@ -467,6 +475,7 @@
 #pragma mark 约见电话点击事件
 - (void)tableViewCellDidSeleteTelBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath
 {
+    NSLog(@"我想约见打电话");
     clickRow=indexPath;
     MeetingData *data=_agreeSourceArr[indexPath.row];
     
@@ -527,7 +536,17 @@
 #pragma mark 消息点击事件
 -(void)tableViewCellDidSeleteMessageBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath
 {
+    GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
+    talk.talkType = GJGCChatFriendTalkTypePrivate;
+    MeetingData *data = _agreeSourceArr[indexPath.row];
+    NSLog(@"data.userid =%@",data.userid);
+    talk.toId = data.userid;
+    talk.toUserName = data.realname;
     
+    GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
+    privateChat.type = MessageTypeNormlPage;
+    [self.navigationController pushViewController:privateChat animated:YES];
+
 }
 #pragma mark 语音按钮点击事件
 -(void)tableViewCellDidSeleteAudioBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath

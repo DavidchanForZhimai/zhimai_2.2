@@ -26,6 +26,7 @@
 @property(nonatomic,strong)NSString *match;
 @property(nonatomic,strong)NSString *resource;
 
+
 @property(nonatomic,strong)NSString *remark;//文字备注
 @property(nonatomic,strong)NSString *audio;//语音备注
 @property(nonatomic,strong)NSString *reward;//悬赏金额

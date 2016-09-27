@@ -12,6 +12,7 @@
 #import "Parameter.h"
 #import "XLDataService.h"
 #import "MP3PlayerManager.h"
+#import "GJGCChatFriendViewController.h"
 @interface WantMeetMeVC ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,UITextFieldDelegate,MeettingTableViewDelegate>
 {
     UIScrollView * buttomScr;
@@ -494,7 +495,17 @@
 #pragma mark 消息点击事件
 -(void)tableViewCellDidSeleteMessageBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath
 {
+    GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
+    talk.talkType = GJGCChatFriendTalkTypePrivate;
+    MeetingData *data = _agreeSourceArr[indexPath.row];
     
+    talk.toId = data.userid;
+    talk.toUserName = data.realname;
+    
+    GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
+    privateChat.type = MessageTypeNormlPage;
+    [self.navigationController pushViewController:privateChat animated:YES];
+
 }
 #pragma mark 语音按钮点击事件
 -(void)tableViewCellDidSeleteAudioBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath

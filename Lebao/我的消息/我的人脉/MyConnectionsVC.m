@@ -17,7 +17,7 @@
 #import "EjectView.h"
 #import "MeetPaydingVC.h"
 #import "NSString+Extend.h"
-
+#import "GJGCChatFriendViewController.h"
 @interface MyConnectionsVC ()<UITableViewDelegate,UITableViewDataSource,EjectViewDelegate,MeettingTableViewDelegate,UIAlertViewDelegate>
 {
     BOOL audioMark;
@@ -265,7 +265,17 @@
 }
 //对话按钮的点击
 - (void)tableViewCellDidSeleteMessageBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath{
+    GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
+    talk.talkType = GJGCChatFriendTalkTypePrivate;
+    MeetingData *data = _CellSouceArr[indexPath.row];
     
+    talk.toId = data.userid;
+    talk.toUserName = data.realname;
+    
+    GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
+    privateChat.type = MessageTypeNormlPage;
+    [self.navigationController pushViewController:privateChat animated:YES];
+
 }
 
 #pragma mark - YXCustomAlertViewDelegate

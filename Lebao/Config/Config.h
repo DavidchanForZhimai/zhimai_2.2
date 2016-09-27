@@ -43,7 +43,10 @@
 #define conductConnectionsURL [NSString stringWithFormat:@"%@connection/conduct",HttpURL]
 //添加我的人脉操作列表
 #define numbelConnectionsURL [NSString stringWithFormat:@"%@connection/requestcount",HttpURL]
-
+//查看所有可约的人
+#define canseeURL [NSString stringWithFormat:@"%@meet/cansee",HttpURL]
+//用户详情
+#define detailManURL [NSString stringWithFormat:@"%@broker/detail",HttpURL]
 //请求参数
 #define DeviceToken @"deviceToken"
 #define KuserName @"username"
