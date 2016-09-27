@@ -49,19 +49,6 @@
 
 
 @implementation DynamicVC
--(void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    if ([CoreArchive strForKey:@"isread"]) {
-        [self.homePageBtn setImage:[UIImage imageNamed:@"icon_dicover_me_selected"] forState:UIControlStateNormal];
-    }
-    else
-    {
-        
-        [self.homePageBtn setImage:[UIImage imageNamed:@"icon_dicover_me"] forState:UIControlStateNormal];
-    }
-    
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];

@@ -162,8 +162,7 @@ static BOOL isBackGroundActivateApplication;
         }
         
     }
-    //是否读消息
-    [CoreArchive setStr:@"yes" key:@"isread"];
+
     for ( UINavigationController * subnav in self.mainTab.viewControllers) {
         for (UIViewController *subVC in subnav.viewControllers) {
     
