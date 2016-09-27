@@ -25,7 +25,11 @@ typedef enum {
 @property(nonatomic,strong)UIView *navigationBarView;
 @property(nonatomic, strong)UILabel *navTitle;
 @property(nonatomic,strong) BaseButton *homePageBtn;
+@property(nonatomic,strong) UIView    *message;
+@property(nonatomic,assign) int    index;
 
+//推送来消息
+- (void)pushMessage;
 //导航栏
 - (void)navViewTitle:(NSString *)title;
 - (void)navViewTitleAndBackBtn:(NSString *)title;

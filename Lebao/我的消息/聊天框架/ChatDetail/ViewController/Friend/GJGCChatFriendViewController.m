@@ -64,12 +64,12 @@ GJCUCaptureViewControllerDelegate>
 @implementation GJGCChatFriendViewController
 {
     int _page;//页吗
-    
+    UIRefreshControl *refresh;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    _page= 1;
+    
     // Do any additional setup after loading the view.s
     [self setRightButtonWithStateImage:@"title-icon-个人资料" stateHighlightedImage:nil stateDisabledImage:nil titleName:nil];
     
@@ -99,12 +99,22 @@ GJCUCaptureViewControllerDelegate>
     [GJCFNotificationCenter addObserver:self selector:@selector(observeChatInputPanelBeginRecord:) name:formateNoti object:nil];
     [GJCFNotificationCenter addObserver:self selector:@selector(observeApplicationResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
     
-    [self startRefresh];
     //初始化数据
     
-    [self netWork:NO isFooter:NO isShouldClear:YES isSend:NO ];
+    refresh = [[UIRefreshControl alloc]init];
+    refresh.tintColor = AppMainColor;
+   
+    [self.chatListTable addSubview:refresh];
+    [refresh addTarget:self action:@selector(refreshViewControlEventValueChanged) forControlEvents:UIControlEventValueChanged];
+    [self refreshViewControlEventValueChanged];
 }
-
+#pragma mark -RefreshViewControlEventValueChanged
+- (void)refreshViewControlEventValueChanged
+{
+      _page= _page + 1;
+     [refresh beginRefreshing];
+     [self netWork:YES isFooter:NO isShouldClear:NO isSend:NO ];
+}
 #pragma mark
 #pragma mark - 初始化数据
 #pragma mark
@@ -134,11 +144,7 @@ GJCUCaptureViewControllerDelegate>
     
     [XLDataService postWithUrl:CommunicatelistURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         NSLog(@"dataObj =%@ param=%@",dataObj,param);
-        [self stopRefresh];
-        if (isRefresh) {
-            
-            
-        }
+        [refresh endRefreshing];
         
         if (dataObj) {
             CommunityModal *modal=[CommunityModal mj_objectWithKeyValues:dataObj];
@@ -166,7 +172,6 @@ GJCUCaptureViewControllerDelegate>
                     chatContentModel.toId = self.taklInfo.toId;
                     chatContentModel.senderId = modal.receiver;
                     chatContentModel.toUserName = self.taklInfo.toUserName;
-                    NSLog(@"%@",data.createtime );
                     chatContentModel.sendTime = [data.createtime longLongValue];
                     chatContentModel.sendStatus = GJGCChatFriendSendMessageStatusSuccess;
                     chatContentModel.isFromSelf = data.isself;
@@ -1574,7 +1579,6 @@ GJCUCaptureViewControllerDelegate>
     chatContentModel.toId = self.taklInfo.toId;
     chatContentModel.senderId =_receiver;
     chatContentModel.toUserName = self.taklInfo.toUserName;
-    NSLog(@"%@",data.createtime );
     chatContentModel.sendTime = [data.createtime longLongValue];
     chatContentModel.sendStatus = GJGCChatFriendSendMessageStatusSuccess;
     chatContentModel.isFromSelf = data.isself;

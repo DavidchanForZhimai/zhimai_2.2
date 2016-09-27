@@ -43,7 +43,7 @@
 
         
     };
-   
+    
     [self navViewTitle:title leftBtn:nil rightBtn:_homePageBtn];
 }
 
@@ -88,11 +88,16 @@
 }
 - (void)setTabbarIndex:(int)index
 {
+    _index = index;
     BottomView  * bottomView= [[BottomView alloc] initWithFrame:frame(0, APPHEIGHT - TabBarHeight, APPWIDTH, TabBarHeight) selectIndex:index clickCenterButton:^{
         
         [[ToolManager shareInstance] addReleseDctView:self];
         
     }];
+    _message = [[UIView alloc]initWithFrame:frame(2.57*APPWIDTH/4.0, 5, 8, 8)];
+    [_message setRound];
+    _message.backgroundColor = [UIColor clearColor];
+    [bottomView addSubview:_message];
     [self.view addSubview:bottomView];
     
 }
@@ -109,9 +114,27 @@
     
     
 }
-
+#pragma mark
+#pragma mark- pushMessage
+- (void)pushMessage
+{
+    _message.backgroundColor = [UIColor redColor];
+}
+- (void)viewWillAppear:(BOOL)animated
+{
+    
+    [super viewWillAppear:animated];
+    if (_index ==2) {
+       _message.backgroundColor = [UIColor clearColor];
+    }
+  
+    
+}
 - (void)viewWillDisappear:(BOOL)animated
 {
+    if (_index!=2) {
+         _message.backgroundColor = [UIColor clearColor];
+    }
     [super viewWillDisappear:animated];
     
 }

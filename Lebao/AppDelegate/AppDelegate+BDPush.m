@@ -144,9 +144,18 @@ static BOOL isBackGroundActivateApplication;
     NSLog(@"notifacion =%@",notifacion);
     
     UINavigationController * nav = (UINavigationController *)self.mainTab.selectedViewController;
+    
     //取到nav控制器当前显示的控制器
     UIViewController * baseVC = (UIViewController *)nav.visibleViewController;
-    
+    //当前四大tab之一
+    for (UIViewController *view in nav.viewControllers) {
+        NSLog(@"view =%@",view);
+        if ([NSStringFromClass([view class]) isEqualToString:@"DiscoverHomePageViewController"]||[NSStringFromClass([view class]) isEqualToString:@"DynamicVC"]||[NSStringFromClass([view class]) isEqualToString:@"NotificationViewController"]||[NSStringFromClass([view class]) isEqualToString:@"MeetingVC"]) {
+            BaseViewController *baseView = (BaseViewController *)view;
+            [baseView pushMessage];
+        }
+    }
+
     //刷新界面
     if ([baseVC isKindOfClass:[NotificationViewController class]] ) {
         
@@ -197,7 +206,7 @@ static BOOL isBackGroundActivateApplication;
                     GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
                     talk.talkType = GJGCChatFriendTalkTypePrivate;
                     talk.toId = notifacion[@"api"][@"bid"];
-                    talk.toUserName = notifacion[@"api"][@"realname"];
+                    talk.toUserName = notifacion[@"api"][@"chat"][@"realname"];
                     
                     GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
                     privateChat.type = MessageTypeNormlPage;
@@ -217,7 +226,7 @@ static BOOL isBackGroundActivateApplication;
                 GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
                 talk.talkType = GJGCChatFriendTalkTypePrivate;
                 talk.toId = notifacion[@"api"][@"bid"];
-                talk.toUserName = notifacion[@"api"][@"realname"];
+                talk.toUserName = notifacion[@"api"][@"chat"][@"realname"];
                 
                 GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
                 privateChat.type = MessageTypeNormlPage;
