@@ -13,7 +13,7 @@
 #import "GJCUImageBrowserNavigationViewController.h"
 #import "UIImage+GJFixOrientation.h"
 #import "GJGCChatContentEmojiParser.h"
-//#import "GJGCPersonInformationViewController.h"
+#import "MyDetialViewController.h"
 #import "GJCUCaptureViewController.h"
 #import "GJCFUitils.h"
 #import "GJGCGIFLoadManager.h"
@@ -165,6 +165,7 @@ GJCUCaptureViewControllerDelegate>
                     NSString *text = data.content;
                     NSDictionary *parseTextDict = [GJGCChatFriendCellStyle formateSimpleTextMessage:text];
                     chatContentModel.simpleTextMessage = [parseTextDict objectForKey:@"contentString"];
+                    chatContentModel.userId = [NSString stringWithFormat:@"%ld",data.brokerid];
                     chatContentModel.localMsgId = data.msgId;
                     chatContentModel.originTextMessage = text;
                     chatContentModel.emojiInfoArray = [parseTextDict objectForKey:@"imageInfo"];
@@ -734,10 +735,13 @@ GJCUCaptureViewControllerDelegate>
 - (void)chatCellDidTapOnHeadView:(GJGCChatBaseCell *)tapedCell
 {
     NSIndexPath *tapIndexPath = [self.chatListTable indexPathForCell:tapedCell];
-    //    GJGCChatFriendContentModel *contentModel = (GJGCChatFriendContentModel *)[self.dataSourceManager contentModelAtIndex:tapIndexPath.row];
+    MyDetialViewController *myDetailVC = [[MyDetialViewController alloc]init];
+    GJGCChatFriendContentModel *contentmodel = (GJGCChatFriendContentModel *)[self.dataSourceManager contentModelAtIndex:tapIndexPath.row];
+    myDetailVC.isOther = !contentmodel.isFromSelf;
+    myDetailVC.userID = contentmodel.userId;
+    [self.navigationController pushViewController:myDetailVC animated:YES];
     
-    //    GJGCPersonInformationViewController *personVC = [[GJGCPersonInformationViewController alloc]initWithUserId:[contentModel.senderId longLongValue] reportType:GJGCReportTypePerson];
-    //    [[GJGCUIStackManager share]pushViewController:personVC animated:YES];
+    
 }
 
 - (void)chatCellDidTapOnDriftBottleCard:(GJGCChatBaseCell *)tappedCell
@@ -1514,7 +1518,7 @@ GJCUCaptureViewControllerDelegate>
             contentModel.sendTime = [dataObj[@"datas"][@"createtime"] longLongValue];
             contentModel.headUrl =[NSString stringWithFormat:@"%@%@",ImageURLS,dataObj[@"datas"][@"imgurl"]];
             contentModel.localMsgId =[NSString stringWithFormat:@"%@%@",ImageURLS,dataObj[@"datas"][@"id"]] ;
-           
+            contentModel.userId = dataObj[@"datas"][@"brokerid"];
             
         }
         else
@@ -1543,9 +1547,11 @@ GJCUCaptureViewControllerDelegate>
 {
     NSLog(@"dic ==%@",dic);
     CommunityDataModal *data =[CommunityDataModal mj_objectWithKeyValues:dic];
+   
     GJGCChatFriendContentModel *chatContentModel = [[GJGCChatFriendContentModel alloc]init];
     chatContentModel.baseMessageType = GJGCChatBaseMessageTypeChatMessage;
     chatContentModel.contentType = data.msgtype;
+    chatContentModel.userId = [NSString stringWithFormat:@"%d",data.brokerid];
     NSString *text = data.content;
     NSDictionary *parseTextDict = [GJGCChatFriendCellStyle formateSimpleTextMessage:text];
     chatContentModel.simpleTextMessage = [parseTextDict objectForKey:@"contentString"];
