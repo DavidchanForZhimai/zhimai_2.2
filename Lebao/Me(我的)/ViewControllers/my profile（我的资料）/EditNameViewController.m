@@ -48,9 +48,13 @@ typedef enum
     {
         title =@"修改手机";
     }
-    else if (_editPageTag == EditIntroducePageTag)
+    else if (_editPageTag == EditHangyePageTag)
     {
-        title =@"个人简介";
+        title =@"修改行业";
+    }
+    else if (_editPageTag == EditZhiyePageTag)
+    {
+        title =@"修改职业";
     }
     else if (_editPageTag == EditCompanyTag)
     {
@@ -61,14 +65,13 @@ typedef enum
     {
         title =@"从业年限";
     }
-    else if (_editPageTag == EditeTag)
+    else if (_editPageTag == EditGuanzhuPageTag)
     {
-        title =@"添加标签";
+        title =@"修改关注的行业";
     }
     [self navViewTitleAndBackBtn:title rightBtn:rightBtn];
     
-    
-    
+
 }
 #pragma mark
 #pragma mark - buttonAction -
@@ -80,16 +83,9 @@ typedef enum
     else if (sender.tag == ButtonActionTagFinish)
     {
         if (_editBlock) {
-            if (_editPageTag == EditNamePageTag ||_editPageTag ==EditPhoneNumPageTag||_editPageTag ==EditCompanyTag||_editPageTag ==EditWorkYearsPageTag||_editPageTag == EditeTag) {
-                
-                _editBlock(_modityTextField.text);
-            }
-            
-            else
-            {
-                _editBlock(_modityTextView.text);
-
-            }
+          
+         _editBlock(_modityTextField.text);
+           
             PopView(self);
         }
     }
@@ -105,8 +101,7 @@ typedef enum
     _mainScrollView.alwaysBounceVertical = YES;
     [self.view addSubview:_mainScrollView];
     
-    if (_editPageTag == EditNamePageTag ||_editPageTag ==EditPhoneNumPageTag||_editPageTag ==EditCompanyTag||_editPageTag ==EditWorkYearsPageTag||_editPageTag == EditeTag) {
-    
+   
         _modityTextField =  allocAndInitWithFrame(UITextField, frame(20*ScreenMultiple, 10, frameWidth(_mainScrollView) - 40*ScreenMultiple, 32));
     
         _modityTextField.text = _textView;
@@ -122,26 +117,24 @@ typedef enum
         UILabel *line = allocAndInitWithFrame(UILabel, frame(10*ScreenMultiple, CGRectGetMaxY(_modityTextField.frame), frameWidth(_mainScrollView) - 20*ScreenMultiple, 0.5));
         line.backgroundColor = AppMainColor;
         [_mainScrollView addSubview:line];
-        
-        
-    }
-    else
-    {
-        UIView *bg = allocAndInitWithFrame(UIView, frame(10*ScreenMultiple, 10, frameWidth(_mainScrollView) - 20*ScreenMultiple, 70));
-        bg.layer.borderColor = AppMainColor.CGColor;
-        bg.layer.borderWidth = 0.5;
-        [_mainScrollView addSubview:bg];
-        
-        _modityTextView =  allocAndInitWithFrame(UITextView, frame(5, 0, frameWidth(bg), frameHeight(bg) - 10));
-        _modityTextView.text = _textView;
-        _modityTextView.textColor = LightBlackTitleColor;
-        _modityTextView.font = Size(28);
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.35 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-             [_modityTextView becomeFirstResponder];
-        });
-        [bg addSubview:_modityTextView];
-        
-    }
+
+//    else
+//    {
+//        UIView *bg = allocAndInitWithFrame(UIView, frame(10*ScreenMultiple, 10, frameWidth(_mainScrollView) - 20*ScreenMultiple, 70));
+//        bg.layer.borderColor = AppMainColor.CGColor;
+//        bg.layer.borderWidth = 0.5;
+//        [_mainScrollView addSubview:bg];
+//        
+//        _modityTextView =  allocAndInitWithFrame(UITextView, frame(5, 0, frameWidth(bg), frameHeight(bg) - 10));
+//        _modityTextView.text = _textView;
+//        _modityTextView.textColor = LightBlackTitleColor;
+//        _modityTextView.font = Size(28);
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.35 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//             [_modityTextView becomeFirstResponder];
+//        });
+//        [bg addSubview:_modityTextView];
+//        
+//    }
     
     if (CGRectGetMaxY(_modityTextField.frame) + 10>frameHeight(_mainScrollView)||CGRectGetMaxY(_modityTextView.frame) + 10>frameHeight(_mainScrollView)) {
         if (CGRectGetMaxY(_modityTextField.frame) + 10>frameHeight(_mainScrollView)) {

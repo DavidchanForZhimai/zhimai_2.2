@@ -10,10 +10,13 @@
 typedef enum {
    EditNamePageTag,
    EditPhoneNumPageTag,
-   EditIntroducePageTag,
+   
    EditCompanyTag,
+   EditZhiyePageTag,
+   EditHangyePageTag,
    EditWorkYearsPageTag,
-   EditeTag
+   EditGuanzhuPageTag,
+   
 }EditPageTag;
 typedef void (^EditBlock)(NSString *text);
 @interface EditNameViewController : BaseViewController

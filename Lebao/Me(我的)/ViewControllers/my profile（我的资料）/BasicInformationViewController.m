@@ -35,11 +35,6 @@
 @property (strong, nonatomic) NSArray            *citiesData;
 @property (nonatomic,assign ) NSInteger          selectedProvince;
 @property (nonatomic,assign ) NSInteger          selectedCity;
-@property (strong, nonatomic) NSMutableArray            *personArray;
-@property (strong, nonatomic) NSMutableArray            *personAndoptionalArray;
-@property (strong, nonatomic) NSMutableArray            *recommendArray;
-@property (strong, nonatomic) NSMutableArray            *optionalArray;
-
 
 @property(nonatomic,strong)UIView * tagsView;//所有标签的父视图
 @property(nonatomic,strong)DWTagsView *productTagsView;//产品标签
@@ -60,7 +55,10 @@
 @property(nonatomic,strong)UILabel *addTagsLb;//点击添加新的关注行业
 
 @property(nonatomic,copy)NSMutableArray *addTags;//添加的标签
-@property(nonatomic,copy)NSMutableArray *addDefalutTags;//默认的标签
+
+@property(nonatomic,copy)NSMutableArray *addPersonsTags;//默认的个人标签
+@property(nonatomic,copy)NSMutableArray *addResourseaTags;//默认的资源标签
+@property(nonatomic,copy)NSMutableArray *addProductsTags;//默认的产品标签
 
 @property(nonatomic,strong)UITextField *addTextField;//添加标签输入框
 @property(nonatomic,strong)BaseButton *addSure;//确定按钮
@@ -93,7 +91,7 @@
 - (void)navView
 {
     [self navViewTitleAndBackBtn:@"个人资料"];
-    _saveBtn = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 50, StatusBarHeight, 50, NavigationBarHeight) setTitle:@"保存" titleSize:28*SpacedFonts titleColor:BlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:[UIColor clearColor] inView:self.view];
+    _saveBtn = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 50, StatusBarHeight, 50, NavigationBarHeight) setTitle:@"完成" titleSize:28*SpacedFonts titleColor:BlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:[UIColor clearColor] inView:self.view];
     _saveBtn.hidden = YES;
     __weak BasicInformationViewController *weakSelf = self;
     _saveBtn.didClickBtnBlock = ^
@@ -112,33 +110,24 @@
 }
 - (void)tagsView:(DWTagsView *)tagsView didSelectTagAtIndex:(NSUInteger)index
 {
+
     switch (tagsView.tag) {
         case 88:
         {
             if (index==_productsTags.count-1) {
-                NSLog(@"产品标签++");
-                [self addTagsWithType:tagsView andDataSource:_productsTags andDefalutDataSource:self.addDefalutTags];
+          
+                [self addTagsWithType:tagsView andDataSource:_productsTags andDefalutDataSource:self.addProductsTags];
             }
-            else
-            {
-             
-                [_productsTags removeObjectAtIndex:index];
-                [_productTagsView removeTagAtIndex:index];
-              
-            }
+
         }
             break;
         case 888:
         {
             if (index==_resourseaTags.count-1) {
-                NSLog(@"资源特点++");
-                [self addTagsWithType:tagsView andDataSource:_resourseaTags andDefalutDataSource:self.addDefalutTags];
+        
+                [self addTagsWithType:tagsView andDataSource:_resourseaTags andDefalutDataSource:self.addResourseaTags];
             }
-            else
-            {
-                [_resourseaTags removeObjectAtIndex:index];
-                [_resourseTagsView removeTagAtIndex:index];
-            }
+
             
         }
             break;
@@ -146,18 +135,21 @@
         {
             if (index==_personsTags.count-1) {
                 NSLog(@"个人标签++");
-                 [self addTagsWithType:tagsView andDataSource:_personsTags andDefalutDataSource:self.addDefalutTags];
+                 [self addTagsWithType:tagsView andDataSource:_personsTags andDefalutDataSource:self.addPersonsTags];
             }
-            else
-            {
-                [_personsTags removeObjectAtIndex:index];
-                [_personsTagsView removeTagAtIndex:index];
-            }
+
             
         }
+             break;
         case 88888:
         {
-           
+         
+            [_addHasTagsView removeTagWithName:_currentTagsArray[index]];
+            [_currentTagsView removeTagWithName:_currentTagsArray[index]];
+            [_currentTagsArray removeObjectAtIndex:index];
+            //高度重新布局
+            [self addTagsViewReSetFrame];
+            [self tagsViewReSetFrame];
         }
             break;
         case 888888:
@@ -169,6 +161,10 @@
             [_currentTagsArray insertObject:_currentDefalutTagsArray[index] atIndex:_currentTagsArray.count-1];
             [_currentTagsView insertTag:_currentDefalutTagsArray[index] AtIndex:_currentTagsArray.count-2];
             [_addHasTagsView addTag:_currentDefalutTagsArray[index]];
+            
+            //高度重新布局
+            [self addTagsViewReSetFrame];
+            [self tagsViewReSetFrame];
             
         }
             break;
@@ -191,14 +187,13 @@
 }
 - (void)tagsView:(DWTagsView *)tagsView didDeSelectTagAtIndex:(NSUInteger)index
 {
-   
+
     if (tagsView.tag ==888888) {
 
         [_currentTagsView removeTagWithName:_currentDefalutTagsArray[index]];
         [_addHasTagsView removeTagWithName:_currentDefalutTagsArray[index]];
         [_currentTagsArray removeObject:_currentDefalutTagsArray[index]];
      
-        
     }
     
 }
@@ -247,20 +242,33 @@
     self.addSure.didClickBtnBlock = ^{
        
         if ([weakSelf.addTextField.text isEqualToString:@""]) {
-            [[ToolManager shareInstance] showInfoWithStatus:@"标签不能为空"];
+            weakSelf.addTextField.placeholder = @"标签不能为空";
             return;
         }
+       
+        if (weakSelf.addTextField.text.length>6) {
+            weakSelf.addTextField.text = @"";
+            weakSelf.addTextField.placeholder = @"标签不能超过6个字符";
+            return;
+        }
+        
         if ([dataSource containsObject:weakSelf.addTextField.text]) {
             [[ToolManager shareInstance] showInfoWithStatus:@"标签已存在"];
             return;
         }
+        
 
         [dataSource insertObject:weakSelf.addTextField.text atIndex:dataSource.count-1];
         
         [type insertTag:weakSelf.addTextField.text AtIndex:dataSource.count-2];
         [weakSelf.addHasTagsView addTag:weakSelf.addTextField.text];
          weakSelf.addTextField.text=@"";
+        weakSelf.addTextField.placeholder = @"请输入自定义标签";
         [weakSelf.addTextField resignFirstResponder];
+        
+        //高度重新布局
+        [weakSelf addTagsViewReSetFrame];
+        [weakSelf tagsViewReSetFrame];
     };
     [self.addTagsView addSubview:self.addDefalutTagsView];
     _addDefalutTagsView.tagsArray = defalutDataSource;
@@ -298,7 +306,7 @@
     if (_addHasTagsView) {
         return _addHasTagsView;
     }
-    _addHasTagsView = allocAndInitWithFrame(DWTagsView, CGRectZero);
+    _addHasTagsView = allocAndInitWithFrame(DWTagsView, CGRectMake(20, 10, APPWIDTH - 40,2*(TagHeight +10)));
     _addHasTagsView.contentInsets = UIEdgeInsetsZero;
     _addHasTagsView.tagInsets = UIEdgeInsetsMake(5, 15, 5, 15);
     _addHasTagsView.tagcornerRadius = 2;
@@ -316,7 +324,7 @@
     
     _addHasTagsView.delegate = self;
 
-    
+   
     return _addHasTagsView;
     
 }
@@ -359,7 +367,7 @@
     if (_addDefalutTagsView) {
         return _addDefalutTagsView;
     }
-    _addDefalutTagsView = allocAndInitWithFrame(DWTagsView, CGRectZero);
+    _addDefalutTagsView = allocAndInitWithFrame(DWTagsView, CGRectMake(20, CGRectGetMaxY(_addTextField.frame) + 20, APPWIDTH -40, 2*(TagHeight+10)));
     _addDefalutTagsView.contentInsets = UIEdgeInsetsZero;
     _addDefalutTagsView.tagInsets = UIEdgeInsetsMake(5, 15, 5, 15);
     _addDefalutTagsView.tagcornerRadius = 2;
@@ -380,26 +388,42 @@
     
     return _addDefalutTagsView;
 }
-- (NSMutableArray *)addDefalutTags
+- (NSMutableArray *)addResourseaTags
 {
-    if (_addDefalutTags) {
-        return _addDefalutTags;
+    if (_addResourseaTags) {
+        return _addResourseaTags;
     }
-    _addDefalutTags = [[NSMutableArray alloc]initWithObjects:@"商务4",@"开发",@"产品",@"经理",@"老板",@"业务", nil];
-    return _addDefalutTags;
+    _addResourseaTags = [[NSMutableArray alloc]init];
+    return _addResourseaTags;
+}
+- (NSMutableArray *)addPersonsTags
+{
+    if (_addPersonsTags) {
+        return _addPersonsTags;
+    }
+    _addPersonsTags = [[NSMutableArray alloc]init];
+    return _addPersonsTags;
+}
+- (NSMutableArray *)addProductsTags
+{
+    if (_addProductsTags) {
+        return _addProductsTags;
+    }
+    _addProductsTags = [[NSMutableArray alloc]init];
+    return _addProductsTags;
 }
 #pragma mark
 #pragma mark resetFrame
 - (void)addTagsViewReSetFrame
 {
     
-    _addHasTagsView.frame = CGRectMake(20, 10, APPWIDTH - 40, 2*(TagHeight+10));
+    _addHasTagsView.frame = CGRectMake(20, 10, APPWIDTH - 40,[_addHasTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
     
     _addTagsLb.frame = CGRectMake(0, CGRectGetMaxY(_addHasTagsView.frame), APPWIDTH, 40);
     _addTextField.frame = CGRectMake(20, CGRectGetMaxY(_addTagsLb.frame), 220*ScreenMultiple, 30);
     _addSure.frame = CGRectMake(CGRectGetMaxX(_addTextField.frame) + 15,  CGRectGetMaxY(_addTagsLb.frame) + 2, 52*ScreenMultiple, _addTextField.height - 4);
     
-    _addDefalutTagsView.frame = CGRectMake(20, CGRectGetMaxY(_addTextField.frame) + 20, APPWIDTH -40, 2*(TagHeight+10));
+    _addDefalutTagsView.frame = CGRectMake(20, CGRectGetMaxY(_addTextField.frame) + 20, APPWIDTH -40, [_addDefalutTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
     
     [UIView animateWithDuration:0.3 animations:^{
          _addTagsView.frame =CGRectMake(0,APPHEIGHT -  CGRectGetMaxY(_addDefalutTagsView.frame) -20, APPWIDTH , CGRectGetMaxY(_addDefalutTagsView.frame) + 20);
@@ -457,7 +481,7 @@
     if (_productTagsView) {
         return _productTagsView;
     }
-    _productTagsView = allocAndInitWithFrame(DWTagsView, CGRectZero);
+    _productTagsView = allocAndInitWithFrame(DWTagsView, CGRectMake(20, 45, APPWIDTH - 40, 2*(TagHeight + 10)));
     _productTagsView.clipsToBounds = YES;
     _productTagsView.contentInsets = UIEdgeInsetsZero;
     _productTagsView.tagInsets = UIEdgeInsetsMake(5, 15, 5, 15);
@@ -496,7 +520,7 @@
     if (_resourseTagsView) {
         return _resourseTagsView;
     }
-    _resourseTagsView = allocAndInitWithFrame(DWTagsView, CGRectZero);
+    _resourseTagsView = allocAndInitWithFrame(DWTagsView, CGRectMake(20, CGRectGetMaxY(_resourseTagsLb.frame), APPWIDTH - 40,2*(TagHeight + 10)));
     _resourseTagsView.contentInsets = UIEdgeInsetsZero;
     _resourseTagsView.tagInsets = UIEdgeInsetsMake(5, 15, 5, 15);
     _resourseTagsView.tagcornerRadius = 2;
@@ -544,7 +568,7 @@
     if (_personsTagsView) {
         return _personsTagsView;
     }
-    _personsTagsView = allocAndInitWithFrame(DWTagsView, CGRectZero);
+    _personsTagsView = allocAndInitWithFrame(DWTagsView, CGRectMake(20, CGRectGetMaxY(_personsTagsLb.frame), APPWIDTH - 40, 2*(TagHeight + 10)));
     _personsTagsView.contentInsets = UIEdgeInsetsZero;
     _personsTagsView.tagInsets = UIEdgeInsetsMake(5, 15, 5, 15);
     _personsTagsView.tagcornerRadius = 2;
@@ -572,7 +596,7 @@
     if (_productsTags) {
         return _productsTags;
     }
-    _productsTags = [[NSMutableArray alloc]initWithObjects:@"商务1",@"开发",@"产品",@"经理",@"老板",@"业务",@"+", nil];
+    _productsTags = [[NSMutableArray alloc]init];
     return _productsTags;
 }
 - (NSMutableArray *)resourseaTags
@@ -580,7 +604,7 @@
     if (_resourseaTags) {
         return _resourseaTags;
     }
-    _resourseaTags = [[NSMutableArray alloc]initWithObjects:@"商务2",@"开发",@"产品",@"经理",@"老板",@"业务",@"+", nil];
+    _resourseaTags = [[NSMutableArray alloc]init];
     return _resourseaTags;
 }
 - (NSMutableArray *)personsTags
@@ -588,7 +612,7 @@
     if (_personsTags) {
         return _personsTags;
     }
-    _personsTags = [[NSMutableArray alloc]initWithObjects:@"商务3",@"开发",@"产品",@"经理",@"老板",@"业务",@"+", nil];
+    _personsTags = [[NSMutableArray alloc]init];
     return _personsTags;
 }
 #pragma mark
@@ -596,15 +620,21 @@
 - (void)tagsViewReSetFrame
 {
     
-    _productTagsView.frame = CGRectMake(20, 45, APPWIDTH - 40, 2*(TagHeight+10));
-    _resourseTagsLb.frame = CGRectMake(20, CGRectGetMaxY(_productTagsView.frame), APPWIDTH, 35);
-    _resourseTagsView.frame = CGRectMake(20, CGRectGetMaxY(_resourseTagsLb.frame), APPWIDTH - 40,2*(TagHeight+10));
-    _line1.frame = CGRectMake(0, CGRectGetMaxY(_resourseTagsView.frame), APPWIDTH, 10);
-    _personsTagsLb.frame = CGRectMake(20, CGRectGetMaxY(_line1.frame), APPWIDTH, 35);
-    _personsTagsView.frame =CGRectMake(20, CGRectGetMaxY(_personsTagsLb.frame), APPWIDTH - 40, 2*(TagHeight+10));
-    _tagsView.frame = frame(0, 0, APPWIDTH, CGRectGetMaxY(_personsTagsView.frame) + 10);
-
+    _productTagsView.frame = CGRectMake(20, 45, APPWIDTH - 40, [_productTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
     
+    _resourseTagsLb.frame = CGRectMake(20, CGRectGetMaxY(_productTagsView.frame), APPWIDTH, 35);
+    
+    _resourseTagsView.frame = CGRectMake(20, CGRectGetMaxY(_resourseTagsLb.frame), APPWIDTH - 40,[_resourseTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
+    
+    _line1.frame = CGRectMake(0, CGRectGetMaxY(_resourseTagsView.frame) + 10, APPWIDTH, 10);
+    
+    _personsTagsLb.frame = CGRectMake(20, CGRectGetMaxY(_line1.frame), APPWIDTH, 35);
+    
+    _personsTagsView.frame =CGRectMake(20, CGRectGetMaxY(_personsTagsLb.frame), APPWIDTH - 40, [_personsTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
+    
+    _tagsView.frame = frame(0, 0, APPWIDTH, CGRectGetMaxY(_personsTagsView.frame) + 10);
+    
+    _basicInfoTableView.tableFooterView = _tagsView;
 }
 
 #pragma mark
@@ -621,43 +651,40 @@
 #pragma mark - mainView
 - (void)mainView
 {
-    _personArray = allocAndInit(NSMutableArray);
-    _personAndoptionalArray = allocAndInit(NSMutableArray);
-    _optionalArray = allocAndInit(NSMutableArray);
-    _recommendArray = allocAndInit(NSMutableArray);
-    
+   
     _basicInfoTableView =[[UITableView alloc]initWithFrame:frame(0, StatusBarHeight + NavigationBarHeight, APPWIDTH, APPHEIGHT - StatusBarHeight -NavigationBarHeight) style:UITableViewStyleGrouped];
     _basicInfoTableView.delegate = self;
     _basicInfoTableView.dataSource = self;
     _basicInfoTableView.backgroundColor =[UIColor clearColor];
-    _basicInfoTableView.tableFooterView = self.tagsView;
     [self.view addSubview:_basicInfoTableView];
     
     [[ToolManager shareInstance] showWithStatus:@"获取信息..."];
     NSMutableDictionary *parame = [Parameter parameterWithSessicon];
     [parame setObject:@"info" forKey:Conduct];
     [XLDataService postWithUrl:MemberURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        
+        NSLog(@"dataObj == %@",dataObj);
         if (dataObj) {
             _modal = [BasicInfoModal mj_objectWithKeyValues:dataObj];
             if (![_modal.mylabels isEqualToString:@""]) {
-                [_personArray addObjectsFromArray:[_modal.mylabels componentsSeparatedByString:@","]];
+                [self.personsTags addObjectsFromArray:[_modal.mylabels componentsSeparatedByString:@","]];
                 
             }
             if (![_modal.filllabels isEqualToString:@""]) {
-                [_optionalArray addObjectsFromArray:[_modal.filllabels componentsSeparatedByString:@","]];
+                [self.personsTags addObjectsFromArray:[_modal.filllabels componentsSeparatedByString:@","]];
                 
             }
             if (![_modal.relabls isEqualToString:@""]) {
-                [_recommendArray addObjectsFromArray:[_modal.relabls componentsSeparatedByString:@","]];
+                [self.addPersonsTags addObjectsFromArray:[_modal.relabls componentsSeparatedByString:@","]];
                 
             }
             
-            [_personAndoptionalArray addObjectsFromArray:_personArray];
-            [_personAndoptionalArray addObjectsFromArray:_optionalArray];
-            if (![_personAndoptionalArray containsObject:@"+标签"]) {
-                [_personAndoptionalArray addObject:@"+标签"];
-            }
+            [self.personsTags addObject:@"+"];
+            [self.productsTags addObject:@"+"];
+            [self.resourseaTags addObject:@"+"];
+            NSLog(@"self.personsTags =%@",self.personsTags);
+            [_basicInfoTableView beginUpdates];
+             _basicInfoTableView.tableFooterView = self.tagsView;
+            [_basicInfoTableView endUpdates];
             if (_modal.rtcode ==1) {
                 
                 NSString *pathDocuments = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
@@ -733,10 +760,8 @@
 #pragma mark - TableViewDelegate TableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section==0) {
-        return 5;
-    }
-    return 4;
+  
+    return 5;
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -856,11 +881,11 @@
     
     case 0:
         
-        [cell  showTitle:@"公司" icon:nil bg:nil detail:_modal.synopsis canEdit:YES];
+        [cell  showTitle:@"公司" icon:nil bg:nil detail:_modal.address canEdit:YES];
         break;
     case 1:
         
-        [cell  showTitle:@"职业" icon:nil bg:nil detail:_modal.address canEdit:YES];
+        [cell  showTitle:@"职业" icon:nil bg:nil detail:_modal.position canEdit:YES];
         break;
             
     case 2:
@@ -871,6 +896,10 @@
         
         [cell  showTitle:@"从业年限" icon:nil bg:nil detail:_modal.workyears canEdit:YES];
         break;
+    case 4:
+            
+        [cell  showTitle:@"关注的行业" icon:nil bg:nil detail:_modal.workyears canEdit:YES];
+            break;
 
         
     }
@@ -886,29 +915,27 @@
     NSMutableDictionary *parame = [Parameter parameterWithSessicon];
     [parame setObject:@"edit" forKey:Conduct];
     __weak BasicInformationViewController *weakSelf= self;
-    if (indexPath.row ==0) {
-        [[ToolManager shareInstance] seleteImageFormSystem:self seleteImageFormSystemBlcok:^(UIImage *image) {
-            NSString *type;
-            type =@"head";
-            [[UpLoadImageManager shareInstance] upLoadImageType:type image:image imageBlock:^(UpLoadImageModal * upLoadImageModal) {
-                weakSelf.saveBtn.hidden = NO;
-                _modal.imgurl = upLoadImageModal.abbr_imgurl;
-                [_basicInfoTableView reloadData];
-                
-            }];
-        }];
-        
-        
-    }
-    else
-    {
-        EditNameViewController *edit = allocAndInit(EditNameViewController);
-        
+    
+    EditNameViewController *edit = allocAndInit(EditNameViewController);
+    if (indexPath.section==0&&indexPath.row ==0) {
         switch (indexPath.row) {
+            case 0:
+            {
+                [[ToolManager shareInstance] seleteImageFormSystem:self seleteImageFormSystemBlcok:^(UIImage *image) {
+                    NSString *type;
+                    type =@"head";
+                    [[UpLoadImageManager shareInstance] upLoadImageType:type image:image imageBlock:^(UpLoadImageModal * upLoadImageModal) {
+                        weakSelf.saveBtn.hidden = NO;
+                        _modal.imgurl = upLoadImageModal.abbr_imgurl;
+                        [_basicInfoTableView reloadData];
+                        
+                    }];
+                }];
+            }
+                break;
             case 1:
             {
-                weakSelf.saveBtn.hidden = NO;
-                
+            
                 edit.editPageTag =EditNamePageTag;
                 edit.textView =  _modal.realname;
                 edit.editBlock = ^(NSString *text)
@@ -924,7 +951,6 @@
             case 2:
             {
                 DWOptionView  *view =[[DWOptionView alloc]initWithFrame:self.view.window.bounds block:^(BOOL isBoy) {
-                    weakSelf.saveBtn.hidden = NO;
                     int tag;
                     if (isBoy) {
                         tag = 1;
@@ -938,21 +964,50 @@
                     [_basicInfoTableView reloadData];
                     view.tag = 88;
                 }];
-                
+
             }
-                break;
                 
+                break;
+            case 3:
+                
+                break;
             case 4:
             {
                 [self configureCustomPikerView];
             }
+                
                 break;
                 
-            case 5:
+            default:
+                break;
+        }
+        
+        
+        
+    }
+    else
+    {
+       
+        switch (indexPath.row) {
+            case 0:
             {
-                weakSelf.saveBtn.hidden = NO;
-                
-                edit.editPageTag =EditIntroducePageTag;
+              
+                edit.editPageTag =EditCompanyTag;
+                edit.textView =  _modal.address;
+                edit.editBlock = ^(NSString *text)
+                {
+                    
+                    _modal.address = text;
+                    [_basicInfoTableView reloadData];
+                    
+                };
+                PushView(self, edit);
+
+            }
+                break;
+            case 1:
+            {
+                edit.editPageTag =EditZhiyePageTag;
                 edit.textView =  _modal.synopsis;
                 edit.editBlock = ^(NSString *text)
                 {
@@ -964,16 +1019,16 @@
                 PushView(self, edit);
             }
                 break;
-            case 6:
-            {
-                weakSelf.saveBtn.hidden = NO;
                 
-                edit.editPageTag =EditCompanyTag;
-                edit.textView =  _modal.address;
+            case 2:
+            {
+            
+                edit.editPageTag =EditHangyePageTag;
+                edit.textView =  _modal.synopsis;
                 edit.editBlock = ^(NSString *text)
                 {
                     
-                    _modal.address = text;
+                    _modal.synopsis = text;
                     [_basicInfoTableView reloadData];
                     
                 };
@@ -981,11 +1036,24 @@
             }
                 break;
                 
-            case 7:
+            case 3:
             {
-                weakSelf.saveBtn.hidden = NO;
-                
+              
                 edit.editPageTag =EditWorkYearsPageTag;
+                edit.textView =  _modal.workyears;
+                edit.editBlock = ^(NSString *text)
+                {
+                    
+                    _modal.workyears = text;
+                    [_basicInfoTableView reloadData];
+                    
+                };
+                PushView(self, edit);
+            }
+                break;
+            case 4:
+            {
+                edit.editPageTag =EditGuanzhuPageTag;
                 edit.textView =  _modal.workyears;
                 edit.editBlock = ^(NSString *text)
                 {
@@ -1021,14 +1089,13 @@
     [parame setObject:_modal.address forKey:@"address"];
     [parame setObject:_modal.workyears forKey:@"workyears"];
     
-    if ([_personArray mj_JSONString]) {
-        [parame setObject:[_personArray mj_JSONString] forKey:@"mylabels"];
-    }
-    if ([_optionalArray mj_JSONString]) {
-        [parame setObject:[_optionalArray mj_JSONString] forKey:@"filllabels"];
-    }
-    
-    //    NSLog(@"parame =%@",parame);
+//    if ([_personArray mj_JSONString]) {
+//        [parame setObject:[_personArray mj_JSONString] forKey:@"mylabels"];
+//    }
+//    if ([_optionalArray mj_JSONString]) {
+//        [parame setObject:[_optionalArray mj_JSONString] forKey:@"filllabels"];
+//    }
+ 
     [XLDataService postWithUrl:SaveMemberURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         if (dataObj) {
             if ([dataObj[@"rtcode"] intValue] ==1) {

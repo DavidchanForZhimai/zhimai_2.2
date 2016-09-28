@@ -8,6 +8,7 @@
 
 #import "GJGCChatDetailViewController.h"
 #import "GJGCChatFriendDataSourceManager.h"
+
 typedef NS_ENUM(NSUInteger,MessageType) {
     MessageTypeNormlPage  =1,
     MeeageTypeRedPage     =2,
@@ -26,4 +27,6 @@ typedef NS_ENUM(NSUInteger,MessageType) {
 
 //接受消息
 - (void)reciverNotiWithData:(NSDictionary *)dic;
+
+
 @end

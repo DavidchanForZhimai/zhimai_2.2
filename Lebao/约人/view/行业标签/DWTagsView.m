@@ -316,8 +316,7 @@ static NSString * const kTagCellID = @"TagCellID";
     [self.tagModels addObject:tagModel];
     [self.collectionView reloadData];
     [self invalidateIntrinsicContentSize];
-   
-   
+
     
  
 }
@@ -420,32 +419,35 @@ static NSString * const kTagCellID = @"TagCellID";
     if ([self.delegate respondsToSelector:@selector(tagsView:didSelectTagAtIndex:)]) {
         [self.delegate tagsView:self didSelectTagAtIndex:indexPath.row];
     }
-    
-    DWTagModel *tagModel = self.tagModels[indexPath.row];
-    DWTagCell *cell = (DWTagCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    if (self.allowsMultipleSelection) {
-        tagModel.selected = YES;
-        [self setCell:cell selected:YES];
-        return;
-    }
-    
-    //修复单选情况下，无法取消选中的问题
-    if (tagModel.selected) {
-        //不允许空选，直接返回
-        if (!self.allowEmptySelection && self.collectionView.indexPathsForSelectedItems.count == 1) {
+    //避免数组越狱
+    if (self.tagModels.count>indexPath.row) {
+        DWTagModel *tagModel = self.tagModels[indexPath.row];
+        DWTagCell *cell = (DWTagCell *)[collectionView cellForItemAtIndexPath:indexPath];
+        if (self.allowsMultipleSelection) {
+            tagModel.selected = YES;
+            [self setCell:cell selected:YES];
             return;
         }
         
-        cell.selected = NO;
-        collectionView.allowsMultipleSelection = YES;
-        [collectionView deselectItemAtIndexPath:indexPath animated:NO];
-        [self collectionView:collectionView didDeselectItemAtIndexPath:indexPath];
-        collectionView.allowsMultipleSelection = NO;
-        return;
+        //修复单选情况下，无法取消选中的问题
+        if (tagModel.selected) {
+            //不允许空选，直接返回
+            if (!self.allowEmptySelection && self.collectionView.indexPathsForSelectedItems.count == 1) {
+                return;
+            }
+            
+            cell.selected = NO;
+            collectionView.allowsMultipleSelection = YES;
+            [collectionView deselectItemAtIndexPath:indexPath animated:NO];
+            [self collectionView:collectionView didDeselectItemAtIndexPath:indexPath];
+            collectionView.allowsMultipleSelection = NO;
+            return;
+        }
+        
+        tagModel.selected = YES;
+        [self setCell:cell selected:YES];
     }
-    
-    tagModel.selected = YES;
-    [self setCell:cell selected:YES];
+  
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
