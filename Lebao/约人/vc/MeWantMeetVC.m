@@ -13,7 +13,7 @@
 #import "XLDataService.h"
 #import "MP3PlayerManager.h"
 #import "GJGCChatFriendViewController.h"
-@interface MeWantMeetVC ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,UITextFieldDelegate,MeettingTableViewDelegate>
+@interface MeWantMeetVC ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,UITextFieldDelegate,WantMeettingTableViewDelegate>
 {
     UIScrollView * buttomScr;
     NSIndexPath * clickRow;
@@ -30,9 +30,7 @@
 @property (nonatomic,assign)int agreePage;
 @property (nonatomic,strong)NSString *state;
 @property (nonatomic,strong)NSMutableArray *oprationArr;
-@property (nonatomic,strong)NSMutableArray *oprationSourceArr;
-@property (nonatomic,strong)NSMutableArray *agreeArr;
-@property (nonatomic,strong)NSMutableArray *agreeSourceArr;
+@property (nonatomic,strong)NSMutableArray *agreeArr;;
 @property (nonatomic,strong)NSMutableArray *refuseArr;
 
 
@@ -54,13 +52,7 @@
     }
     return _agreeArr;
 }
--(NSMutableArray *)agreeSourceArr
-{
-    if (!_agreeSourceArr) {
-        _agreeSourceArr=[[NSMutableArray alloc]init];
-    }
-    return _agreeSourceArr;
-}
+
 -(NSMutableArray *)oprationArr
 {
     if (!_oprationArr) {
@@ -68,13 +60,7 @@
     }
     return _oprationArr;
 }
--(NSMutableArray *)oprationSourceArr
-{
-    if (!_oprationSourceArr) {
-        _oprationSourceArr=[[NSMutableArray alloc]init];
-    }
-    return _oprationSourceArr;
-}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -249,12 +235,6 @@
             [[ToolManager shareInstance]endFooterWithRefreshing:tabView];
         }if (isShouldClearData) {
             [arr removeAllObjects];
-            if ([state isEqualToString:@"10"]) {
-                [self.oprationSourceArr removeAllObjects];
-            }
-            if ([state isEqualToString:@"20"]) {
-                [self.agreeSourceArr removeAllObjects];
-            }
             
         }
         NSLog(@"dataobj=%@",dataObj);
@@ -275,10 +255,10 @@
                 for (MeetingData *data in modal.datas) {
                     if ([state isEqualToString:@"10"]) {
                         [arr addObject:[[WantMeetLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andTelBtn:NO]];
-                        [self.oprationSourceArr addObject:data];
+                       
                     }else if ([state isEqualToString:@"20"]) {
                         [arr addObject:[[WantMeetLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andTelBtn:YES]];
-                        [self.agreeSourceArr addObject:data];
+                    
                     }else if ([state isEqualToString:@"90"]) {
                         [arr addObject:[[WantMeetLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andTelBtn:NO]];
                     }
@@ -409,7 +389,7 @@
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    NSLog(@"tableView  -----------");
     WantMeetTabCell *cell=[tableView dequeueReusableCellWithIdentifier:@"WMCell"];
     if (!cell) {
         cell=[[WantMeetTabCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"WMCell"];
@@ -435,7 +415,7 @@
 }
 - (void)buttonAction:(UIButton *)sender
 {
-    PopView(self);
+    PopRootView(self);
 }
 
 #pragma mark- scrollview代理方法
@@ -461,12 +441,19 @@
     }];
     
 }
+
 #pragma mark 约见取消按钮点击事件
-- (void)tableViewCellDidSeleteMeetingBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath
+- (void)tableViewCellDidSeleteMeetingBtn:(UIButton *)btn layout:(WantMeetLayout*)layout andIndexPath:(NSIndexPath *)indexPath
 {
-    clickRow=indexPath;
-    MeetingData *data=_oprationSourceArr[indexPath.row];
-         UIAlertView *alertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"是否取消约见%@",data.realname] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    
+  
+    for (int i =0; i<self.oprationArr.count; i++) {
+        if ([layout isEqual:(WantMeetLayout*)self.oprationArr[i]]) {
+            clickRow = [NSIndexPath indexPathForRow:i inSection:0];
+        }
+    }
+//      NSLog(@"clickRow.row,==%ld clickRow = %ld",indexPath.row,clickRow.row);
+         UIAlertView *alertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"是否取消约见%@",layout.model.realname] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
         alertV.tag=10000;
         [alertV show];
         
@@ -477,11 +464,11 @@
 {
     NSLog(@"我想约见打电话");
     clickRow=indexPath;
-    MeetingData *data=_agreeSourceArr[indexPath.row];
-    
-    if (data.tel&&data.tel!=nil) {
+
+    WantMeetLayout *layout=self.agreeArr[clickRow.row];
+    if (layout.model.tel&&layout.model.tel!=nil) {
         
-        UIAlertView *alertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"是否要拨打电话%@",data.tel] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        UIAlertView *alertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"是否要拨打电话%@",layout.model.tel] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
         alertV.tag=10001;
         [alertV show];
         
@@ -491,13 +478,14 @@
 
 {
     
+    
     if (alertView.tag==10001) {
         
         if (buttonIndex==0) {
             return;
         }else if (buttonIndex==1) {
-            MeetingData *data=_agreeSourceArr[clickRow.row];
-            NSString *str=[NSString stringWithFormat:@"tel://%@",data.tel];
+             WantMeetLayout *layout=self.agreeArr[clickRow.row];
+            NSString *str=[NSString stringWithFormat:@"tel://%@",layout.model.tel];
             
             NSURL *url=[NSURL URLWithString:str];
             [[UIApplication sharedApplication]openURL:url];
@@ -509,16 +497,19 @@
             return;
         }else if (buttonIndex==1) {
 
-        MeetingData *data=self.oprationSourceArr[clickRow.row];
+        WantMeetLayout *layout=self.oprationArr[clickRow.row];
         NSMutableDictionary *param=[Parameter parameterWithSessicon];
-        [param setObject:data.meetId forKey:@"invitedid"];
+        [param setObject:layout.model.meetId forKey:@"invitedid"];
         [XLDataService putWithUrl:MeetCancelURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
             if (dataObj) {
                 MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
                 if (modal.rtcode ==1) {
                     [self.oprationArr removeObjectAtIndex:clickRow.row];
+                    NSLog(@"self.oprationArr=%@",self.oprationArr);
                     [self.oprationTab deleteRowsAtIndexPaths:[NSArray arrayWithObjects:clickRow, nil] withRowAnimation:UITableViewRowAnimationRight];
-                    [self.oprationTab reloadData];
+                    
+
+                    [[NSNotificationCenter defaultCenter]postNotificationName:@"KRefreshMeetingViewNotifation" object:@{@"userid":layout.model.userid,@"operation":@"cancel"}];
                 }
                 else
                 {
@@ -530,6 +521,7 @@
                 [[ToolManager shareInstance] showInfoWithStatus];
             }
         }];
+            
 }
 }
 }
@@ -538,10 +530,9 @@
 {
     GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
     talk.talkType = GJGCChatFriendTalkTypePrivate;
-    MeetingData *data = _agreeSourceArr[indexPath.row];
-    NSLog(@"data.userid =%@",data.userid);
-    talk.toId = data.userid;
-    talk.toUserName = data.realname;
+    WantMeetLayout *layout=self.agreeArr[clickRow.row];
+    talk.toId = layout.model.userid;
+    talk.toUserName = layout.model.realname;
     
     GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
     privateChat.type = MessageTypeNormlPage;
@@ -549,28 +540,34 @@
 
 }
 #pragma mark 语音按钮点击事件
--(void)tableViewCellDidSeleteAudioBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath
+-(void)tableViewCellDidSeleteAudioBtn:(UIButton *)btn layout:(WantMeetLayout *)layout andIndexPath:(NSIndexPath *)indexPath
 {
     //    _url = @"http://pic.lmlm.cn/record/201607/22/146915727469518.mp3";
-    MeetingData *data=_agreeSourceArr[indexPath.row];
-    NSString *url=[NSString stringWithFormat:@"%@%@",ImageURLS,data.audio];
-    NSArray *pathArrays = [url componentsSeparatedByString:@"/"];
+    for (int i =0; i<self.oprationArr.count; i++) {
+        if ([layout isEqual:(WantMeetLayout*)self.oprationArr[i]]) {
+            clickRow = [NSIndexPath indexPathForRow:i inSection:0];
+        }
+    }
+    NSString *_url=[NSString stringWithFormat:@"%@%@",ImageURLS,layout.model.audio];
+    
+    NSArray *pathArrays = [_url componentsSeparatedByString:@"/"];
     NSString *topath;
     if (pathArrays.count>0) {
         topath = pathArrays[pathArrays.count-1];
     }
     if (btn.tag==1110) {
-        [[MP3PlayerManager shareInstance] downLoadAudioWithUrl:url  finishDownLoadBloak:^(BOOL succeed) {
+        [[MP3PlayerManager shareInstance] downLoadAudioWithUrl:_url  finishDownLoadBloak:^(BOOL succeed) {
             if (succeed) {
-                [(UIImageView *)btn startAnimating];
+                //                [(btn.tag startAnimating];
                 btn.tag=1111;
-                
+                [btn setImage:[UIImage imageNamed:@"meet_yuyindianbo"] forState:UIControlStateNormal];
                 [[MP3PlayerManager shareInstance] audioPlayerWithURl:topath];
                 [MP3PlayerManager shareInstance].playFinishBlock = ^(BOOL succeed)
                 {
                     if (succeed) {
                         btn.tag=1110;
-                        [(UIImageView *)btn stopAnimating];
+                        //                        [(UIImageView *)sender.view stopAnimating];
+                        [btn setImage:[UIImage imageNamed:@"meet_yuyin"] forState:UIControlStateNormal];
                     }
                     
                 };
@@ -582,10 +579,9 @@
     }else if (btn.tag==1111){
         btn.tag=1110;
         [[MP3PlayerManager shareInstance] pausePlayer];
-        [(UIImageView *)btn stopAnimating];
+        [btn setImage:[UIImage imageNamed:@"meet_yuyin"] forState:UIControlStateNormal];
+        //        [(UIImageView *)sender.view stopAnimating];
     }
-    
-    
 
 }
 

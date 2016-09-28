@@ -182,8 +182,8 @@
 - (void)agreeAndrefuseBtnClick:(UIButton *)sender
 {
     NSLog(@"uibutttt===%ld",sender.tag);
-    if ([_delegate conformsToProtocol:@protocol(MeettingTableViewDelegate)]&&[_delegate respondsToSelector:@selector(tableViewCellDidSeleteAgreeAndRefuseBtn:andIndexPath:)]) {
-        [_delegate tableViewCellDidSeleteAgreeAndRefuseBtn:sender andIndexPath:_indexPath];
+    if ([_delegate conformsToProtocol:@protocol(MeettingTableViewDelegate)]&&[_delegate respondsToSelector:@selector(tableViewCellDidSeleteAgreeAndRefuseBtn: layout: andIndexPath:)]) {
+        [_delegate tableViewCellDidSeleteAgreeAndRefuseBtn:sender layout:_cellLayout andIndexPath:_indexPath];
     }
 }
 //- (void)agreeBtnClick:(UIButton *)sender

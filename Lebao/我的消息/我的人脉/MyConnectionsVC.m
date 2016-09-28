@@ -112,7 +112,7 @@
                     
                     
                     [self.CellSouceArr addObject:data];
-                    [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andMessageBtn:YES andOprationBtn:NO]];
+                    [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andMessageBtn:YES andOprationBtn:NO]];
                     
                                   }
                 

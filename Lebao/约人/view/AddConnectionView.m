@@ -8,7 +8,8 @@
 //
 
 #import "AddConnectionView.h"
-
+#define myDotNumbers     @"0123456789.\n"
+#define myNumbers          @"0123456789\n"
 @interface AddConnectionView()<UITextFieldDelegate>
 {
     UIButton *btn1;
@@ -80,7 +81,7 @@
         [btn3 addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:btn3];
         
-        _logField = [[UITextField alloc] initWithFrame:CGRectMake(20,CGRectGetMaxY(btn1.frame)+15,self.frame.size.width-80, 32)];
+        _logField = [[UITextField alloc] initWithFrame:CGRectMake(20,CGRectGetMaxY(btn1.frame)+15,self.frame.size.width-30, 32)];
         _logField.layer.borderColor = [[UIColor colorWithWhite:0.9 alpha:1] CGColor];
         UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 8, 32)];
         _logField.leftViewMode = UITextFieldViewModeAlways;
@@ -89,7 +90,9 @@
         _logField.layer.borderWidth = 1;
         _logField.placeholder=@"请输入其它金额";
         _logField.layer.cornerRadius=8;
+        _logField.delegate=self;
         _logField.backgroundColor=[UIColor whiteColor];
+        _logField.text=@"100";
         [self addSubview:_logField];
         
         
@@ -139,6 +142,7 @@
         sender.layer.borderColor=[UIColor colorWithRed:0.298 green:0.627 blue:0.996 alpha:1.000].CGColor;
         btn2.layer.borderColor=[UIColor grayColor].CGColor;
         btn3.layer.borderColor=[UIColor grayColor].CGColor;
+        _logField.text=@"100";
         self.money=@"100";
         
     }
@@ -149,6 +153,7 @@
         sender.layer.borderColor=[UIColor colorWithRed:0.298 green:0.627 blue:0.996 alpha:1.000].CGColor;
         btn1.layer.borderColor=[UIColor grayColor].CGColor;
         btn3.layer.borderColor=[UIColor grayColor].CGColor;
+        _logField.text=@"200";
         self.money=@"200";
       
     }
@@ -159,7 +164,7 @@
         sender.layer.borderColor=[UIColor colorWithRed:0.298 green:0.627 blue:0.996 alpha:1.000].CGColor;
         btn2.layer.borderColor=[UIColor grayColor].CGColor;
         btn1.layer.borderColor=[UIColor grayColor].CGColor;
-
+        _logField.text=@"300";
         self.money=@"300";
     }
 }
@@ -175,6 +180,7 @@
 
 - (void) confirmBtnClick
 {
+    self.money=_logField.text;
     if ([_delegate respondsToSelector:@selector(customAlertView:clickedButtonAtIndex:)]) {
         [_delegate customAlertView:self clickedButtonAtIndex:1];
     }
@@ -240,6 +246,33 @@
     return _titleLabel2;
 }
 
+#pragma mark
+#pragma mark textField 方法
+
+-  (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    
+    NSCharacterSet *cs;
+        NSUInteger nDotLoc = [_logField.text rangeOfString:@"."].location;
+        if (NSNotFound == nDotLoc && 0 != range.location) {
+            cs = [[NSCharacterSet characterSetWithCharactersInString:myDotNumbers] invertedSet];
+        }
+        else {
+            cs = [[NSCharacterSet characterSetWithCharactersInString:myNumbers] invertedSet];
+        }
+        NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
+        BOOL basicTest = [string isEqualToString:filtered];
+        if (!basicTest) {
+            
+
+            return NO;
+        }
+        if (NSNotFound != nDotLoc && range.location > nDotLoc + 2) {
+
+            return NO;
+        }
+    return YES;
+}
 
 
 @end

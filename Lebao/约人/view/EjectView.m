@@ -8,7 +8,8 @@
 
 #import "EjectView.h"
 #import "MP3PlayerManager.h"
-
+#define myDotNumbers     @"0123456789.\n"
+#define myNumbers          @"0123456789\n"
 @interface EjectView()<D3RecordDelegate,AVAudioPlayerDelegate,UITextFieldDelegate>
 {
     UIButton *btn1;
@@ -94,6 +95,7 @@
         otherMoneyField.layer.cornerRadius=8;
         otherMoneyField.delegate=self;
 //        otherMoneyField.keyboardType=UIKeyboardTypePhonePad;
+        otherMoneyField.text=@"100";
         otherMoneyField.backgroundColor=[UIColor whiteColor];
         [self addSubview:otherMoneyField];
         
@@ -194,6 +196,7 @@
         btn2.layer.borderColor=[UIColor grayColor].CGColor;
         btn3.layer.borderColor=[UIColor grayColor].CGColor;
         self.money=@"100";
+        otherMoneyField.text=@"100";
         [self changeAllFrameWithHeight:0];
     }
     if (sender.tag==101) {
@@ -204,6 +207,7 @@
         btn1.layer.borderColor=[UIColor grayColor].CGColor;
         btn3.layer.borderColor=[UIColor grayColor].CGColor;
         self.money=@"200";
+        otherMoneyField.text=@"200";
         [self changeAllFrameWithHeight:0];
     }
     if (sender.tag==102) {
@@ -229,6 +233,7 @@
 
 - (void) confirmBtnClick
 {
+    self.money=otherMoneyField.text;
     if ([_delegate respondsToSelector:@selector(customAlertView:clickedButtonAtIndex:)]) {
         [_delegate customAlertView:self clickedButtonAtIndex:1];
     }
@@ -264,7 +269,6 @@
         [sender setImage:[UIImage imageNamed:@"yuejian_bofang"] forState:UIControlStateNormal];
         NSError *error;
         play = [[AVAudioPlayer alloc]initWithData:_audioData error:&error];
-//         NSLog(@"%@",error);
         play.volume = 1.0f;
         play.delegate=self;
         [play play];
@@ -279,23 +283,26 @@
 #pragma mark
 #pragma mark textField 方法
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    return [self validateNumber:string];
-}
-
-- (BOOL)validateNumber:(NSString*)number {
-    BOOL res = YES;
-    NSCharacterSet* tmpSet = [NSCharacterSet characterSetWithCharactersInString:@"0123456789"];
-    int i = 0;
-    while (i < number.length) {
-        NSString * string = [number substringWithRange:NSMakeRange(i, 1)];
-        NSRange range = [string rangeOfCharacterFromSet:tmpSet];
-        if (range.length == 0) {
-            res = NO;
-            break;
-        }
-        i++;
+    NSCharacterSet *cs;
+    NSUInteger nDotLoc = [_logField.text rangeOfString:@"."].location;
+    if (NSNotFound == nDotLoc && 0 != range.location) {
+        cs = [[NSCharacterSet characterSetWithCharactersInString:myDotNumbers] invertedSet];
     }
-    return res;
+    else {
+        cs = [[NSCharacterSet characterSetWithCharactersInString:myNumbers] invertedSet];
+    }
+    NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
+    BOOL basicTest = [string isEqualToString:filtered];
+    if (!basicTest) {
+        
+        
+        return NO;
+    }
+    if (NSNotFound != nDotLoc && range.location > nDotLoc + 2) {
+        
+        return NO;
+    }
+    return YES;
 }
 #pragma mark - 播放器代理方法
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag

@@ -13,7 +13,7 @@
 #import "XLDataService.h"
 #import "MP3PlayerManager.h"
 #import "GJGCChatFriendViewController.h"
-@interface WantMeetMeVC ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,UITextFieldDelegate,MeettingTableViewDelegate>
+@interface WantMeetMeVC ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,UITextFieldDelegate,WantMeettingTableViewDelegate>
 {
     UIScrollView * buttomScr;
     NSIndexPath * clickRow;
@@ -30,9 +30,7 @@
 @property (nonatomic,assign)int agreePage;
 @property (nonatomic,strong)NSString *state;
 @property (nonatomic,strong)NSMutableArray *oprationArr;
-@property (nonatomic,strong)NSMutableArray *oprationSourceArr;
 @property (nonatomic,strong)NSMutableArray *agreeArr;
-@property (nonatomic,strong)NSMutableArray *agreeSourceArr;
 @property (nonatomic,strong)NSMutableArray *refuseArr;
 
 
@@ -60,20 +58,6 @@
         _oprationArr=[[NSMutableArray alloc]init];
     }
     return _oprationArr;
-}
--(NSMutableArray *)oprationSourceArr
-{
-    if (!_oprationSourceArr) {
-        _oprationSourceArr=[[NSMutableArray alloc]init];
-    }
-    return _oprationSourceArr;
-}
--(NSMutableArray *)agreeSourceArr
-{
-    if (!_agreeSourceArr) {
-        _agreeSourceArr=[[NSMutableArray alloc]init];
-    }
-    return _agreeSourceArr;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -240,7 +224,6 @@
     [param setObject:state forKey:@"state"];
     [param setObject:@(page) forKey:@"page"];
     
-    NSLog(@"parem -------------%@",param);
     [XLDataService putWithUrl:WantMeetMeURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         if (isRefresh) {
             [[ToolManager shareInstance]endHeaderWithRefreshing:tabView];
@@ -249,16 +232,8 @@
             [[ToolManager shareInstance]endFooterWithRefreshing:tabView];
         }if (isShouldClearData) {
             [arr removeAllObjects];
-            if ([state isEqualToString:@"10"]) {
-                [self.oprationSourceArr removeAllObjects];
-            }
-            if ([state isEqualToString:@"20"]) {
-                [self.agreeSourceArr removeAllObjects];
-            }
-            
         }
         
-        NSLog(@"WantMeetMeURL========%@",dataObj);
         if (dataObj) {
             
             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
@@ -276,10 +251,8 @@
                 for (MeetingData *data in modal.datas) {
                     if ([state isEqualToString:@"10"]) {
                         [arr addObject:[[WantMeetLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andTelBtn:NO]];
-                        [self.oprationSourceArr addObject:data];
                     }else if ([state isEqualToString:@"20"]) {
                         [arr addObject:[[WantMeetLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andTelBtn:YES]];
-                        [self.agreeSourceArr addObject:data];
                     }else if ([state isEqualToString:@"90"]) {
                         [arr addObject:[[WantMeetLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andTelBtn:NO]];
                     }
@@ -439,7 +412,7 @@
 }
 - (void)buttonAction:(UIButton *)sender
 {
-    PopView(self);
+    PopRootView(self);
 }
 
 #pragma mark- scrollview代理方法
@@ -465,27 +438,28 @@
      }];
     
 }
-#pragma mark 约见按钮点击事件
-- (void)tableViewCellDidSeleteMeetingBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath
-{
-   
-    MeetingData *data=_oprationSourceArr[indexPath.row];
-   
-    UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"同意约见后,您将获得%@元约见打赏",data.reward] delegate:self cancelButtonTitle:@"拒绝" otherButtonTitles:@"同意", nil];
+#pragma mark 拒绝和同意按钮点击事件
+- (void)tableViewCellDidSeleteMeetingBtn:(UIButton *)btn layout:(WantMeetLayout *)layout andIndexPath:(NSIndexPath *)indexPath{
+    for (int i =0; i<self.oprationArr.count; i++) {
+        if ([layout isEqual:(WantMeetLayout*)self.oprationArr[i]]) {
+            clickRow = [NSIndexPath indexPathForRow:i inSection:0];
+        }
+    }
+
+   UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"同意约见后,您将获得%@元约见打赏",layout.model.reward] delegate:self cancelButtonTitle:@"拒绝" otherButtonTitles:@"同意", nil];
     alertView.tag=10000;
     [alertView show];
-    clickRow=indexPath;
+   
     
 }
 #pragma mark 约见电话点击事件
 - (void)tableViewCellDidSeleteTelBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath
 {
     clickRow=indexPath;
-    MeetingData *data=_agreeSourceArr[indexPath.row];
+    WantMeetLayout *layout=self.agreeArr[clickRow.row];
     
-    if (data.tel&&data.tel!=nil) {
-        
-        UIAlertView *alertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"是否要拨打电话 %@",data.tel] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+if (layout.model.tel&&layout.model.tel!=nil) {
+        UIAlertView *alertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"是否要拨打电话 %@",layout.model.tel] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
         alertV.tag=10001;
         [alertV show];
         
@@ -497,10 +471,9 @@
 {
     GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
     talk.talkType = GJGCChatFriendTalkTypePrivate;
-    MeetingData *data = _agreeSourceArr[indexPath.row];
-    
-    talk.toId = data.userid;
-    talk.toUserName = data.realname;
+    WantMeetLayout *layout=self.agreeArr[clickRow.row];
+    talk.toId = layout.model.userid;
+    talk.toUserName = layout.model.realname;
     
     GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
     privateChat.type = MessageTypeNormlPage;
@@ -508,9 +481,49 @@
 
 }
 #pragma mark 语音按钮点击事件
--(void)tableViewCellDidSeleteAudioBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath
+-(void)tableViewCellDidSeleteAudioBtn:(UIButton *)btn layout:(WantMeetLayout *)layout andIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"语音按钮被点击");
+    //    _url = @"http://pic.lmlm.cn/record/201607/22/146915727469518.mp3";
+    for (int i =0; i<self.oprationArr.count; i++) {
+        if ([layout isEqual:(WantMeetLayout*)self.oprationArr[i]]) {
+            clickRow = [NSIndexPath indexPathForRow:i inSection:0];
+        }
+    }
+   NSString *_url=[NSString stringWithFormat:@"%@%@",ImageURLS,layout.model.audio];
+
+    NSArray *pathArrays = [_url componentsSeparatedByString:@"/"];
+    NSString *topath;
+    if (pathArrays.count>0) {
+        topath = pathArrays[pathArrays.count-1];
+    }
+    if (btn.tag==1110) {
+        [[MP3PlayerManager shareInstance] downLoadAudioWithUrl:_url  finishDownLoadBloak:^(BOOL succeed) {
+            if (succeed) {
+//                [(btn.tag startAnimating];
+                btn.tag=1111;
+                [btn setImage:[UIImage imageNamed:@"meet_yuyindianbo"] forState:UIControlStateNormal];
+                [[MP3PlayerManager shareInstance] audioPlayerWithURl:topath];
+                [MP3PlayerManager shareInstance].playFinishBlock = ^(BOOL succeed)
+                {
+                    if (succeed) {
+                        btn.tag=1110;
+//                        [(UIImageView *)sender.view stopAnimating];
+                         [btn setImage:[UIImage imageNamed:@"meet_yuyin"] forState:UIControlStateNormal];
+                    }
+                    
+                };
+                
+            }
+            
+        }];
+        
+    }else if (btn.tag==1111){
+        btn.tag=1110;
+        [[MP3PlayerManager shareInstance] pausePlayer];
+        [btn setImage:[UIImage imageNamed:@"meet_yuyin"] forState:UIControlStateNormal];
+//        [(UIImageView *)sender.view stopAnimating];
+    }
+
 }
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -519,8 +532,8 @@
         if (buttonIndex==0) {
             return;
         }else if (buttonIndex==1) {
-            MeetingData *data=_agreeSourceArr[clickRow.row];
-            NSString *str=[NSString stringWithFormat:@"tel://%@",data.tel];
+            WantMeetLayout *layout=self.agreeArr[clickRow.row];
+            NSString *str=[NSString stringWithFormat:@"tel://%@",layout.model.tel];
             
             NSURL *url=[NSURL URLWithString:str];
             [[UIApplication sharedApplication]openURL:url];
@@ -529,8 +542,7 @@
 
     }
     if (alertView.tag==10000) {
-        MeetingData *data=_oprationSourceArr[clickRow.row];
-        NSMutableDictionary *parame=[Parameter parameterWithSessicon];
+        WantMeetLayout *layout=self.oprationArr[clickRow.row];        NSMutableDictionary *parame=[Parameter parameterWithSessicon];
         
         if (buttonIndex==0) {
             [parame setObject:@"refuse" forKey:@"conduct"];
@@ -538,7 +550,7 @@
             [parame setObject:@"agree" forKey:@"conduct"];
         }
         
-        [parame setObject:data.meetId forKey:@"invitedid"];
+        [parame setObject:layout.model.meetId forKey:@"invitedid"];
         
         [XLDataService putWithUrl:MeetOperationURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
             
@@ -550,8 +562,6 @@
                 if (model.rtcode==1) {
                     [self.oprationArr removeObjectAtIndex:clickRow.row];
                     [self.oprationTab deleteRowsAtIndexPaths:[NSArray arrayWithObjects:clickRow, nil] withRowAnimation:UITableViewRowAnimationAutomatic];
-                    
-                    [self.oprationTab reloadData];
                 }
                 
                 else

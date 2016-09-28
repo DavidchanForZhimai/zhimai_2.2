@@ -18,6 +18,7 @@
     self = [super init];
     if (self) {
         //用户头像
+        _model = model;
         LWImageStorage *_avatarStorage = [[LWImageStorage alloc]initWithIdentifier:@"avatar"];
         _avatarStorage.frame = CGRectMake(10, 13, 44, 44);
         model.imgurl = [[ToolManager shareInstance] urlAppend:model.imgurl];
@@ -72,7 +73,7 @@
         _line1Rect  = CGRectMake(0, _avatarStorage.bottom + 10, APPWIDTH, 0.5);
         
         if (messageBtn) {
-            _messageBtnRect=CGRectMake(APPWIDTH-108, 20, 30, 30);
+            _messageBtnRect=CGRectMake(APPWIDTH-50, 20, 30, 30);
         }
         
         if (oprationBtn) {

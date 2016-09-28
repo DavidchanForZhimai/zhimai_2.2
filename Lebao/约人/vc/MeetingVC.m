@@ -28,7 +28,6 @@
 @property (nonatomic,strong)MeetHeadV *headView;
 @property (nonatomic,assign)int page;
 @property (nonatomic,strong)NSMutableArray *nearByManArr;
-@property (nonatomic,strong)NSMutableArray *CellSouceArr;
 @property (nonatomic,strong)NSMutableArray *headimgArr;
 @property (nonatomic,assign)BOOL isopen;
 @end
@@ -38,8 +37,54 @@
 {
     [super viewWillAppear:animated];
     [self shakeToShow:_yrBtn];
-
     
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(refreshRow:) name:@"KRefreshMeetingViewNotifation" object:nil];
+    
+    NSMutableDictionary *param = [Parameter parameterWithSessicon];
+    [XLDataService putWithUrl:WantURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+        
+        if (dataObj) {
+            MeetNumModel *modal = [MeetNumModel mj_objectWithKeyValues:dataObj];
+            _headView.meWantBtn.titleLabel.text=[NSString stringWithFormat:@"%d\n我想约见",modal.invited];
+            NSMutableAttributedString *text1 = [[NSMutableAttributedString alloc]initWithString:_headView.meWantBtn.titleLabel.text];
+            [text1 addAttribute:NSFontAttributeName value:Size(40) range:[_headView.meWantBtn.titleLabel.text rangeOfString:[NSString stringWithFormat:@"%d",modal.invited]]];
+            [_headView.meWantBtn setAttributedTitle:text1 forState:UIControlStateNormal];
+            _headView.meWantBtn.titleLabel.numberOfLines = 0;
+            
+            _headView.wantMeBtn.titleLabel.text=[NSString stringWithFormat:@"%d\n想约见我",modal.beinvited];
+            NSMutableAttributedString *text = [[NSMutableAttributedString alloc]initWithString:_headView.wantMeBtn.titleLabel.text];
+            [text addAttribute:NSFontAttributeName value:Size(40) range:[_headView.wantMeBtn.titleLabel.text rangeOfString:[NSString stringWithFormat:@"%d",modal.beinvited]]];
+            [_headView.wantMeBtn setAttributedTitle:text forState:UIControlStateNormal];
+            _headView.wantMeBtn.titleLabel.numberOfLines = 0;
+            
+        }  else
+        {
+            [[ToolManager shareInstance] showInfoWithStatus];
+        }
+        
+    }];
+    
+    
+}
+-(void)refreshRow:(NSNotification *)notification
+{
+    NSLog(@"notification.object===%@",notification.object);
+    for (int i =0;i<_nearByManArr.count;i++) {
+        
+        MeetingCellLayout *layout =_nearByManArr[i];
+        if ([layout.model.userid isEqualToString:notification.object[@"userid"]]) {
+            
+            
+            if([notification.object[@"operation"] isEqualToString:@"cancel"]){
+                layout.model.isappoint = 0;
+                NSLog(@"layout.model.isappoint===%d",layout.model.isappoint);
+            }else if([notification.object[@"operation"] isEqualToString:@"meet"]){
+                layout.model.isappoint = 1;
+            }
+            [_nearByManArr replaceObjectAtIndex:i withObject:layout];
+            [_yrTab reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+        }
+    }
 }
 
 -(NSMutableArray *)nearByManArr
@@ -55,14 +100,6 @@
         _headimgArr=[[NSMutableArray alloc]init];
     }
     return _headimgArr;
-}
--(NSMutableArray *)CellSouceArr
-{
-    if (!_CellSouceArr) {
-        _CellSouceArr=[[NSMutableArray alloc]init];
-        
-    }
-    return _CellSouceArr;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -99,28 +136,6 @@
     location.longitude=118.180851;
     NSMutableDictionary *param = [Parameter parameterWithSessicon];
     
-    [XLDataService putWithUrl:WantURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        
-        if (dataObj) {
-            MeetNumModel *modal = [MeetNumModel mj_objectWithKeyValues:dataObj];
-            _headView.meWantBtn.titleLabel.text=[NSString stringWithFormat:@"%d\n我想约见",modal.invited];
-            NSMutableAttributedString *text1 = [[NSMutableAttributedString alloc]initWithString:_headView.meWantBtn.titleLabel.text];
-            [text1 addAttribute:NSFontAttributeName value:Size(40) range:[_headView.meWantBtn.titleLabel.text rangeOfString:[NSString stringWithFormat:@"%d",modal.invited]]];
-            [_headView.meWantBtn setAttributedTitle:text1 forState:UIControlStateNormal];
-            _headView.meWantBtn.titleLabel.numberOfLines = 0;
-            
-            _headView.wantMeBtn.titleLabel.text=[NSString stringWithFormat:@"%d\n想约见我",modal.beinvited];
-            NSMutableAttributedString *text = [[NSMutableAttributedString alloc]initWithString:_headView.wantMeBtn.titleLabel.text];
-            [text addAttribute:NSFontAttributeName value:Size(40) range:[_headView.wantMeBtn.titleLabel.text rangeOfString:[NSString stringWithFormat:@"%d",modal.beinvited]]];
-            [_headView.wantMeBtn setAttributedTitle:text forState:UIControlStateNormal];
-            _headView.wantMeBtn.titleLabel.numberOfLines = 0;
-            
-        }  else
-        {
-            [[ToolManager shareInstance] showInfoWithStatus];
-        }
-        
-    }];
     
     
     
@@ -141,7 +156,6 @@
         }
         if (isShouldClearData) {
             [self.nearByManArr removeAllObjects];
-            [self.CellSouceArr removeAllObjects];
             [self.headimgArr removeAllObjects];
         }
         if (dataObj) {
@@ -157,21 +171,7 @@
             }
             
             if (modal.rtcode ==1) {
-                int i = 0;
                 for (MeetingData *data in modal.datas) {
-                    
-                    if (i==1||i==4) {
-                        data.service= @"还是大放送发/啥地方/的是覅就搜到/时间分配给;老地方颇高/几个人讨论课阮经天/发/发/发";
-                    }
-                    
-                    if (i==2||i==3) {
-                        data.resource= @"djfkgkhjdfgkhjdg/dgdgdfgdfgdfgdgf/dgdgdgdfgdfgdgdfgdfgdfg/dfgdfgdgdgdgdf/dgdgdgdgddg/dgdfgd/fghfh/ghfghfg/fgfgyfyh";
-                    }
-                    i++;
-                    
-                    
-                    
-                    [self.CellSouceArr addObject:data];
                     [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andMessageBtn:NO andOprationBtn:NO]];
                     
                     if (data.imgurl!=nil) {
@@ -231,7 +231,6 @@
 -(void)addTabView
 {
     _yrTab=[[UITableView alloc]init];
-    //    [_yrTab registerClass:[MeetingTVCell class] forCellReuseIdentifier:@"yrCell"];
     _yrTab.frame=CGRectMake(0,StatusBarHeight + NavigationBarHeight, APPWIDTH, APPHEIGHT-(StatusBarHeight + NavigationBarHeight + TabBarHeight));
     _yrTab.delegate=self;
     _yrTab.dataSource=self;
@@ -368,7 +367,7 @@
     MeetingCellLayout *layout=self.nearByManArr[indexPath.row];
     [cell setCellLayout:layout];
     [cell setIndexPath:indexPath];
-    MeetingData *data=self.CellSouceArr[indexPath.row];
+    MeetingData *data=layout.model;
     
     if(data.isappoint==1){
         [cell.meetingBtn setTitle:@"等待中" forState:UIControlStateNormal];
@@ -412,7 +411,8 @@
 {
     MyDetialViewController *myDetialViewCT=allocAndInit(MyDetialViewController);
     myDetialViewCT.isOther=YES;
-    MeetingData *data=self.CellSouceArr[indexPath.row];
+    MeetingCellLayout *layout=(MeetingCellLayout *)self.nearByManArr[indexPath.row];
+    MeetingData *data = layout.model;
     myDetialViewCT.userID=data.userid;
     [self.navigationController pushViewController:myDetialViewCT animated:YES];
 }
@@ -422,16 +422,17 @@
 {
     
     if (buttonIndex==0) {
-
+        
         [customAlertView dissMiss];
         customAlertView = nil;
-
+        
         
     }else
     {
         
         MeetPaydingVC * payVC = [[MeetPaydingVC alloc]init];
-        MeetingData *model=_CellSouceArr[customAlertView.indexth.row];
+        MeetingCellLayout *layout=(MeetingCellLayout *)self.nearByManArr[customAlertView.indexth.row];
+        MeetingData *model = layout.model;
         NSLog(@"model=%@",model);
         NSMutableDictionary *param=[Parameter parameterWithSessicon];
         [param setObject:model.userid forKey:@"userid"];
@@ -439,14 +440,14 @@
         
         [param setObject:customAlertView.logField.text forKey:@"remark"];
         [param setObject:model.distance forKey:@"distance"];
-
+        
         payVC.param=param;
         payVC.jineStr = customAlertView.money;
         payVC.audioData=customAlertView.audioData;
         
         [self.navigationController pushViewController:payVC animated:YES];
         
-
+        
         [customAlertView dissMiss];
         customAlertView = nil;
         

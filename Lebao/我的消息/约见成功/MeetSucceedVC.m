@@ -13,7 +13,7 @@
 #import "XLDataService.h"
 #import "MP3PlayerManager.h"
 #import "GJGCChatFriendViewController.h"
-@interface MeetSucceedVC ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,UITextFieldDelegate,MeettingTableViewDelegate>
+@interface MeetSucceedVC ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,UITextFieldDelegate,WantMeettingTableViewDelegate>
 {
     UIScrollView * buttomScr;
     NSIndexPath * clickRow;

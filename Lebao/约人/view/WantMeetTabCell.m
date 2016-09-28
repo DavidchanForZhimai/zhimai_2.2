@@ -146,25 +146,25 @@
 #pragma mark - some button actions
 - (void)meettingBtnClick:(UIButton *)sender
 {
-    if ([_delegate conformsToProtocol:@protocol(MeettingTableViewDelegate)]&&[_delegate respondsToSelector:@selector(tableViewCellDidSeleteMeetingBtn: andIndexPath:)]) {
-        [_delegate tableViewCellDidSeleteMeetingBtn:sender andIndexPath:_indexPath];
+    if ([_delegate conformsToProtocol:@protocol(WantMeettingTableViewDelegate)]&&[_delegate respondsToSelector:@selector(tableViewCellDidSeleteMeetingBtn:layout:andIndexPath:)]) {
+        [_delegate tableViewCellDidSeleteMeetingBtn:sender layout:_cellLayout andIndexPath:_indexPath];
     }
 }
 -(void)audioBtnClick:(UIButton *)sender
 {
-    if ([_delegate conformsToProtocol:@protocol(MeettingTableViewDelegate)]&&[_delegate respondsToSelector:@selector(tableViewCellDidSeleteAudioBtn: andIndexPath:)]) {
-        [_delegate tableViewCellDidSeleteAudioBtn:sender andIndexPath:_indexPath];
+    if ([_delegate conformsToProtocol:@protocol(WantMeettingTableViewDelegate)]&&[_delegate respondsToSelector:@selector(tableViewCellDidSeleteAudioBtn: layout: andIndexPath:)]) {
+        [_delegate tableViewCellDidSeleteAudioBtn:sender layout:_cellLayout andIndexPath:_indexPath];
     }
 }
 -(void)TelBtnClick:(UIButton *)sender
 {
-    if ([_delegate conformsToProtocol:@protocol(MeettingTableViewDelegate)]&&[_delegate respondsToSelector:@selector(tableViewCellDidSeleteAudioBtn: andIndexPath:)]) {
+    if ([_delegate conformsToProtocol:@protocol(WantMeettingTableViewDelegate)]&&[_delegate respondsToSelector:@selector(tableViewCellDidSeleteTelBtn: andIndexPath:)]) {
         [_delegate tableViewCellDidSeleteTelBtn:sender andIndexPath:_indexPath];
     }
 }
 -(void)messageBtnClick:(UIButton *)sender
 {
-    if ([_delegate conformsToProtocol:@protocol(MeettingTableViewDelegate)]&&[_delegate respondsToSelector:@selector(tableViewCellDidSeleteAudioBtn: andIndexPath:)]) {
+    if ([_delegate conformsToProtocol:@protocol(WantMeettingTableViewDelegate)]&&[_delegate respondsToSelector:@selector(tableViewCellDidSeleteMessageBtn: andIndexPath:)]) {
         [_delegate tableViewCellDidSeleteMessageBtn:sender andIndexPath:_indexPath];
     }
 }

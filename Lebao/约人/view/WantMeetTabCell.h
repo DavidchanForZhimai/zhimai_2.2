@@ -8,13 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "WantMeetLayout.h"
-@protocol MeettingTableViewDelegate <NSObject>
+@protocol WantMeettingTableViewDelegate <NSObject>
 
 
 //约见按钮
-- (void)tableViewCellDidSeleteMeetingBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath;
+- (void)tableViewCellDidSeleteMeetingBtn:(UIButton *)btn layout:(WantMeetLayout*)layout andIndexPath:(NSIndexPath *)indexPath;
 //语音按钮
-- (void)tableViewCellDidSeleteAudioBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath;
+- (void)tableViewCellDidSeleteAudioBtn:(UIButton *)btn layout:(WantMeetLayout*)layout andIndexPath:(NSIndexPath *)indexPath;
 //电话按钮
 - (void)tableViewCellDidSeleteTelBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath;
 //对话按钮
@@ -28,6 +28,6 @@
 @property (nonatomic,strong)UIButton *audioBtn;
 @property (nonatomic,strong)UIButton *telBtn;//电话
 @property (nonatomic,strong)UIButton *messageBtn;//短信
-@property(nonatomic,weak)id <MeettingTableViewDelegate > delegate;
+@property(nonatomic,weak)id <WantMeettingTableViewDelegate > delegate;
 
 @end

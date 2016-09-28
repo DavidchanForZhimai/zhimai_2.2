@@ -14,7 +14,8 @@
 #import "EjectView.h"
 #import "MeetPaydingVC.h"
 #import "MyDetialViewController.h"
-@interface CanmeetTabVC ()<UITableViewDelegate,UITableViewDataSource,MeettingTableViewDelegate,UIAlertViewDelegate,EjectViewDelegate>
+#import "AddConnectionView.h"
+@interface CanmeetTabVC ()<UITableViewDelegate,UITableViewDataSource,MeettingTableViewDelegate,UIAlertViewDelegate,EjectViewDelegate,AddConnectionViewDelegate>
 @property(nonatomic,assign)NSInteger page;
 @property(nonatomic,strong)NSMutableArray *allMeetArr;
 @property(nonatomic,strong)NSMutableArray *CellSouceArr;
@@ -130,7 +131,7 @@
                         for (MeetingData *data in modal.datas) {
                     
                           [self.CellSouceArr addObject:data];
-                    [self.allMeetArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andMessageBtn:NO andOprationBtn:NO]];
+                    [self.allMeetArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andMessageBtn:NO andOprationBtn:NO]];
                     
                     
                 }
@@ -183,21 +184,8 @@
     MeetingCellLayout *layout=self.allMeetArr[indexPath.row];
     [cell setCellLayout:layout];
     [cell setIndexPath:indexPath];
-    MeetingData *data=self.CellSouceArr[indexPath.row];
-    
-    if(data.isappoint==1){
-        [cell.meetingBtn setTitle:@"等待中" forState:UIControlStateNormal];
-        cell.meetingBtn.titleLabel.font=[UIFont systemFontOfSize:13];
-        [cell.meetingBtn setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-        cell.meetingBtn.backgroundColor=AppViewBGColor;
-        cell.meetingBtn.userInteractionEnabled=NO;
-    }else{
-        cell.meetingBtn.backgroundColor=AppMainColor;
-        [cell.meetingBtn setTitle:@"约见" forState:UIControlStateNormal];
-        [cell.meetingBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        cell.meetingBtn.userInteractionEnabled=YES;
-        cell.meetingBtn.titleLabel.font=[UIFont systemFontOfSize:14];
-    }
+   
+    [cell.messageBtn setImage:[UIImage imageNamed:@"keyuejianjiarenmai"] forState:UIControlStateNormal];
     
     [cell setDelegate:self];
     
@@ -205,20 +193,80 @@
 
 }
 #pragma mark
-#pragma mark - MeettingTableViewCellDelegate 约见按钮地点击
-- (void)tableViewCellDidSeleteMeetingBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath
+#pragma mark - MeettingTableViewCellDelegate 添加人脉按钮地点击
+- (void)tableViewCellDidSeleteMessageBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath
 {
-    //do something
-    
     CGFloat dilX = 25;
     CGFloat dilH = 250;
-    EjectView *alertV = [[EjectView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.navigationController.view];
+    AddConnectionView *alertV = [[AddConnectionView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.navigationController.view];
     alertV.center = CGPointMake(APPWIDTH/2, APPHEIGHT/2-30);
     alertV.delegate = self;
     alertV.titleStr = @"提示";
-    alertV.title2Str=@"您需要打赏一定的约见费";
-    alertV.indexth=indexPath;
+    alertV.title2Str=@"打赏让加人脉更顺畅!";
+
 }
+#pragma mark - YXCustomAlertViewDelegate
+- (void) customAlertView:(AddConnectionView *) customAlertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+     MeetingData *model=_CellSouceArr[customAlertView.indexth.row];
+    if (buttonIndex==0) {
+        NSMutableDictionary *param=[Parameter parameterWithSessicon];
+        [param setObject:model.userid forKey:@"beinvited"];
+        [param setObject:customAlertView.money forKey:@"reward"];
+        [XLDataService putWithUrl:addConnectionsURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+            if(dataObj){
+                MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
+                if (model.rtcode==1) {
+                    UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"添加人脉请求已发出,请耐心等待" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+                    successAlertV.cancelButtonIndex=2;
+                    [successAlertV show];
+                }
+                else
+                {
+                    [[ToolManager shareInstance] showAlertMessage:model.rtmsg];
+                }
+                NSLog(@"model.rtmsg=========dataobj=%@",model.rtmsg);
+            }else
+            {
+                [[ToolManager shareInstance] showInfoWithStatus];
+                
+            }
+            
+        }];
+        [customAlertView dissMiss];
+        customAlertView = nil;
+        
+        
+    }else
+    {
+        MeetPaydingVC * payVC = [[MeetPaydingVC alloc]init];
+        NSMutableDictionary *param=[Parameter parameterWithSessicon];
+        [param setObject:model.userid forKey:@"beinvited"];
+        [param setObject:customAlertView.money forKey:@"reward"];
+        
+        payVC.param=param;
+        payVC.jineStr = customAlertView.money;
+        payVC.whatZfType=1;
+        [self.navigationController pushViewController:payVC animated:YES];
+        [customAlertView dissMiss];
+        customAlertView = nil;
+        
+    }
+}
+
+//- (void)tableViewCellDidSeleteMeetingBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath
+//{
+//    //do something
+//    
+//    CGFloat dilX = 25;
+//    CGFloat dilH = 250;
+//    EjectView *alertV = [[EjectView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.navigationController.view];
+//    alertV.center = CGPointMake(APPWIDTH/2, APPHEIGHT/2-30);
+//    alertV.delegate = self;
+//    alertV.titleStr = @"提示";
+//    alertV.title2Str=@"您需要打赏一定的约见费";
+//    alertV.indexth=indexPath;
+//}
 
 -(void)tableViewCellDidSeleteHeadImg:(LWImageStorage *)imageStoragen andIndexPath:(NSIndexPath *)indexPath
 {
@@ -229,41 +277,41 @@
     [self.navigationController pushViewController:myDetialViewCT animated:YES];
 }
 
-#pragma mark - YXCustomAlertViewDelegate
-- (void) customAlertView:(EjectView *) customAlertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    
-    if (buttonIndex==0) {
-        
-        [customAlertView dissMiss];
-        customAlertView = nil;
-        
-        
-    }else
-    {
-        
-        MeetPaydingVC * payVC = [[MeetPaydingVC alloc]init];
-        MeetingData *model=_CellSouceArr[customAlertView.indexth.row];
-        NSLog(@"model=%@",model);
-        NSMutableDictionary *param=[Parameter parameterWithSessicon];
-        [param setObject:model.userid forKey:@"userid"];
-        [param setObject:customAlertView.money forKey:@"reward"];
-        
-        [param setObject:customAlertView.logField.text forKey:@"remark"];
-        [param setObject:model.distance forKey:@"distance"];
-        
-        payVC.param=param;
-        payVC.jineStr = customAlertView.money;
-        payVC.audioData=customAlertView.audioData;
-        
-        [self.navigationController pushViewController:payVC animated:YES];
-        
-        
-        [customAlertView dissMiss];
-        customAlertView = nil;
-        
-    }
-}
+//#pragma mark - YXCustomAlertViewDelegate
+//- (void) customAlertView:(EjectView *) customAlertView clickedButtonAtIndex:(NSInteger)buttonIndex
+//{
+//    
+//    if (buttonIndex==0) {
+//        
+//        [customAlertView dissMiss];
+//        customAlertView = nil;
+//        
+//        
+//    }else
+//    {
+//        
+//        MeetPaydingVC * payVC = [[MeetPaydingVC alloc]init];
+//        MeetingData *model=_CellSouceArr[customAlertView.indexth.row];
+//        NSLog(@"model=%@",model);
+//        NSMutableDictionary *param=[Parameter parameterWithSessicon];
+//        [param setObject:model.userid forKey:@"userid"];
+//        [param setObject:customAlertView.money forKey:@"reward"];
+//        
+//        [param setObject:customAlertView.logField.text forKey:@"remark"];
+//        [param setObject:model.distance forKey:@"distance"];
+//        
+//        payVC.param=param;
+//        payVC.jineStr = customAlertView.money;
+//        payVC.audioData=customAlertView.audioData;
+//        
+//        [self.navigationController pushViewController:payVC animated:YES];
+//        
+//        
+//        [customAlertView dissMiss];
+//        customAlertView = nil;
+//        
+//    }
+//}
 
 -(BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath//高亮
 {

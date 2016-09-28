@@ -24,7 +24,6 @@
 @property (nonatomic,strong)UITableView *yrTab;
 @property (nonatomic,assign)int page;
 @property (nonatomic,strong)NSMutableArray *nearByManArr;
-@property (nonatomic,strong)NSMutableArray *CellSouceArr;
 @property (nonatomic,assign)BOOL isopen;
 @end
 
@@ -45,14 +44,7 @@
     }
     return _nearByManArr;
 }
--(NSMutableArray *)CellSouceArr
-{
-    if (!_CellSouceArr) {
-        _CellSouceArr=[[NSMutableArray alloc]init];
-        
-    }
-    return _CellSouceArr;
-}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     //新版本提示
@@ -91,7 +83,6 @@
         }
         if (isShouldClearData) {
             [self.nearByManArr removeAllObjects];
-            [self.CellSouceArr removeAllObjects];
         }
         if (dataObj) {
             NSLog(@"meetObj====%@",dataObj);
@@ -108,9 +99,6 @@
             if (modal.rtcode ==1) {
                 
                 for (MeetingData *data in modal.datas) {
-                    
-                    
-                    [self.CellSouceArr addObject:data];
                     [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andMessageBtn:NO andOprationBtn:YES]];
                     
                 }
@@ -204,7 +192,7 @@
     MeetingCellLayout *layout=self.nearByManArr[indexPath.row];
     [cell setCellLayout:layout];
     [cell setIndexPath:indexPath];
-    MeetingData *data=self.CellSouceArr[indexPath.row];
+    MeetingData *data=layout.model;
     
     if(data.isappoint==1){
         [cell.meetingBtn setTitle:@"等待中" forState:UIControlStateNormal];
@@ -231,16 +219,23 @@
 #pragma mark
 #pragma mark - MeettingTableViewCellDelegate 同意和拒绝按钮地点击
 //同意和拒绝按钮
-- (void)tableViewCellDidSeleteAgreeAndRefuseBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath
+- (void)tableViewCellDidSeleteAgreeAndRefuseBtn:(UIButton *)btn layout:(MeetingCellLayout *)layout andIndexPath:(NSIndexPath *)indexPath
 {
+    NSIndexPath * clickRow;
     NSLog(@"btn=====%ld",btn.tag);
+    for (int i =0; i<self.nearByManArr.count; i++) {
+        if ([layout isEqual:(MeetingCellLayout*)self.nearByManArr[i]]) {
+            clickRow = [NSIndexPath indexPathForRow:i inSection:0];
+        }
+    }
     NSMutableDictionary *param = [Parameter parameterWithSessicon];
     if(btn.tag==2221){
         [param setObject:@"agree" forKey:@"conduct"];
     }else if (btn.tag==2222){
         [param setObject:@"refuse" forKey:@"conduct"];
     }
-    MeetingData *data=_CellSouceArr[indexPath.row];
+    MeetingCellLayout *layout1=self.nearByManArr[indexPath.row];
+    MeetingData *data=layout1.model;
     [param setObject:data.meetId forKey:@"id"];
     NSLog(@"param====%@",param);
 
@@ -250,7 +245,16 @@
             MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
             
             if (model.rtcode==1) {
-                UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"恭喜您,约见成功!" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"对话",@"电话联系",@"继续约见他人", nil];
+                NSString *str;
+                if(btn.tag==2221){
+                    str=@"您已拒绝";
+                }else if (btn.tag==2222){
+                    str=@"您已同意";
+                }
+
+                UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:str delegate:self cancelButtonTitle:nil otherButtonTitles:@"对话",@"电话联系",@"继续操作", nil];
+                [self.nearByManArr removeObjectAtIndex:clickRow.row];
+                [self.yrTab deleteRowsAtIndexPaths:[NSArray arrayWithObjects:clickRow, nil] withRowAnimation:UITableViewRowAnimationRight];
                 successAlertV.cancelButtonIndex=2;
                 [successAlertV show];
             }
