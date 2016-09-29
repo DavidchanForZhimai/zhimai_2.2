@@ -685,8 +685,8 @@
                 
             }
            
-            if (_modal.relabls.count>0) {
-                for (NSDictionary *relabls in _modal.relabls) {
+            if (_modal.relabels.count>0) {
+                for (NSDictionary *relabls in _modal.relabels) {
                     if (relabls[@"labelname"]) {
                         [self.addPersonsTags addObject:relabls[@"labelname"]];
                     }

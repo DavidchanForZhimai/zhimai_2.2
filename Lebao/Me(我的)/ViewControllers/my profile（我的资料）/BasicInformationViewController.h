@@ -24,9 +24,9 @@
 @property(assign,nonatomic)int rtcode;
 @property(copy,nonatomic)NSString *rtmsg;
 @property(copy,nonatomic)NSString *version;
-@property(copy,nonatomic)NSString *mylabels;
+@property(copy,nonatomic)NSMutableArray *relabels;
 @property(copy,nonatomic)NSString *filllabels;
-@property(copy,nonatomic)NSMutableArray *relabls;
+@property(copy,nonatomic)NSString *mylabels;
 
 @property(copy,nonatomic)NSString *position;//职位
 @property(copy,nonatomic)NSString *service;//产品服务标签

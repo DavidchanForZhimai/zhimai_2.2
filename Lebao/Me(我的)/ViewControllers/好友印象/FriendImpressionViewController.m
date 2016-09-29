@@ -11,6 +11,7 @@
 #import "BaseModal.h"
 #import "DWTagsView.h"
 #import "NSString+Extend.h"
+#import "InvateFriendCommentViewController.h"//邀请好友评价
 #define TagHeight 22
 #define MininumTagWidth (APPWIDTH - 120)/5.0
 #define MaxinumTagWidth (APPWIDTH - 20)
@@ -335,7 +336,7 @@
     }
     
     [XLDataService putWithUrl:UserFriendImpression param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        NSLog(@" param =%@   dataObj =%@",param,dataObj);
+//        NSLog(@" param =%@   dataObj =%@",param,dataObj);
         if (isRefresh) {
             
             [[ToolManager shareInstance] endHeaderWithRefreshing:_impressionView];
@@ -396,10 +397,10 @@
     }
     _evaluation = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 50 ,StatusBarHeight,50, NavigationBarHeight) setTitle:@"求评价" titleSize:28*SpacedFonts titleColor:BlackTitleColor textAlignment:NSTextAlignmentRight backgroundColor:[UIColor clearColor] inView:nil];
     _evaluation.shouldAnmial = NO;
-//    __weak typeof(self) weakSelf = self;
+    __weak typeof(self) weakSelf = self;
     _evaluation.didClickBtnBlock = ^
     {
-        
+        PushView(weakSelf, allocAndInit(InvateFriendCommentViewController));
     };
     return _evaluation;
 }
