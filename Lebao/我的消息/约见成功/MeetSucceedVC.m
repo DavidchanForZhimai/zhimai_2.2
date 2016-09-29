@@ -13,6 +13,7 @@
 #import "XLDataService.h"
 #import "MP3PlayerManager.h"
 #import "GJGCChatFriendViewController.h"
+#import "AppraiseVC.h"
 @interface MeetSucceedVC ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,UITextFieldDelegate,WantMeettingTableViewDelegate>
 {
     UIScrollView * buttomScr;
@@ -379,12 +380,14 @@
     }];
     
 }
-#pragma mark 约见取消按钮点击事件
-- (void)tableViewCellDidSeleteMeetingBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath
+#pragma mark 评价按钮点击事件
+- (void)tableViewCellDidSeleteMeetingBtn:(UIButton *)btn layout:(WantMeetLayout *)layout andIndexPath:(NSIndexPath *)indexPath
 {
     clickRow=indexPath;
     MeetingData *data=_meetMeSourceArr[indexPath.row];
+    AppraiseVC *appraiseVC=[[AppraiseVC alloc]init];
     
+    PushView(self, appraiseVC);
     
 }
 #pragma mark 语音按钮点击事件

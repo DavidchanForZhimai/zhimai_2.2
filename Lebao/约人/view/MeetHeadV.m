@@ -12,8 +12,11 @@
 #import "WantMeetMeVC.h"
 #import "GzHyViewController.h"
 #import "CALayer+WebCache.h"
+#import "MyDetialViewController.h"
 @implementation MeetHeadV
-
+{
+    NSArray *frameArr;
+}
 /*
  // Only override drawRect: if you perform custom drawing.
  // An empty implementation adversely affects performance during animation.
@@ -179,7 +182,7 @@
 -(void)addEightImgView
 {
   
-    NSArray *frameArr=@[NSStringFromCGRect(CGRectMake(_midBtn.x-10, _midBtn.y, 20,20)),
+    frameArr=@[NSStringFromCGRect(CGRectMake(_midBtn.x-10, _midBtn.y, 20,20)),
                         NSStringFromCGRect(CGRectMake(_midBtn.x+30, 10, 23, 23)),
                         NSStringFromCGRect(CGRectMake(CGRectGetMaxX(_midBtn.frame)-15, 30, 30, 30)),
                          NSStringFromCGRect(CGRectMake(_midBtn.x-10, CGRectGetMaxY(_midBtn.frame)-8, 25, 25)),
@@ -187,10 +190,6 @@
                          NSStringFromCGRect(CGRectMake(CGRectGetMaxX(_midBtn.frame)-40,CGRectGetMaxY(_midBtn.frame), 20, 20)),
                         NSStringFromCGRect(CGRectMake(CGRectGetMaxX(_midBtn.frame)+30, _midBtn.y+30, 18, 18)),
                         NSStringFromCGRect(CGRectMake(_midBtn.x-40, _midBtn.y+50, 17, 17))];
-    
-    
-//    __weak UIBezierPath *apath=[UIBezierPath bezierPath];
-    
     CAShapeLayer *shapelayer = [CAShapeLayer layer];
     //设置边框颜色
     shapelayer.strokeColor = [[UIColor colorWithWhite:1.000 alpha:0.15]CGColor];
@@ -198,30 +197,23 @@
     shapelayer.fillColor = [[UIColor clearColor]CGColor];
     //就是这句话在关联彼此（UIBezierPath和CAShapeLayer）：
     
+//    __weak UIBezierPath *apath=[UIBezierPath bezierPath];
 //    for (int i=0; i<_headimgsArr.count&&i<8; i++) {
 //    CGRect rect = CGRectFromString(frameArr[i]);
-//        
-//        [apath moveToPoint:CGPointMake(rect.origin.x+rect.size.width/2.0, rect.origin.y+rect.size.height/2.0)];
+//          [apath moveToPoint:CGPointMake(rect.origin.x+rect.size.width/2.0, rect.origin.y+rect.size.height/2.0)];
 //
-//        for (int j=1;j<_headimgsArr.count&&i<8; j++) {
+//        for (int j=i+1;j<_headimgsArr.count&&j<8; j++) {
 //            if (j-i==4||j-i==1||j-i==7||j-i==5) {
 //                CGRect rect1 = CGRectFromString(frameArr[j]);
-//                
 //                [apath addLineToPoint:CGPointMake(rect1.origin.x+rect1.size.width/2.0, rect1.origin.y+rect1.size.height/2.0)];
 //                [apath closePath];
 //                shapelayer.path = apath.CGPath;
-//                
 //                [self.layer addSublayer:shapelayer];
-//
 //            }
-//            
-//
 //        }
-//    
 //    }
      for (int i=0; i<_headimgsArr.count&&i<8; i++) {
         CGRect rect = CGRectFromString(frameArr[i]);
-         
          CALayer *layer=[CALayer layer];
          layer.masksToBounds=YES;
          layer.frame=rect;
@@ -230,21 +222,34 @@
          layer.borderColor=[UIColor colorWithWhite:1.000 alpha:0.2].CGColor;
          layer.shouldRasterize=YES;
          [layer sd_setImageWithURL:[NSURL URLWithString:[[ToolManager shareInstance]urlAppend:_headimgsArr[i]]]placeholderImage:[UIImage imageNamed:@"defaulthead"]];
-         
          [self.layer addSublayer:layer];
-         
-    }
-   
-  
-    
+     }
     _midBtn.layer.zPosition=20;
     
+    
+    UITapGestureRecognizer *oneTG=[[UITapGestureRecognizer alloc]init];
+    [oneTG addTarget:self action:@selector(toch:)];
+    [self addGestureRecognizer:oneTG];
+    
+    
 }
-
-
-
-
-
+-(void)toch:(UITapGestureRecognizer *)sender
+{
+    CGPoint point = [sender locationInView:self];
+    
+    for (int i=0; i<_headimgsArr.count&&i<8; i++) {
+        CGRect rect = CGRectFromString(frameArr[i]);
+        if(point.x>rect.origin.x&&point.x<(rect.origin.x+rect.size.width)&&point.y>rect.origin.y&&point.y<(rect.origin.y+rect.size.height)){
+            
+            if ([self.delegate respondsToSelector:@selector(pushView:userInfo:)]&&[self.delegate conformsToProtocol:@protocol(MeetHeadVDelegate)]) {
+                MyDetialViewController *myDetialViewCT=allocAndInit(MyDetialViewController);
+                myDetialViewCT.isOther=YES;
+                myDetialViewCT.userID=_userIdArr[i];
+                [_delegate pushView:myDetialViewCT userInfo:nil];
+            }
+        }
+    }
+}
 -(void)wantMeClick:(UIButton *)sender
 {
 
@@ -252,8 +257,6 @@
             WantMeetMeVC *mewantMeetVC=[[WantMeetMeVC alloc]init];
             [_delegate pushView:mewantMeetVC userInfo:nil];
         }
-
-
 }
 -(void)IwantClick:(UIButton *)sender
 {

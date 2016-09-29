@@ -84,6 +84,7 @@
 //录音失败
 - (void)failRecord
 {
+    [RecordHUD setTitle:@"录音失败"];
 }
 
 

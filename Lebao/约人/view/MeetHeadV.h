@@ -25,7 +25,7 @@
 @property(nonatomic,strong) NSTimer *timer2;
 @property(nonatomic,strong) NSTimer *timer3;
 @property(nonatomic,strong)NSArray *headimgsArr;
-
+@property(nonatomic,strong)NSArray *userIdArr;
 @property(nonatomic,weak) id<MeetHeadVDelegate>delegate;
 
 -(void)addEightImgView;

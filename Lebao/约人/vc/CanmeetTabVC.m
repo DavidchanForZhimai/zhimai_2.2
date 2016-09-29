@@ -18,7 +18,6 @@
 @interface CanmeetTabVC ()<UITableViewDelegate,UITableViewDataSource,MeettingTableViewDelegate,UIAlertViewDelegate,EjectViewDelegate,AddConnectionViewDelegate>
 @property(nonatomic,assign)NSInteger page;
 @property(nonatomic,strong)NSMutableArray *allMeetArr;
-@property(nonatomic,strong)NSMutableArray *CellSouceArr;
 @end
 
 @implementation CanmeetTabVC
@@ -29,13 +28,6 @@
         _allMeetArr=[[NSMutableArray alloc]init];
     }
     return _allMeetArr;
-}
--(NSMutableArray*)CellSouceArr
-{
-    if (!_CellSouceArr) {
-        _CellSouceArr=[[NSMutableArray alloc]init];
-    }
-    return _CellSouceArr;
 }
 
 - (void)viewDidLoad {
@@ -113,7 +105,6 @@
         }
         if (isShouldClearData) {
             [self.allMeetArr removeAllObjects];
-            [self.CellSouceArr removeAllObjects];
         }
         if (dataObj) {
             NSLog(@"meetObj====%@",dataObj);
@@ -129,14 +120,9 @@
             
             if (modal.rtcode ==1) {
                         for (MeetingData *data in modal.datas) {
-                    
-                          [self.CellSouceArr addObject:data];
                     [self.allMeetArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andMessageBtn:NO andOprationBtn:NO]];
-                    
-                    
                 }
                  [self.tableView reloadData];
-                
             }
             else
             {
@@ -208,7 +194,8 @@
 #pragma mark - YXCustomAlertViewDelegate
 - (void) customAlertView:(AddConnectionView *) customAlertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-     MeetingData *model=_CellSouceArr[customAlertView.indexth.row];
+     MeetingCellLayout *layout=self.allMeetArr[customAlertView.indexth.row];
+     MeetingData *model=layout.model;
     if (buttonIndex==0) {
         NSMutableDictionary *param=[Parameter parameterWithSessicon];
         [param setObject:model.userid forKey:@"beinvited"];
@@ -254,112 +241,20 @@
     }
 }
 
-//- (void)tableViewCellDidSeleteMeetingBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath
-//{
-//    //do something
-//    
-//    CGFloat dilX = 25;
-//    CGFloat dilH = 250;
-//    EjectView *alertV = [[EjectView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.navigationController.view];
-//    alertV.center = CGPointMake(APPWIDTH/2, APPHEIGHT/2-30);
-//    alertV.delegate = self;
-//    alertV.titleStr = @"提示";
-//    alertV.title2Str=@"您需要打赏一定的约见费";
-//    alertV.indexth=indexPath;
-//}
-
 -(void)tableViewCellDidSeleteHeadImg:(LWImageStorage *)imageStoragen andIndexPath:(NSIndexPath *)indexPath
 {
     MyDetialViewController *myDetialViewCT=allocAndInit(MyDetialViewController);
     myDetialViewCT.isOther=YES;
-    MeetingData *data=self.CellSouceArr[indexPath.row];
+    MeetingCellLayout *layout=self.allMeetArr[indexPath.row];
+    MeetingData *data=layout.model;
     myDetialViewCT.userID=data.userid;
     [self.navigationController pushViewController:myDetialViewCT animated:YES];
 }
-
-//#pragma mark - YXCustomAlertViewDelegate
-//- (void) customAlertView:(EjectView *) customAlertView clickedButtonAtIndex:(NSInteger)buttonIndex
-//{
-//    
-//    if (buttonIndex==0) {
-//        
-//        [customAlertView dissMiss];
-//        customAlertView = nil;
-//        
-//        
-//    }else
-//    {
-//        
-//        MeetPaydingVC * payVC = [[MeetPaydingVC alloc]init];
-//        MeetingData *model=_CellSouceArr[customAlertView.indexth.row];
-//        NSLog(@"model=%@",model);
-//        NSMutableDictionary *param=[Parameter parameterWithSessicon];
-//        [param setObject:model.userid forKey:@"userid"];
-//        [param setObject:customAlertView.money forKey:@"reward"];
-//        
-//        [param setObject:customAlertView.logField.text forKey:@"remark"];
-//        [param setObject:model.distance forKey:@"distance"];
-//        
-//        payVC.param=param;
-//        payVC.jineStr = customAlertView.money;
-//        payVC.audioData=customAlertView.audioData;
-//        
-//        [self.navigationController pushViewController:payVC animated:YES];
-//        
-//        
-//        [customAlertView dissMiss];
-//        customAlertView = nil;
-//        
-//    }
-//}
 
 -(BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath//高亮
 {
     return NO;
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -25,7 +25,6 @@
 @property (nonatomic,strong)UITableView *yrTab;
 @property (nonatomic,assign)int page;
 @property (nonatomic,strong)NSMutableArray *nearByManArr;
-@property (nonatomic,strong)NSMutableArray *CellSouceArr;
 @property (nonatomic,assign)BOOL isopen;
 @end
 
@@ -44,14 +43,6 @@
         _nearByManArr=[[NSMutableArray alloc]init];
     }
     return _nearByManArr;
-}
--(NSMutableArray *)CellSouceArr
-{
-    if (!_CellSouceArr) {
-        _CellSouceArr=[[NSMutableArray alloc]init];
-        
-    }
-    return _CellSouceArr;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -75,15 +66,11 @@
 }
 - (void)netWorkRefresh:(BOOL)isRefresh andIsLoadMoreData:(BOOL)isMoreLoadMoreData isShouldClearData:(BOOL)isShouldClearData//加载数据
 {
-
     NSMutableDictionary *param = [Parameter parameterWithSessicon];
-
     [param setObject:@(_page) forKey:@"page"];
     NSLog(@"param====%@",param);
     [XLDataService putWithUrl:myConnectionsURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         if (isRefresh) {
-            
-            
             [[ToolManager shareInstance] endHeaderWithRefreshing:_yrTab];
         }
         if (isMoreLoadMoreData) {
@@ -91,11 +78,9 @@
         }
         if (isShouldClearData) {
             [self.nearByManArr removeAllObjects];
-            [self.CellSouceArr removeAllObjects];
                    }
         NSLog(@"meetObj====%@",dataObj);
         if (dataObj) {
-            
             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
             if (_page ==1) {
                 [[ToolManager shareInstance] moreDataStatus:_yrTab];
@@ -103,20 +88,13 @@
             if (!modal.datas||modal.datas.count==0) {
                 
                 [[ToolManager shareInstance] noMoreDataStatus:_yrTab];
-                
             }
-            
             if (modal.rtcode ==1) {
               
                 for (MeetingData *data in modal.datas) {
-                    
-                    
-                    [self.CellSouceArr addObject:data];
                     [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andMessageBtn:YES andOprationBtn:NO]];
                     
                                   }
-                
-              
                 [_yrTab reloadData];
                 
             }
@@ -224,7 +202,7 @@
     MeetingCellLayout *layout=self.nearByManArr[indexPath.row];
     [cell setCellLayout:layout];
     [cell setIndexPath:indexPath];
-    MeetingData *data=self.CellSouceArr[indexPath.row];
+    MeetingData *data=layout.model;
     
     if(data.isappoint==1){
         [cell.meetingBtn setTitle:@"等待中" forState:UIControlStateNormal];
@@ -267,7 +245,8 @@
 - (void)tableViewCellDidSeleteMessageBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath{
     GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
     talk.talkType = GJGCChatFriendTalkTypePrivate;
-    MeetingData *data = _CellSouceArr[indexPath.row];
+    MeetingCellLayout *layout=self.nearByManArr[indexPath.row];
+    MeetingData *data =layout.model;
     
     talk.toId = data.userid;
     talk.toUserName = data.realname;
@@ -289,8 +268,8 @@
     }else
     {
         MeetPaydingVC * payVC = [[MeetPaydingVC alloc]init];
-        MeetingData *model=_CellSouceArr[customAlertView.indexth.row];
-        NSLog(@"model=%@",model);
+        MeetingCellLayout *layout=self.nearByManArr[customAlertView.indexth.row];
+        MeetingData *model =layout.model;
         NSMutableDictionary *param=[Parameter parameterWithSessicon];
         [param setObject:model.userid forKey:@"userid"];
         [param setObject:customAlertView.money forKey:@"reward"];

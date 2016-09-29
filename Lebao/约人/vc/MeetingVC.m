@@ -29,6 +29,7 @@
 @property (nonatomic,assign)int page;
 @property (nonatomic,strong)NSMutableArray *nearByManArr;
 @property (nonatomic,strong)NSMutableArray *headimgArr;
+@property (nonatomic,strong)NSMutableArray *headUserIdArr;
 @property (nonatomic,assign)BOOL isopen;
 @end
 
@@ -101,6 +102,13 @@
     }
     return _headimgArr;
 }
+-(NSMutableArray *)headUserIdArr
+{
+    if (!_headUserIdArr) {
+        _headUserIdArr=[[NSMutableArray alloc]init];
+    }
+    return _headUserIdArr;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     //新版本提示
@@ -157,6 +165,7 @@
         if (isShouldClearData) {
             [self.nearByManArr removeAllObjects];
             [self.headimgArr removeAllObjects];
+            [self.headUserIdArr removeAllObjects];
         }
         if (dataObj) {
             NSLog(@"meetObj====%@",dataObj);
@@ -176,6 +185,7 @@
                     
                     if (data.imgurl!=nil) {
                         [self.headimgArr addObject:data.imgurl];
+                        [self.headUserIdArr addObject:data.userid];
                     }
                     
                     
@@ -183,6 +193,7 @@
                 }
                 
                 _headView.headimgsArr=[NSArray arrayWithArray:self.headimgArr];
+                _headView.userIdArr=[NSArray arrayWithArray:self.headUserIdArr];
                 [_headView addEightImgView];
                 _headView.nearManLab.text=[NSString stringWithFormat:@"最近有空 %d人",modal.count];
                 _headView.midBtn.titleLabel.text=[NSString stringWithFormat:@"可约\n%d\n位经纪人",modal.count];
