@@ -684,10 +684,17 @@
                 [self.personsTags addObjectsFromArray:[_modal.filllabels componentsSeparatedByString:@","]];
                 
             }
-            if (![_modal.relabls isEqualToString:@""]) {
-                [self.addPersonsTags addObjectsFromArray:[_modal.relabls componentsSeparatedByString:@","]];
+           
+            if (_modal.relabls.count>0) {
+                for (NSDictionary *relabls in _modal.relabls) {
+                    if (relabls[@"labelname"]) {
+                        [self.addPersonsTags addObject:relabls[@"labelname"]];
+                    }
+                    
+                }
                 
             }
+            
             if (![_modal.service
                   isEqualToString:@""]) {
                 [self.productsTags addObjectsFromArray:[_modal.service componentsSeparatedByString:@","]];
