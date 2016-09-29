@@ -16,7 +16,7 @@
 
 @property (nonatomic) UIEdgeInsets contentInsets; //default is (10,10,10,10)
 
-@property (nonatomic) NSArray<NSString *> *tagsArray;   //数据源
+@property (nonatomic) NSArray *tagsArray;   //数据源
 @property (weak, nonatomic) id<DWTagsViewDelegate> delegate;
 
 @property (nonatomic) CGFloat lineSpacing;       //行间距, 默认为10
@@ -47,7 +47,7 @@
 @property (nonatomic) BOOL allowEmptySelection;         //是否允许空选, default is YES
 
 @property (nonatomic, readonly) NSUInteger selectedIndex;   //选中索引
-@property (nonatomic, readonly) NSArray<NSString *> *selecedTags;     //多选状态下，选中的Tags
+@property (nonatomic, readonly) NSArray *selecedTags;     //多选状态下，选中的Tags
 @property (nonatomic, readonly) NSArray<NSNumber *> *selectedIndexes; //多选状态下，选中的索引
 
 - (void)selectTagAtIndex:(NSUInteger)index animate:(BOOL)animate;
@@ -56,12 +56,12 @@
 #pragma mark - ......::::::: Edit :::::::......
 
 //if not found, return NSNotFount
-- (NSUInteger)indexOfTag:(NSString *)tagName;
+- (NSUInteger)indexOfTag:(id)tagName;
 
-- (void)addTag:(NSString *)tagName;
-- (void)insertTag:(NSString *)tagName AtIndex:(NSUInteger)index;
+- (void)addTag:(id)tagName;
+- (void)insertTag:(id)tagName AtIndex:(NSUInteger)index;
 
-- (void)removeTagWithName:(NSString *)tagName;
+- (void)removeTagWithName:(id)tagName;
 - (void)removeTagAtIndex:(NSUInteger)index;
 - (void)removeAllTags;
 

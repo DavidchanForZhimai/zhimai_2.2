@@ -12,22 +12,24 @@ static NSString * const kTagCellID = @"TagCellID";
 
 @interface DWTagModel : NSObject
 
-@property (copy, nonnull) NSString *name;
+@property (strong, nonatomic) id name;
 @property (nonatomic) BOOL selected;
 //用于计算文字大小
 @property (strong, nonatomic) UIFont *font;
 
 @property (nonatomic, readonly) CGSize contentSize;
 
-- (instancetype)initWithName:(NSString *)name font:(UIFont *)font;
+- (instancetype)initWithName:(id)name font:(UIFont *)font;
 
 @end
 
 @implementation DWTagModel
 
-- (instancetype)initWithName:(NSString *)name font:(UIFont *)font {
+- (instancetype)initWithName:(id)name font:(UIFont *)font {
     if (self = [super init]) {
+       
         _name = name;
+        
         self.font = font;
     }
     return self;
@@ -41,8 +43,22 @@ static NSString * const kTagCellID = @"TagCellID";
 
 - (void)calculateContentSize {
     NSDictionary *dict = @{NSFontAttributeName: self.font};
-    CGSize textSize = [_name boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, 1000)
-                                          options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
+    CGSize textSize;
+    if ([_name isKindOfClass:[NSString class]]) {
+        textSize = [_name boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, 1000)
+                                              options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
+    }
+    else
+    {
+       CGSize textSize1 = [_name[@"label"] boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, 1000)
+                                       options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
+        
+      CGSize  textSize2 = [_name[@"count"] boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, 1000)
+                                       options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
+        
+        textSize = CGSizeMake(textSize1.width + textSize2.width + 3, textSize2.height);
+    }
+    
     
     _contentSize = CGSizeMake(ceil(textSize.width), ceil(textSize.height));
 }
@@ -52,6 +68,7 @@ static NSString * const kTagCellID = @"TagCellID";
 @interface DWTagCell : UICollectionViewCell
 
 @property (strong, nonatomic) UILabel *tagLabel;
+@property (strong, nonatomic) UILabel *countLabel;
 @property (nonatomic) DWTagModel *tagModel;
 @property (nonatomic) UIEdgeInsets contentInsets;
 
@@ -65,6 +82,12 @@ static NSString * const kTagCellID = @"TagCellID";
         _tagLabel.textAlignment = NSTextAlignmentCenter;
         _tagLabel.userInteractionEnabled = NO;
         [self.contentView addSubview:_tagLabel];
+        
+        _countLabel = [[UILabel alloc] init];
+        _countLabel.textAlignment = NSTextAlignmentCenter;
+        _countLabel.userInteractionEnabled = NO;
+        self.countLabel.backgroundColor = rgba(255, 255, 255, 0.3);
+        [self.contentView addSubview:_countLabel];
     }
     
     return self;
@@ -73,11 +96,29 @@ static NSString * const kTagCellID = @"TagCellID";
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    CGRect bounds = self.contentView.bounds;
-    CGFloat width = bounds.size.width - self.contentInsets.left - self.contentInsets.right;
-    CGRect frame = CGRectMake(0, 0, width, [self.tagModel contentSize].height);
-    self.tagLabel.frame = frame;
-    self.tagLabel.center = self.contentView.center;
+    if ([_tagModel.name isKindOfClass:[NSString class]]) {
+        CGRect bounds = self.contentView.bounds;
+        CGFloat width = bounds.size.width - self.contentInsets.left - self.contentInsets.right;
+        CGRect frame = CGRectMake(0, 0, width, [self.tagModel contentSize].height);
+        self.tagLabel.frame = frame;
+        self.tagLabel.center = self.contentView.center;
+    }
+    else
+    {
+        NSDictionary *dict = @{NSFontAttributeName: _tagModel.font};
+        CGSize  textSize2 = [_tagModel.name[@"count"] boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, 1000)
+                                                          options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
+        CGRect bounds = self.contentView.bounds;
+        CGFloat width = bounds.size.width - self.contentInsets.left - self.contentInsets.right - 3 - textSize2.width;
+        CGRect frame = CGRectMake(self.contentInsets.left,  (bounds.size.height - [self.tagModel contentSize].height)/2.0, width, [self.tagModel contentSize].height);
+        self.tagLabel.frame = frame;
+        
+        CGRect frame1 = CGRectMake(bounds.size.width -(textSize2.width + 6), 0,textSize2.width + 6 ,bounds.size.height);
+        self.countLabel.frame = frame1;
+  
+        
+    }
+   
 }
 
 @end
@@ -207,7 +248,7 @@ static NSString * const kTagCellID = @"TagCellID";
 @interface DWTagsView ()<UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 
 
-@property (strong, nonatomic) NSMutableArray<NSString *> *tagsMutableArray;
+@property (strong, nonatomic) NSMutableArray *tagsMutableArray;
 @property (strong, nonatomic) NSMutableArray<DWTagModel *> *tagModels;
 
 @end
@@ -275,13 +316,18 @@ static NSString * const kTagCellID = @"TagCellID";
     return CGSizeMake(UIViewNoIntrinsicMetric, contentSize.height);
 }
 
-- (void)setTagsArray:(NSArray<NSString *> *)tagsArray {
+- (void)setTagsArray:(NSArray *)tagsArray {
     _tagsMutableArray = [tagsArray mutableCopy];
     [self.tagModels removeAllObjects];
-    [tagsArray enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        DWTagModel *tagModel = [[DWTagModel alloc] initWithName:obj font:self.tagFont];
-        [self.tagModels addObject:tagModel];
+    
+    [tagsArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+
+    DWTagModel *tagModel = [[DWTagModel alloc] initWithName:obj font:self.tagFont];
+    [self.tagModels addObject:tagModel];
+        
+        
     }];
+  
     [self.collectionView reloadData];
 
 }
@@ -298,10 +344,11 @@ static NSString * const kTagCellID = @"TagCellID";
 
 #pragma mark - ......::::::: Edit :::::::......
 
-- (NSUInteger)indexOfTag:(NSString *)tagName {
+- (NSUInteger)indexOfTag:(id)tagName {
     __block NSUInteger index = NSNotFound;
-    [self.tagsMutableArray enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([obj isEqualToString:tagName]) {
+   
+    [self.tagsMutableArray enumerateObjectsUsingBlock:^(id _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj isEqual:tagName]) {
             index = idx;
             *stop = YES;
         }
@@ -310,7 +357,7 @@ static NSString * const kTagCellID = @"TagCellID";
     return index;
 }
 
-- (void)addTag:(NSString *)tagName {
+- (void)addTag:(id)tagName {
     [self.tagsMutableArray addObject:tagName];
     DWTagModel *tagModel = [[DWTagModel alloc] initWithName:tagName font:self.tagFont];
     [self.tagModels addObject:tagModel];
@@ -321,7 +368,7 @@ static NSString * const kTagCellID = @"TagCellID";
  
 }
 
-- (void)insertTag:(NSString *)tagName AtIndex:(NSUInteger)index {
+- (void)insertTag:(id)tagName AtIndex:(NSUInteger)index {
     if (index >= self.tagsMutableArray.count) {
         return;
     }
@@ -334,7 +381,7 @@ static NSString * const kTagCellID = @"TagCellID";
 
 }
 
-- (void)removeTagWithName:(NSString *)tagName {
+- (void)removeTagWithName:(id)tagName {
     return [self removeTagAtIndex:[self indexOfTag:tagName]];
 }
 
@@ -369,7 +416,18 @@ static NSString * const kTagCellID = @"TagCellID";
     
     DWTagModel *tagModel = self.tagModels[indexPath.row];
     cell.tagModel = tagModel;
-    cell.tagLabel.text = tagModel.name;
+    if ([tagModel.name isKindOfClass:[NSString class]]) {
+        cell.tagLabel.text = tagModel.name;
+        cell.countLabel.hidden = YES;
+    }
+    else
+    {
+        cell.tagLabel.text = tagModel.name[@"label"];
+        cell.countLabel.hidden = NO;
+        cell.countLabel.text = tagModel.name[@"count"];
+
+    }
+    
     cell.layer.cornerRadius = self.tagcornerRadius;
     cell.layer.masksToBounds = self.tagcornerRadius > 0;
     cell.contentInsets = self.tagInsets;
@@ -385,11 +443,15 @@ static NSString * const kTagCellID = @"TagCellID";
         cell.backgroundColor = self.tagSelectedBackgroundColor;
         cell.tagLabel.font = self.tagSelectedFont;
         cell.tagLabel.textColor = self.tagSelectedTextColor;
+        cell.countLabel.font = self.tagSelectedFont;
+        cell.countLabel.textColor = self.tagSelectedTextColor;
         cell.layer.borderColor = self.tagSelectedBorderColor.CGColor;
     }else {
         cell.backgroundColor = self.tagBackgroundColor;
         cell.tagLabel.font = self.tagFont;
         cell.tagLabel.textColor = self.tagTextColor;
+        cell.countLabel.font = self.tagFont;
+        cell.countLabel.textColor = self.tagTextColor;
         cell.layer.borderColor = self.tagBorderColor.CGColor;
     }
 }

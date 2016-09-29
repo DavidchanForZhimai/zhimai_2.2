@@ -18,7 +18,7 @@
 @property(nonatomic,strong)NSString *imgurl;
 @property(nonatomic,assign)BOOL isself;
 @property(nonatomic,assign)int sex;
-@property(nonatomic,assign)int brokerid;
+@property(nonatomic,strong)NSString *brokerid;
 @property(nonatomic,strong)NSString *realname;
 @property(nonatomic,strong)NSString *audios;
 @property(nonatomic,assign)int msgtype;

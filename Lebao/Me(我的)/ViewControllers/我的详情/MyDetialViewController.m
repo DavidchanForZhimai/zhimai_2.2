@@ -18,21 +18,37 @@
 #import "MeetPaydingVC.h"
 #import "XLDataService.h"
 #import "MeetingModel.h"
+
 #define TagHeight 22
 #define MininumTagWidth (APPWIDTH - 120)/5.0
 #define MaxinumTagWidth (APPWIDTH - 20)
 
 @interface HeaderModel : NSObject
 @property(nonatomic,strong)NSString *authen;
-@property(nonatomic,strong)NSString *imgurl;
-@property(nonatomic,strong)NSString *industry;
+@property(nonatomic,strong)NSString *connection_count;
+@property(nonatomic,strong)NSString *dynamic_count;
 @property(nonatomic,strong)NSString *realname;
+@property(nonatomic,strong)NSString *Id;
+@property(nonatomic,strong)NSString *imgurl;
+@property(nonatomic,strong)NSMutableArray *impression;
+
+@property(nonatomic,strong)NSString *labels;
+@property(nonatomic,strong)NSString *address;
+@property(nonatomic,strong)NSString *position;
+@property(nonatomic,strong)NSString *resource;
+@property(nonatomic,strong)NSString *service;
+@property(nonatomic,strong)NSString *success_count;
+@property(nonatomic,strong)NSString *synopsis;
+@property(nonatomic,strong)NSString *vip;
+@property(nonatomic,strong)NSString *want_count;
 @property(nonatomic,strong)NSString *workyears;
-@property(nonatomic,strong)NSString *userid;
-@property(nonatomic,strong)NSString *company;
 @end
 @implementation HeaderModel
-
++ (NSDictionary *)mj_replacedKeyFromPropertyName
+{
+    return @{@"Id" : @"id",
+             };
+}
 @end
 
 @interface HeaderViewLayout : LWLayout
@@ -70,16 +86,32 @@
         nameTextStorage.textAlignment = NSTextAlignmentCenter;
          //行业
         LWTextStorage* industryTextStorage = [[LWTextStorage alloc] init];
-        if (model.company&&model.company.length>0) {
-            industryTextStorage.text =[NSString stringWithFormat:@"%@\n",model.company];
+        if (model.address&&model.address.length>0) {
+            industryTextStorage.text =[NSString stringWithFormat:@"%@\n",model.address];
         }
-        if (model.industry&&model.industry.length>0) {
-            industryTextStorage.text =[NSString stringWithFormat:@"%@%@  ",industryTextStorage.text,[Parameter industryForChinese:model.industry]];
+        if (model.position&&model.position.length>0) {
+            industryTextStorage.text =[NSString stringWithFormat:@"%@%@  ",industryTextStorage.text,model.position];
         }
         if (model.workyears&&model.workyears.length>0) {
             industryTextStorage.text=[NSString stringWithFormat:@"%@从业%@年\n",industryTextStorage.text,model.workyears];
         }
-        industryTextStorage.text =[NSString stringWithFormat:@"%@ [iconprofilerenzhen] [iconprofilevip] ",industryTextStorage.text];
+        NSString *authen;
+        if ([model.authen isEqualToString:@"3"]) {
+            authen = @"[iconprofilerenzhen]";
+        }
+        else
+        {
+             authen = @"[iconprofileweirenzhen]";
+        }
+        NSString *vip;
+        if ([model.vip boolValue]) {
+            vip = @"[iconprofilevip]";
+        }
+        else
+        {
+            vip = @"[iconprofilevipweikaitong]";
+        }
+        industryTextStorage.text =[NSString stringWithFormat:@"%@ %@ %@ ",industryTextStorage.text,authen,vip];
         
         industryTextStorage.textColor = [UIColor colorWithRed:0.549 green:0.5569 blue:0.5608 alpha:1.0];
         industryTextStorage.font = Size(24.0);
@@ -128,10 +160,22 @@
 @property(nonatomic,strong)UILabel *resourseTagsLb;//资源标签
 @property(nonatomic,strong)UILabel *personsTagsLb;//个人标签
 @property(nonatomic,strong)UIView *line1;//间隔
+
+@property(nonatomic,strong)DWTagsView *impressionTagsView;//好友印象
+@property(nonatomic,strong)UILabel *impressionTagsLb;//个人标签
+@property(nonatomic,copy)NSMutableArray *impressionTags;
+
 @end
 
 @implementation MyDetialViewController
-
+{
+    HeaderModel *headerModel;
+}
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -144,17 +188,6 @@
         
     }
     [self.view addSubview:self.myDetailTV];
-    
-    HeaderModel *headerModel = [[HeaderModel alloc]init];
-    headerModel.imgurl = @"";
-    headerModel.realname = @"陈大伟";
-    headerModel.industry = @"car";
-    headerModel.workyears = @"18";
-    headerModel.company = @"厦门知脉科技有限公司";
-    self.headerViewLayout = [[HeaderViewLayout alloc]initCellLayoutWithModel:headerModel];
-
-    _myDetailTV.tableHeaderView = self.viewHeader;
-    _myDetailTV.tableFooterView = self.viewFooter;
     [self netWork];
 }
 
@@ -195,12 +228,15 @@
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
         
-        [UILabel createLabelWithFrame:frame(20, 0, 100, 40) text:@"我的动态" fontSize:14 textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:cell];
+       [UILabel createLabelWithFrame:frame(20, 0, 100, 40) text:@"我的动态" fontSize:14 textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:cell];
         
-        [UILabel createLabelWithFrame:frame(APPWIDTH - 100, 0, 70, 40) text:@"10" fontSize:12 textColor:LightBlackTitleColor textAlignment:NSTextAlignmentRight inView:cell];
+        UILabel *label =  [UILabel createLabelWithFrame:frame(APPWIDTH - 100, 0, 70, 40) text:headerModel.dynamic_count fontSize:12 textColor:LightBlackTitleColor textAlignment:NSTextAlignmentRight inView:cell];
+        label.tag =888;
         
        cell.accessoryType =UITableViewCellAccessoryDisclosureIndicator;
     }
+    UILabel *label = [cell viewWithTag:888];
+    label.text = headerModel.dynamic_count;
     return cell;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -260,14 +296,15 @@
     view.backgroundColor = self.view.backgroundColor;
     [_viewHeader addSubview:view];
     //人脉
-    BaseButton *renmai = [self addViewWithFrame:frame(0, self.userView.y + self.userView.height + 10, APPWIDTH/3, 40) andTitle:@"人脉" rangeText:@"10" andView:_viewHeader];
+
+    BaseButton *renmai = [self addViewWithFrame:frame(0, self.userView.y + self.userView.height + 10, APPWIDTH/3, 40) andTitle:@"人脉" rangeText:headerModel.connection_count andView:_viewHeader];
     renmai.didClickBtnBlock = ^
     {
         NSLog(@"人脉");
         
     };
     //约见成功
-    BaseButton *yuejian = [self addViewWithFrame:frame(CGRectGetMaxX(renmai.frame),renmai.y,renmai.width, renmai.height) andTitle:@"约见成功" rangeText:@"18" andView:_viewHeader];
+    BaseButton *yuejian = [self addViewWithFrame:frame(CGRectGetMaxX(renmai.frame),renmai.y,renmai.width, renmai.height) andTitle:@"约见成功" rangeText:headerModel.success_count andView:_viewHeader];
     yuejian.didClickBtnBlock = ^
     {
         NSLog(@"约见成功");
@@ -275,7 +312,7 @@
     };
     
     //想约
-    BaseButton *xiangyue = [self addViewWithFrame:frame(CGRectGetMaxX(yuejian.frame),yuejian.y,yuejian.width, yuejian.height) andTitle:@"想约" rangeText:@"18" andView:_viewHeader];
+    BaseButton *xiangyue = [self addViewWithFrame:frame(CGRectGetMaxX(yuejian.frame),yuejian.y,yuejian.width, yuejian.height) andTitle:@"想约" rangeText:headerModel.want_count andView:_viewHeader];
     xiangyue.didClickBtnBlock = ^
     {
         NSLog(@"想约");
@@ -337,6 +374,10 @@
     
     [self.viewFooter addSubview:self.personsTagsLb];
     [self.viewFooter addSubview:self.personsTagsView];
+    
+    //好友印象
+    [self.viewFooter addSubview:self.impressionTagsLb];
+    [self.viewFooter addSubview:self.impressionTagsView];
     //设置位置
     [self tagsViewReSetFrame];
     return _viewFooter;
@@ -356,7 +397,7 @@
     if (_productTagsView) {
         return _productTagsView;
     }
-    _productTagsView = allocAndInitWithFrame(DWTagsView, CGRectZero);
+    _productTagsView = allocAndInitWithFrame(DWTagsView, CGRectMake(20, 45, APPWIDTH - 40, 2*(TagHeight+10)));
     _productTagsView.contentInsets = UIEdgeInsetsZero;
     _productTagsView.tagInsets = UIEdgeInsetsMake(5, 15, 5, 15);
     _productTagsView.tagcornerRadius = 2;
@@ -394,7 +435,7 @@
     if (_resourseTagsView) {
         return _resourseTagsView;
     }
-    _resourseTagsView = allocAndInitWithFrame(DWTagsView, CGRectZero);
+    _resourseTagsView = allocAndInitWithFrame(DWTagsView, CGRectMake(20, CGRectGetMaxY(_resourseTagsLb.frame), APPWIDTH - 40,2*(TagHeight+10)));
     _resourseTagsView.contentInsets = UIEdgeInsetsZero;
     _resourseTagsView.tagInsets = UIEdgeInsetsMake(5, 15, 5, 15);
     _resourseTagsView.tagcornerRadius = 2;
@@ -442,7 +483,7 @@
     if (_personsTagsView) {
         return _personsTagsView;
     }
-    _personsTagsView = allocAndInitWithFrame(DWTagsView, CGRectZero);
+    _personsTagsView = allocAndInitWithFrame(DWTagsView, CGRectMake(20, CGRectGetMaxY(_personsTagsLb.frame), APPWIDTH - 40, 2*(TagHeight+10)));
     _personsTagsView.contentInsets = UIEdgeInsetsZero;
     _personsTagsView.tagInsets = UIEdgeInsetsMake(5, 15, 5, 15);
     _personsTagsView.tagcornerRadius = 2;
@@ -465,12 +506,50 @@
     return _personsTagsView;
     
 }
+
+- (UILabel *)impressionTagsLb
+{
+    if (_impressionTagsLb) {
+        return  _impressionTagsLb;
+    }
+    _impressionTagsLb =[UILabel createLabelWithFrame:CGRectZero text:@"好友印象" fontSize:14 textColor:[UIColor colorWithRed:0.9843 green:0.451 blue:0.2549 alpha:1.0] textAlignment:NSTextAlignmentLeft inView:nil];
+    
+    return  _impressionTagsLb;
+    
+}
+-(DWTagsView *)impressionTagsView
+{
+    if (_impressionTagsView) {
+        return _impressionTagsView;
+    }
+    _impressionTagsView = allocAndInitWithFrame(DWTagsView, CGRectMake(20, CGRectGetMaxY(_impressionTagsLb.frame), APPWIDTH - 40, 2*(TagHeight+10)));
+    _impressionTagsView.contentInsets = UIEdgeInsetsZero;
+    _impressionTagsView.tagInsets = UIEdgeInsetsMake(5, 15, 5, 15);
+    _impressionTagsView.tagcornerRadius = 2;
+    _impressionTagsView.tag = 8888;
+    _impressionTagsView.mininumTagWidth =MininumTagWidth;
+    _impressionTagsView.maximumTagWidth = MaxinumTagWidth;
+    _impressionTagsView.tagHeight  = TagHeight;
+    
+    _impressionTagsView.tagBackgroundColor = [UIColor colorWithRed:0.9843 green:0.451 blue:0.2549 alpha:1.0];
+    _impressionTagsView.lineSpacing = 10;
+    _impressionTagsView.interitemSpacing = 20;
+    _impressionTagsView.tagFont = [UIFont systemFontOfSize:14];
+    _impressionTagsView.tagTextColor = WhiteColor;
+    _impressionTagsView.tagSelectedBackgroundColor = _impressionTagsView.tagBackgroundColor;
+    _impressionTagsView.tagSelectedTextColor = _impressionTagsView.tagTextColor;
+    
+    _impressionTagsView.delegate = self;
+    _impressionTagsView.tagsArray = self.impressionTags;
+    
+    return _impressionTagsView;
+}
 - (NSMutableArray *)productsTags
 {
     if (_productsTags) {
         return _productsTags;
     }
-    _productsTags = [[NSMutableArray alloc]initWithObjects:@"商务1",@"开发",@"产品",@"经理",@"老板",@"业务", nil];
+    _productsTags = [[NSMutableArray alloc]init];
     return _productsTags;
 }
 - (NSMutableArray *)resourseaTags
@@ -478,7 +557,7 @@
     if (_resourseaTags) {
         return _resourseaTags;
     }
-    _resourseaTags = [[NSMutableArray alloc]initWithObjects:@"商务2",@"开发",@"产品",@"经理",@"老板",@"业务", nil];
+    _resourseaTags = [[NSMutableArray alloc]init];
     return _resourseaTags;
 }
 - (NSMutableArray *)personsTags
@@ -486,21 +565,35 @@
     if (_personsTags) {
         return _personsTags;
     }
-    _personsTags = [[NSMutableArray alloc]initWithObjects:@"商务3",@"开发",@"产品",@"经理",@"老板",@"业务", nil];
+    _personsTags = [[NSMutableArray alloc]init];
     return _personsTags;
+}
+- (NSMutableArray *)impressionTags
+{
+    if (_impressionTags) {
+        return _impressionTags;
+    }
+    
+    _impressionTags = [[NSMutableArray alloc]init];
+    return _impressionTags;
 }
 #pragma mark
 #pragma mark resetFrame
 - (void)tagsViewReSetFrame
 {
     
-    _productTagsView.frame = CGRectMake(20, 45, APPWIDTH - 40, 2*(TagHeight+10));
+    _productTagsView.frame = CGRectMake(20, 45, APPWIDTH - 40, [_productTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
     _resourseTagsLb.frame = CGRectMake(20, CGRectGetMaxY(_productTagsView.frame), APPWIDTH, 35);
-    _resourseTagsView.frame = CGRectMake(20, CGRectGetMaxY(_resourseTagsLb.frame), APPWIDTH - 40,2*(TagHeight+10));
-    _line1.frame = CGRectMake(0, CGRectGetMaxY(_resourseTagsView.frame), APPWIDTH, 10);
+    _resourseTagsView.frame = CGRectMake(20, CGRectGetMaxY(_resourseTagsLb.frame), APPWIDTH - 40,[_resourseTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
+    _line1.frame = CGRectMake(0, CGRectGetMaxY(_resourseTagsView.frame) + 10, APPWIDTH, 10);
     _personsTagsLb.frame = CGRectMake(20, CGRectGetMaxY(_line1.frame), APPWIDTH, 35);
-    _personsTagsView.frame =CGRectMake(20, CGRectGetMaxY(_personsTagsLb.frame), APPWIDTH - 40, 2*(TagHeight+10));
-    _viewFooter.frame = frame(0, 0, APPWIDTH, CGRectGetMaxY(_personsTagsView.frame) + 10);
+    _personsTagsView.frame =CGRectMake(20, CGRectGetMaxY(_personsTagsLb.frame), APPWIDTH - 40, [_personsTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
+    
+    _impressionTagsLb.frame = CGRectMake(20, CGRectGetMaxY(_personsTagsView.frame), APPWIDTH, 35);
+    
+    _impressionTagsView.frame =CGRectMake(20, CGRectGetMaxY(_impressionTagsLb.frame), APPWIDTH - 40, [_impressionTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
+    
+    _viewFooter.frame = frame(0, 0, APPWIDTH, CGRectGetMaxY(_impressionTagsView.frame) + 10);
     
     
 }
@@ -569,7 +662,7 @@
                 {
                     [[ToolManager shareInstance] showAlertMessage:model.rtmsg];
                 }
-                NSLog(@"model.rtmsg=========dataobj=%@",model.rtmsg);
+               
             }else
             {
                 [[ToolManager shareInstance] showInfoWithStatus];
@@ -606,18 +699,41 @@
 {
     NSMutableDictionary *param=[Parameter parameterWithSessicon];
     [param setObject:_userID forKey:@"id"];
-    NSLog(@"param=%@",param);
+    [[ToolManager shareInstance] showWithStatus];
     [XLDataService putWithUrl:detailManURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        NSLog(@"data=%@",dataObj);
-              if (dataObj) {
-             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
-         if (modal.rtcode ==1) {
+//        NSLog(@"dataObj =%@",dataObj);
+        if (dataObj) {
+             headerModel = [HeaderModel mj_objectWithKeyValues:dataObj[@"data"]];
+         if ([dataObj[@"rtcode"] integerValue]==1) {
+             [[ToolManager shareInstance] dismiss];
+             self.headerViewLayout = [[HeaderViewLayout alloc]initCellLayoutWithModel:headerModel];
+             if (![headerModel.labels isEqualToString:@""]) {
+                 [self.personsTags addObjectsFromArray:[headerModel.labels componentsSeparatedByString:@","]];
+                 
+             }
+             
+           
+             if (![headerModel.service
+                   isEqualToString:@""]) {
+                 [self.productsTags addObjectsFromArray:[headerModel.service componentsSeparatedByString:@","]];
+                 
+             }
+           
+             if (![headerModel.resource
+                   isEqualToString:@""]) {
+                 [self.resourseaTags addObjectsFromArray:[headerModel.resource componentsSeparatedByString:@","]];
+                 
+             }
+             [self.impressionTags addObjectsFromArray:headerModel.impression] ;
+             _myDetailTV.tableHeaderView = self.viewHeader;
+             _myDetailTV.tableFooterView = self.viewFooter;
+             [_myDetailTV reloadData];
              
          }
-              else
-              {
-                  [[ToolManager shareInstance] showAlertMessage:modal.rtmsg];
-              }
+        else
+        {
+            [[ToolManager shareInstance] showAlertMessage:dataObj[@"rtmsg"]];
+        }
         
     }
      else
