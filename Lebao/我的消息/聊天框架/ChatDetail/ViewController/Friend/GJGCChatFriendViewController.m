@@ -178,11 +178,10 @@ GJCUCaptureViewControllerDelegate>
                     chatContentModel.isFromSelf = data.isself;
                     chatContentModel.talkType = self.taklInfo.talkType;
                     chatContentModel.headUrl = [[ToolManager shareInstance] urlAppend:data.imgurl];
-                    chatContentModel.audioModel.duration = 0;
                     chatContentModel.audioModel.remotePath = [[ToolManager shareInstance] urlAppend:data.audios];
                     
+                    chatContentModel.audioModel.duration =data.audios_secont;
                     chatContentModel.audioDuration = [GJGCChatFriendCellStyle formateAudioDuration:GJCFStringFromInt(chatContentModel.audioModel.duration)];
-                    
                     [self.dataSourceManager mockSendAnMesssage:chatContentModel];
                      if (i==modal.datas.count-1) {
                          [self.dataSourceManager resortAllChatContentBySendTime];
@@ -1489,7 +1488,7 @@ GJCUCaptureViewControllerDelegate>
         
         [param setObject:@"语音消息" forKey:@"content"];
         [param setObject:@(GJGCChatFriendContentTypeAudio) forKey:@"msgtype"];
-        
+        [param setObject:@(contentModel.audioModel.duration) forKey:@"audios_secont"];
          [[MP3PlayerManager shareInstance] uploadAudioWithType:@"mp3" audioData:[NSData dataWithContentsOfFile:contentModel.audioModel.tempEncodeFilePath] finishuploadBlock:^(BOOL succeed, id audioDic) {
              
             [param setObject:audioDic[@"audiourl"] forKey:@"audios"];
@@ -1570,7 +1569,9 @@ GJCUCaptureViewControllerDelegate>
     chatContentModel.audioModel.duration = 0;
     chatContentModel.audioModel.remotePath = [[ToolManager shareInstance] urlAppend:data.audios];
     chatContentModel.isRead = NO;
+    chatContentModel.audioModel.duration =data.audios_secont;
     chatContentModel.audioDuration = [GJGCChatFriendCellStyle formateAudioDuration:GJCFStringFromInt(chatContentModel.audioModel.duration)];
+    
     
     [self.dataSourceManager mockSendAnMesssage:chatContentModel];
    

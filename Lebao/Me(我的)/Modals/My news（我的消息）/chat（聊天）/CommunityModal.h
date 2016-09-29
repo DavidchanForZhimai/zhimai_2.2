@@ -23,4 +23,5 @@
 @property(nonatomic,strong)NSString *audios;
 @property(nonatomic,assign)int msgtype;
 @property(nonatomic,strong)NSString * msgId;
+@property(nonatomic,assign)NSTimeInterval audios_secont;
 @end

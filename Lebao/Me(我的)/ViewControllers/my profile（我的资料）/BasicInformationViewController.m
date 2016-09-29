@@ -693,8 +693,13 @@
                 [self.productsTags addObjectsFromArray:[_modal.service componentsSeparatedByString:@","]];
                 
             }
-            if (![_modal.service_labels isEqualToString:@""]) {
-                [self.addProductsTags addObjectsFromArray:[_modal.service_labels componentsSeparatedByString:@","]];
+            if (_modal.service_labels.count>0) {
+                for (NSDictionary *service_labels in _modal.service_labels) {
+                    if (service_labels[@"labelname"]) {
+                        [self.addProductsTags addObject:service_labels[@"labelname"]];
+                    }
+                    
+                }
                 
             }
             if (![_modal.resource
@@ -702,9 +707,13 @@
                 [self.resourseaTags addObjectsFromArray:[_modal.resource componentsSeparatedByString:@","]];
                 
             }
-            if (![_modal.resource_labels isEqualToString:@""]) {
-                [self.addResourseaTags addObjectsFromArray:[_modal.resource_labels componentsSeparatedByString:@","]];
-                
+            if (_modal.resource_labels.count>0) {
+                for (NSDictionary *resource_labels in _modal.resource_labels) {
+                    if (resource_labels[@"labelname"]) {
+                        [self.addResourseaTags addObject:resource_labels[@"labelname"]];
+                    }
+                    
+                }
             }
             
             [self.personsTags addObject:@"+"];

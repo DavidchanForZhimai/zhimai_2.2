@@ -31,8 +31,8 @@
 @property(copy,nonatomic)NSString *position;//职位
 @property(copy,nonatomic)NSString *service;//产品服务标签
 @property(copy,nonatomic)NSString *resource;//资源特点
-@property(copy,nonatomic)NSString *service_labels;//待选产品服务标签
-@property(copy,nonatomic)NSString *resource_labels;//待选资源特点
+@property(copy,nonatomic)NSMutableArray *service_labels;//待选产品服务标签
+@property(copy,nonatomic)NSMutableArray *resource_labels;//待选资源特点
 @property(copy,nonatomic)NSString *industry;//行业
 @property(copy,nonatomic)NSString *focus_industrys;//关注行业
 
