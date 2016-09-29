@@ -49,7 +49,7 @@
 @property(nonatomic,strong)UIView *line1;//间隔
 
 @property(nonatomic,strong)BaseButton *addTagsBgView;//背景
-@property(nonatomic,strong)UIView * addTagsView;//所有add标签的父视图
+@property(nonatomic,strong)UIScrollView * addTagsView;//所有add标签的父视图
 @property(nonatomic,strong)DWTagsView *addHasTagsView;//添加标签
 @property(nonatomic,strong)DWTagsView *addDefalutTagsView;//默认选择标签
 @property(nonatomic,strong)UILabel *addTagsLb;//点击添加新的关注行业
@@ -92,7 +92,6 @@
 {
     [self navViewTitleAndBackBtn:@"个人资料"];
     _saveBtn = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 50, StatusBarHeight, 50, NavigationBarHeight) setTitle:@"完成" titleSize:28*SpacedFonts titleColor:BlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:[UIColor clearColor] inView:self.view];
-    _saveBtn.hidden = YES;
     __weak BasicInformationViewController *weakSelf = self;
     _saveBtn.didClickBtnBlock = ^
     {
@@ -193,7 +192,9 @@
         [_currentTagsView removeTagWithName:_currentDefalutTagsArray[index]];
         [_addHasTagsView removeTagWithName:_currentDefalutTagsArray[index]];
         [_currentTagsArray removeObject:_currentDefalutTagsArray[index]];
-     
+        //高度重新布局
+        [self addTagsViewReSetFrame];
+        [self tagsViewReSetFrame];
     }
     
 }
@@ -235,7 +236,7 @@
     [self.addTagsView addSubview:self.addHasTagsView];
     [dataSource removeObject:@"+"];
     _addHasTagsView.tagsArray = dataSource;
-     [dataSource addObject:@"+"];
+    [dataSource addObject:@"+"];
     [self.addTagsView addSubview:self.addTagsLb];
     [self.addTagsView addSubview:self.addTextField];
     [self.addTagsView addSubview:self.addSure];
@@ -288,15 +289,18 @@
     }
     _addTagsBgView = [[BaseButton alloc]initWithFrame:self.view.frame backgroundImage:nil iconImage:nil highlightImage:nil inView:nil];
     _addTagsBgView.backgroundColor = rgba(0, 0, 0, 0.3);
-   
+    _addTagsBgView.userInteractionEnabled = YES;
     return _addTagsBgView;
 }
-- (UIView *)addTagsView
+- (UIScrollView *)addTagsView
 {
     if (_addTagsView) {
         return _addTagsView;
     }
-    _addTagsView = [[UIView alloc]initWithFrame:frame(0, APPHEIGHT, APPWIDTH, 0)];
+    _addTagsView = [[UIScrollView alloc]initWithFrame:frame(0, APPHEIGHT, APPWIDTH, 0)];
+    _addTagsView.userInteractionEnabled = YES;
+    _addTagsView.scrollEnabled = YES;
+    _addTagsView.showsVerticalScrollIndicator = YES;
     _addTagsView.backgroundColor = WhiteColor;
     return _addTagsView;
     
@@ -426,7 +430,14 @@
     _addDefalutTagsView.frame = CGRectMake(20, CGRectGetMaxY(_addTextField.frame) + 20, APPWIDTH -40, [_addDefalutTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
     
     [UIView animateWithDuration:0.3 animations:^{
-         _addTagsView.frame =CGRectMake(0,APPHEIGHT -  CGRectGetMaxY(_addDefalutTagsView.frame) -20, APPWIDTH , CGRectGetMaxY(_addDefalutTagsView.frame) + 20);
+        
+        _addTagsView.frame =CGRectMake(0,APPHEIGHT -  CGRectGetMaxY(_addDefalutTagsView.frame) -20, APPWIDTH , CGRectGetMaxY(_addDefalutTagsView.frame) + 20);
+        
+        if ( CGRectGetMaxY(_addDefalutTagsView.frame) + 20>APPHEIGHT - (StatusBarHeight + NavigationBarHeight)) {
+            _addTagsView.frame =CGRectMake(0,StatusBarHeight + NavigationBarHeight, APPWIDTH , APPHEIGHT - (StatusBarHeight + NavigationBarHeight));
+            _addTagsView.contentSize = CGSizeMake(APPWIDTH, CGRectGetMaxY(_addDefalutTagsView.frame) + 20);
+        }
+        
     }];
    
     
@@ -677,11 +688,28 @@
                 [self.addPersonsTags addObjectsFromArray:[_modal.relabls componentsSeparatedByString:@","]];
                 
             }
+            if (![_modal.service
+                  isEqualToString:@""]) {
+                [self.productsTags addObjectsFromArray:[_modal.service componentsSeparatedByString:@","]];
+                
+            }
+            if (![_modal.service_labels isEqualToString:@""]) {
+                [self.addProductsTags addObjectsFromArray:[_modal.service_labels componentsSeparatedByString:@","]];
+                
+            }
+            if (![_modal.resource
+                  isEqualToString:@""]) {
+                [self.resourseaTags addObjectsFromArray:[_modal.resource componentsSeparatedByString:@","]];
+                
+            }
+            if (![_modal.resource_labels isEqualToString:@""]) {
+                [self.addResourseaTags addObjectsFromArray:[_modal.resource_labels componentsSeparatedByString:@","]];
+                
+            }
             
             [self.personsTags addObject:@"+"];
             [self.productsTags addObject:@"+"];
             [self.resourseaTags addObject:@"+"];
-            NSLog(@"self.personsTags =%@",self.personsTags);
             [_basicInfoTableView beginUpdates];
              _basicInfoTableView.tableFooterView = self.tagsView;
             [_basicInfoTableView endUpdates];
@@ -890,7 +918,7 @@
             
     case 2:
             
-        [cell  showTitle:@"行业" icon:nil bg:nil detail:_modal.address canEdit:YES];
+        [cell  showTitle:@"行业" icon:nil bg:nil detail:_modal.industry canEdit:YES];
             break;
     case 3:
         
@@ -898,7 +926,7 @@
         break;
     case 4:
             
-        [cell  showTitle:@"关注的行业" icon:nil bg:nil detail:_modal.workyears canEdit:YES];
+        [cell  showTitle:@"关注的行业" icon:nil bg:nil detail:_modal.focus_industrys canEdit:YES];
             break;
 
         
@@ -917,7 +945,7 @@
     __weak BasicInformationViewController *weakSelf= self;
     
     EditNameViewController *edit = allocAndInit(EditNameViewController);
-    if (indexPath.section==0&&indexPath.row ==0) {
+    if (indexPath.section==0) {
         switch (indexPath.row) {
             case 0:
             {
@@ -1008,11 +1036,10 @@
             case 1:
             {
                 edit.editPageTag =EditZhiyePageTag;
-                edit.textView =  _modal.synopsis;
+                edit.textView =  _modal.position;
                 edit.editBlock = ^(NSString *text)
                 {
-                    
-                    _modal.synopsis = text;
+                    _modal.position = text;
                     [_basicInfoTableView reloadData];
                     
                 };
@@ -1024,11 +1051,11 @@
             {
             
                 edit.editPageTag =EditHangyePageTag;
-                edit.textView =  _modal.synopsis;
+                edit.textView =  _modal.industry;
                 edit.editBlock = ^(NSString *text)
                 {
                     
-                    _modal.synopsis = text;
+                    _modal.industry = text;
                     [_basicInfoTableView reloadData];
                     
                 };
@@ -1054,11 +1081,11 @@
             case 4:
             {
                 edit.editPageTag =EditGuanzhuPageTag;
-                edit.textView =  _modal.workyears;
+                edit.textView =  _modal.focus_industrys;
                 edit.editBlock = ^(NSString *text)
                 {
                     
-                    _modal.workyears = text;
+                    _modal.focus_industrys = text;
                     [_basicInfoTableView reloadData];
                     
                 };
@@ -1079,23 +1106,59 @@
 {
     
     [[ToolManager shareInstance] showWithStatus:@"修改中.."];
+     NSMutableArray *mylabels = [NSMutableArray new];
+     NSMutableArray *filllabels = [NSMutableArray new];
+     NSMutableArray *service = [NSMutableArray arrayWithArray:_productsTags];
+     NSMutableArray *resource = [NSMutableArray arrayWithArray:_resourseaTags];
+    //分开自选和推荐标签
+    for (NSString *lable in _personsTags) {
+        if (![lable isEqualToString:@"+"]) {
+            if ([_addPersonsTags containsObject:lable]) {
+                [mylabels addObject:lable];
+            }
+            else
+            {
+                [filllabels addObject:lable];
+            }
+        }
+        
+    }
+    _modal.filllabels =[filllabels mj_JSONString];
+    _modal.mylabels = [mylabels mj_JSONString];
+    if ([service containsObject:@"+"]) {
+        [service removeObject:@"+"];
+    }
+    if ([resource containsObject:@"+"]) {
+        [resource removeObject:@"+"];
+    }
+    _modal.service = [service mj_JSONString];
+    _modal.resource = [resource mj_JSONString];
     NSMutableDictionary *parame =[Parameter parameterWithSessicon];
+    if ([_modal.imgurl isEqualToString:@""]||[_modal.sex isEqualToString:@""]||[_modal.area isEqualToString:@""]||[_modal.realname isEqualToString:@""]||[_modal.tel isEqualToString:@""]||[_modal.address isEqualToString:@""]||[_modal.workyears isEqualToString:@""]||[_modal.industry isEqualToString:@""]||[_modal.position isEqualToString:@""]||[_modal.focus_industrys isEqualToString:@""]||[_modal.service isEqualToString:@""]||[_modal.resource isEqualToString:@""]||[_modal.mylabels isEqualToString:@""]) {
+        
+        
+        [[ToolManager shareInstance] showAlertMessage:@"请完善资料！！"];
+        return;
+    }
+    
+    
     [parame setObject:_modal.imgurl forKey:@"imgurl"];
     [parame setObject:_modal.sex forKey:@"sex"];
     [parame setObject:_modal.area forKey:@"area"];
     [parame setObject:_modal.realname forKey:@"realname"];
-    [parame setObject:_modal.synopsis forKey:@"synopsis"];
     [parame setObject:_modal.tel forKey:@"tel"];
     [parame setObject:_modal.address forKey:@"address"];
     [parame setObject:_modal.workyears forKey:@"workyears"];
     
-//    if ([_personArray mj_JSONString]) {
-//        [parame setObject:[_personArray mj_JSONString] forKey:@"mylabels"];
-//    }
-//    if ([_optionalArray mj_JSONString]) {
-//        [parame setObject:[_optionalArray mj_JSONString] forKey:@"filllabels"];
-//    }
- 
+    [parame setObject:_modal.focus_industrys forKey:@"focus_industrys"];
+    [parame setObject:_modal.industry forKey:@"industry"];
+    [parame setObject:_modal.position forKey:@"position"];
+    [parame setObject:_modal.service forKey:@"service"];
+    [parame setObject:_modal.resource forKey:@"resource"];
+    [parame setObject:_modal.mylabels forKey:@"mylabels"];
+    [parame setObject:_modal.filllabels forKey:@"filllabels"];
+
+    NSLog(@"parame =%@",parame);
     [XLDataService postWithUrl:SaveMemberURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         if (dataObj) {
             if ([dataObj[@"rtcode"] intValue] ==1) {
