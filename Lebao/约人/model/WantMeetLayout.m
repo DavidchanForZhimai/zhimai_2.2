@@ -35,18 +35,25 @@
         
         
         
-        //用户名
-        NSString *renzen;
-        if ([model.authen intValue]==3) {
-            renzen = @"[renzhen]";
+        NSString *authen;
+        if ([model.authen isEqualToString:@"3"]) {
+            authen = @"[iconprofilerenzhen]";
         }
         else
         {
-            renzen=@"[weirenzhen]";
+            authen = @"[iconprofileweirenzhen]";
+        }
+        NSString *vip;
+        if ([model.vip boolValue]) {
+            vip = @"[iconprofilevip]";
+        }
+        else
+        {
+            vip = @"[iconprofilevipweikaitong]";
         }
         //名字模型 nameTextStorage
         LWTextStorage* nameTextStorage = [[LWTextStorage alloc] init];
-        nameTextStorage.text = [NSString stringWithFormat:@"%@ %@",model.realname,renzen];
+        nameTextStorage.text = [NSString stringWithFormat:@"%@ %@ %@",model.realname,authen,vip];
         nameTextStorage.font = Size(28.0);
         nameTextStorage.frame = CGRectMake(_avatarStorage.right + 10, 12.0, SCREEN_WIDTH - (_avatarStorage.right), CGFLOAT_MAX);
         [nameTextStorage lw_addLinkWithData:[NSString stringWithFormat:@"%@",model.userid]

@@ -69,7 +69,7 @@
 }
 -(void)refreshRow:(NSNotification *)notification
 {
-//    NSLog(@"notification.object===%@",notification.object);
+    //    NSLog(@"notification.object===%@",notification.object);
     for (int i =0;i<_nearByManArr.count;i++) {
         
         MeetingCellLayout *layout =_nearByManArr[i];
@@ -78,7 +78,7 @@
             
             if([notification.object[@"operation"] isEqualToString:@"cancel"]){
                 layout.model.isappoint = 0;
-//                NSLog(@"layout.model.isappoint===%d",layout.model.isappoint);
+                //                NSLog(@"layout.model.isappoint===%d",layout.model.isappoint);
             }else if([notification.object[@"operation"] isEqualToString:@"meet"]){
                 layout.model.isappoint = 1;
             }
@@ -123,6 +123,10 @@
     
     _page = 1;
     _isopen=NO;
+    if (self.nearByManArr.count==0) {
+        [[ToolManager shareInstance] showWithStatus];
+    }
+    
     
     [self netWorkRefresh:NO andIsLoadMoreData:NO isShouldClearData:NO];
     
@@ -131,90 +135,86 @@
 - (void)netWorkRefresh:(BOOL)isRefresh andIsLoadMoreData:(BOOL)isMoreLoadMoreData isShouldClearData:(BOOL)isShouldClearData//加载数据
 {
     
-        [[LoCationManager shareInstance] creatLocationManager];
-        [LoCationManager shareInstance].callBackLocation = ^(CLLocationCoordinate2D location)
-        {
-//    测试用,要删掉
-//    CLLocationCoordinate2D location;
-//    location.latitude=24.491534;
-//    location.longitude=118.180851;
-            if (self.nearByManArr.count==0) {
-                 [[ToolManager shareInstance] showWithStatus];
-            }
-           
-    NSMutableDictionary *param = [Parameter parameterWithSessicon];
-    [param setObject:[NSString stringWithFormat:@"%.6f",location.latitude] forKey:@"latitude"];
-    [param setObject:[NSString stringWithFormat:@"%.6f",location.longitude] forKey:@"longitude"];
-    [param setObject:@(_page) forKey:@"page"];
-    
-    [XLDataService putWithUrl:MeetMainURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-//        NSLog(@"param====%@",param);
-        if (isRefresh) {
-            
-            
-            [[ToolManager shareInstance] endHeaderWithRefreshing:_yrTab];
-        }
-        if (isMoreLoadMoreData) {
-            [[ToolManager shareInstance] endFooterWithRefreshing:_yrTab];
-        }
-        if (isShouldClearData) {
-            [self.nearByManArr removeAllObjects];
-            [self.headimgArr removeAllObjects];
-            [self.headUserIdArr removeAllObjects];
-        }
-        if (dataObj) {
-//            NSLog(@"meetObj====%@",dataObj);
-            MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
-            if (_page ==1) {
-                [[ToolManager shareInstance] moreDataStatus:_yrTab];
-            }
-            if (!modal.datas||modal.datas.count==0) {
+    [[LoCationManager shareInstance] creatLocationManager];
+    [LoCationManager shareInstance].callBackLocation = ^(CLLocationCoordinate2D location)
+    {
+        //    测试用,要删掉
+        //    CLLocationCoordinate2D location;
+        //    location.latitude=24.491534;
+        //    location.longitude=118.180851;
+        NSMutableDictionary *param = [Parameter parameterWithSessicon];
+        [param setObject:[NSString stringWithFormat:@"%.6f",location.latitude] forKey:@"latitude"];
+        [param setObject:[NSString stringWithFormat:@"%.6f",location.longitude] forKey:@"longitude"];
+        [param setObject:@(_page) forKey:@"page"];
+        
+        [XLDataService putWithUrl:MeetMainURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+            //        NSLog(@"param====%@",param);
+            if (isRefresh) {
                 
-                [[ToolManager shareInstance] noMoreDataStatus:_yrTab];
                 
+                [[ToolManager shareInstance] endHeaderWithRefreshing:_yrTab];
             }
-            
-            if (modal.rtcode ==1) {
-                [[ToolManager shareInstance] dismiss];
-                for (MeetingData *data in modal.datas) {
-                    [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andMessageBtn:NO andOprationBtn:NO]];
+            if (isMoreLoadMoreData) {
+                [[ToolManager shareInstance] endFooterWithRefreshing:_yrTab];
+            }
+            if (isShouldClearData) {
+                [self.nearByManArr removeAllObjects];
+                [self.headimgArr removeAllObjects];
+                [self.headUserIdArr removeAllObjects];
+            }
+            if (dataObj) {
+                //            NSLog(@"meetObj====%@",dataObj);
+                MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
+                if (_page ==1) {
+                    [[ToolManager shareInstance] moreDataStatus:_yrTab];
+                }
+                if (!modal.datas||modal.datas.count==0) {
                     
-                    if (data.imgurl!=nil) {
-                        [self.headimgArr addObject:data.imgurl];
-                        [self.headUserIdArr addObject:data.userid];
-                    }
-                    
-                    
+                    [[ToolManager shareInstance] noMoreDataStatus:_yrTab];
                     
                 }
                 
-                _headView.headimgsArr=[NSArray arrayWithArray:self.headimgArr];
-                _headView.userIdArr=[NSArray arrayWithArray:self.headUserIdArr];
-                [_headView addEightImgView];
-                _headView.nearManLab.text=[NSString stringWithFormat:@"最近有空 %d人",modal.count];
-                _headView.midBtn.titleLabel.text=[NSString stringWithFormat:@"可约\n%d\n位经纪人",modal.count];
-                _headView.midBtn.titleLabel.textAlignment=NSTextAlignmentCenter;
-                NSMutableAttributedString *str=[[NSMutableAttributedString alloc]initWithString:_headView.midBtn.titleLabel.text];
-                [str addAttribute:NSFontAttributeName value:Size(60) range:[_headView.midBtn.titleLabel.text rangeOfString:[NSString stringWithFormat:@"%d",modal.count]]];
-                [_headView.midBtn setAttributedTitle:str forState:UIControlStateNormal];
-                _headView.midBtn.titleLabel.numberOfLines=0;
-                [_yrTab reloadData];
+                if (modal.rtcode ==1) {
+                    [[ToolManager shareInstance] dismiss];
+                    for (MeetingData *data in modal.datas) {
+                        [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andMessageBtn:NO andOprationBtn:NO]];
+                        
+                        if (data.imgurl!=nil) {
+                            [self.headimgArr addObject:data.imgurl];
+                            [self.headUserIdArr addObject:data.userid];
+                        }
+                        
+                        
+                        
+                    }
+                    
+                    _headView.headimgsArr=[NSArray arrayWithArray:self.headimgArr];
+                    _headView.userIdArr=[NSArray arrayWithArray:self.headUserIdArr];
+                    [_headView addEightImgView];
+                    _headView.nearManLab.text=[NSString stringWithFormat:@"最近有空 %d人",modal.count];
+                    _headView.midBtn.titleLabel.text=[NSString stringWithFormat:@"可约\n%d\n位经纪人",modal.count];
+                    _headView.midBtn.titleLabel.textAlignment=NSTextAlignmentCenter;
+                    NSMutableAttributedString *str=[[NSMutableAttributedString alloc]initWithString:_headView.midBtn.titleLabel.text];
+                    [str addAttribute:NSFontAttributeName value:Size(60) range:[_headView.midBtn.titleLabel.text rangeOfString:[NSString stringWithFormat:@"%d",modal.count]]];
+                    [_headView.midBtn setAttributedTitle:str forState:UIControlStateNormal];
+                    _headView.midBtn.titleLabel.numberOfLines=0;
+                    [_yrTab reloadData];
+                    
+                }
+                else
+                {
+                    [[ToolManager shareInstance] showAlertMessage:modal.rtmsg];
+                }
                 
             }
             else
             {
-                [[ToolManager shareInstance] showAlertMessage:modal.rtmsg];
+                [[ToolManager shareInstance] showInfoWithStatus];
             }
             
-        }
-        else
-        {
-            [[ToolManager shareInstance] showInfoWithStatus];
-        }
+        }];
         
-    }];
-    
-        };
+    };
     
     
     
@@ -443,7 +443,7 @@
         NSMutableDictionary *param=[Parameter parameterWithSessicon];
         [param setObject:model.userid forKey:@"userid"];
         [param setObject:customAlertView.money forKey:@"reward"];
- 
+        
         [param setObject:customAlertView.logField.text forKey:@"remark"];
         [param setObject:model.distance forKey:@"distance"];
         

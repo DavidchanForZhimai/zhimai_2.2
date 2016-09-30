@@ -25,7 +25,7 @@
 @property(nonatomic,strong)NSString *service;
 @property(nonatomic,strong)NSString *match;
 @property(nonatomic,strong)NSString *resource;
-
+@property(nonatomic,strong)NSString *vip;
 
 @property(nonatomic,strong)NSString *remark;//文字备注
 @property(nonatomic,strong)NSString *audio;//语音备注
