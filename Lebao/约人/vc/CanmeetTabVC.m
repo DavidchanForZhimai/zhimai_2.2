@@ -89,11 +89,13 @@
 {
     
     NSMutableDictionary *param = [Parameter parameterWithSessicon];
-    
+    if (self.allMeetArr.count==0) {
+        [[ToolManager shareInstance] showWithStatus];
+    }
     [param setObject:@(_page) forKey:@"page"];
     [param setObject:@"" forKey:@"keyword"];
     [param setObject:@"" forKey:@"industrys"];
-     NSLog(@"param====%@",param);
+//     NSLog(@"param====%@",param);
     [XLDataService putWithUrl:canseeURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
        
         if (isRefresh) {
@@ -107,7 +109,7 @@
             [self.allMeetArr removeAllObjects];
         }
         if (dataObj) {
-            NSLog(@"meetObj====%@",dataObj);
+//            NSLog(@"meetObj====%@",dataObj);
             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
             if (_page ==1) {
                 [[ToolManager shareInstance] moreDataStatus:self.tableView];
@@ -119,6 +121,7 @@
             }
             
             if (modal.rtcode ==1) {
+                [[ToolManager shareInstance]dismiss];
                         for (MeetingData *data in modal.datas) {
                     [self.allMeetArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andMessageBtn:NO andOprationBtn:NO]];
                 }

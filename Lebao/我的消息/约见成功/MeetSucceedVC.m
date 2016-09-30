@@ -197,6 +197,9 @@
     }if (tabView==_iMeetTab) {
         url=IWantMeetURL;
     }
+    if (arr.count==0) {
+        [[ToolManager shareInstance] showWithStatus];
+    }
     [XLDataService putWithUrl:url param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         if (isRefresh) {
             [[ToolManager shareInstance]endHeaderWithRefreshing:tabView];
@@ -227,7 +230,7 @@
             }
             
             if (modal.rtcode ==1) {
-                
+                [[ToolManager shareInstance]dismiss];
                 for (MeetingData *data in modal.datas) {
 
                         [arr addObject:[[WantMeetLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andTelBtn:NO]];

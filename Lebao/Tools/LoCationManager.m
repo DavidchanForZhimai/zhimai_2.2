@@ -69,8 +69,8 @@ static LoCationManager *locationManager;
     
     coordinate2D=cllocation.coordinate;
     //测试用,要删掉
-    coordinate2D.latitude=24.491534;
-    coordinate2D.longitude=118.180851;
+//    coordinate2D.latitude=24.491534;
+//    coordinate2D.longitude=118.180851;
     if (_callBackLocation) {
         _callBackLocation(coordinate2D);
     }

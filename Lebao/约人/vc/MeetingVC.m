@@ -69,7 +69,7 @@
 }
 -(void)refreshRow:(NSNotification *)notification
 {
-    NSLog(@"notification.object===%@",notification.object);
+//    NSLog(@"notification.object===%@",notification.object);
     for (int i =0;i<_nearByManArr.count;i++) {
         
         MeetingCellLayout *layout =_nearByManArr[i];
@@ -78,7 +78,7 @@
             
             if([notification.object[@"operation"] isEqualToString:@"cancel"]){
                 layout.model.isappoint = 0;
-                NSLog(@"layout.model.isappoint===%d",layout.model.isappoint);
+//                NSLog(@"layout.model.isappoint===%d",layout.model.isappoint);
             }else if([notification.object[@"operation"] isEqualToString:@"meet"]){
                 layout.model.isappoint = 1;
             }
@@ -131,29 +131,24 @@
 - (void)netWorkRefresh:(BOOL)isRefresh andIsLoadMoreData:(BOOL)isMoreLoadMoreData isShouldClearData:(BOOL)isShouldClearData//加载数据
 {
     
-    //    [[LoCationManager shareInstance] creatLocationManager];
-    //    [LoCationManager shareInstance].callBackLocation = ^(CLLocationCoordinate2D location)
-    //    {
-    //测试用,要删掉
-    
-    
-    
-    
-    CLLocationCoordinate2D location;
-    location.latitude=24.491534;
-    location.longitude=118.180851;
+        [[LoCationManager shareInstance] creatLocationManager];
+        [LoCationManager shareInstance].callBackLocation = ^(CLLocationCoordinate2D location)
+        {
+//    测试用,要删掉
+//    CLLocationCoordinate2D location;
+//    location.latitude=24.491534;
+//    location.longitude=118.180851;
+            if (self.nearByManArr.count==0) {
+                 [[ToolManager shareInstance] showWithStatus];
+            }
+           
     NSMutableDictionary *param = [Parameter parameterWithSessicon];
-    
-    
-    
-    
-    
     [param setObject:[NSString stringWithFormat:@"%.6f",location.latitude] forKey:@"latitude"];
     [param setObject:[NSString stringWithFormat:@"%.6f",location.longitude] forKey:@"longitude"];
     [param setObject:@(_page) forKey:@"page"];
     
     [XLDataService putWithUrl:MeetMainURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        NSLog(@"param====%@",param);
+//        NSLog(@"param====%@",param);
         if (isRefresh) {
             
             
@@ -168,7 +163,7 @@
             [self.headUserIdArr removeAllObjects];
         }
         if (dataObj) {
-            NSLog(@"meetObj====%@",dataObj);
+//            NSLog(@"meetObj====%@",dataObj);
             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
             if (_page ==1) {
                 [[ToolManager shareInstance] moreDataStatus:_yrTab];
@@ -180,6 +175,7 @@
             }
             
             if (modal.rtcode ==1) {
+                [[ToolManager shareInstance] dismiss];
                 for (MeetingData *data in modal.datas) {
                     [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andMessageBtn:NO andOprationBtn:NO]];
                     
@@ -218,7 +214,7 @@
         
     }];
     
-    //    };
+        };
     
     
     

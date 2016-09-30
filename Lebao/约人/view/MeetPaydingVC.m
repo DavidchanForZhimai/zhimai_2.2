@@ -136,7 +136,7 @@ typedef enum{
             
             [[MP3PlayerManager shareInstance] uploadAudioWithType:@"mp3" audioData:_audioData  finishuploadBlock:^(BOOL succeed,id  audioDic)
              {
-                
+                 
                  [self.param setValue:audioDic[@"audiourl"] forKey:@"audio"];
                  
                  [XLDataService putWithUrl:MeetyouURL param:self.param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
@@ -147,19 +147,16 @@ typedef enum{
                              
                              if (_moneyType==weixinzhifuType) {
                                  [[WetChatPayManager shareInstance]wxPay:dataObj[@"datas"] succeedMeg:@"发布成功！" recharge:@"0" wetChatPaySucceed:^(NSString *payMoney) {
-                                      UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"恭喜您,约见成功!" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"对话",@"电话联系",@"继续约见他人", nil];
-                                     successAlertV.cancelButtonIndex=2;
-                                     successAlertV.tag=666;
-                                     PushView(self, iWantMeetVC);
+                                     UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:nil message:@"请求已发出,请耐心等待对方答复" delegate:self cancelButtonTitle:@"确认" otherButtonTitles: nil];                                     PushView(self, iWantMeetVC);
                                      [successAlertV show];
                                  }];
                                  return ;
                                  
                              }
                              
-                             UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"恭喜您,约见成功!" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"对话",@"电话联系",@"继续约见他人", nil];
-                             successAlertV.tag=666;
-                             successAlertV.cancelButtonIndex=2;
+                             UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:nil message:@"请求已发出,请耐心等待对方答复" delegate:self cancelButtonTitle:@"确认" otherButtonTitles: nil];
+                             //                             successAlertV.tag=666;
+                             //                             successAlertV.cancelButtonIndex=2;
                              PushView(self, iWantMeetVC);
                              [successAlertV show];
                              
@@ -194,10 +191,9 @@ typedef enum{
                         if (_moneyType==weixinzhifuType) {
                             [[WetChatPayManager shareInstance]wxPay:dataObj[@"datas"] succeedMeg:@"发布成功！" recharge:@"0" wetChatPaySucceed:^(NSString *payMoney) {
                                 NSLog(@"dataondddk=%@",dataObj[@"datas"] );
-                                UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"恭喜您,约见成功!" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"对话",@"电话联系",@"继续约见他人", nil];
+                                UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:nil message:@"请求已发出,请耐心等待对方答复" delegate:self cancelButtonTitle:@"确认" otherButtonTitles: nil];
                                 [[NSNotificationCenter defaultCenter]postNotificationName:@"KRefreshMeetingViewNotifation" object:@{@"userid":self.param[@"userid"],@"operation":@"meet"}];
-                                successAlertV.tag=666;
-                                successAlertV.cancelButtonIndex=2;
+                                
                                 PushView(self, iWantMeetVC);
                                 [successAlertV show];
                             }];
@@ -206,9 +202,7 @@ typedef enum{
                         }
                         
                         [[NSNotificationCenter defaultCenter]postNotificationName:@"KRefreshMeetingViewNotifation" object:@{@"userid":self.param[@"userid"],@"operation":@"meet"}];
-                        UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"恭喜您,约见成功!" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"对话",@"电话联系",@"继续约见他人", nil];
-                        successAlertV.tag=666;
-                        successAlertV.cancelButtonIndex=2;
+                        UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:nil message:@"请求已发出,请耐心等待对方答复" delegate:self cancelButtonTitle:@"确认" otherButtonTitles: nil];
                         PushView(self, iWantMeetVC);
                         [successAlertV show];
                         
@@ -249,8 +243,8 @@ typedef enum{
                         
                     }
                     
-                   UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"添加人脉请求已发出,请耐心等待" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
-                   
+                    UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"添加人脉请求已发出,请耐心等待" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+                    
                     [successAlertV show];
                     
                 }
@@ -270,30 +264,30 @@ typedef enum{
     }
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (alertView.tag==666) {
-        if (buttonIndex==0) {
-            GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
-            talk.talkType = GJGCChatFriendTalkTypePrivate;
-           
-            talk.toId =_param[@"userid"];
-            talk.toUserName =_realname;
-            GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
-            privateChat.type = MessageTypeNormlPage;
-            [self.navigationController pushViewController:privateChat animated:YES];
-            
-        }else if(buttonIndex==1){
-            NSString *str=[NSString stringWithFormat:@"tel://%@",_tel];
-            
-            NSURL *url=[NSURL URLWithString:str];
-            [[UIApplication sharedApplication]openURL:url];
-        }else if(buttonIndex==2){
-            
-            
-        }
-    }
-}
+//- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+//{
+//    if (alertView.tag==666) {
+//        if (buttonIndex==0) {
+//            GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
+//            talk.talkType = GJGCChatFriendTalkTypePrivate;
+//
+//            talk.toId =_param[@"userid"];
+//            talk.toUserName =_realname;
+//            GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
+//            privateChat.type = MessageTypeNormlPage;
+//            [self.navigationController pushViewController:privateChat animated:YES];
+//
+//        }else if(buttonIndex==1){
+//            NSString *str=[NSString stringWithFormat:@"tel://%@",_tel];
+//
+//            NSURL *url=[NSURL URLWithString:str];
+//            [[UIApplication sharedApplication]openURL:url];
+//        }else if(buttonIndex==2){
+//
+//
+//        }
+//    }
+//}
 
 
 

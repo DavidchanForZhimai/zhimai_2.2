@@ -223,7 +223,9 @@
     NSMutableDictionary *param=[Parameter parameterWithSessicon];
     [param setObject:state forKey:@"state"];
     [param setObject:@(page) forKey:@"page"];
-    
+    if (arr.count==0) {
+        [[ToolManager shareInstance] showWithStatus];
+    }
     [XLDataService putWithUrl:WantMeetMeURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         if (isRefresh) {
             [[ToolManager shareInstance]endHeaderWithRefreshing:tabView];
@@ -247,7 +249,7 @@
             }
             
             if (modal.rtcode ==1) {
-                
+                [[ToolManager shareInstance]dismiss];
                 for (MeetingData *data in modal.datas) {
                     if ([state isEqualToString:@"10"]) {
                         [arr addObject:[[WantMeetLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andTelBtn:NO]];
