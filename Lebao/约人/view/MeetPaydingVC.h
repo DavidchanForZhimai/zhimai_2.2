@@ -23,4 +23,6 @@
 @property (assign,nonatomic)int whatZfType;//什么页面的支付
 @property (strong,nonatomic) NSData *audioData;
 @property (nonatomic,strong)NSMutableDictionary *param;
+@property (nonatomic,strong)NSString *tel;
+@property (nonatomic,strong)NSString *realname;
 @end

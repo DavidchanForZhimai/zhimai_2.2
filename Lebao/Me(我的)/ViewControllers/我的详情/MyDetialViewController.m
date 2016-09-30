@@ -84,7 +84,7 @@
         nameTextStorage.textColor = BlackTitleColor;
         nameTextStorage.frame = CGRectMake(0, _avatarStorage.bottom + 8, SCREEN_WIDTH , CGFLOAT_MAX);
         nameTextStorage.textAlignment = NSTextAlignmentCenter;
-         //行业
+        //行业
         LWTextStorage* industryTextStorage = [[LWTextStorage alloc] init];
         if (model.address&&model.address.length>0) {
             industryTextStorage.text =[NSString stringWithFormat:@"%@\n",model.address];
@@ -101,7 +101,7 @@
         }
         else
         {
-             authen = @"[iconprofileweirenzhen]";
+            authen = @"[iconprofileweirenzhen]";
         }
         NSString *vip;
         if ([model.vip boolValue]) {
@@ -117,18 +117,18 @@
         industryTextStorage.font = Size(24.0);
         industryTextStorage.frame = CGRectMake(nameTextStorage.left, nameTextStorage.bottom + 8, nameTextStorage.width, CGFLOAT_MAX);
         
-//        NSString *range = @"";
-//        if (model.industry&&model.industry.length>0) {
-//            range =[Parameter industryForChinese:model.industry];
-//        }
-//        if (model.workyears&&model.workyears.length>0) {
-//            range=[NSString stringWithFormat:@"%@从业%@年\n",range,model.workyears];
-//        }
-//        
-//        NSMutableAttributedString *str = [[NSMutableAttributedString alloc]initWithString:industryTextStorage.text];
-//        
-//        [str addAttribute:NSFontAttributeName value:Size(20.0) range:[industryTextStorage.text rangeOfString:range]];
-//        industryTextStorage.attributedText = str;
+        //        NSString *range = @"";
+        //        if (model.industry&&model.industry.length>0) {
+        //            range =[Parameter industryForChinese:model.industry];
+        //        }
+        //        if (model.workyears&&model.workyears.length>0) {
+        //            range=[NSString stringWithFormat:@"%@从业%@年\n",range,model.workyears];
+        //        }
+        //
+        //        NSMutableAttributedString *str = [[NSMutableAttributedString alloc]initWithString:industryTextStorage.text];
+        //
+        //        [str addAttribute:NSFontAttributeName value:Size(20.0) range:[industryTextStorage.text rangeOfString:range]];
+        //        industryTextStorage.attributedText = str;
         industryTextStorage.textAlignment = NSTextAlignmentCenter;
         [LWTextParser parseEmojiWithTextStorage:industryTextStorage];
         
@@ -182,8 +182,8 @@
     if (self.isOther) {
         [self navViewTitleAndBackBtn:@"个人详情"];
         [self addBottomView];
-     }else{
-     [self navViewTitleAndBackBtn:@"我的详情"];
+    }else{
+        [self navViewTitleAndBackBtn:@"我的详情"];
         [self.view addSubview:self.edit];
         
     }
@@ -219,21 +219,21 @@
 }
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-     return [[UIView alloc]init];
+    return [[UIView alloc]init];
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-   static NSString *cellID = @"myDatial";
+    static NSString *cellID = @"myDatial";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
         
-       [UILabel createLabelWithFrame:frame(20, 0, 100, 40) text:@"我的动态" fontSize:14 textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:cell];
+        [UILabel createLabelWithFrame:frame(20, 0, 100, 40) text:@"我的动态" fontSize:14 textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:cell];
         
         UILabel *label =  [UILabel createLabelWithFrame:frame(APPWIDTH - 100, 0, 70, 40) text:headerModel.dynamic_count fontSize:12 textColor:LightBlackTitleColor textAlignment:NSTextAlignmentRight inView:cell];
         label.tag =888;
         
-       cell.accessoryType =UITableViewCellAccessoryDisclosureIndicator;
+        cell.accessoryType =UITableViewCellAccessoryDisclosureIndicator;
     }
     UILabel *label = [cell viewWithTag:888];
     label.text = headerModel.dynamic_count;
@@ -273,9 +273,9 @@
     }
     if (self.isOther) {
         _myDetailTV = [[UITableView alloc]initWithFrame:CGRectMake(0, StatusBarHeight + NavigationBarHeight, APPWIDTH, APPHEIGHT - (StatusBarHeight + NavigationBarHeight+44)) style:UITableViewStyleGrouped];
-
+        
     }else
-    _myDetailTV = [[UITableView alloc]initWithFrame:CGRectMake(0, StatusBarHeight + NavigationBarHeight, APPWIDTH, APPHEIGHT - (StatusBarHeight + NavigationBarHeight)) style:UITableViewStyleGrouped];
+        _myDetailTV = [[UITableView alloc]initWithFrame:CGRectMake(0, StatusBarHeight + NavigationBarHeight, APPWIDTH, APPHEIGHT - (StatusBarHeight + NavigationBarHeight)) style:UITableViewStyleGrouped];
     _myDetailTV.delegate = self;
     _myDetailTV.dataSource = self;
     _myDetailTV.separatorColor = [UIColor clearColor];
@@ -296,7 +296,7 @@
     view.backgroundColor = self.view.backgroundColor;
     [_viewHeader addSubview:view];
     //人脉
-
+    
     BaseButton *renmai = [self addViewWithFrame:frame(0, self.userView.y + self.userView.height + 10, APPWIDTH/3, 40) andTitle:@"人脉" rangeText:headerModel.connection_count andView:_viewHeader];
     renmai.didClickBtnBlock = ^
     {
@@ -343,9 +343,9 @@
     if (_headerViewLayout == headerViewLayout) {
         return;
     }
-     _headerViewLayout = headerViewLayout;
+    _headerViewLayout = headerViewLayout;
     self.userView.layout = headerViewLayout;
-   
+    
 }
 
 #pragma mark
@@ -359,7 +359,7 @@
     
     _viewFooter = [[UIView alloc]initWithFrame:CGRectZero];
     _viewFooter.backgroundColor = WhiteColor;
-
+    
     //产品标签
     [self.viewFooter addSubview:self.productTagsLb];
     
@@ -606,7 +606,7 @@
     UIImage *image = [UIImage imageNamed:@"addConnections"];
     
     BaseButton *addConnectionsBtn=[[BaseButton alloc]initWithFrame:CGRectMake(0, 0,addConnectionsBtnW, 44) setTitle:@"加人脉" titleSize:12 titleColor:[UIColor grayColor] backgroundImage:nil iconImage:[UIImage imageNamed:@"addConnections"] highlightImage:nil setTitleOrgin:CGPointMake(bottomView.height - 17,(addConnectionsBtnW - 36)/2.0-image.size.width) setImageOrgin:CGPointMake(5,(addConnectionsBtnW -image.size.width)/2.0) inView:bottomView];
-
+    
     addConnectionsBtn.didClickBtnBlock = ^
     {
         CGFloat dilX = 25;
@@ -616,10 +616,8 @@
         alertV.delegate = self;
         alertV.titleStr = @"提示";
         alertV.title2Str=@"打赏让加人脉更顺畅!";
-        
-
     };
-  
+    
     UIButton *meetBtn=[UIButton buttonWithType:UIButtonTypeCustom];
     [meetBtn setTitle:@"立即约见" forState:UIControlStateNormal];
     meetBtn.titleLabel.font = [UIFont systemFontOfSize:14];
@@ -645,24 +643,21 @@
         NSMutableDictionary *param=[Parameter parameterWithSessicon];
         [param setObject:_userID forKey:@"beinvited"];
         [param setObject:customAlertView.money forKey:@"reward"];
-
-     
         [XLDataService putWithUrl:addConnectionsURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
             if(dataObj){
                 
                 MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
                 
                 if (model.rtcode==1) {
-                            UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"恭喜您,约见成功!" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"对话",@"电话联系",@"继续约见他人", nil];
-                            successAlertV.cancelButtonIndex=2;
-                            [successAlertV show];
-                    }
+                    UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"添加人脉请求已发出,请耐心等待" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+                    [successAlertV show];
+                }
                 
                 else
                 {
                     [[ToolManager shareInstance] showAlertMessage:model.rtmsg];
                 }
-               
+                
             }else
             {
                 [[ToolManager shareInstance] showInfoWithStatus];
@@ -681,7 +676,7 @@
         NSMutableDictionary *param=[Parameter parameterWithSessicon];
         [param setObject:_userID forKey:@"beinvited"];
         [param setObject:customAlertView.money forKey:@"reward"];
-
+        
         payVC.param=param;
         payVC.jineStr = customAlertView.money;
         payVC.whatZfType=1;
@@ -701,46 +696,46 @@
     [param setObject:_userID forKey:@"id"];
     [[ToolManager shareInstance] showWithStatus];
     [XLDataService putWithUrl:detailManURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-//        NSLog(@"dataObj =%@",dataObj);
+        //        NSLog(@"dataObj =%@",dataObj);
         if (dataObj) {
-             headerModel = [HeaderModel mj_objectWithKeyValues:dataObj[@"data"]];
-         if ([dataObj[@"rtcode"] integerValue]==1) {
-             [[ToolManager shareInstance] dismiss];
-             self.headerViewLayout = [[HeaderViewLayout alloc]initCellLayoutWithModel:headerModel];
-             if (![headerModel.labels isEqualToString:@""]) {
-                 [self.personsTags addObjectsFromArray:[headerModel.labels componentsSeparatedByString:@","]];
-                 
-             }
-             
-           
-             if (![headerModel.service
-                   isEqualToString:@""]) {
-                 [self.productsTags addObjectsFromArray:[headerModel.service componentsSeparatedByString:@","]];
-                 
-             }
-           
-             if (![headerModel.resource
-                   isEqualToString:@""]) {
-                 [self.resourseaTags addObjectsFromArray:[headerModel.resource componentsSeparatedByString:@","]];
-                 
-             }
-             [self.impressionTags addObjectsFromArray:headerModel.impression] ;
-             _myDetailTV.tableHeaderView = self.viewHeader;
-             _myDetailTV.tableFooterView = self.viewFooter;
-             [_myDetailTV reloadData];
-             
-         }
+            headerModel = [HeaderModel mj_objectWithKeyValues:dataObj[@"data"]];
+            if ([dataObj[@"rtcode"] integerValue]==1) {
+                [[ToolManager shareInstance] dismiss];
+                self.headerViewLayout = [[HeaderViewLayout alloc]initCellLayoutWithModel:headerModel];
+                if (![headerModel.labels isEqualToString:@""]) {
+                    [self.personsTags addObjectsFromArray:[headerModel.labels componentsSeparatedByString:@","]];
+                    
+                }
+                
+                
+                if (![headerModel.service
+                      isEqualToString:@""]) {
+                    [self.productsTags addObjectsFromArray:[headerModel.service componentsSeparatedByString:@","]];
+                    
+                }
+                
+                if (![headerModel.resource
+                      isEqualToString:@""]) {
+                    [self.resourseaTags addObjectsFromArray:[headerModel.resource componentsSeparatedByString:@","]];
+                    
+                }
+                [self.impressionTags addObjectsFromArray:headerModel.impression] ;
+                _myDetailTV.tableHeaderView = self.viewHeader;
+                _myDetailTV.tableFooterView = self.viewFooter;
+                [_myDetailTV reloadData];
+                
+            }
+            else
+            {
+                [[ToolManager shareInstance] showAlertMessage:dataObj[@"rtmsg"]];
+            }
+            
+        }
         else
         {
-            [[ToolManager shareInstance] showAlertMessage:dataObj[@"rtmsg"]];
+            [[ToolManager shareInstance] showInfoWithStatus];
         }
         
-    }
-     else
-     {
-         [[ToolManager shareInstance] showInfoWithStatus];
-     }
-
     }];
 }
 
@@ -763,7 +758,7 @@
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:btn.titleLabel.text];
     [attributedString addAttribute:NSFontAttributeName value:Size(28) range:[btn.titleLabel.text rangeOfString:rangeText?rangeText:str]];
     [btn setAttributedTitle:attributedString forState:UIControlStateNormal];
- 
+    
     
     return btn;
 }
@@ -773,13 +768,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

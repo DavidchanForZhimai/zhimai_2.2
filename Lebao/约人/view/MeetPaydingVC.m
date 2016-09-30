@@ -7,6 +7,7 @@
 //
 
 #import "MeetPaydingVC.h"
+#import "MeetingVC.h"
 #import "XianSuoDetailInfo.h"
 #import "ToolManager.h"
 #import "WetChatPayManager.h"
@@ -14,7 +15,8 @@
 #import "MP3PlayerManager.h"
 #import "XLDataService.h"
 #import "MeetingModel.h"
-@interface MeetPaydingVC ()
+#import "GJGCChatFriendViewController.h"
+@interface MeetPaydingVC ()<UIAlertViewDelegate>
 typedef enum {
     zhimaizhifuType=0,//知脉支付
     weixinzhifuType,//微信支付
@@ -128,13 +130,13 @@ typedef enum{
     }
     [self.param setObject:zhifuType forKey:@"paytype"];
     if (_whatZfType!=addConnections) {
-        MeWantMeetVC *iWantMeetVC =  allocAndInit(MeWantMeetVC);
+        MeetingVC *iWantMeetVC =  allocAndInit(MeetingVC);
         
         if (_audioData) {
             
             [[MP3PlayerManager shareInstance] uploadAudioWithType:@"mp3" audioData:_audioData  finishuploadBlock:^(BOOL succeed,id  audioDic)
              {
-                 NSLog(@"audioDic =%@",audioDic);
+                
                  [self.param setValue:audioDic[@"audiourl"] forKey:@"audio"];
                  
                  [XLDataService putWithUrl:MeetyouURL param:self.param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
@@ -145,9 +147,9 @@ typedef enum{
                              
                              if (_moneyType==weixinzhifuType) {
                                  [[WetChatPayManager shareInstance]wxPay:dataObj[@"datas"] succeedMeg:@"发布成功！" recharge:@"0" wetChatPaySucceed:^(NSString *payMoney) {
-                                     
-                                     UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"恭喜您,约见成功!" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"对话",@"电话联系",@"继续约见他人", nil];
+                                      UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"恭喜您,约见成功!" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"对话",@"电话联系",@"继续约见他人", nil];
                                      successAlertV.cancelButtonIndex=2;
+                                     successAlertV.tag=666;
                                      PushView(self, iWantMeetVC);
                                      [successAlertV show];
                                  }];
@@ -156,6 +158,7 @@ typedef enum{
                              }
                              
                              UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"恭喜您,约见成功!" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"对话",@"电话联系",@"继续约见他人", nil];
+                             successAlertV.tag=666;
                              successAlertV.cancelButtonIndex=2;
                              PushView(self, iWantMeetVC);
                              [successAlertV show];
@@ -192,10 +195,8 @@ typedef enum{
                             [[WetChatPayManager shareInstance]wxPay:dataObj[@"datas"] succeedMeg:@"发布成功！" recharge:@"0" wetChatPaySucceed:^(NSString *payMoney) {
                                 NSLog(@"dataondddk=%@",dataObj[@"datas"] );
                                 UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"恭喜您,约见成功!" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"对话",@"电话联系",@"继续约见他人", nil];
-                                
-                                
                                 [[NSNotificationCenter defaultCenter]postNotificationName:@"KRefreshMeetingViewNotifation" object:@{@"userid":self.param[@"userid"],@"operation":@"meet"}];
-                                
+                                successAlertV.tag=666;
                                 successAlertV.cancelButtonIndex=2;
                                 PushView(self, iWantMeetVC);
                                 [successAlertV show];
@@ -206,6 +207,7 @@ typedef enum{
                         
                         [[NSNotificationCenter defaultCenter]postNotificationName:@"KRefreshMeetingViewNotifation" object:@{@"userid":self.param[@"userid"],@"operation":@"meet"}];
                         UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"恭喜您,约见成功!" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"对话",@"电话联系",@"继续约见他人", nil];
+                        successAlertV.tag=666;
                         successAlertV.cancelButtonIndex=2;
                         PushView(self, iWantMeetVC);
                         [successAlertV show];
@@ -239,7 +241,7 @@ typedef enum{
                     if (_moneyType==weixinzhifuType) {
                         [[WetChatPayManager shareInstance]wxPay:dataObj[@"datas"] succeedMeg:@"发送成功！" recharge:@"0" wetChatPaySucceed:^(NSString *payMoney) {
                             
-                            UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"添加人脉请求已发出,请耐心等待" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];                            successAlertV.cancelButtonIndex=2;
+                            UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"添加人脉请求已发出,请耐心等待" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
                             //                            PushView(self, iWantMeetVC);
                             [successAlertV show];
                         }];
@@ -248,8 +250,7 @@ typedef enum{
                     }
                     
                    UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"添加人脉请求已发出,请耐心等待" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
-                    successAlertV.cancelButtonIndex=2;
-                    //                    PushView(self, iWantMeetVC);
+                   
                     [successAlertV show];
                     
                 }
@@ -269,7 +270,30 @@ typedef enum{
     }
 }
 
-
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag==666) {
+        if (buttonIndex==0) {
+            GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
+            talk.talkType = GJGCChatFriendTalkTypePrivate;
+           
+            talk.toId =_param[@"userid"];
+            talk.toUserName =_realname;
+            GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
+            privateChat.type = MessageTypeNormlPage;
+            [self.navigationController pushViewController:privateChat animated:YES];
+            
+        }else if(buttonIndex==1){
+            NSString *str=[NSString stringWithFormat:@"tel://%@",_tel];
+            
+            NSURL *url=[NSURL URLWithString:str];
+            [[UIApplication sharedApplication]openURL:url];
+        }else if(buttonIndex==2){
+            
+            
+        }
+    }
+}
 
 
 

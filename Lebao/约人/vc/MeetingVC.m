@@ -448,10 +448,12 @@
         NSMutableDictionary *param=[Parameter parameterWithSessicon];
         [param setObject:model.userid forKey:@"userid"];
         [param setObject:customAlertView.money forKey:@"reward"];
-        
+ 
         [param setObject:customAlertView.logField.text forKey:@"remark"];
         [param setObject:model.distance forKey:@"distance"];
         
+        payVC.realname=model.realname;
+        payVC.tel=model.tel;
         payVC.param=param;
         payVC.jineStr = customAlertView.money;
         payVC.audioData=customAlertView.audioData;
