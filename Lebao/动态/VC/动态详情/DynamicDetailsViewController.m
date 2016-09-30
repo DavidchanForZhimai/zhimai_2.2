@@ -11,7 +11,7 @@
 #import "CoreArchive.h"
 #import "MJExtension.h"
 #import "MJRefresh.h"
-#import "JJRDetailVC.h"
+#import "MyDetialViewController.h"
 
 #import "LWImageBrowser.h"
 #import "TableViewCell.h"
@@ -479,9 +479,9 @@
                 return;
             }
             
-            JJRDetailVC * jjrV = [[JJRDetailVC alloc]init];
-            jjrV.jjrID = data;
-            [self.navigationController pushViewController:jjrV animated:YES];
+            MyDetialViewController * myDetialViewController = [[MyDetialViewController alloc]init];
+            myDetialViewController.userID = data;
+            [self.navigationController pushViewController:myDetialViewController animated:YES];
             
         }
     }
@@ -489,9 +489,9 @@
 //点击点赞头像
 - (void)tableViewCell:(TableViewCell *)cell didClickedLikeButtonWithJJRId:(NSString *)JJRId{
     
-    JJRDetailVC * jjrV = [[JJRDetailVC alloc]init];
-    jjrV.jjrID = JJRId;
-    [self.navigationController pushViewController:jjrV animated:YES];
+    MyDetialViewController * myDetialViewController = [[MyDetialViewController alloc]init];
+    myDetialViewController.userID = JJRId;
+    [self.navigationController pushViewController:myDetialViewController animated:YES];
     
 }
 //更多按钮事件

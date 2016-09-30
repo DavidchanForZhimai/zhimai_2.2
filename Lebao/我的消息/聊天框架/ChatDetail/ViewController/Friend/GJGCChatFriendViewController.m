@@ -736,7 +736,6 @@ GJCUCaptureViewControllerDelegate>
     NSIndexPath *tapIndexPath = [self.chatListTable indexPathForCell:tapedCell];
     MyDetialViewController *myDetailVC = [[MyDetialViewController alloc]init];
     GJGCChatFriendContentModel *contentmodel = (GJGCChatFriendContentModel *)[self.dataSourceManager contentModelAtIndex:tapIndexPath.row];
-    myDetailVC.isOther = !contentmodel.isFromSelf;
     myDetailVC.userID = contentmodel.userId;
     [self.navigationController pushViewController:myDetailVC animated:YES];
     

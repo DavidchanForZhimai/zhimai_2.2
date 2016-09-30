@@ -243,7 +243,6 @@
             
             if ([self.delegate respondsToSelector:@selector(pushView:userInfo:)]&&[self.delegate conformsToProtocol:@protocol(MeetHeadVDelegate)]) {
                 MyDetialViewController *myDetialViewCT=allocAndInit(MyDetialViewController);
-                myDetialViewCT.isOther=YES;
                 myDetialViewCT.userID=_userIdArr[i];
                 [_delegate pushView:myDetialViewCT userInfo:nil];
             }

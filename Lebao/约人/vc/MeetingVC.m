@@ -417,7 +417,6 @@
 -(void)tableViewCellDidSeleteHeadImg:(LWImageStorage *)imageStoragen andIndexPath:(NSIndexPath *)indexPath
 {
     MyDetialViewController *myDetialViewCT=allocAndInit(MyDetialViewController);
-    myDetialViewCT.isOther=YES;
     MeetingCellLayout *layout=(MeetingCellLayout *)self.nearByManArr[indexPath.row];
     MeetingData *data = layout.model;
     myDetialViewCT.userID=data.userid;

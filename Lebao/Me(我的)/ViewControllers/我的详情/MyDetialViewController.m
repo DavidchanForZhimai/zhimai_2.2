@@ -42,6 +42,8 @@
 @property(nonatomic,strong)NSString *vip;
 @property(nonatomic,strong)NSString *want_count;
 @property(nonatomic,strong)NSString *workyears;
+
+@property(assign)BOOL isme;
 @end
 @implementation HeaderModel
 + (NSDictionary *)mj_replacedKeyFromPropertyName
@@ -167,14 +169,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    if (self.isOther) {
-        [self navViewTitleAndBackBtn:@"个人详情"];
-        [self addBottomView];
-    }else{
-        [self navViewTitleAndBackBtn:@"我的详情"];
-        [self.view addSubview:self.edit];
-        
-    }
+    [self navViewTitleAndBackBtn:@"个人详情"];
     [self.view addSubview:self.myDetailTV];
     [self netWork];
 }
@@ -259,11 +254,8 @@
     if (_myDetailTV) {
         return _myDetailTV;
     }
-    if (self.isOther) {
-        _myDetailTV = [[UITableView alloc]initWithFrame:CGRectMake(0, StatusBarHeight + NavigationBarHeight, APPWIDTH, APPHEIGHT - (StatusBarHeight + NavigationBarHeight+44)) style:UITableViewStyleGrouped];
-        
-    }else
-        _myDetailTV = [[UITableView alloc]initWithFrame:CGRectMake(0, StatusBarHeight + NavigationBarHeight, APPWIDTH, APPHEIGHT - (StatusBarHeight + NavigationBarHeight)) style:UITableViewStyleGrouped];
+   
+    _myDetailTV = [[UITableView alloc]initWithFrame:CGRectMake(0, StatusBarHeight + NavigationBarHeight, APPWIDTH, APPHEIGHT - (StatusBarHeight + NavigationBarHeight)) style:UITableViewStyleGrouped];
     _myDetailTV.delegate = self;
     _myDetailTV.dataSource = self;
     _myDetailTV.separatorColor = [UIColor clearColor];
@@ -708,6 +700,17 @@
                     
                 }
                 [self.impressionTags addObjectsFromArray:headerModel.impression] ;
+                
+                [self navViewTitleAndBackBtn:headerModel.realname];
+                if (!headerModel.isme) {
+                    [self addBottomView];
+                    _myDetailTV.frame = CGRectMake(0, _myDetailTV.y,_myDetailTV.width, APPHEIGHT - (_myDetailTV.y) -TabBarHeight);
+                }else{
+                   
+                    [self.view addSubview:self.edit];
+                    _myDetailTV.frame = CGRectMake(0, _myDetailTV.y,_myDetailTV.width, APPHEIGHT - (_myDetailTV.y));
+                        
+                }
                 _myDetailTV.tableHeaderView = self.viewHeader;
                 _myDetailTV.tableFooterView = self.viewFooter;
                 [_myDetailTV reloadData];

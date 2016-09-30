@@ -276,7 +276,7 @@
     
     [[ToolManager shareInstance] showWithStatus];
     [XLDataService putWithUrl:UserMemberBriefs param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        NSLog(@"dataObj =%@",dataObj);
+//        NSLog(@"dataObj =%@",dataObj);
         _model = [InvateFriendCommentModel mj_objectWithKeyValues:dataObj];
         if (dataObj) {
             
