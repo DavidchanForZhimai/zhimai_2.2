@@ -8,15 +8,21 @@
 
 #import <Foundation/Foundation.h>
 #import "DWOptionView.h"
-
+typedef NS_ENUM(NSInteger,ShareType) {
+    ShareWxFriendType =0, //聊天界面
+    ShareWxTimeLineType //朋友圈
+};
 @interface WetChatShareManager : NSObject
 //单例
 + (instancetype)shareInstance;
 //分享图片
 - (void)shareImageToWXApp:(UIImage *)image;
 
+
+//邀请好友评价分享
+- (void)invateFriendShareTo:(NSString *)title desc:(NSString *)desc image:(UIImage *)image shareurl:(NSString *)url type:(ShareType)sharetype;
 //微信分享
-- (void)shareToWeixinApp:(NSString *)title desc:(NSString *)desc  image:(UIImage *)image shareID:(NSString *)str isWxShareSucceedShouldNotice:(BOOL)isWxShareSucceedShouldNotice isAuthen:(BOOL)isAuthen;
+- (void)shareToWeixinApp:(NSString *)title desc:(NSString *)desc image:(UIImage *)image shareID:(NSString *)str isWxShareSucceedShouldNotice:(BOOL)isWxShareSucceedShouldNotice isAuthen:(BOOL)isAuthen;
 
 //本地分享
 - (void)showLocalShareView:(NSArray *)arrays otherParamer:(NSArray *)Paramer title:(NSString *)title desc:(NSString *)desc  image:(UIImage *)image shareID:(NSString *)str isWxShareSucceedShouldNotice:(BOOL)isWxShareSucceedShouldNotice isAuthen:(BOOL)isAuthen;

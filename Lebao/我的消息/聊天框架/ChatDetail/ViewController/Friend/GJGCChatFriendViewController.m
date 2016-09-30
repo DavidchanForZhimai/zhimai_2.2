@@ -180,7 +180,7 @@ GJCUCaptureViewControllerDelegate>
                     chatContentModel.headUrl = [[ToolManager shareInstance] urlAppend:data.imgurl];
                     chatContentModel.audioModel.remotePath = [[ToolManager shareInstance] urlAppend:data.audios];
                     
-                    chatContentModel.audioModel.duration =data.audios_secont;
+                    chatContentModel.audioModel.duration =data.audios_second;
                     chatContentModel.audioDuration = [GJGCChatFriendCellStyle formateAudioDuration:GJCFStringFromInt(chatContentModel.audioModel.duration)];
                     [self.dataSourceManager mockSendAnMesssage:chatContentModel];
                      if (i==modal.datas.count-1) {
@@ -1488,12 +1488,11 @@ GJCUCaptureViewControllerDelegate>
         
         [param setObject:@"语音消息" forKey:@"content"];
         [param setObject:@(GJGCChatFriendContentTypeAudio) forKey:@"msgtype"];
-        [param setObject:@(contentModel.audioModel.duration) forKey:@"audios_secont"];
+        [param setObject:@((int)contentModel.audioModel.duration) forKey:@"audios_second"];
+        
          [[MP3PlayerManager shareInstance] uploadAudioWithType:@"mp3" audioData:[NSData dataWithContentsOfFile:contentModel.audioModel.tempEncodeFilePath] finishuploadBlock:^(BOOL succeed, id audioDic) {
-             
             [param setObject:audioDic[@"audiourl"] forKey:@"audios"];
              [XLDataService postWithUrl:CommunicateURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-                 
                  [self dealData:dataObj andContentModel:contentModel ];
              }];
          }];
@@ -1569,7 +1568,7 @@ GJCUCaptureViewControllerDelegate>
     chatContentModel.audioModel.duration = 0;
     chatContentModel.audioModel.remotePath = [[ToolManager shareInstance] urlAppend:data.audios];
     chatContentModel.isRead = NO;
-    chatContentModel.audioModel.duration =data.audios_secont;
+    chatContentModel.audioModel.duration =data.audios_second;
     chatContentModel.audioDuration = [GJGCChatFriendCellStyle formateAudioDuration:GJCFStringFromInt(chatContentModel.audioModel.duration)];
     
     

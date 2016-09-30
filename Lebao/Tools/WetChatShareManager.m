@@ -38,9 +38,72 @@ static dispatch_once_t once;
     
 }
 #pragma mark
+#pragma mark 邀请好友评价分享
+- (void)invateFriendShareTo:(NSString *)title desc:(NSString *)desc image:(UIImage *)image shareurl:(NSString *)url type:(ShareType)sharetype
+{
+    if (![url hasPrefix:@"http://"]) {
+        url = [NSString stringWithFormat:@"%@%@",HttpURL,url];
+    }
+    if (![WXApi isWXAppInstalled]) {
+        
+        [[ToolManager shareInstance] showInfoWithStatus:@"未安装微信"];
+        return;
+    }
+    if (![WXApi isWXAppSupportApi]) {
+        
+        [[ToolManager shareInstance] showInfoWithStatus:@"此版本不支持微信分享"];
+        return;
+    }
+
+        WXMediaMessage *message = [WXMediaMessage message];
+        message.description = desc;
+        //因为分享的图片有限制
+        if (image) {
+            
+            float w = image.size.width;
+            float h = image.size.height;
+            if (w>120) {
+                w = 120;
+                h = 120.0/image.size.width*image.size.height;
+            }
+            UIImage *newImage = [image imageByScalingAndCroppingForSize:CGSizeMake(w, h)];
+            [message setThumbImage:newImage];
+        }
+        else
+        {
+            [message setThumbImage:[UIImage imageNamed:@"wx-logo.jpg"]];
+        }
+        
+        WXWebpageObject *webpageObject=  [WXWebpageObject object];
+        webpageObject.webpageUrl =url;
+        message.mediaObject = webpageObject;
+        
+        SendMessageToWXReq *rep = [[SendMessageToWXReq alloc]init];
+        rep.bText = NO;
+        rep.message = message;
+        switch (sharetype) {
+            case 0:
+                message.title = title;
+                rep.scene = WXSceneSession;
+                break;
+            case 1:
+                message.title = desc ;
+                rep.scene = WXSceneTimeline;
+                break;
+                
+            default:
+                break;
+        }
+        [WXApi sendReq:rep];
+        //回调
+        [WXApiManager sharedManager].delegate =self;
+    
+}
+#pragma mark
 #pragma mark 分享图片
 - (void)shareImageToWXApp:(UIImage *)image
 {
+    
     DWActionSheetView *_actionSheetView =[DWActionSheetView showShareViewWithTitle:@"分享" otherButtonTitles:@[@"weixing",@"weixingpenyouquan"] handler:^(DWActionSheetView *actionSheetView, NSInteger buttonIndex, NSString *shareText) {
         
         if (![WXApi isWXAppInstalled]) {

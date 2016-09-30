@@ -116,19 +116,7 @@
         industryTextStorage.textColor = [UIColor colorWithRed:0.549 green:0.5569 blue:0.5608 alpha:1.0];
         industryTextStorage.font = Size(24.0);
         industryTextStorage.frame = CGRectMake(nameTextStorage.left, nameTextStorage.bottom + 8, nameTextStorage.width, CGFLOAT_MAX);
-        
-        //        NSString *range = @"";
-        //        if (model.industry&&model.industry.length>0) {
-        //            range =[Parameter industryForChinese:model.industry];
-        //        }
-        //        if (model.workyears&&model.workyears.length>0) {
-        //            range=[NSString stringWithFormat:@"%@从业%@年\n",range,model.workyears];
-        //        }
-        //
-        //        NSMutableAttributedString *str = [[NSMutableAttributedString alloc]initWithString:industryTextStorage.text];
-        //
-        //        [str addAttribute:NSFontAttributeName value:Size(20.0) range:[industryTextStorage.text rangeOfString:range]];
-        //        industryTextStorage.attributedText = str;
+
         industryTextStorage.textAlignment = NSTextAlignmentCenter;
         [LWTextParser parseEmojiWithTextStorage:industryTextStorage];
         
