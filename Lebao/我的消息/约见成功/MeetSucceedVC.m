@@ -389,7 +389,7 @@
     clickRow=indexPath;
     MeetingData *data=_meetMeSourceArr[indexPath.row];
     AppraiseVC *appraiseVC=[[AppraiseVC alloc]init];
-    
+    appraiseVC.meetId=data.meetId;
     PushView(self, appraiseVC);
     
 }

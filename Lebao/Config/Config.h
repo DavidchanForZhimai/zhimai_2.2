@@ -47,6 +47,8 @@
 #define canseeURL [NSString stringWithFormat:@"%@meet/cansee",HttpURL]
 //用户详情
 #define detailManURL [NSString stringWithFormat:@"%@broker/detail",HttpURL]
+//约见评价页面
+#define evaluateURL [NSString stringWithFormat:@"%@meet/evaluate",HttpURL]
 //请求参数
 #define DeviceToken @"deviceToken"
 #define KuserName @"username"

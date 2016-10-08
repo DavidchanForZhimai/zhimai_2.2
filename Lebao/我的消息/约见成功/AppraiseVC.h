@@ -9,5 +9,5 @@
 #import "BaseViewController.h"
 
 @interface AppraiseVC : BaseViewController
-
+@property (nonatomic,strong)NSString *meetId;
 @end
