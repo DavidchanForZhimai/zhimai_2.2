@@ -851,7 +851,6 @@ GJCUCaptureViewControllerDelegate>
         [self.audioPlayer playAudioFile:contentModel.audioModel];
         contentModel.isPlayingAudio = YES;
         contentModel.isRead = YES;
-        contentModel.audioDuration = [GJGCChatFriendCellStyle formateAudioDuration:GJCFStringFromInt(contentModel.audioModel.duration)];
         self.isLastPlayedMyAudio = contentModel.isFromSelf;
         [self.dataSourceManager updateContentModelValuesNotEffectRowHeight:contentModel atIndex:playingIndex];
         

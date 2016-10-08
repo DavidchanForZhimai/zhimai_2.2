@@ -132,7 +132,7 @@ static dispatch_once_t once;
                 break;
             case PlaceholderTypeUserHead:
                 placeholderImage = [UIImage imageNamed:@"defaulthead"];
-                button.contentMode = UIViewContentModeScaleToFill;
+                button.contentMode = UIViewContentModeScaleAspectFill;
                 break;
             case PlaceholderTypeOther:
                 placeholderImage =[UIImage imageNamed:@"icon_placeholder"];
