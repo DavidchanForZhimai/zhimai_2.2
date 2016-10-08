@@ -175,7 +175,7 @@
 }
 - (void)messageBtnClick:(UIButton *)sender
 {
-    if ([_delegate conformsToProtocol:@protocol(MeettingTableViewDelegate)]&&[_delegate respondsToSelector:@selector(tableViewCellDidSeleteMeetingBtn: andIndexPath:)]) {
+    if ([_delegate conformsToProtocol:@protocol(MeettingTableViewDelegate)]&&[_delegate respondsToSelector:@selector(tableViewCellDidSeleteMessageBtn: andIndexPath:)]) {
         [_delegate tableViewCellDidSeleteMessageBtn:sender andIndexPath:_indexPath];
     }
 }

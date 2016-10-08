@@ -123,7 +123,7 @@
             if (modal.rtcode ==1) {
                 [[ToolManager shareInstance]dismiss];
                         for (MeetingData *data in modal.datas) {
-                    [self.allMeetArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andMessageBtn:NO andOprationBtn:NO]];
+                    [self.allMeetArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andMessageBtn:YES andOprationBtn:NO]];
                 }
                  [self.tableView reloadData];
             }
@@ -215,7 +215,7 @@
                 {
                     [[ToolManager shareInstance] showAlertMessage:model.rtmsg];
                 }
-                NSLog(@"model.rtmsg=========dataobj=%@",model.rtmsg);
+
             }else
             {
                 [[ToolManager shareInstance] showInfoWithStatus];
@@ -233,7 +233,6 @@
         NSMutableDictionary *param=[Parameter parameterWithSessicon];
         [param setObject:model.userid forKey:@"beinvited"];
         [param setObject:customAlertView.money forKey:@"reward"];
-        
         payVC.param=param;
         payVC.jineStr = customAlertView.money;
         payVC.whatZfType=1;
@@ -252,6 +251,7 @@
     myDetialViewCT.userID=data.userid;
     [self.navigationController pushViewController:myDetialViewCT animated:YES];
 }
+
 
 -(BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath//高亮
 {

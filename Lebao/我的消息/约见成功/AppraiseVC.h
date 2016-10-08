@@ -10,4 +10,5 @@
 
 @interface AppraiseVC : BaseViewController
 @property (nonatomic,strong)NSString *meetId;
+@property (nonatomic,strong)NSString *headImg;
 @end

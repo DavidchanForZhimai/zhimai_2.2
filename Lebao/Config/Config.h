@@ -49,6 +49,9 @@
 #define detailManURL [NSString stringWithFormat:@"%@broker/detail",HttpURL]
 //约见评价页面
 #define evaluateURL [NSString stringWithFormat:@"%@meet/evaluate",HttpURL]
+//约见评价提交按钮
+#define saveEvaluateURL [NSString stringWithFormat:@"%@meet/save-evaluate",HttpURL]
+
 //请求参数
 #define DeviceToken @"deviceToken"
 #define KuserName @"username"

@@ -233,7 +233,7 @@
     
     
 }
--(void)toch:(UITapGestureRecognizer *)sender
+-(void)toch:(UITapGestureRecognizer *)sender//头像点击
 {
     CGPoint point = [sender locationInView:self];
     

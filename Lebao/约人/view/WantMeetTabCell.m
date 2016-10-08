@@ -141,7 +141,18 @@
     
     return _line2;
 }
-
+#pragma mark -  LWAsyncDisplayViewDelegate
+- (void)lwAsyncDisplayView:(LWAsyncDisplayView *)asyncDisplayView didCilickedImageStorage:(LWImageStorage *)imageStorage touch:(UITouch *)touch
+{
+    //    NSLog(@"lwAsyncDisplayView.tag=%li",imageStorage.tag);
+    if (imageStorage.tag == 888) {
+        if ([_delegate respondsToSelector:@selector(tableViewCellDidSeleteHeadImg: andIndexPath:)] &&[_delegate conformsToProtocol:@protocol(WantMeettingTableViewDelegate)]) {
+            [_delegate tableViewCellDidSeleteHeadImg:imageStorage andIndexPath:_indexPath];
+        }
+    }
+    
+    
+}
 #pragma mark
 #pragma mark - some button actions
 - (void)meettingBtnClick:(UIButton *)sender

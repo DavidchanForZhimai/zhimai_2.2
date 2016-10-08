@@ -14,6 +14,7 @@
 #import "MP3PlayerManager.h"
 #import "GJGCChatFriendViewController.h"
 #import "AppraiseVC.h"
+#import "MyDetialViewController.h"
 @interface MeetSucceedVC ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,UITextFieldDelegate,WantMeettingTableViewDelegate>
 {
     UIScrollView * buttomScr;
@@ -28,9 +29,7 @@
 @property (nonatomic,assign)int iMeetPage;
 @property (nonatomic,strong)NSString *state;
 @property (nonatomic,strong)NSMutableArray *meetMeArr;
-@property (nonatomic,strong)NSMutableArray *meetMeSourceArr;
 @property (nonatomic,strong)NSMutableArray *iMeetArr;
-@property (nonatomic,strong)NSMutableArray *iMeetSourceArr;
 
 @end
 
@@ -51,35 +50,50 @@
     }
     return _meetMeArr;
 }
--(NSMutableArray *)meetMeSourceArr
+
+-(void)viewWillAppear:(BOOL)animated
 {
-    if (!_meetMeSourceArr) {
-        _meetMeSourceArr=[[NSMutableArray alloc]init];
-    }
-    return _meetMeSourceArr;
-}
--(NSMutableArray *)iMeetSourceArr
-{
-    if (!_iMeetSourceArr) {
-        _iMeetSourceArr=[[NSMutableArray alloc]init];
-    }
-    return _iMeetSourceArr;
+    [super viewWillAppear:YES];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(reflashRow:) name:@"EVALUATE" object:nil];
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     [self navViewTitleAndBackBtn:@"约见成功"];
-    
-
     _iMeetPage=1;
     _meetMePage=1;
     _state=@"20";
-    
     [self setButtomScr];
     [self addTheBtnView];
-    
     [self netWorkRefresh:NO andIsLoadMoreData:NO isShouldClearData:NO withState:_state andTabView:_meetMeTab andArr:self.meetMeArr andPage:_meetMePage];
 }
+
+-(void)reflashRow:(NSNotification *)notification
+{
+   
+    NSMutableArray *arr;
+    UITableView *tab;
+    if (_meetMeBtn.selected==YES) {
+        arr=_meetMeArr;
+        tab=_meetMeTab;
+    }else {
+        arr=_iMeetArr;
+        tab=_iMeetTab;
+    }
+
+    for (int i =0;i<arr.count;i++) {
+        
+        WantMeetLayout *layout =arr[i];
+        if ([layout.model.meetId isEqualToString:notification.object[@"meetid"]]) {
+            if([notification.object[@"operation"] isEqualToString:@"yes"]){
+                layout.model.evaluate=@"1";
+            }
+            [arr replaceObjectAtIndex:i withObject:layout];
+            [tab reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+        }
+    }
+
+}
+
 /**
  *  最下层的scrollview
  */
@@ -180,7 +194,7 @@
     
     [buttomScr addSubview:_iMeetTab];
     
-   
+    
     
 }
 
@@ -208,15 +222,8 @@
             [[ToolManager shareInstance]endFooterWithRefreshing:tabView];
         }if (isShouldClearData) {
             [arr removeAllObjects];
-            if (tabView==_meetMeTab) {
-                [self.meetMeSourceArr removeAllObjects];
-            }
-             if (tabView==_iMeetTab) {
-                [self.iMeetSourceArr removeAllObjects];
-            }
-            
+
         }
-        
         if (dataObj) {
             
             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
@@ -232,10 +239,9 @@
             if (modal.rtcode ==1) {
                 [[ToolManager shareInstance]dismiss];
                 for (MeetingData *data in modal.datas) {
-
-                        [arr addObject:[[WantMeetLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andTelBtn:NO]];
-                        [self.meetMeSourceArr addObject:data];
-            
+                    
+                    [arr addObject:[[WantMeetLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andTelBtn:NO]];
+                    
                 }
                 [tabView reloadData];
                 
@@ -257,7 +263,7 @@
 }
 
 
-#pragma mark - 头部3个按钮点击切换事件
+#pragma mark - 头部2个按钮点击切换事件
 -(void)oprationBtn:(UIButton *)sender//待操作
 {
     sender.selected = YES;
@@ -350,7 +356,13 @@
         layout =self.iMeetArr[indexPath.row];
         
     }
-    [cell.meetingBtn setTitle:@"待评价" forState:UIControlStateNormal];
+    if([layout.model.evaluate isEqualToString:@"0"]){
+        [cell.meetingBtn setTitle:@"待评价" forState:UIControlStateNormal];
+        [cell.meetingBtn setBackgroundColor:AppMainColor];
+    }else{
+        [cell.meetingBtn setTitle:@"已评价" forState:UIControlStateNormal];
+        [cell.meetingBtn setBackgroundColor:[UIColor lightGrayColor]];
+    }
     [cell setCellLayout:layout];
     [cell setIndexPath:indexPath];
     [cell setDelegate:self];
@@ -378,7 +390,7 @@
             }else if(point.x/SCREEN_WIDTH ==1) {
                 [self agreeBtn:_iMeetBtn];
             }
-          
+            
         }
     }];
     
@@ -387,17 +399,18 @@
 - (void)tableViewCellDidSeleteMeetingBtn:(UIButton *)btn layout:(WantMeetLayout *)layout andIndexPath:(NSIndexPath *)indexPath
 {
     clickRow=indexPath;
-    MeetingData *data=_meetMeSourceArr[indexPath.row];
+    MeetingData *data=layout.model;
     AppraiseVC *appraiseVC=[[AppraiseVC alloc]init];
     appraiseVC.meetId=data.meetId;
+    appraiseVC.headImg=data.imgurl;
     PushView(self, appraiseVC);
     
 }
 #pragma mark 语音按钮点击事件
--(void)tableViewCellDidSeleteAudioBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath
+-(void)tableViewCellDidSeleteAudioBtn:(UIButton *)btn layout:(WantMeetLayout *)layout andIndexPath:(NSIndexPath *)indexPath
 {
     //    _url = @"http://pic.lmlm.cn/record/201607/22/146915727469518.mp3";
-    MeetingData *data=_iMeetSourceArr[indexPath.row];
+    MeetingData *data=layout.model;
     NSString *url=[NSString stringWithFormat:@"%@%@",ImageURLS,data.audio];
     NSArray *pathArrays = [url componentsSeparatedByString:@"/"];
     NSString *topath;
@@ -433,7 +446,21 @@
     
     
 }
-
+#pragma mark 头像按钮点击事件
+-(void)tableViewCellDidSeleteHeadImg:(LWImageStorage *)imageStoragen andIndexPath:(NSIndexPath *)indexPath
+{
+    NSMutableArray *arr;
+    if (_meetMeBtn.selected==YES) {
+        arr=_meetMeArr;
+    }else {
+        arr=_iMeetArr;
+    }
+    MyDetialViewController *myDetialViewCT=allocAndInit(MyDetialViewController);
+    WantMeetLayout *layout=(WantMeetLayout *)arr[indexPath.row];
+    MeetingData *data = layout.model;
+    myDetialViewCT.userID=data.userid;
+    [self.navigationController pushViewController:myDetialViewCT animated:YES];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
