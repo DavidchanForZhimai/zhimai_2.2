@@ -8,32 +8,33 @@
 
 #import "AppraiseVC.h"
 #import "XLDataService.h"
-@interface appraiseModel : NSObject
-@property(nonatomic,assign)int rtcode;
-@property(nonatomic,strong)NSString *rtmsg;
-@property(nonatomic,strong)NSArray *i_evaluate;
-@end
-@interface appraiseData : NSObject
-@property(nonatomic,strong)NSString *authen;
-@property(nonatomic,strong)NSString *vip;
-@property(nonatomic,strong)NSString *userid;
-@property(nonatomic,strong)NSString *realname;
-@property(nonatomic,strong)NSString *imgurl;
-@property(nonatomic,strong)NSString *scord;
-@property(nonatomic,strong)NSString *content;
-@end
-@interface appraiseMy : NSObject
-
-@property(nonatomic,strong)NSString *scord;
-@property(nonatomic,strong)NSString *content;
-@end
-
-@implementation appraiseModel
-+ (NSDictionary *)objectClassInArray{
-    return @{@"data" : [appraiseData class]};
-    return @{@"evaluate_of_my" : [appraiseMy class]};
-}
-@end
+//@interface appraiseModel : NSObject
+//@property(nonatomic,assign)int rtcode;
+//@property(nonatomic,strong)NSString *rtmsg;
+//@property(nonatomic,strong)NSArray *i_evaluate;
+//@property(nonatomic,strong)NSArray *data;
+//@end
+//@interface appraiseData : NSObject
+//@property(nonatomic,strong)NSString *authen;
+//@property(nonatomic,strong)NSString *vip;
+//@property(nonatomic,strong)NSString *userid;
+//@property(nonatomic,strong)NSString *realname;
+//@property(nonatomic,strong)NSString *imgurl;
+//@property(nonatomic,strong)NSString *scord;
+//@property(nonatomic,strong)NSString *content;
+//@end
+//@interface appraiseMy : NSObject
+//
+//@property(nonatomic,strong)NSString *scord;
+//@property(nonatomic,strong)NSString *content;
+//@end
+//
+//@implementation appraiseModel
+//+ (NSDictionary *)objectClassInArray{
+//    return @{@"data" : [appraiseData class]};
+//    return @{@"evaluate_of_my" : [appraiseMy class]};
+//}
+//@end
 @interface AppraiseVC ()
 {
     UIScrollView *botomScr;
@@ -41,6 +42,7 @@
     UITextView *appraiseTF;
     UIButton *appraiseBtn;
 }
+
 @end
 
 @implementation AppraiseVC
@@ -51,38 +53,33 @@
     self.view.backgroundColor=AppViewBGColor;
 //     [[ToolManager shareInstance] showWithStatus];
     [self creatUI];
-    [self netWork];
+//    [self netWork];
 }
 
--(void)netWork
-{
-    NSMutableDictionary *param=[Parameter parameterWithSessicon];
-    [param setObject:_meetId forKey:@"id"];
-    NSLog(@"parem=%@",param);
-    [XLDataService putWithUrl:evaluateURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        NSLog(@"dataobj==%@",dataObj);
-        if (dataObj) {
-            appraiseModel *modal=[appraiseModel mj_objectWithKeyValues:dataObj];
-            if (modal.rtcode ==1) {
-                [[ToolManager shareInstance] dismiss];
-                for (MeetingData *data in modal.datas) {
-                    [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andMessageBtn:NO andOprationBtn:NO]];
-                    
-                    if (data.imgurl!=nil) {
-                        [self.headimgArr addObject:data.imgurl];
-                        [self.headUserIdArr addObject:data.userid];
-                    }
-
-         
-                  }
-        else
-        {
-            [[ToolManager shareInstance] showInfoWithStatus];
-        }
-        
-    }];
-
-}
+//-(void)netWork
+//{
+//    NSMutableDictionary *param=[Parameter parameterWithSessicon];
+//    [param setObject:_meetId forKey:@"id"];
+//    NSLog(@"parem=%@",param);
+//    [XLDataService putWithUrl:evaluateURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+//        NSLog(@"dataobj==%@",dataObj);
+//        if (dataObj) {
+//            appraiseModel *modal=[appraiseModel mj_objectWithKeyValues:dataObj];
+//            if (modal.rtcode ==1) {
+//                [[ToolManager shareInstance] dismiss];
+//                for (appraiseData *data in modal.data) {
+//                            
+//                  }
+//            }
+//        else
+//        {
+//            [[ToolManager shareInstance] showInfoWithStatus];
+//        }
+//        }
+//        
+//    }];
+//
+//}
 
 
 
