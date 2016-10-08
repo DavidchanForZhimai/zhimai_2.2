@@ -8,32 +8,140 @@
 
 #import "AddIndustryViewController.h"
 #import "DWTagsView.h"
+#import "XLDataService.h"
+#define FocusIndustryURL [NSString stringWithFormat:@"%@user/focus-industry",HttpURL]
+#define SaveFocusIndustryURL [NSString stringWithFormat:@"%@user/save-focusindustry",HttpURL]
+
+#define MininumTagWidth (APPWIDTH - 120)/5.0
+#define MaxinumTagWidth (APPWIDTH - 20)
+
 #define TagHeight 30
 #define ViewStartX StatusBarHeight + NavigationBarHeight
 @interface AddIndustryViewController ()<DWTagsViewDelegate>
 
 @property(nonatomic,strong)DWTagsView *hasTagsView;//已关注标签
+@property(nonatomic,strong)DWTagsView *newsClassTagsView;//新热门标签 类型
 @property(nonatomic,strong)DWTagsView *newsTagsView;//新热门标签
 @property(nonatomic,copy)NSMutableArray *newsTags;//新标签
+@property(nonatomic,copy)NSMutableArray *classNewsTags;//新标签 类型
 @property(nonatomic,strong)UILabel *newsLb;//新标签
 @property(nonatomic,strong)BaseButton *finishBtn;//完成
+
+@property(nonatomic,strong)NSMutableArray *industry_label;
+@property(nonatomic,strong)NSDictionary  *saveIndustry_label;
 @end
 
 @implementation AddIndustryViewController
+{
+    NSDictionary *industrys;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor = WhiteColor;
-    [self navViewTitleAndBackBtn:@"添加行业"];
-    [self.view addSubview:self.finishBtn];
-    [self.view addSubview:self.hasTagsView];
-    [self.view addSubview:self.newsLb];
-    [self.view addSubview:self.newsTagsView];
-    [self resetFrame];
+    [self navViewTitleAndBackBtn:@"选择关注行业"];
+
+    [self netWorkIsSave:NO];
     
 }
-
+#pragma mark
+#pragma mark netWork
+- (void)netWorkIsSave:(BOOL )isSave
+{
+    NSMutableDictionary *parame = [Parameter parameterWithSessicon];
+    NSString *url =@"";
+    if (isSave) {
+        url = SaveFocusIndustryURL;
+        
+        NSMutableArray *industry = [NSMutableArray new];
+        for (id dic in industrys.allValues) {
+            if ([dic isKindOfClass:[NSDictionary class]]) {
+                for (NSString *str in _hasTags) {
+                    if ([dic[@"name"] isEqualToString:str]) {
+                        [industry addObject:dic[@"full_number"]];
+                        
+                    }
+                }
+                
+            }
+        }
+    
+        [parame setValue:[industry componentsJoinedByString:@"/"] forKey:@"focus_industrys"];
+        [[ToolManager shareInstance] showWithStatus:@"保存行业..."];
+    }
+    else
+    {
+        url = FocusIndustryURL;
+        [[ToolManager shareInstance] showWithStatus];
+        
+    }
+    
+    [XLDataService postWithUrl:url param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+        NSLog(@"parame =%@ data = %@ ",parame,dataObj);
+        if (dataObj) {
+            if ([dataObj[@"rtcode"] intValue] ==1) {
+                [[ToolManager shareInstance] dismiss];
+                
+                if (isSave) {
+                   
+                    PopView(self);
+                }
+                else{
+                    NSDictionary *industryDic= dataObj[@"industry_label"];
+                    industrys = dataObj[@"industrys"];
+                    NSArray *focus_industrys;
+                    if (dataObj[@"focus_industrys"]&&[dataObj[@"focus_industrys"] isKindOfClass:[NSString class]]&&![dataObj[@"focus_industrys"] isEqualToString:@""]) {
+                        focus_industrys = [dataObj[@"focus_industrys"] componentsSeparatedByString:@"/"];
+                    }
+                    [focus_industrys enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                        
+                        if (industrys[obj][@"name"]) {
+                            [self.hasTags addObject:industrys[obj][@"name"]];
+                        }
+                        
+                
+                        
+                    }];
+                    for (id value in industryDic.allValues) {
+                        if ([value isKindOfClass:[NSDictionary class]]) {
+                        
+                            [self.industry_label  addObject:value];
+                            [self.classNewsTags addObject:value[@"name"]];
+                        }
+                    }
+                   
+                }
+                 self.hasTagsView.tagsArray = self.hasTags;
+                self.newsClassTagsView.tagsArray = self.classNewsTags;
+                [self.view addSubview:self.finishBtn];
+                [self.view addSubview:self.hasTagsView];
+                [self.view addSubview:self.newsLb];
+                [self.view addSubview:self.newsClassTagsView];
+                [self.view addSubview:self.newsTagsView];
+                
+                [self resetFrame];
+                
+                
+            }
+            else
+            {
+                
+                [[ToolManager shareInstance] showInfoWithStatus:dataObj[@"rtmsg"]];
+            }
+            
+        }
+        else
+        {
+            
+            [[ToolManager shareInstance] showInfoWithStatus];
+        }
+        
+        
+        
+    }];
+    
+}
 
 #pragma mark getter
 - (BaseButton *)finishBtn
@@ -46,11 +154,8 @@
     __weak typeof(self) weakSelf = self;
     _finishBtn.didClickBtnBlock = ^
     {
-        if (weakSelf.addTagsfinishBlock) {
-
-            weakSelf.addTagsfinishBlock(weakSelf.hasTags);
-        }
-        PopView(weakSelf);
+      [weakSelf netWorkIsSave:YES];
+      PopView(weakSelf);
     };
     return _finishBtn;
 }
@@ -65,7 +170,8 @@
     _hasTagsView.tagInsets = UIEdgeInsetsMake(5, 15, 5, 15);
     _hasTagsView.tagBorderWidth = 0.5;
     _hasTagsView.tagcornerRadius = 5;
-    _hasTagsView.mininumTagWidth = (APPWIDTH - 30)/3.0;
+    _hasTagsView.mininumTagWidth = MininumTagWidth;
+    _hasTagsView.maximumTagWidth = MaxinumTagWidth;
     _hasTagsView.tagHeight  = TagHeight;
     _hasTagsView.tagBorderColor = LineBg;
     _hasTagsView.tagSelectedBorderColor = LineBg;
@@ -76,9 +182,9 @@
     _hasTagsView.tagTextColor = BlackTitleColor;
     _hasTagsView.tagSelectedBackgroundColor = _newsTagsView.tagBackgroundColor;
     _hasTagsView.tagSelectedTextColor = _hasTagsView.tagTextColor;
-    
+    _hasTagsView.tag = 888;
     _hasTagsView.delegate = self;
-    _hasTagsView.tagsArray = self.hasTags;
+   
     
     return _hasTagsView;
     
@@ -92,18 +198,45 @@
     return _newsLb;
 }
 
+- (DWTagsView *)newsClassTagsView
+{
+    if (_newsClassTagsView) {
+        return _newsClassTagsView;
+    }
+    _newsClassTagsView = allocAndInitWithFrame(DWTagsView, frame(10, CGRectGetMaxY(_newsLb.frame) , APPWIDTH -20, 70));
+    _newsClassTagsView.contentInsets = UIEdgeInsetsZero;
+    _newsClassTagsView.tagInsets = UIEdgeInsetsMake(5, 15, 5, 15);
+    _newsClassTagsView.tagBorderWidth = 0.5;
+    _newsClassTagsView.tagcornerRadius = 5;
+    _newsClassTagsView.mininumTagWidth = MininumTagWidth;
+    _newsClassTagsView.maximumTagWidth = MaxinumTagWidth;
+    _newsClassTagsView.tagHeight  = TagHeight;
+    _newsClassTagsView.tagBorderColor = LineBg;
+    _newsClassTagsView.tagSelectedBorderColor = LineBg;
+    _newsClassTagsView.tagBackgroundColor = [UIColor whiteColor];
+    _newsClassTagsView.lineSpacing = 5;
+    _newsClassTagsView.interitemSpacing = 5;
+    _newsClassTagsView.tagFont = [UIFont systemFontOfSize:14];
+    _newsClassTagsView.tagTextColor = BlackTitleColor;
+    _newsClassTagsView.tagSelectedBackgroundColor = _newsClassTagsView.tagBackgroundColor;
+    _newsClassTagsView.tagSelectedTextColor = _newsClassTagsView.tagTextColor;
+    _newsClassTagsView.delegate = self;
+    _newsClassTagsView.tag = 8888;
+    return _newsClassTagsView;
+}
 
 - (DWTagsView *)newsTagsView
 {
     if (_newsTagsView) {
         return _newsTagsView;
     }
-    _newsTagsView = allocAndInitWithFrame(DWTagsView, frame(10, CGRectGetMaxY(_newsLb.frame) , APPWIDTH -20, 70));
+    _newsTagsView = allocAndInitWithFrame(DWTagsView, frame(10, CGRectGetMaxY(_newsClassTagsView.frame) + 20, APPWIDTH -20, 70));
     _newsTagsView.contentInsets = UIEdgeInsetsZero;
     _newsTagsView.tagInsets = UIEdgeInsetsMake(5, 15, 5, 15);
     _newsTagsView.tagBorderWidth = 0.5;
     _newsTagsView.tagcornerRadius = 5;
-    _newsTagsView.mininumTagWidth = (APPWIDTH - 30)/3.0;
+    _newsTagsView.mininumTagWidth = MininumTagWidth;
+    _newsTagsView.maximumTagWidth = MaxinumTagWidth;
     _newsTagsView.tagHeight  = TagHeight;
     _newsTagsView.tagBorderColor = LineBg;
     _newsTagsView.tagSelectedBorderColor = LineBg;
@@ -113,10 +246,10 @@
     _newsTagsView.tagFont = [UIFont systemFontOfSize:14];
     _newsTagsView.tagTextColor = LightBlackTitleColor;
     _newsTagsView.tagSelectedBackgroundColor = _newsTagsView.tagBackgroundColor;
-    _newsTagsView.tagSelectedTextColor = _hasTagsView.tagTextColor;
-    _newsTagsView.allowsMultipleSelection = YES;
+    _newsTagsView.tagSelectedTextColor = _newsTagsView.tagTextColor;
     _newsTagsView.delegate = self;
     _newsTagsView.tagsArray = self.newsTags;
+     _newsTagsView.tag = 88888;
     return _newsTagsView;
 }
 
@@ -125,42 +258,80 @@
     if (_newsTags) {
         return _newsTags;
     }
-    _newsTags = [[NSMutableArray alloc]initWithObjects:@"商务",@"开发",@"产品",@"经理",@"老板",@"业务", nil];
+    _newsTags = [[NSMutableArray alloc]init];
     return _newsTags;
 }
-
-
+- (NSMutableArray *)hasTags
+{
+    if (!_hasTags) {
+        _hasTags = [[NSMutableArray alloc]init];
+    }
+    return _hasTags;
+}
+- (NSMutableArray *)classNewsTags
+{
+    if (!_classNewsTags) {
+        _classNewsTags = [[NSMutableArray alloc]init];
+    }
+    return _classNewsTags;
+}
+- (NSMutableArray *)industry_label
+{
+    if (!_industry_label) {
+        _industry_label = [[NSMutableArray alloc]init];
+    }
+    return _industry_label;
+}
+- (NSDictionary *)saveIndustry_label
+{
+    if (!_saveIndustry_label) {
+        _saveIndustry_label = [[NSDictionary alloc]init];
+    }
+    return _saveIndustry_label;
+}
 #pragma mark
 #pragma mark DWTagsViewDelegate
  - (void)tagsView:(DWTagsView *)tagsView didSelectTagAtIndex:(NSUInteger)index
 {
+   
+    if (tagsView.tag == 88888) {
+       
+        if ([_hasTags containsObject:_newsTags[index]]) {
+            [[ToolManager shareInstance] showAlertMessage:@"标签已存在！"];
+            return;
+        }
+        [_hasTagsView addTag:_newsTags[index]];
+        [_hasTags addObject:_newsTags[index]];
+    }
+    else if (tagsView.tag == 888)
+    {
+        
+        [_hasTagsView removeTagAtIndex:index];
+        [_hasTags removeObjectAtIndex:index];
+    }
+    else
+    {
+   
+        _saveIndustry_label = nil;
+        [self.newsTags removeAllObjects];
+        [_newsTagsView removeAllTags];
+        _saveIndustry_label = _industry_label[index][@"son"];
+        for (NSDictionary *dic in _saveIndustry_label.allValues) {
+            [self.newsTags addObject:dic[@"name"]];
+            [_newsTagsView addTag:dic[@"name"]];
+        }
+
+    }
+   
     
-    [_hasTagsView addTag:_newsTags[index]];
-    [_hasTags addObject:_newsTags[index]];
     [self resetFrame];
     
 }
 - (BOOL)tagsView:(DWTagsView *)tagsView shouldSelectTagAtIndex:(NSUInteger)index
 {
-    if ([tagsView isEqual:_newsTagsView]) {
+
     return YES;
-    };
-    return NO;
-}
- - (void)tagsView:(DWTagsView *)tagsView didDeSelectTagAtIndex:(NSUInteger)index
-{
-
-    [_hasTagsView removeTagAtIndex:index];
-    [_hasTags removeObjectAtIndex:index];
-     [self resetFrame];   
-
-}
-- (BOOL)tagsView:(DWTagsView *)tagsView shouldDeselectItemAtIndex:(NSUInteger)index
-{
-    if ([tagsView isEqual:_newsTagsView]) {
-        return YES;
-    };
-    return NO;
+    
 }
 #pragma mark
 #pragma mark buttons Aticon
@@ -172,18 +343,12 @@
 #pragma mark  setframe
 - (void)resetFrame
 {
-    int hotRow = 0;
-    if (_hasTags.count%3==0) {
-        hotRow=(int)(_hasTags.count/3);
-    }
-    else
-    {
-        hotRow=(int)(_hasTags.count/3) + 1;
-    }
-    NSLog(@"hotRow =%d _hasTags.count=%ld",hotRow,_hasTags.count);
-    _hasTagsView.frame =frame(10, 10+ViewStartX , APPWIDTH -20, (TagHeight + 5)*hotRow);
+    _hasTagsView.frame =frame(10, 10+ViewStartX , APPWIDTH -20, [_hasTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
     _newsLb.frame =frame(0, _hasTagsView.height + _hasTagsView.y +10, APPWIDTH, 40);
-    _newsTagsView.frame = frame(10, CGRectGetMaxY(_newsLb.frame) , APPWIDTH -20, APPHEIGHT - CGRectGetMaxY(_newsLb.frame));
+    
+     _newsClassTagsView.frame = frame(10, CGRectGetMaxY(_newsLb.frame) , APPWIDTH -20, [_newsClassTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
+    
+    _newsTagsView.frame = frame(10, CGRectGetMaxY(_newsClassTagsView.frame) +20 , APPWIDTH -20, [_newsTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
     
     
 }

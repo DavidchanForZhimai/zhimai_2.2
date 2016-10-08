@@ -16,6 +16,8 @@
 #import "NSString+File.h"
 #import "CoreArchive.h"
 #import "DWTagsView.h"
+#import "IndustrySelectionViewController.h"//选择行业
+#import "AddIndustryViewController.h"//选择关注行业
 #define TagHeight 22
 #define MininumTagWidth (APPWIDTH - 120)/5.0
 #define MaxinumTagWidth (APPWIDTH - 20)
@@ -673,7 +675,7 @@
     NSMutableDictionary *parame = [Parameter parameterWithSessicon];
     [parame setObject:@"info" forKey:Conduct];
     [XLDataService postWithUrl:MemberURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        NSLog(@"dataObj == %@",dataObj);
+//        NSLog(@"dataObj == %@",dataObj);
         if (dataObj) {
             _modal = [BasicInfoModal mj_objectWithKeyValues:dataObj];
             if (![_modal.mylabels isEqualToString:@""]) {
@@ -942,7 +944,7 @@
         break;
     case 4:
             
-        [cell  showTitle:@"关注的行业" icon:nil bg:nil detail:_modal.focus_industrys canEdit:YES];
+        [cell  showTitle:@"关注的行业" icon:nil bg:nil detail:@"" canEdit:YES];
             break;
 
         
@@ -1066,16 +1068,16 @@
             case 2:
             {
             
-                edit.editPageTag =EditHangyePageTag;
-                edit.textView =  _modal.industry;
-                edit.editBlock = ^(NSString *text)
+                IndustrySelectionViewController *industrySelectionVC = [[IndustrySelectionViewController alloc]init];
+                
+                industrySelectionVC.editBlock = ^(NSString *text)
                 {
                     
                     _modal.industry = text;
                     [_basicInfoTableView reloadData];
                     
                 };
-                PushView(self, edit);
+                PushView(self, industrySelectionVC);
             }
                 break;
                 
@@ -1096,16 +1098,9 @@
                 break;
             case 4:
             {
-                edit.editPageTag =EditGuanzhuPageTag;
-                edit.textView =  _modal.focus_industrys;
-                edit.editBlock = ^(NSString *text)
-                {
-                    
-                    _modal.focus_industrys = text;
-                    [_basicInfoTableView reloadData];
-                    
-                };
-                PushView(self, edit);
+                AddIndustryViewController *industrySelectionVC = [[AddIndustryViewController alloc]init];
+            
+                PushView(self, industrySelectionVC);
             }
                 break;
                 
@@ -1178,20 +1173,20 @@
     [XLDataService postWithUrl:SaveMemberURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         if (dataObj) {
             if ([dataObj[@"rtcode"] intValue] ==1) {
-                weakSelf.saveBtn.hidden = YES;
+               
                 [[ToolManager shareInstance] showSuccessWithStatus:@"修改成功"];
                 PopView(weakSelf);
             }
             else
             {
-                weakSelf.saveBtn.hidden = NO;
+               
                 [[ToolManager shareInstance] showInfoWithStatus:dataObj[@"rtmsg"]];
             }
             
         }
         else
         {
-            weakSelf.saveBtn.hidden = NO;
+           
             [[ToolManager shareInstance] showInfoWithStatus];
         }
         

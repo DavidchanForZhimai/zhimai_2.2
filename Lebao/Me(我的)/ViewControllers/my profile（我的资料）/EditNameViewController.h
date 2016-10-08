@@ -13,9 +13,7 @@ typedef enum {
    
    EditCompanyTag,
    EditZhiyePageTag,
-   EditHangyePageTag,
    EditWorkYearsPageTag,
-   EditGuanzhuPageTag,
    
 }EditPageTag;
 typedef void (^EditBlock)(NSString *text);

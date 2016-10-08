@@ -48,11 +48,7 @@ typedef enum
     {
         title =@"修改手机";
     }
-    else if (_editPageTag == EditHangyePageTag)
-    {
-        title =@"修改行业";
-    }
-    else if (_editPageTag == EditZhiyePageTag)
+       else if (_editPageTag == EditZhiyePageTag)
     {
         title =@"修改职业";
     }
@@ -65,10 +61,7 @@ typedef enum
     {
         title =@"从业年限";
     }
-    else if (_editPageTag == EditGuanzhuPageTag)
-    {
-        title =@"修改关注的行业";
-    }
+   
     [self navViewTitleAndBackBtn:title rightBtn:rightBtn];
     
 
