@@ -16,6 +16,7 @@
 #import "XLDataService.h"
 #import "Parameter.h"
 #import "LWImageBrowser.h"
+#import "CooperateView.h"
 #define PADDING 10
 #define kScreenHeight [UIScreen mainScreen].bounds.size.height
 #define kScreenWidth [UIScreen mainScreen].bounds.size.width
@@ -34,7 +35,7 @@
 #define MaxY(v)            CGRectGetMaxY((v).frame) //纵坐标加上控件的高度
 
 
-@interface PublishDynamicVC ()<UITextViewDelegate,UITextFieldDelegate,UICollectionViewDataSource, UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,UIImagePickerControllerDelegate,UINavigationControllerDelegate,XWDragCellCollectionViewDataSource, XWDragCellCollectionViewDelegate,UITextFieldDelegate,UIScrollViewDelegate,UIActionSheetDelegate>
+@interface PublishDynamicVC ()<UITextViewDelegate,UITextFieldDelegate,UICollectionViewDataSource, UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,UIImagePickerControllerDelegate,UINavigationControllerDelegate,XWDragCellCollectionViewDataSource, XWDragCellCollectionViewDelegate,UITextFieldDelegate,UIScrollViewDelegate,UIActionSheetDelegate,CooperateViewDelegate>
 {
     
     XWDragCellCollectionView *_collectionView;
@@ -207,10 +208,19 @@
     {
         [weakSelf BtnhotTopicBtnClick];
     };
-    
     self.hotTopicBtn.layer.borderWidth=1;
     self.hotTopicBtn.layer.borderColor=[UIColor colorWithWhite:0.875 alpha:1.000].CGColor;
     self.hotTopicBtn.layer.cornerRadius=5;
+    //添加合作利益按钮
+    UIImage *image1 = [UIImage imageNamed:@"coorperate"];
+    self.cooperateBtn=[[BaseButton alloc]initWithFrame:CGRectMake(30+2*btnAddPhoneW, 10, btnAddPhoneW, btnAddPhoneW) setTitle:@"合作利益" titleSize:titleSize titleColor:[UIColor colorWithRed:0.745 green:0.749 blue:0.757 alpha:1.000] backgroundImage:nil iconImage:image1 highlightImage:image1 setTitleOrgin:CGPointMake((btnAddPhoneW - image1.size.height - titleSize -juli)/2 + image.size.height + juli, (btnAddPhoneW - 4*titleSize)/2- image1.size.width ) setImageOrgin:CGPointMake((btnAddPhoneW - image.size.height - titleSize-juli)/2, (btnAddPhoneW - image1.size.width)/2) inView:_collectionView];
+    self.cooperateBtn.didClickBtnBlock = ^
+    {
+        [weakSelf cooperateBtnClick];
+    };
+    self.cooperateBtn.layer.borderWidth=1;
+    self.cooperateBtn.layer.borderColor=[UIColor colorWithWhite:0.875 alpha:1.000].CGColor;
+    self.cooperateBtn.layer.cornerRadius=5;
     //滚动视图
     self.svMain.contentSize = CGSizeMake(APPWIDTH,MaxY(_collectionView));
     
@@ -305,7 +315,6 @@
     }
     else if ([string length] >255)
     {
-        NSLog(@"string length%ld",[string length]);
         string = [string substringToIndex:255];
         textView.text = string;
         
@@ -444,7 +453,7 @@
     [self resetLayout];
 }
 -(void)resetLayout{
-    int columnCount = ceilf((_phonelist.count + 2) * 1.0 / 3);
+    int columnCount = ceilf((_phonelist.count + 3) * 1.0 / 3);
     float height = columnCount * ((kScreenWidth-40)/3 +10)+10;
     if (height < (kScreenWidth-40)/3+20) {
         height = (kScreenWidth-40)/3+20;
@@ -456,7 +465,9 @@
     
     self.btnAddPhone.frame = CGRectMake(10+(10+(kScreenWidth-40)/3)*(self.phonelist.count%3),10+(10+(kScreenWidth-40)/3)*(self.phonelist.count/3),(kScreenWidth-40)/3,(kScreenWidth-40)/3);
     
-    self.hotTopicBtn.frame = CGRectMake(10+(10+(kScreenWidth-40)/3)*((self.phonelist.count+1)%3), HEIGHT(_collectionView)-(kScreenWidth-40)/3-10,(kScreenWidth-40)/3,(kScreenWidth-40)/3);
+    self.hotTopicBtn.frame = CGRectMake(10+(10+(kScreenWidth-40)/3)*((self.phonelist.count+1)%3), 10+(10+(kScreenWidth-40)/3)*((self.phonelist.count+1)/3),(kScreenWidth-40)/3,(kScreenWidth-40)/3);
+    
+    self.cooperateBtn.frame = CGRectMake(10+(10+(kScreenWidth-40)/3)*((self.phonelist.count+2)%3), HEIGHT(_collectionView)-(kScreenWidth-40)/3-10,(kScreenWidth-40)/3,(kScreenWidth-40)/3);
     
     self.viewlin.frame = CGRectMake(0, HEIGHT(_collectionView)-1, kScreenWidth, 1);
     self.svMain.contentSize = CGSizeMake(kScreenWidth,MaxY(_collectionView));
@@ -469,6 +480,37 @@
     [self postDataSouce];
     [self.view endEditing:YES];
 }
+#pragma mark - 合作利益按钮
+-(void)cooperateBtnClick
+{
+    CGFloat dilX = 25;
+    CGFloat dilH = 250;
+    CooperateView *alertV = [[CooperateView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.navigationController.view];
+    alertV.center = CGPointMake(APPWIDTH/2, APPHEIGHT/2-30);
+    alertV.delegate = self;
+    alertV.titleStr = @"合作利益描述";
+    alertV.oldText= @"如果你展示的是自己的产品,可以将合作利益描述的更详细";
+
+}
+#pragma mark - YXCustomAlertViewDelegate
+- (void) customAlertView:(CooperateView *) customAlertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    
+    if (buttonIndex==0) {
+        
+        [customAlertView dissMiss];
+        customAlertView = nil;
+        
+        
+    }else
+    {
+        
+        [customAlertView dissMiss];
+        customAlertView = nil;
+        
+    }
+}
+
 #pragma mark - UIActionSheetDelegate
 
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex

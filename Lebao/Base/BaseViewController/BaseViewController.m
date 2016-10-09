@@ -7,7 +7,7 @@
 //
 
 #import "BaseViewController.h"
-#import "BottomView.h"
+
 #import "CoreArchive.h"
 #import "NotificationViewController.h"
 @interface BaseViewController ()<UIGestureRecognizerDelegate>
@@ -89,7 +89,7 @@
 - (void)setTabbarIndex:(int)index
 {
     _index = index;
-    BottomView  * bottomView= [[BottomView alloc] initWithFrame:frame(0, APPHEIGHT - TabBarHeight, APPWIDTH, TabBarHeight) selectIndex:index clickCenterButton:^{
+   _bottomView= [[BottomView alloc] initWithFrame:frame(0, APPHEIGHT - TabBarHeight, APPWIDTH, TabBarHeight) selectIndex:index clickCenterButton:^{
         
         [[ToolManager shareInstance] addReleseDctView:self];
         
@@ -97,8 +97,8 @@
     _message = [[UIView alloc]initWithFrame:frame(2.57*APPWIDTH/4.0, 5, 8, 8)];
     [_message setRound];
     _message.backgroundColor = [UIColor clearColor];
-    [bottomView addSubview:_message];
-    [self.view addSubview:bottomView];
+    [_bottomView addSubview:_message];
+    [self.view addSubview:_bottomView];
     
 }
 

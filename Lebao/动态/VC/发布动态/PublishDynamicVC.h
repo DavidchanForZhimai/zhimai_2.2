@@ -18,4 +18,6 @@ typedef void (^FaBuSucceedBlock) (void);
 @property (strong,nonatomic)UIButton *btnAddPhone;          //添加照片
 @property (strong,nonatomic)FaBuSucceedBlock faBuSucceedBlock;//发布成功
 @property (strong,nonatomic)BaseButton *hotTopicBtn;            //话题按钮
+@property (strong,nonatomic)BaseButton *cooperateBtn;            //话题按钮
+
 @end

@@ -463,7 +463,34 @@
 }
 
 
+#pragma mark 滑动隐藏导航栏
+//滑动隐藏导航栏 LiXingLe
 
+-(void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset{
+    
+    if(velocity.y>0)
+        
+    {
+        _yrTab.frame=CGRectMake(0,StatusBarHeight, APPWIDTH, APPHEIGHT-StatusBarHeight);
+        [self.navigationController setNavigationBarHidden:YES animated:YES];
+        [self.bottomView setHidden:YES];
+        [self.navigationBarView setHidden:YES];
+        [self.yrBtn setHidden:YES];
+        
+    }
+    
+    else
+        
+    {
+        
+//        [self.navigationController setNavigationBarHidden:NO animated:YES];
+        _yrTab.frame=CGRectMake(0,StatusBarHeight + NavigationBarHeight, APPWIDTH, APPHEIGHT-(StatusBarHeight + NavigationBarHeight + TabBarHeight));
+        [self.bottomView setHidden:NO];
+        [self.navigationBarView setHidden:NO];
+        [self.yrBtn setHidden:NO];
+    }
+    
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

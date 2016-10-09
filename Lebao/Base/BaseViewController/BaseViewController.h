@@ -12,6 +12,7 @@
 #import "BaseButton.h"
 #import "UIButton+Extend.h"
 #import "UILabel+Extend.h"
+#import "BottomView.h"
 typedef enum {
     
     NavViewButtonActionNavLeftBtnTag = 0,
@@ -27,6 +28,7 @@ typedef enum {
 @property(nonatomic,strong) BaseButton *homePageBtn;
 @property(nonatomic,strong) UIView    *message;
 @property(nonatomic,assign) int    index;
+@property(nonatomic, strong)BottomView  * bottomView;
 
 //推送来消息
 - (void)pushMessage;

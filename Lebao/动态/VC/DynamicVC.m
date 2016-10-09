@@ -810,6 +810,36 @@
 //
 //
 //}
+//#pragma mark 滑动隐藏导航栏
+////滑动隐藏导航栏 LiXingLe
+//
+//-(void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset{
+//    
+//    if(velocity.y>0)
+//        
+//    {
+//        buttomScr.frame=CGRectMake(0,StatusBarHeight, APPWIDTH, APPHEIGHT-StatusBarHeight);
+//        [self.navigationController setNavigationBarHidden:YES animated:YES];
+//        [self.bottomView setHidden:YES];
+//        [self.navigationBarView setHidden:YES];
+//        _toolBar.frame=CGRectMake(_toolBar.x, frameHeight(buttomScr), _toolBar.width, _toolBar.height);
+//
+//        
+//    }
+//    
+//    else
+//        
+//    {
+//        
+//        //        [self.navigationController setNavigationBarHidden:NO animated:YES];
+//        buttomScr.frame=CGRectMake(0,StatusBarHeight + NavigationBarHeight, APPWIDTH, APPHEIGHT-(StatusBarHeight + NavigationBarHeight + TabBarHeight));
+//        [self.bottomView setHidden:NO];
+//        [self.navigationBarView setHidden:NO];
+//        _toolBar.frame= CGRectMake(0,frameHeight(buttomScr), APPWIDTH, kToolBarH);;
+//    }
+//    
+//}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
