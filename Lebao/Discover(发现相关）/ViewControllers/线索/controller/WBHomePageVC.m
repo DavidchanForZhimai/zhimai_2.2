@@ -32,7 +32,7 @@
 #define kTextFieldH 30
 #define xsTabTag  110
 #define jjrTabTag 120
-@interface WBHomePageVC ()<UITableViewDelegate,UITableViewDataSource,TableViewCellDelegate,UIScrollViewDelegate,UITextFieldDelegate>
+@interface WBHomePageVC ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,UITextFieldDelegate>
 {
 
     UIButton * xsBtn;

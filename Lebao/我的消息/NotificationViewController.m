@@ -17,6 +17,7 @@
 #import "CoreArchive.h"
 #import "MyConnectionsVC.h"
 #import "ConnectionsRequestVC.h"
+#import "HeadLineVC.h"
 #define cellH  40
 #define MessageURL [NSString stringWithFormat:@"%@message/index",HttpURL]
 @interface NotificationViewController ()<UITableViewDelegate, UITableViewDataSource>
@@ -66,7 +67,7 @@
     
     _notificationArray = allocAndInit(NSMutableArray);
     _secondNotificationArray = allocAndInit(NSMutableArray);
-     NSArray *_sectionOne =[NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"系统消息",@"name",@"icon_message_xitongxiaoxi",@"image",@"1",@"show",@"",@"viewController",nil],[NSDictionary dictionaryWithObjectsAndKeys:@"知脉头条",@"name",@"icon_message_toutiao",@"image" ,@"1",@"show",@"",@"viewController",nil] ,[NSDictionary dictionaryWithObjectsAndKeys:@"我的人脉",@"name",@"icon_message_woderenmai",@"image" ,@"0",@"show",@"MyConnectionsVC",@"viewController",nil],nil];
+     NSArray *_sectionOne =[NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"系统消息",@"name",@"icon_message_xitongxiaoxi",@"image",@"1",@"show",@"",@"viewController",nil],[NSDictionary dictionaryWithObjectsAndKeys:@"知脉头条",@"name",@"icon_message_toutiao",@"image" ,@"1",@"show",@"HeadLineVC",@"viewController",nil] ,[NSDictionary dictionaryWithObjectsAndKeys:@"我的人脉",@"name",@"icon_message_woderenmai",@"image" ,@"0",@"show",@"MyConnectionsVC",@"viewController",nil],nil];
     [_notificationArray addObject:_sectionOne];
     [_notificationArray addObject:_secondNotificationArray];
     
@@ -295,8 +296,12 @@
         NotificationDetailViewController *detail = allocAndInit(NotificationDetailViewController);
         detail.isSystempagetype =YES;
         PushView(self, detail);
-//        MeCell *cell  = [tableView cellForRowAtIndexPath:indexPath];
-//        cell.message.hidden = YES;
+
+    } if (indexPath.section==0&&indexPath.row==1) {
+        HeadLineVC *detail = allocAndInit(HeadLineVC);
+        PushView(self, detail);
+        MeCell *cell  = [tableView cellForRowAtIndexPath:indexPath];
+        cell.message.hidden = YES;
     }
     if (indexPath.section==0&&indexPath.row==2) {
         MyConnectionsVC *detail = allocAndInit(MyConnectionsVC);

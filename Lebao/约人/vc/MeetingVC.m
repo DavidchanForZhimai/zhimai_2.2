@@ -135,13 +135,13 @@
 - (void)netWorkRefresh:(BOOL)isRefresh andIsLoadMoreData:(BOOL)isMoreLoadMoreData isShouldClearData:(BOOL)isShouldClearData//加载数据
 {
     
-    [[LoCationManager shareInstance] creatLocationManager];
-    [LoCationManager shareInstance].callBackLocation = ^(CLLocationCoordinate2D location)
-    {
-        //    测试用,要删掉
-        //    CLLocationCoordinate2D location;
-        //    location.latitude=24.491534;
-        //    location.longitude=118.180851;
+//    [[LoCationManager shareInstance] creatLocationManager];
+//    [LoCationManager shareInstance].callBackLocation = ^(CLLocationCoordinate2D location)
+//    {
+//            测试用,要删掉
+            CLLocationCoordinate2D location;
+            location.latitude=24.491534;
+            location.longitude=118.180851;
         NSMutableDictionary *param = [Parameter parameterWithSessicon];
         [param setObject:[NSString stringWithFormat:@"%.6f",location.latitude] forKey:@"latitude"];
         [param setObject:[NSString stringWithFormat:@"%.6f",location.longitude] forKey:@"longitude"];
@@ -214,7 +214,7 @@
             
         }];
         
-    };
+//    };
     
     
     

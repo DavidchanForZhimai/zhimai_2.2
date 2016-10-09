@@ -130,33 +130,33 @@
     [self addSubview:_meWantBtn];
     
     
-    CAShapeLayer*layer1=[[CAShapeLayer alloc]init];
-    layer1.frame=_meWantBtn.frame;
-    layer1.strokeStart=0;
-    layer1.position=_wantMeBtn.center;
-    layer1.fillColor=[UIColor clearColor].CGColor;
-    layer1.strokeColor=[UIColor whiteColor].CGColor;
-    layer1.strokeEnd=1.0;
-    layer1.lineWidth=2;
-    layer1.shouldRasterize=YES;
-    UIBezierPath *bezier1=[UIBezierPath bezierPathWithOvalInRect:layer1.bounds];
-    layer1.path=bezier1.CGPath;
-    [bgImgV addSublayer:layer1];
-    
-    CAShapeLayer*layer2=[[CAShapeLayer alloc]init];
-    layer2.frame=_meWantBtn.frame;
-    layer2.strokeStart=0;
-    layer2.position=_meWantBtn.center;
-    layer2.fillColor=[UIColor clearColor].CGColor;
-    layer2.strokeColor=[UIColor whiteColor].CGColor;
-    layer2.strokeEnd=1.0;
-    layer2.lineWidth=2;
-    layer2.shouldRasterize=YES;
-    UIBezierPath *bezier2=[UIBezierPath bezierPathWithOvalInRect:layer2.bounds];
-    layer2.path=bezier2.CGPath;
-    
-    [bgImgV addSublayer:layer2];
-    
+//    CAShapeLayer*layer1=[[CAShapeLayer alloc]init];
+//    layer1.frame=_meWantBtn.frame;
+//    layer1.strokeStart=0;
+//    layer1.position=_wantMeBtn.center;
+//    layer1.fillColor=[UIColor clearColor].CGColor;
+//    layer1.strokeColor=[UIColor whiteColor].CGColor;
+//    layer1.strokeEnd=1.0;
+//    layer1.lineWidth=2;
+//    layer1.shouldRasterize=YES;
+//    UIBezierPath *bezier1=[UIBezierPath bezierPathWithOvalInRect:layer1.bounds];
+//    layer1.path=bezier1.CGPath;
+//    [bgImgV addSublayer:layer1];
+//    
+//    CAShapeLayer*layer2=[[CAShapeLayer alloc]init];
+//    layer2.frame=_meWantBtn.frame;
+//    layer2.strokeStart=0;
+//    layer2.position=_meWantBtn.center;
+//    layer2.fillColor=[UIColor clearColor].CGColor;
+//    layer2.strokeColor=[UIColor whiteColor].CGColor;
+//    layer2.strokeEnd=1.0;
+//    layer2.lineWidth=2;
+//    layer2.shouldRasterize=YES;
+//    UIBezierPath *bezier2=[UIBezierPath bezierPathWithOvalInRect:layer2.bounds];
+//    layer2.path=bezier2.CGPath;
+//    
+//    [bgImgV addSublayer:layer2];
+//    
     
       _midBtn=[UIButton buttonWithType:UIButtonTypeSystem];
     _midBtn.frame=CGRectMake((bgImgV.frame.size.width-105)/2.0, (bgImgV.frame.size.height-105)/2.0, 105, 105);
