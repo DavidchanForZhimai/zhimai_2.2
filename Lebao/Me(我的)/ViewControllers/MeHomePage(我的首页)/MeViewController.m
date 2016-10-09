@@ -83,7 +83,7 @@
     _header = [CExpandHeader expandWithScrollView:self.tableView expandView:customView];
     
     //设置
-    UIImage *image = [UIImage imageNamed:@"iconfonticon_me_shezhi"];
+    UIImage *image = [UIImage imageNamed:@"iconfont-shezhi"];
     BaseButton *set =  [[BaseButton alloc]initWithFrame:frame(frameWidth(self.tableView) - 54, APPHEIGHT - 49,54, 49) setTitle:@"设置" titleSize:24*SpacedFonts titleColor:hexColor(5a5a5a) backgroundImage:nil iconImage:image highlightImage:nil setTitleOrgin:CGPointMake(20,5) setImageOrgin:CGPointMake(20, 0) inView:self.view];
     set.didClickBtnBlock = ^
     {

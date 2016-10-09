@@ -28,7 +28,7 @@
 @property(nonatomic,strong)BaseButton *finishBtn;//完成
 
 @property(nonatomic,strong)NSMutableArray *industry_label;
-@property(nonatomic,strong)NSDictionary  *saveIndustry_label;
+@property(nonatomic,strong)NSMutableArray  *saveIndustry_label;
 @end
 
 @implementation AddIndustryViewController
@@ -282,10 +282,10 @@
     }
     return _industry_label;
 }
-- (NSDictionary *)saveIndustry_label
+- (NSMutableArray *)saveIndustry_label
 {
     if (!_saveIndustry_label) {
-        _saveIndustry_label = [[NSDictionary alloc]init];
+        _saveIndustry_label = [[NSMutableArray alloc]init];
     }
     return _saveIndustry_label;
 }
@@ -316,7 +316,7 @@
         [self.newsTags removeAllObjects];
         [_newsTagsView removeAllTags];
         _saveIndustry_label = _industry_label[index][@"son"];
-        for (NSDictionary *dic in _saveIndustry_label.allValues) {
+        for (NSDictionary *dic in _saveIndustry_label) {
             [self.newsTags addObject:dic[@"name"]];
             [_newsTagsView addTag:dic[@"name"]];
         }

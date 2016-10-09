@@ -207,8 +207,8 @@
     if(tableView == tableV1){
         [industrySon_label removeAllObjects];
         saveIndustry_label  = nil;
-        NSDictionary *dic = industry_label[indexPath.row][@"son"];
-        for (id value in dic.allValues) {
+        NSArray *array = industry_label[indexPath.row][@"son"];
+        for (id value in array) {
             if ([value isKindOfClass:[NSDictionary class]]) {
                 [industrySon_label addObject:value];
             }

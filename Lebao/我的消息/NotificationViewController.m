@@ -251,10 +251,17 @@
         NSDictionary *dict = _sectionArray[indexPath.row];
         [cell setLeftImage:dict[@"image"] Title:dict[@"name"] isShowLine:[dict[@"show"] boolValue]];
         if (indexPath.row==0) {
-            cell.message.hidden =![modal.syscount boolValue];
+            if ([modal.syscount boolValue]||[modal.corsscount boolValue]) {
+                cell.message.hidden = NO;
+            }
+            else
+            {
+                cell.message.hidden = YES;
+            }
+        
         }
         if (indexPath.row==1) {
-            cell.message.hidden =![modal.corsscount boolValue];
+            cell.message.hidden = YES;
         }
         if (indexPath.row==2) {
             cell.message.hidden =![modal.cuscount boolValue];
