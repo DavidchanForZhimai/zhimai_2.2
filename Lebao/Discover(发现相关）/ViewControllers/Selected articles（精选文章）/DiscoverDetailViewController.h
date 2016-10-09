@@ -13,6 +13,7 @@
 @property(nonatomic,assign) int tag;
 @property(nonatomic,strong) NSString *ID;
 @property(nonatomic,strong) UIImage *shareImage;
+@property(nonatomic,copy) NSString *Nav_title;
 @end
 
 

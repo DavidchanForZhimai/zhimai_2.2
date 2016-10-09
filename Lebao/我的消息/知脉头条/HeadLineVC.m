@@ -11,12 +11,14 @@
 #import "HeadLineTwoCell.h"
 #import "XLDataService.h"
 #import "NSString+Extend.h"
+#import "DiscoverDetailViewController.h"
 @class subtitleData;
 @interface topModel : NSObject
 
 @property(nonatomic,assign)int topId;
 @property(nonatomic,strong)NSString *title;
 @property(nonatomic,strong)NSString *upimgurl;
+@property(nonatomic,strong)NSString *imgurl;
 @end
 
 @interface newsData : NSObject
@@ -42,12 +44,18 @@
 @end
 @implementation newsModel
 
++ (NSDictionary *)objectClassInArray{
+    return @{@"datas" : [newsData class]};
+}
 @end
 
 @implementation newsData
 +(NSDictionary *)mj_replacedKeyFromPropertyName
 {
     return @{@"datasId":@"id"};
+}
++ (NSDictionary *)objectClassInArray{
+    return @{@"subtitle" : [subtitleData class]};
 }
 @end
 
@@ -138,7 +146,7 @@
 
         }
         if (dataObj) {
-//                        NSLog(@"meetObj====%@",dataObj);
+                NSLog(@"meetObj====%@",dataObj);
             newsModel *modal = [newsModel mj_objectWithKeyValues:dataObj];
             count=modal.count;
             if (_page ==1) {
@@ -149,7 +157,10 @@
             }
             if (modal.rtcode ==1) {
                 [[ToolManager shareInstance] dismiss];
-                    [self.headLineArr addObjectsFromArray:modal.datas];
+                for (newsData *data in modal.datas) {
+                    [self.headLineArr addObject:data];
+                }
+                   
                     [headLineTab reloadData];
             }
             else
@@ -174,8 +185,9 @@
     UIView *headView = [[UIView alloc]init];
     headView.backgroundColor = AppViewBGColor;
     headView.height = 50;
+    newsData *data =  _headLineArr[section];
     UILabel *timelab=[[UILabel alloc]initWithFrame:CGRectMake((APPWIDTH-80)/2.0, (50-25)/2, 80, 25)];
-    NSString *times=[NSString stringWithFormat:@"%@",self.headLineArr[section][@"time"]];
+    NSString *times=data.time;
     
     timelab.text= [times updateTime];
     timelab.font=[UIFont systemFontOfSize:12];
@@ -223,30 +235,64 @@
         cellTwo=[[HeadLineTwoCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"twoCell"];
         cellTwo.backgroundColor=[UIColor clearColor];
     }
+    
+    newsData *data =  _headLineArr[indexPath.section];
     if(indexPath.row==0){
         
-        if (![_headLineArr[indexPath.section][@"top"][@"upimgurl"] isEqualToString:@""]) {
+        if (![data.top.upimgurl isEqualToString:@""]) {
 
-            [[ToolManager shareInstance]imageView:cellOne.bgImgView setImageWithURL:_headLineArr[indexPath.section][@"top"][@"upimgurl"]  placeholderType:PlaceholderTypeOther];
+            [[ToolManager shareInstance]imageView:cellOne.bgImgView setImageWithURL:data.top.upimgurl  placeholderType:PlaceholderTypeOther];
 
-        }else if (![_headLineArr[indexPath.section][@"top"][@"imgurl"] isEqualToString:@""]) {
+        }else if (![data.top.imgurl isEqualToString:@""]) {
             
-             [[ToolManager shareInstance]imageView:cellOne.bgImgView setImageWithURL:_headLineArr[indexPath.section][@"top"][@"imgurl"]  placeholderType:PlaceholderTypeOther];
+             [[ToolManager shareInstance]imageView:cellOne.bgImgView setImageWithURL:data.top.imgurl  placeholderType:PlaceholderTypeOther];
         }
         
-        cellOne.titleLab.text=_headLineArr[indexPath.section][@"top"][@"title"];
+        cellOne.titleLab.text=data.top.title;
         return cellOne;
     }
         else {
-            cellTwo.TitleLab.text=_headLineArr[indexPath.section][@"subtitle"][indexPath.row-1][@"title"];
-           [[ToolManager shareInstance]imageView:cellTwo.imgView setImageWithURL:_headLineArr[indexPath.section][@"subtitle"][indexPath.row-1][@"imgurl"]  placeholderType:PlaceholderTypeOther];
+            if (indexPath.row - 1<data.subtitle.count) {
+                subtitleData *subData =data.subtitle[indexPath.row - 1];
+            cellTwo.TitleLab.text=subData.title;
+           [[ToolManager shareInstance]imageView:cellTwo.imgView setImageWithURL:subData.imgurl  placeholderType:PlaceholderTypeOther];
+            }
         return cellTwo;
     }
     
 }
--(BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return NO;
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    DiscoverDetailViewController *detail = allocAndInit(DiscoverDetailViewController);
+   
+    newsData *data =  _headLineArr[indexPath.section];
+    if(indexPath.row==0){
+        
+        HeadLineOneCell *cellOne = [tableView cellForRowAtIndexPath:indexPath];
+        detail.shareImage =cellOne.bgImgView.image;
+        detail.ID =[NSString stringWithFormat:@"%d", data.top.topId];
+        detail.Nav_title = data.top.title;
+       
+    }
+    else {
+        
+        HeadLineTwoCell *cellTwo = [tableView cellForRowAtIndexPath:indexPath];
+        if (indexPath.row - 1<data.subtitle.count) {
+            subtitleData *subData =data.subtitle[indexPath.row - 1];
+            detail.shareImage =cellTwo.imgView.image;
+            detail.ID =[NSString stringWithFormat:@"%d", subData.subtitleId];
+            detail.Nav_title = subData.title;
+        }
+        
+    }
+
+   
+    PushView(self, detail);
+
 }
 - (void)buttonAction:(UIButton *)sender
 {

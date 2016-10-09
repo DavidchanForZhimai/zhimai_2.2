@@ -25,6 +25,8 @@
 
 #define ArticleURL [NSString stringWithFormat:@"%@release/list",HttpURL]
 #define ArticleDelURL [NSString stringWithFormat:@"%@release/del",HttpURL]
+
+#define DynamicWriteURL [NSString stringWithFormat:@"%@dynamic/write",HttpURL]
 #define cellH 114
 @interface AlreadysentproductViewController ()<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate>
 
@@ -221,49 +223,86 @@
     }
     
     MyContentDataModal *modal = _productArray[indexPath.section];
-    [cell dataModal:modal deleBlock:^(MyContentDataModal *modal) {
+    [cell dataModal:modal editBlock:^(MyContentDataModal *modal, EditType type) {
         
-        [[ToolManager shareInstance] showAlertViewTitle:@"您确定要删除该内容吗?"  contentText:nil showAlertViewBlcok:^{
+        if (type == EditDeleType) {
             NSMutableDictionary *parame = [Parameter parameterWithSessicon];
-            [parame setObject:modal.ID forKey:@"acid"];
-            NSString *url;
-            if (_isArticle) {
-                url = ArticleDelURL;
-            }
-            else
-            {
-                url = ProductDelURL;
-            }
-
-            [XLDataService postWithUrl:url param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-                //                NSLog(@"data =%@",dataObj);
-                if (dataObj) {
-                    if ([dataObj[@"rtcode"] integerValue] ==1) {
-                        NSMutableArray *array = _productArray;
-                        for (int i = 0; i<array.count; i++) {
-                            MyContentDataModal *modalData = array[i];
-                            if ([modalData.ID isEqualToString:modal.ID]) {
-                                
-                                [_productArray removeObjectAtIndex:i];
-                                [_productView reloadData];
-                            }
-                        }
-                        
-                    }
-                    else
-                    {
-                        [[ToolManager shareInstance] showInfoWithStatus:dataObj[@"rtmsg"]];
-                    }
+                [parame setObject:modal.ID forKey:@"acid"];
+                NSString *url;
+                if (_isArticle) {
+                    url = ArticleDelURL;
                 }
                 else
                 {
-                    [[ToolManager shareInstance] showInfoWithStatus];
+                    url = ProductDelURL;
                 }
                 
+                [XLDataService postWithUrl:url param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+                    //                NSLog(@"data =%@",dataObj);
+                    if (dataObj) {
+                        if ([dataObj[@"rtcode"] integerValue] ==1) {
+                            NSMutableArray *array = _productArray;
+                            for (int i = 0; i<array.count; i++) {
+                                MyContentDataModal *modalData = array[i];
+                                if ([modalData.ID isEqualToString:modal.ID]) {
+                                    
+                                    [_productArray removeObjectAtIndex:i];
+                                    [_productView reloadData];
+                                }
+                            }
+                            
+                        }
+                        else
+                        {
+                            [[ToolManager shareInstance] showInfoWithStatus:dataObj[@"rtmsg"]];
+                        }
+                    }
+                    else
+                    {
+                        [[ToolManager shareInstance] showInfoWithStatus];
+                    }
+                    
+                    
+                }];
                 
-            }];
+         
+        }
+        else
+        {
             
-        }];
+           
+            
+         
+//          NSMutableDictionary *parame = [Parameter parameterWithSessicon];
+//            [parame setValue:@"测试动态分享" forKey:@"content"];
+//            [parame setValue:@"2" forKey:@"type"];
+//            [parame setValue:modal.ID forKey:@"acid"];
+//            
+//            [[ToolManager shareInstance] showWithStatus];
+//            [XLDataService postWithUrl:DynamicWriteURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+//                        NSLog(@"data =%@",dataObj);
+//                if (dataObj) {
+//                    if ([dataObj[@"rtcode"] integerValue] ==1) {
+//                        
+//                        [[ToolManager shareInstance] showSuccessWithStatus:@"分享成功！"];
+//                    }
+//                    else
+//                    {
+//                        [[ToolManager shareInstance] showInfoWithStatus:dataObj[@"rtmsg"]];
+//                    }
+//                }
+//                else
+//                {
+//                    [[ToolManager shareInstance] showInfoWithStatus];
+//                }
+//                
+//                
+//            }];
+//
+            
+            
+            
+        }
         
         
     } pathBlock:^(MyContentDataModal *modal) {

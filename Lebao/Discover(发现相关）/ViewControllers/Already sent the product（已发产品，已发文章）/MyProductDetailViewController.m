@@ -44,8 +44,13 @@ typedef enum{
     [self navView];
     
     NSMutableDictionary *parame = [Parameter parameterWithSessicon];
-    [parame setObject:_uid forKey:@"uid"];
-    [parame setObject:_ID forKey:@"acid"];
+    if (_uid) {
+        [parame setObject:_uid forKey:@"uid"];
+    }
+    if (_ID) {
+        [parame setObject:_ID forKey:@"acid"];
+    }
+
     [self addMainView:parame];
     
 }
@@ -53,7 +58,7 @@ typedef enum{
 - (void)navView
 {
 
-    [self navViewTitleAndBackBtn:@"产品详情"];
+    [self navViewTitleAndBackBtn:@"详情"];
     
 }
 - (void)addMainView:(NSMutableDictionary *)parame

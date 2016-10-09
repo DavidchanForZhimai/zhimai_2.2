@@ -44,23 +44,26 @@
 - (void)navView
 {
     
-    NSString *title;
-    switch (_tag) {
-        case 0:
-            title =@"保险详情";
-            break;
-        case 1:
-            title =@"金融详情";
-            break;
-        case 2:
-            title =@"房产详情";
-            break;
-        case 3:
-            title =@"原创详情";
-            break;
-            
-        default:
-            break;
+    NSString *title = @"详情";
+//    switch (_tag) {
+//        case 0:
+//            title =@"保险详情";
+//            break;
+//        case 1:
+//            title =@"金融详情";
+//            break;
+//        case 2:
+//            title =@"房产详情";
+//            break;
+//        case 3:
+//            title =@"原创详情";
+//            break;
+//            
+//        default:
+//            break;
+//    }
+    if (_Nav_title) {
+        title =  _Nav_title;
     }
     [self navViewTitleAndBackBtn:title];
     

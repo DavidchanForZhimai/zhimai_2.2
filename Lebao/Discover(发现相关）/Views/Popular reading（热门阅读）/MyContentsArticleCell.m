@@ -11,7 +11,7 @@
 #import "ToolManager.h"
 #import "UILabel+Extend.h"
 #import "NSString+Extend.h"
-@interface MyContentsArticleCell()
+@interface MyContentsArticleCell()<UIActionSheetDelegate>
 @end
 @implementation MyContentsArticleCell
 {
@@ -24,7 +24,7 @@
     
     UIButton   *_shareImage;
     BaseButton *_pathBtn;
-    BaseButton *_deleteBtn;
+    BaseButton *_editBtn;
     BaseButton *_shareBtn;
 }
 
@@ -71,8 +71,8 @@
         UIImage *_pathPress = [UIImage imageNamed:@"icon_exhibition_mycontent_path_press"];
         UIImage *_share = [UIImage imageNamed:@"discover_clue_normal"];
         UIImage *_sharePress = [UIImage imageNamed:@"discover_clue_selected"];
-        UIImage *_delete = [UIImage imageNamed:@"icon_exhibition_mycontent_delete_nomal"];
-        UIImage *_deletePress = [UIImage imageNamed:@"icon_exhibition_mycontent_delete_press"];
+        UIImage *_edit = [UIImage imageNamed:@"iconfont-shezhi"];
+       
 
         //路径
         
@@ -92,10 +92,10 @@
         line2.backgroundColor = LineBg;
         [cell addSubview:line2];
        
-        //删除
+        //编辑
 
-       _deleteBtn = [[BaseButton alloc]initWithFrame:frame(CGRectGetMaxX(_shareBtn.frame), frameY(_pathBtn),frameWidth(_pathBtn), frameHeight(_pathBtn)) backgroundImage:nil iconImage:_delete highlightImage:_deletePress inView:self];
-        _deleteBtn.exclusiveTouch = YES;
+       _editBtn = [[BaseButton alloc]initWithFrame:frame(CGRectGetMaxX(_shareBtn.frame), frameY(_pathBtn),frameWidth(_pathBtn), frameHeight(_pathBtn)) backgroundImage:nil iconImage:_edit highlightImage:_edit inView:self];
+        _editBtn.exclusiveTouch = YES;
        
         
     }
@@ -103,18 +103,23 @@
     return self;
 }
 
-- (void)dataModal:(MyContentDataModal *)modal deleBlock:(void(^)(MyContentDataModal *modal))deleBlock pathBlock:(void(^)(MyContentDataModal *modal))pathBlock myfluence:(void(^)(MyContentDataModal *modal))myfluence;
+- (void)dataModal:(MyContentDataModal *)modal editBlock:(EditBlock)block  pathBlock:(void(^)(MyContentDataModal *modal))pathBlock myfluence:(void(^)(MyContentDataModal *modal))myfluence;
 {
-   
+    _editBlock = block;
+    _model = modal;
+    
     [[ToolManager shareInstance] imageView:_icon setImageWithURL:modal.imgurl placeholderType:PlaceholderTypeOther];
     _descrip.text = modal.title;
     _time.text = [modal.createdate timeformatString:@"yyyy-MM-dd"];
     _readsNum.text = modal.readcount;
     _clueNum.text = modal.readcover;
-    _deleteBtn.didClickBtnBlock = ^
+    
+    __weak typeof(self) weakSelf = self;
+    _editBtn.didClickBtnBlock = ^
     {
-        
-        deleBlock(modal);
+        UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:@"选项" delegate:weakSelf cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"删除",@"分享到我的动态", nil];
+        [actionSheet showInView:weakSelf];
+      
     };
     _pathBtn.didClickBtnBlock = ^
     {
@@ -128,6 +133,15 @@
     };
 
     
+}
+#pragma mark
+#pragma mark UIActionSheetDelegate
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex<2) {
+        
+        _editBlock(_model,(EditType)buttonIndex);
+    }
 }
 - (void)awakeFromNib {
     // Initialization code
