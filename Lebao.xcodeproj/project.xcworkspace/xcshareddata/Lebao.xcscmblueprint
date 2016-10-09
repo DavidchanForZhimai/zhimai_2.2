@@ -4,16 +4,16 @@
     "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++1AF0C4C" : {
 
     },
-    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++1693+++7FE102A" : {
-
-    },
-    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++1693+++49CFF02" : {
+    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++B3FD42F" : {
 
     },
     "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++B53D022" : {
 
     },
-    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++B3FD42F" : {
+    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++1693+++49CFF02" : {
+
+    },
+    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++1693+++7FE102A" : {
 
     },
     "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++99A8FEA" : {
@@ -27,11 +27,11 @@
     "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++99A8FEA" : 0,
     "985CF1C47124FE3CF3C7CDBFBDE48819E8747045+++05C1021" : 0,
     "781483BE7427AE9FAE952787F1C41718DCB8825F+++0A84564" : 0,
-    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++1693+++7FE102A" : 0,
     "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++B3FD42F" : 0,
+    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++1693+++7FE102A" : 0,
     "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++1AF0C4C" : 0,
-    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++1693+++49CFF02" : 0,
-    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++B53D022" : 0
+    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++B53D022" : 0,
+    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++1693+++49CFF02" : 0
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "DCD87906-714C-49D8-9D86-CE578318A3A7",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
@@ -41,11 +41,11 @@
     "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++99A8FEA" : "Zhimai_2.2\/Lebao\/My%20news%EF%BC%88%E6%88%91%E7%9A%84%E6%B6%88%E6%81%AF%EF%BC%89\/%E8%81%8A%E5%A4%A9%E6%A1%86%E6%9E%B6\/Dependcy\/GJCFAssetsPicker\/GJCFAssetsPickerResourceBundle.bundle\/",
     "985CF1C47124FE3CF3C7CDBFBDE48819E8747045+++05C1021" : "",
     "781483BE7427AE9FAE952787F1C41718DCB8825F+++0A84564" : "Lebao\/",
-    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++1693+++7FE102A" : "zhimai_2.2\/Lebao\/%E6%88%91%E7%9A%84%E6%B6%88%E6%81%AF\/%E8%81%8A%E5%A4%A9%E6%A1%86%E6%9E%B6\/Dependcy\/GJCUCapture\/",
     "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++B3FD42F" : "zhimai_2.2\/Lebao\/%E6%88%91%E7%9A%84%E6%B6%88%E6%81%AF\/%E8%81%8A%E5%A4%A9%E6%A1%86%E6%9E%B6\/Dependcy\/GJCUAsyncImageView\/",
+    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++1693+++7FE102A" : "zhimai_2.2\/Lebao\/%E6%88%91%E7%9A%84%E6%B6%88%E6%81%AF\/%E8%81%8A%E5%A4%A9%E6%A1%86%E6%9E%B6\/Dependcy\/GJCUCapture\/",
     "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++1AF0C4C" : "zhimai_2.2\/Lebao\/%E6%88%91%E7%9A%84%E6%B6%88%E6%81%AF\/%E8%81%8A%E5%A4%A9%E6%A1%86%E6%9E%B6\/Dependcy\/GJCFAssetsPicker\/GJCFAssetsPickerResourceBundle.bundle\/",
-    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++1693+++49CFF02" : "Zhimai_2.2\/Lebao\/My%20news%EF%BC%88%E6%88%91%E7%9A%84%E6%B6%88%E6%81%AF%EF%BC%89\/%E8%81%8A%E5%A4%A9%E6%A1%86%E6%9E%B6\/Dependcy\/GJCUCapture\/",
-    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++B53D022" : "Zhimai_2.2\/Lebao\/My%20news%EF%BC%88%E6%88%91%E7%9A%84%E6%B6%88%E6%81%AF%EF%BC%89\/%E8%81%8A%E5%A4%A9%E6%A1%86%E6%9E%B6\/Dependcy\/GJCFAssetsPicker\/GJCFAssetsPickerResourceBundle.bundle\/"
+    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++B53D022" : "Zhimai_2.2\/Lebao\/My%20news%EF%BC%88%E6%88%91%E7%9A%84%E6%B6%88%E6%81%AF%EF%BC%89\/%E8%81%8A%E5%A4%A9%E6%A1%86%E6%9E%B6\/Dependcy\/GJCFAssetsPicker\/GJCFAssetsPickerResourceBundle.bundle\/",
+    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++1693+++49CFF02" : "Zhimai_2.2\/Lebao\/My%20news%EF%BC%88%E6%88%91%E7%9A%84%E6%B6%88%E6%81%AF%EF%BC%89\/%E8%81%8A%E5%A4%A9%E6%A1%86%E6%9E%B6\/Dependcy\/GJCUCapture\/"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "Lebao",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
