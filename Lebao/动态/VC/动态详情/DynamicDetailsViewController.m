@@ -17,7 +17,7 @@
 #import "TableViewCell.h"
 #import "GallopUtils.h"
 #import "StatusModel.h"
-
+#import "MyProductDetailViewController.h"
 #define kToolBarH 44
 #define kTextFieldH 30
 @interface DynamicDetailsViewController ()<UITableViewDelegate,UITableViewDataSource,TableViewCellDelegate,UIScrollViewDelegate,UITextFieldDelegate>
@@ -561,6 +561,19 @@
     
 }
 
+#pragma mark
+#pragma mark 点击进入文章详情
+- (void)tableViewCell:(TableViewCell *)cell didClickedLikeButtonWithArticleID:(NSString *)articleID atIndexPath:(NSIndexPath *)indexPath
+{
+    CellLayout *layout =_jjrJsonArr[indexPath.row];
+    MyProductDetailViewController *detail = allocAndInit(MyProductDetailViewController);
+    detail.shareImage =cell.cellLayout.wetbImageStorage.imageStorage;
+    detail.ID = articleID;
+    detail.uid =[NSString stringWithFormat:@"%ld",layout.statusModel.ID];
+    detail.isNoEdit = YES;
+    detail.imageurl = layout.statusModel.imgurl;
+    PushView(self, detail);
+}
 
 
 - (void)didReceiveMemoryWarning {

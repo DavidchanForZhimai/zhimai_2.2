@@ -7,8 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
+/**
+ 动态类型
+**/
+typedef NS_ENUM(NSUInteger,DTDataType) {
+    
+     DTDataTypeNormal = 1,//普通，常规类型
+     DTDataTypeArticle = 2,//文章类型
+     DTDataTypeClue = 3,//线索类型
+};
 
-@class StatusDatas,StatusPic,StatusComment,StatusInfo,StatusLike;
+@class StatusDatas,StatusPic,StatusComment,StatusInfo,StatusLike,Typeinfo;
 @interface StatusModel : NSObject
 
 @property (nonatomic, copy) NSString *rtmsg;
@@ -26,9 +35,8 @@
 @interface StatusDatas : NSObject
 
 @property (nonatomic, copy) NSString *shareurl;
-@property (nonatomic, copy) NSString *sharetitle;
 
-@property (nonatomic, copy) NSString *type;//自己添加
+@property (nonatomic, copy) NSString *sharetitle;
 
 @property (nonatomic, assign) NSInteger likenum;
 
@@ -71,6 +79,14 @@
 @property (nonatomic, copy) NSString *address;
 
 @property (nonatomic, copy) NSString *content;
+
+@property (nonatomic, assign) DTDataType type;//新增动态类型
+@property (nonatomic, strong) Typeinfo *typeinfo;//新增类型数据
+
+@property (nonatomic, copy) NSString *ac_title;//文章标题
+@property (nonatomic, copy) NSString *acid;//文章id
+@property (nonatomic, assign) BOOL  isshow_title;
+@property (nonatomic, copy) NSString *cooperation_benefit;
 
 @end
 
@@ -116,6 +132,19 @@
 @property (nonatomic, assign) NSInteger sex;
 
 @property (nonatomic, assign) NSInteger brokerid;
+
+
+@end
+
+@interface Typeinfo : NSObject
+
+@property (nonatomic, copy) NSString *count;//线索：领取次数
+
+@property (nonatomic, copy) NSString *ID;
+
+@property (nonatomic, copy) NSString *title;
+
+@property (nonatomic, copy) NSString *imgurl;//文章，显示图片
 
 
 @end

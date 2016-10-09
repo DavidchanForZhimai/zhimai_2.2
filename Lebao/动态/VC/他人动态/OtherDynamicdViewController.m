@@ -19,6 +19,8 @@
 #import "StatusModel.h"
 #import "CellLayout.h"
 #import "DynamicDetailsViewController.h"
+
+#import "MyProductDetailViewController.h"
 #define kToolBarH 44
 #define kTextFieldH 30
 @interface OtherDynamicdViewController ()<UITableViewDelegate,UITableViewDataSource,TableViewCellDelegate,UIScrollViewDelegate,UITextFieldDelegate>
@@ -61,7 +63,7 @@
 -(void)setButtomScr
 {
     buttomScr = [[UIScrollView alloc]initWithFrame:CGRectMake(0,StatusBarHeight + NavigationBarHeight, SCREEN_WIDTH, SCREEN_HEIGHT-(StatusBarHeight + NavigationBarHeight))];
-     buttomScr.contentSize = CGSizeMake(SCREEN_WIDTH, frameHeight(buttomScr));
+    buttomScr.contentSize = CGSizeMake(SCREEN_WIDTH, frameHeight(buttomScr));
     buttomScr.backgroundColor = [UIColor clearColor];
     buttomScr.scrollEnabled = YES;
     buttomScr.delegate = self;
@@ -69,7 +71,7 @@
     buttomScr.alwaysBounceVertical = NO;
     buttomScr.showsHorizontalScrollIndicator = NO;
     buttomScr.showsVerticalScrollIndicator = NO;
-//    buttomScr.pagingEnabled = YES;
+    //    buttomScr.pagingEnabled = YES;
     buttomScr.bounces = NO;
     [self.view addSubview:buttomScr];
     [self addTheTab];
@@ -147,7 +149,7 @@
     }];
     
     _dtTab.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreJJR)];
-
+    
     [buttomScr addSubview:_dtTab];
     
 }
@@ -172,6 +174,7 @@
 {
     
     [[HomeInfo shareInstance]getHomePageDT:jjrpageNumb brokerid:_dynamicdID andcallBack:^(BOOL issucced, NSString* info, NSDictionary* jsonDic) {
+    
         if (issucced == YES) {
             
             StatusModel *model = [StatusModel mj_objectWithKeyValues:jsonDic];
@@ -194,7 +197,6 @@
                         [data.like replaceObjectAtIndex:i withObject:like];
                     }
                     
-                    data.type = @"image";
                     LWLayout* layout = [self layoutWithStatusModel:data index:i];
                     [self.jjrJsonArr addObject:layout];
                 }
@@ -268,7 +270,7 @@
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    NSLog(@"didSelectRowAtIndexPath");
+    //    NSLog(@"didSelectRowAtIndexPath");
     if (tableView ==_dtTab) {
         CellLayout* cellLayout = self.jjrJsonArr[indexPath.row];
         DynamicDetailsViewController*dynamicDetailsViewController = allocAndInit(DynamicDetailsViewController);
@@ -579,7 +581,7 @@
             MyDetialViewController * myDetialViewController = [[MyDetialViewController alloc]init];
             myDetialViewController.userID = data;
             [self.navigationController pushViewController:myDetialViewController animated:YES];
-
+            
             
         }
         else if ([data isKindOfClass:[NSDictionary class]])
@@ -611,7 +613,7 @@
                 PushView(self, dynamicDetailsViewController);
             }
         }
-
+        
     }
 }
 //点击点赞头像
@@ -620,7 +622,7 @@
     MyDetialViewController * myDetialViewController = [[MyDetialViewController alloc]init];
     myDetialViewController.userID = JJRId;
     [self.navigationController pushViewController:myDetialViewController animated:YES];
-
+    
 }
 //更多按钮事件
 - (void)tableViewCell:(TableViewCell *)cell didClickedLikeButtonWithIsSelf:(BOOL)isSelf andDynamicID:(NSString *)andDynamicID atIndexPath:(NSIndexPath *)indexPath andIndex:(NSInteger)index
@@ -688,6 +690,19 @@
     
 }
 
+#pragma mark
+#pragma mark 点击进入文章详情
+- (void)tableViewCell:(TableViewCell *)cell didClickedLikeButtonWithArticleID:(NSString *)articleID atIndexPath:(NSIndexPath *)indexPath
+{
+    CellLayout *layout =_jjrJsonArr[indexPath.row];
+    MyProductDetailViewController *detail = allocAndInit(MyProductDetailViewController);
+    detail.shareImage =cell.cellLayout.wetbImageStorage.imageStorage;
+    detail.ID = articleID;
+    detail.uid =[NSString stringWithFormat:@"%ld",layout.statusModel.ID];
+    detail.isNoEdit = YES;
+    detail.imageurl = layout.statusModel.imgurl;
+    PushView(self, detail);
+}
 
 
 - (void)didReceiveMemoryWarning {

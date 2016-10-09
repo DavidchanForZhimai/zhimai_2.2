@@ -33,8 +33,12 @@
 @property (nonatomic,copy) NSArray* prisePostionArray;
 @property (nonatomic,assign) CGRect avatarPosition;
 @property (nonatomic,strong) StatusDatas* statusModel;
+@property (nonatomic,strong)LWImageStorage* wetbImageStorage;
 @property (nonatomic,assign) BOOL isShowMore;
 @property (nonatomic,assign) CGRect websiteRect;
+
+
+
 
 //文字过长时，折叠状态的布局模型
 - (id)initWithStatusModel:(StatusDatas *)statusModel

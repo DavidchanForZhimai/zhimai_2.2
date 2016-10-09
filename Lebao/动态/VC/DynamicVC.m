@@ -20,6 +20,7 @@
 #import "DynamicDetailsViewController.h"//动态详情
 #import "CoreArchive.h"
 #import "ViewController.h"
+#import "MyProductDetailViewController.h"//文章阅读
 #define kToolBarH 44
 #define kTextFieldH 30
 #define xsTabTag  110
@@ -69,7 +70,7 @@
 {
     
     [[HomeInfo shareInstance]getHomePageDT:jjrpageNumb brokerid:nil andcallBack:^(BOOL issucced, NSString* info, NSDictionary* jsonDic) {
-        
+//        NSLog(@"jsonDic =%@",jsonDic);
         if (isRefresh) {
             [[ToolManager shareInstance] endHeaderWithRefreshing:_dtTab];
         }
@@ -112,7 +113,7 @@
                         [data.like replaceObjectAtIndex:i withObject:like];
                     }
                     
-                    data.type = @"image";
+                    
                     LWLayout* layout = [self layoutWithStatusModel:data index:i];
                     [self.jjrJsonArr addObject:layout];
                 }
@@ -755,6 +756,25 @@
     }
     
     
+}
+#pragma mark
+#pragma mark 点击进入文章详情
+- (void)tableViewCell:(TableViewCell *)cell didClickedLikeButtonWithArticleID:(NSString *)articleID atIndexPath:(NSIndexPath *)indexPath
+{
+    CellLayout *layout =_jjrJsonArr[indexPath.row];
+    MyProductDetailViewController *detail = allocAndInit(MyProductDetailViewController);
+    detail.shareImage =cell.cellLayout.wetbImageStorage.imageStorage;
+    detail.ID = articleID;
+    detail.uid =[NSString stringWithFormat:@"%ld",layout.statusModel.ID];
+    detail.isNoEdit = YES;
+    detail.imageurl = layout.statusModel.imgurl;
+    PushView(self, detail);
+}
+#pragma mark
+#pragma mark 点击进入线索
+- (void)tableViewCell:(TableViewCell *)cell didClickedLikeButtonWithClueID:(NSString *)clueID atIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"clueID =%@",clueID);
 }
 //#pragma mark - 选择地址
 //-(void)navLeftAddressBtn

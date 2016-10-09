@@ -54,4 +54,12 @@
 
 @end
 
+@implementation Typeinfo
 
++ (NSDictionary *)mj_replacedKeyFromPropertyName
+{
+    return @{ @"ID" : @"id"
+              };
+}
+
+@end

@@ -85,7 +85,15 @@
             
             [self.navigationController pushViewController:release animated:NO];
 
-        }else
+        }
+        else if ([vcStr isEqualToString: @"AlreadysentproductViewController"])
+        {
+            AlreadysentproductViewController *article =allocAndInit(AlreadysentproductViewController);
+            article.isArticle = YES;
+            [self.navigationController pushViewController:article animated:YES];
+        }
+        
+        else
          PushView(self, allocAndInit(NSClassFromString(vcStr)));
     }
     else
@@ -93,7 +101,7 @@
         [[ToolManager shareInstance] showAlertMessage:@"未知页面"];
     }
    
-    NSLog(@"indexPath.se = %ld  row = %ld",indexPath.section,indexPath.row);
+   
 }
 #pragma mark 
 #pragma mark getters

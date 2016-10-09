@@ -46,7 +46,11 @@
 //更多按钮事件
 - (void)tableViewCell:(TableViewCell *)cell didClickedLikeButtonWithIsSelf:(BOOL)isSelf andDynamicID:(NSString *)andDynamicID atIndexPath:(NSIndexPath *)indexPath andIndex:(NSInteger)index;
 
+//点击进入文章详情
+- (void)tableViewCell:(TableViewCell *)cell didClickedLikeButtonWithArticleID:(NSString *)articleID atIndexPath:(NSIndexPath *)indexPath;
 
+//点击进入文章详情
+- (void)tableViewCell:(TableViewCell *)cell didClickedLikeButtonWithClueID:(NSString *)clueID atIndexPath:(NSIndexPath *)indexPath;
 @end
 
 @interface TableViewCell : UITableViewCell

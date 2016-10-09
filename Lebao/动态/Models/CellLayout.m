@@ -24,6 +24,52 @@
     self = [super init];
     if (self) {
         self.statusModel = statusModel;
+        //线索类型
+        if (self.statusModel.type == DTDataTypeClue) {
+            
+//            LWImageStorage * _avatarStorage = [[LWImageStorage alloc] initWithIdentifier:@"avatar"];
+//            UIImage *image = [UIImage imageNamed:@"icon_dongtai_biaoqian"];
+//            _avatarStorage.contents = image;
+//            _avatarStorage.backgroundColor = [UIColor clearColor];
+//            _avatarStorage.cornerBorderColor = [UIColor clearColor];
+//            _avatarStorage.frame = CGRectMake(8, 15,image.size.width,image.size.height);
+//            [self addStorage:_avatarStorage];
+//            
+//            LWTextStorage* nameTextStorage = [[LWTextStorage alloc] init];
+//            nameTextStorage.text = @"线索";
+//            nameTextStorage.font = Size(22.0);
+//            nameTextStorage.frame = _avatarStorage.frame;
+//            nameTextStorage.textColor = WhiteColor;
+//            nameTextStorage.textAlignment = NSTextAlignmentCenter;
+//            nameTextStorage.backgroundColor = [UIColor clearColor];
+//            [self addStorage:nameTextStorage];
+//            
+//            
+//            LWTextStorage* textStorage = [[LWTextStorage alloc] init];
+//            textStorage.text = self.statusModel.typeinfo.title;
+//            textStorage.font = Size(30.0);
+//            textStorage.frame = frame(20, 10, APPWIDTH - 40, 84);
+//            textStorage.textColor = WhiteColor;
+//            textStorage.linespacing = 5;
+//            textStorage.textAlignment = NSTextAlignmentCenter;
+//            textStorage.textBackgroundColor = [UIColor clearColor];
+//            [self addStorage:textStorage];
+//            
+//            LWTextStorage* textStorage2 = [[LWTextStorage alloc] init];
+//            textStorage2.text = [NSString stringWithFormat:@"%@人领取",self.statusModel.typeinfo.count];
+//            NSLog(@"textStorage2.text =%@",textStorage2.text);
+//            textStorage2.font = Size(24.0);
+//            textStorage2.frame = frame(20, textStorage.height - 30, textStorage.width - 20 , 30);
+//            textStorage2.textColor = WhiteColor;
+//            textStorage2.textAlignment = NSTextAlignmentRight;
+//            textStorage2.backgroundColor = [UIColor clearColor];
+//            [self addStorage:textStorage2];
+            
+            self.cellHeight = 114;
+        }
+        //其他类型
+        else
+        {
         //头像模型 avatarImageStorage
         LWImageStorage * _avatarStorage = [[LWImageStorage alloc] initWithIdentifier:@"avatar"];
         _avatarStorage.frame =CGRectMake(10, 10, 40, 40);
@@ -123,7 +169,38 @@
         NSMutableArray* imageStorageArray = [[NSMutableArray alloc] initWithCapacity:imageCount];
         NSMutableArray* imagePositionArray = [[NSMutableArray alloc] initWithCapacity:imageCount];
        
-        if ([self.statusModel.type isEqualToString:@"image"]) {
+        if (self.statusModel.type ==DTDataTypeArticle) {
+                self.websiteRect = CGRectMake(nameTextStorage.left,contentTextStorage.bottom + 5.0f,SCREEN_WIDTH - nameTextStorage.left - 10,40.0);
+
+                _wetbImageStorage = [[LWImageStorage alloc] init];
+                statusModel.typeinfo.imgurl = [[ToolManager shareInstance] urlAppend:statusModel.typeinfo.imgurl];
+                _wetbImageStorage.contents = statusModel.typeinfo.imgurl;
+                _wetbImageStorage.placeholder = [UIImage imageNamed:@"icon_placeholder"];
+                if ([statusModel.typeinfo.imgurl isEqualToString:ImageURLS]) {
+                    
+                    _wetbImageStorage.contents = [UIImage imageNamed:@"icon_placeholder"];
+                    
+                }
+                _wetbImageStorage.clipsToBounds = YES;
+                _wetbImageStorage.frame = CGRectMake(nameTextStorage.left + 2.5f, contentTextStorage.bottom + 7.5 , 35.0f, 35.0f);
+                [imageStorageArray addObject:_wetbImageStorage];
+            
+               if (self.statusModel.isshow_title) {
+                   LWTextStorage* detailTextStorage = [[LWTextStorage alloc] init];
+                   detailTextStorage.text = self.statusModel.ac_title;
+                   detailTextStorage.font = [UIFont fontWithName:@"Heiti SC" size:12.0f];
+                   detailTextStorage.textColor = RGB(40, 40, 40, 1);
+                   detailTextStorage.frame = CGRectMake(_wetbImageStorage.right + 10.0f, contentTextStorage.bottom + 17.5f, SCREEN_WIDTH - (_wetbImageStorage.right + 20.0), 20);
+                   detailTextStorage.linespacing = 0.5f;
+                   detailTextStorage.textAlignment = NSTextAlignmentLeft;
+                   [detailTextStorage lw_addLinkForWholeTextStorageWithData: @{@"type":@"Article",@"acid":self.statusModel.acid} linkColor:nil highLightColor:RGB(0, 0, 0, 0.15)];
+
+                   [self addStorage:detailTextStorage];
+                }
+            
+            }
+
+         else {
             NSInteger row = 0;
             NSInteger column = 0;
             if (imageCount == 1) {
@@ -168,28 +245,9 @@
             }
             
         }
-        else if ([self.statusModel.type isEqualToString:@"website"]) {
-            self.websiteRect = CGRectMake(nameTextStorage.left,contentTextStorage.bottom + 5.0f,SCREEN_WIDTH - 80.0f,60.0f);
-            LWImageStorage* imageStorage = [[LWImageStorage alloc] init];
-            StatusPic *pic = [statusModel.pic objectAtIndex:0];
-            NSString* URLString = pic.imgurl;
-            imageStorage.contents = [NSURL URLWithString:URLString];
-            imageStorage.clipsToBounds = YES;
-            imageStorage.frame = CGRectMake(nameTextStorage.left + 5.0f, contentTextStorage.bottom + 10.0f , 50.0f, 50.0f);
-            [imageStorageArray addObject:imageStorage];
-            
-            LWTextStorage* detailTextStorage = [[LWTextStorage alloc] init];
-            detailTextStorage.text = statusModel.content;
-            detailTextStorage.font = [UIFont fontWithName:@"Heiti SC" size:12.0f];
-            detailTextStorage.textColor = RGB(40, 40, 40, 1);
-            detailTextStorage.frame = CGRectMake(imageStorage.right + 10.0f, contentTextStorage.bottom + 10.0f, SCREEN_WIDTH - 150.0f, 60.0f);
-            detailTextStorage.linespacing = 0.5f;
-            [detailTextStorage lw_addLinkForWholeTextStorageWithData:@"https://github.com/waynezxcv/LWAlchemy" linkColor:nil highLightColor:RGB(0, 0, 0, 0.15)];
-            [self addStorage:detailTextStorage];
-        }
-        else if ([self.statusModel.type isEqualToString:@"video"]) {
-
-        }
+        //        else if ([self.statusModel.type isEqualToString:@"video"]) {
+//
+//        }
         
     
         //获取最后一张图片的模型
@@ -429,6 +487,8 @@
             [self addStorage:lookMoreStorage];
             self.cellHeight +=10;
         }
+        }
+        
         self.cellMarginsRect = frame(0, self.cellHeight - 10, APPWIDTH, 10);
         
     }
@@ -439,6 +499,46 @@
     self = [super init];
     if (self) {
         self.statusModel = statusModel;
+        
+        //线索类型
+        if (self.statusModel.type == DTDataTypeClue) {
+            
+            LWImageStorage * _avatarStorage = [[LWImageStorage alloc] initWithIdentifier:@"avatar"];
+            UIImage *image = [UIImage imageNamed:@"icon_dongtai_biaoqian"];
+            _avatarStorage.contents = image;
+            _avatarStorage.frame = CGRectMake(-2, 5,image.size.width,image.size.height);
+            [self addStorage:_avatarStorage];
+            
+            LWTextStorage* nameTextStorage = [[LWTextStorage alloc] init];
+            nameTextStorage.text = @"线索";
+            nameTextStorage.font = Size(22.0);
+            nameTextStorage.frame = _avatarStorage.frame;
+            nameTextStorage.textColor = WhiteColor;
+            nameTextStorage.textAlignment = NSTextAlignmentCenter;
+            [self addStorage:nameTextStorage];
+            
+            LWTextStorage* textStorage = [[LWTextStorage alloc] init];
+            textStorage.text = self.statusModel.typeinfo.title;
+            textStorage.font = Size(30.0);
+            textStorage.frame = frame(10, 0, APPWIDTH - 40, 84);
+            textStorage.textColor = WhiteColor;
+            textStorage.textAlignment = NSTextAlignmentCenter;
+            [self addStorage:textStorage];
+            
+            LWTextStorage* textStorage2 = [[LWTextStorage alloc] init];
+            textStorage2.text = [NSString stringWithFormat:@"%@人领取",self.statusModel.typeinfo.count];
+            textStorage2.font = Size(24.0);
+            textStorage2.frame = frame(0, textStorage.height - 30, textStorage.width - 10 , 30);
+            textStorage2.textColor = WhiteColor;
+            textStorage.textAlignment = NSTextAlignmentRight;
+            [self addStorage:textStorage2];
+            
+            self.cellHeight = 114;
+        }
+        //其他类型
+        else
+        {
+
         //头像模型 avatarImageStorage
         LWImageStorage * _avatarStorage = [[LWImageStorage alloc] initWithIdentifier:@"avatar"];
         _avatarStorage.frame =CGRectMake(10, 10, 40, 40);
@@ -530,74 +630,85 @@
         NSMutableArray* imageStorageArray = [[NSMutableArray alloc] initWithCapacity:imageCount];
         NSMutableArray* imagePositionArray = [[NSMutableArray alloc] initWithCapacity:imageCount];
         
-        if ([self.statusModel.type isEqualToString:@"image"]) {
-            NSInteger row = 0;
-            NSInteger column = 0;
-            if (imageCount == 1) {
-                CGRect imageRect = CGRectMake(nameTextStorage.left,
-                                              contentBottom  +(row * (imageWidth + 7.5f)),
-                                              imageWidth*1.7,
-                                              imageWidth*1.7);
-                NSString* imagePositionString = NSStringFromCGRect(imageRect);
-                [imagePositionArray addObject:imagePositionString];
-                LWImageStorage* imageStorage = [[LWImageStorage alloc] initWithIdentifier:@"image"];
-                imageStorage.tag = 0;
-                imageStorage.clipsToBounds = YES;
-                imageStorage.frame = imageRect;
-                imageStorage.backgroundColor = RGB(240, 240, 240, 1);
-                StatusPic *pic = [statusModel.pic objectAtIndex:0];
-                NSString* URLString = pic.abbre_imgurl;
-                imageStorage.contents = [NSURL URLWithString:URLString];
-                [imageStorageArray addObject:imageStorage];
-            } else {
-                for (NSInteger i = 0; i < imageCount; i ++) {
-                    CGRect imageRect = CGRectMake(nameTextStorage.left + (column * (imageWidth + 7.5f)),
-                                                  contentBottom + (row * (imageWidth + 7.5f)),
-                                                  imageWidth,
-                                                  imageWidth);
+            if (self.statusModel.type ==DTDataTypeArticle) {
+                self.websiteRect = CGRectMake(nameTextStorage.left,contentTextStorage.bottom + 5.0f,SCREEN_WIDTH - nameTextStorage.left - 10,40.0);
+                
+                _wetbImageStorage = [[LWImageStorage alloc] init];
+                statusModel.typeinfo.imgurl = [[ToolManager shareInstance] urlAppend:statusModel.typeinfo.imgurl];
+                _wetbImageStorage.contents = statusModel.typeinfo.imgurl;
+                _wetbImageStorage.placeholder = [UIImage imageNamed:@"icon_placeholder"];
+                if ([statusModel.typeinfo.imgurl isEqualToString:ImageURLS]) {
+                    
+                    _wetbImageStorage.contents = [UIImage imageNamed:@"icon_placeholder"];
+                    
+                }
+                _wetbImageStorage.clipsToBounds = YES;
+                _wetbImageStorage.frame = CGRectMake(nameTextStorage.left + 2.5f, contentTextStorage.bottom + 7.5 , 35.0f, 35.0f);
+                [imageStorageArray addObject:_wetbImageStorage];
+                
+                if (self.statusModel.isshow_title) {
+                    LWTextStorage* detailTextStorage = [[LWTextStorage alloc] init];
+                    detailTextStorage.text = self.statusModel.ac_title;
+                    detailTextStorage.font = [UIFont fontWithName:@"Heiti SC" size:12.0f];
+                    detailTextStorage.textColor = RGB(40, 40, 40, 1);
+                    detailTextStorage.frame = CGRectMake(_wetbImageStorage.right + 10.0f, contentTextStorage.bottom + 17.5f, SCREEN_WIDTH - (_wetbImageStorage.right + 20.0), 20);
+                    detailTextStorage.linespacing = 0.5f;
+                    detailTextStorage.textAlignment = NSTextAlignmentLeft;
+                    [detailTextStorage lw_addLinkForWholeTextStorageWithData: @{@"type":@"Article",@"acid":self.statusModel.acid} linkColor:nil highLightColor:RGB(0, 0, 0, 0.15)];
+                    
+                    [self addStorage:detailTextStorage];
+                }
+                
+            }
+            
+            else {
+                NSInteger row = 0;
+                NSInteger column = 0;
+                if (imageCount == 1) {
+                    CGRect imageRect = CGRectMake(nameTextStorage.left,
+                                                  contentBottom + 10.0 + (row * (imageWidth + 7.5f)),
+                                                  imageWidth*1.7,
+                                                  imageWidth*1.7);
                     NSString* imagePositionString = NSStringFromCGRect(imageRect);
                     [imagePositionArray addObject:imagePositionString];
                     LWImageStorage* imageStorage = [[LWImageStorage alloc] initWithIdentifier:@"image"];
+                    imageStorage.tag = 0;
                     imageStorage.clipsToBounds = YES;
-                    imageStorage.tag = i;
                     imageStorage.frame = imageRect;
                     imageStorage.backgroundColor = RGB(240, 240, 240, 1);
-                    StatusPic *pic = [statusModel.pic objectAtIndex:i];
+                    StatusPic *pic = [statusModel.pic objectAtIndex:0];
                     NSString* URLString = pic.abbre_imgurl;
                     imageStorage.contents = [NSURL URLWithString:URLString];
                     [imageStorageArray addObject:imageStorage];
-                    column = column + 1;
-                    if (column > 2) {
-                        column = 0;
-                        row = row + 1;
+                } else {
+                    for (NSInteger i = 0; i < imageCount; i ++) {
+                        CGRect imageRect = CGRectMake(nameTextStorage.left + (column * (imageWidth + 7.5f)),
+                                                      contentBottom + 10.0 +(row * (imageWidth + 7.5f)),
+                                                      imageWidth,
+                                                      imageWidth);
+                        NSString* imagePositionString = NSStringFromCGRect(imageRect);
+                        [imagePositionArray addObject:imagePositionString];
+                        LWImageStorage* imageStorage = [[LWImageStorage alloc] initWithIdentifier:@"image"];
+                        imageStorage.clipsToBounds = YES;
+                        imageStorage.tag = i;
+                        imageStorage.frame = imageRect;
+                        imageStorage.backgroundColor = RGB(240, 240, 240, 1);
+                        StatusPic *pic = [statusModel.pic objectAtIndex:i];
+                        NSString* URLString = pic.abbre_imgurl;
+                        imageStorage.contents = [NSURL URLWithString:URLString];
+                        [imageStorageArray addObject:imageStorage];
+                        column = column + 1;
+                        if (column > 2) {
+                            column = 0;
+                            row = row + 1;
+                        }
                     }
                 }
+                
             }
-            
-        }
-        else if ([self.statusModel.type isEqualToString:@"website"]) {
-            self.websiteRect = CGRectMake(nameTextStorage.left,contentTextStorage.bottom + 5.0f,SCREEN_WIDTH - 80.0f,60.0f);
-            LWImageStorage* imageStorage = [[LWImageStorage alloc] init];
-            StatusPic *pic = [statusModel.pic objectAtIndex:0];
-            NSString* URLString = pic.imgurl;
-            imageStorage.contents = [NSURL URLWithString:URLString];
-            imageStorage.clipsToBounds = YES;
-            imageStorage.frame = CGRectMake(nameTextStorage.left + 5.0f, contentTextStorage.bottom + 10.0f , 50.0f, 50.0f);
-            [imageStorageArray addObject:imageStorage];
-            
-            LWTextStorage* detailTextStorage = [[LWTextStorage alloc] init];
-            detailTextStorage.text = statusModel.content;
-            detailTextStorage.font = [UIFont fontWithName:@"Heiti SC" size:12.0f];
-            detailTextStorage.textColor = RGB(40, 40, 40, 1);
-            detailTextStorage.frame = CGRectMake(imageStorage.right + 10.0f, contentTextStorage.bottom + 10.0f, SCREEN_WIDTH - 150.0f, 60.0f);
-            detailTextStorage.linespacing = 0.5f;
-            [detailTextStorage lw_addLinkForWholeTextStorageWithData:@"https://github.com/waynezxcv/LWAlchemy" linkColor:nil highLightColor:RGB(0, 0, 0, 0.15)];
-            [self addStorage:detailTextStorage];
-        }
-        else if ([self.statusModel.type isEqualToString:@"video"]) {
-            
-        }
-    
+            //        else if ([self.statusModel.type isEqualToString:@"video"]) {
+            //
+            //        }
         
         //获取最后一张图片的模型
         LWImageStorage* lastImageStorage = (LWImageStorage *)[imageStorageArray lastObject];
@@ -836,6 +947,8 @@
             [self addStorage:lookMoreStorage];
             self.cellHeight +=10;
         }
+        }
+        
         self.cellMarginsRect = frame(0, self.cellHeight - 10, APPWIDTH, 10);
         
     }
