@@ -27,13 +27,15 @@
 #define jjrTabTag 120
 @interface DynamicVC ()<UITableViewDelegate,UITableViewDataSource,TableViewCellDelegate,UIScrollViewDelegate,UITextFieldDelegate>
 {
-    UIScrollView * buttomScr;
+
     UIButton * jjrBtn;
     int jjrpageNumb;
     
     UIImageView *_toolBar;
     UITextField *_textField;
     UIButton  *_sendBtn;
+    
+    UIScrollView *_toolBarView;
 }
 @property (strong,nonatomic)NSMutableArray * jjrJsonArr;
 @property (strong,nonatomic)NSMutableArray * fakeDatasource;
@@ -56,15 +58,34 @@
     
     jjrpageNumb = 1;
     _jjrJsonArr = [[NSMutableArray alloc]init];
-    
+   
     self.view.backgroundColor = [UIColor colorWithWhite:0.941 alpha:1.000];
-    [self setButtomScr];
+    [self addTheTab];
     [self getjjrJsonIsRefresh:NO andIsLoadMoreData:NO andShouldClearData:NO];
     //评论
-    [self addToolBar];
     [self setTabbarIndex:1];
     [self navViewTitle:@"动态"];
     
+    
+    _toolBarView = [[UIScrollView alloc]initWithFrame:CGRectMake(self.view.x,StatusBarHeight + NavigationBarHeight, self.view.width, self.view.height -(StatusBarHeight + NavigationBarHeight+ TabBarHeight))];
+    _toolBarView.backgroundColor = [UIColor clearColor];
+    _toolBarView.hidden = YES;
+    _toolBarView.userInteractionEnabled = YES;
+    _toolBarView.delegate =self;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(toolBarViewRemove)];
+    tap.numberOfTapsRequired = 1;
+    UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(toolBarViewRemove)];
+    [_toolBarView addGestureRecognizer:swipe];
+    [_toolBarView addGestureRecognizer:tap];
+    [self.view addSubview:_toolBarView];
+    [self addToolBar];
+   
+}
+//点击屏幕失去相应
+- (void)toolBarViewRemove
+{
+   _toolBarView.hidden = YES;
+   [_textField resignFirstResponder];
 }
 //动态数据加载
 -(void)getjjrJsonIsRefresh:(BOOL)isRefresh andIsLoadMoreData:(BOOL)isLoadMoreData andShouldClearData:(BOOL)shouldClearData
@@ -150,14 +171,14 @@
 - (void)addToolBar
 {
     UIImageView *bgView = [[UIImageView alloc] init];
-    bgView.frame = CGRectMake(0,frameHeight(buttomScr), APPWIDTH, kToolBarH);
+    bgView.frame = CGRectMake(_toolBarView.x,_toolBarView.height - kToolBarH, _toolBarView.width, kToolBarH);
     bgView.layer.borderWidth = 0.5;
     bgView.layer.borderColor= LineBg.CGColor;
     bgView.backgroundColor = WhiteColor ;
     bgView.userInteractionEnabled = YES;
     _toolBar = bgView;
     
-    [buttomScr addSubview:bgView];
+    [_toolBarView addSubview:bgView];
     
     UIView *textView = allocAndInitWithFrame(UIView,frame(10*ScreenMultiple, 8, APPWIDTH - 80*ScreenMultiple, 28));
     textView.userInteractionEnabled  =YES;
@@ -195,30 +216,14 @@
     
     [self postComment];
 }
-/**
- *  最下层的scrollview
- */
--(void)setButtomScr
-{
-    buttomScr = [[UIScrollView alloc]initWithFrame:CGRectMake(0,NavigationBarHeight, APPWIDTH, APPHEIGHT-( NavigationBarHeight + TabBarHeight))];
-    buttomScr.backgroundColor = [UIColor clearColor];
-    buttomScr.contentSize = CGSizeMake(APPWIDTH, frameHeight(buttomScr));
-    buttomScr.scrollEnabled = YES;
-    buttomScr.delegate = self;
-    buttomScr.alwaysBounceHorizontal = NO;
-    buttomScr.alwaysBounceVertical = NO;
-    buttomScr.showsHorizontalScrollIndicator = NO;
-    buttomScr.showsVerticalScrollIndicator = NO;
-    buttomScr.bounces = NO;
-    
-    [self.view addSubview:buttomScr];
-    [self addTheTab];
-}
+
 
 #pragma mark----两个tableview写在这里
 -(void)addTheTab
 {
-    _dtTab = [[UITableView alloc]initWithFrame:CGRectMake(0,0, APPWIDTH, frameHeight(buttomScr))];
+   
+    
+    _dtTab = [[UITableView alloc]initWithFrame:CGRectMake(0, NavigationBarHeight, APPWIDTH, APPHEIGHT - ( NavigationBarHeight)) style:UITableViewStyleGrouped];
     _dtTab.dataSource = self;
     _dtTab.delegate = self;
     _dtTab.tableHeaderView = [self addJJRTopV];
@@ -236,7 +241,7 @@
         [self getjjrJsonIsRefresh:NO andIsLoadMoreData:YES andShouldClearData:NO];
     }];
     
-    [buttomScr addSubview:_dtTab];
+    [self.view addSubview:_dtTab];
     
 }
 /**
@@ -385,6 +390,7 @@
 /***  点击评论 ***/
 - (void)tableViewCell:(TableViewCell *)cell didClickedCommentWithCellLayout:(CellLayout *)layout
           atIndexPath:(NSIndexPath *)indexPath {
+    _toolBarView.hidden = NO;
     [_textField becomeFirstResponder];
     _textField.placeholder =@"评论";
     _dynamicID =[NSString stringWithFormat:@"%ld",layout.statusModel.ID];
@@ -397,12 +403,17 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 
 {
-    
+    _toolBarView.hidden = YES;
     [self postComment];
+    
     return YES;
 }
 
-
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField
+{
+    _toolBarView.hidden = YES;
+    return YES;
+}
 /***  发表评论 ***/
 - (void)postComment {
     
@@ -608,6 +619,7 @@
         }
         else
         {
+            _toolBarView.hidden = NO;
             [_textField becomeFirstResponder];
             _textField.placeholder =[NSString stringWithFormat:@"回复%@:",commentModel.info.realname];
             _dynamicID =[NSString stringWithFormat:@"%ld",layout.statusModel.ID];
@@ -816,12 +828,12 @@
 
 -(void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset{
     
+    
     if(velocity.y>0)
         
     {
-        buttomScr.frame=CGRectMake(0,StatusBarHeight, APPWIDTH, APPHEIGHT-StatusBarHeight);
-        self.dtTab.frame=buttomScr.bounds;
-        _toolBar.frame=CGRectMake(_toolBar.x, frameHeight(buttomScr), _toolBar.width, _toolBar.height);
+        self.dtTab.frame=CGRectMake(0,StatusBarHeight, APPWIDTH, APPHEIGHT-StatusBarHeight);
+
         [UIView animateWithDuration:0.5
                          animations:^{
                              [self.navigationController setNavigationBarHidden:YES animated:YES];self.bottomView.alpha=0;
@@ -846,9 +858,8 @@
                              self.bottomView.alpha=1;
                              self.navigationBarView.alpha=1;
                          }completion:^(BOOL finished) {
-                             buttomScr.frame=CGRectMake(0, NavigationBarHeight, APPWIDTH, APPHEIGHT-( NavigationBarHeight + TabBarHeight));
-                             self.dtTab.frame=buttomScr.bounds;
-                             _toolBar.frame= CGRectMake(0,frameHeight(buttomScr), APPWIDTH, kToolBarH);
+                             self.dtTab.frame=CGRectMake(0, NavigationBarHeight, APPWIDTH, APPHEIGHT-( NavigationBarHeight + TabBarHeight));
+                           
                              
                          }];
     }
@@ -856,11 +867,10 @@
 }
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+  
     if (self.bottomView.alpha!=1||self.bottomView.hidden==YES){
-        buttomScr.frame=CGRectMake(0,StatusBarHeight, APPWIDTH, APPHEIGHT-StatusBarHeight);
-        self.dtTab.frame=buttomScr.bounds;
-        _toolBar.frame=CGRectMake(_toolBar.x, frameHeight(buttomScr), _toolBar.width, _toolBar.height);
-    }
+        self.dtTab.frame=CGRectMake(0,StatusBarHeight, APPWIDTH, APPHEIGHT-StatusBarHeight);
+        }
     
 }
 - (void)didReceiveMemoryWarning {
