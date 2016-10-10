@@ -14,7 +14,7 @@
 #import "MyKuaJieInfo.h"
 #import "ToolManager.h"
 #import "WBPingJiaVC.h"
-#import "JJRDetailVC.h"
+#import "MyDetialViewController.h"
 #import "ClueCommunityViewController.h"
 #import "DXAlertView.h"
 #import "GJGCChatFriendViewController.h"
@@ -432,11 +432,10 @@
 #pragma mark--领取人经纪人详情页面跳转
 -(void)jjrDetaolAction
 {
-    JJRDetailVC * jjrV = allocAndInit(JJRDetailVC);
-    jjrV.jjrID = [_coopArr[0] objectForKey:@"brokerid"];
-    PushView(self, jjrV);
-    
 
+    MyDetialViewController * myDetialViewController = [[MyDetialViewController alloc]init];
+    myDetialViewController.userID = [_coopArr[0] objectForKey:@"brokerid"];
+    [self.navigationController pushViewController:myDetialViewController animated:YES];
 }
 -(void)customBMMYSSV:(CGFloat)orgY
 {
@@ -1100,15 +1099,17 @@
 }
 -(void)whzDetaolAction:(UITapGestureRecognizer *)sender
 {
-    JJRDetailVC * jjrV = allocAndInit(JJRDetailVC);
-    jjrV.jjrID = [_coopArr[sender.view.tag-700] objectForKey:@"brokerid"];
-    [self.navigationController pushViewController:jjrV animated:YES];
+
+    MyDetialViewController * myDetialViewController = [[MyDetialViewController alloc]init];
+    myDetialViewController.userID = [_coopArr[sender.view.tag-700] objectForKey:@"brokerid"];
+    [self.navigationController pushViewController:myDetialViewController animated:YES];
 }
 -(void)jjrAction:(UIGestureRecognizer *)sender
 {
-    JJRDetailVC * jjrV = [[JJRDetailVC alloc]init];
-    jjrV.jjrID = [_recomArr[sender.view.tag-500] objectForKey:@"id"];
-    [self.navigationController pushViewController:jjrV animated:YES];
+    
+    MyDetialViewController * myDetialViewController = [[MyDetialViewController alloc]init];
+    myDetialViewController.userID = [_recomArr[sender.view.tag-500] objectForKey:@"id"];
+    [self.navigationController pushViewController:myDetialViewController animated:YES];
 }
 -(BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
 {

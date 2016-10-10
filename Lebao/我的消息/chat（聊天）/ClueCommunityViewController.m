@@ -10,7 +10,7 @@
 #import "ClueCommunityCell.h"
 #import "XLDataService.h"
 #import "NSString+Extend.h"
-#import "JJRDetailVC.h"
+#import "MyDetialViewController.h"
 #import "MP3PlayerManager.h"
 
 #define CommentlistURL [NSString stringWithFormat:@"%@demand/commentlist",HttpURL]
@@ -307,9 +307,9 @@ typedef NS_ENUM(NSUInteger,ButtonActionTag) {
     ClueCommunityData *data =_clueCommunityArray[indexPath.row];
     [cell setModal:data clueCommunityBlock:^(NSString *jjrID) {
         
-        JJRDetailVC *jjrVC = allocAndInit(JJRDetailVC);
-        jjrVC.jjrID = jjrID;
-        PushView(self, jjrVC);
+        MyDetialViewController * myDetialViewController = [[MyDetialViewController alloc]init];
+        myDetialViewController.userID = jjrID;
+        [self.navigationController pushViewController:myDetialViewController animated:YES];
         
     }];
     return cell;

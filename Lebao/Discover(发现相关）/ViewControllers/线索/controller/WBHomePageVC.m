@@ -10,7 +10,7 @@
 #import "XSCell.h"
 #import "MJExtension.h"
 #import "MJRefresh.h"
-#import "JJRDetailVC.h"
+#import "MyDetialViewController.h"
 #import "XianSuoDetailVC.h"
 #import "JingJiRenVC.h"
 #import "AppDelegate.h"
@@ -320,9 +320,10 @@
 #pragma mark----线索那边的头像那块view的点击事件
 -(void)btnVAction:(UITapGestureRecognizer *)sender
 {
-    JJRDetailVC * jjrV = [[JJRDetailVC alloc]init];
-    jjrV.jjrID = [_xsJsonArr[sender.view.tag-200] objectForKey:@"brokerid"];
-    [self.navigationController pushViewController:jjrV animated:YES];
+    
+    MyDetialViewController * myDetialViewController = [[MyDetialViewController alloc]init];
+    myDetialViewController.userID = [_xsJsonArr[sender.view.tag-200] objectForKey:@"brokerid"];
+    [self.navigationController pushViewController:myDetialViewController animated:YES];
 }
 -(void)blueVAction:(UITapGestureRecognizer *)sender
 {

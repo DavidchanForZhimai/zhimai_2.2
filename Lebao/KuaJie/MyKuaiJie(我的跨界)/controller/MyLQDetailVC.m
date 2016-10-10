@@ -13,7 +13,7 @@
 #import "MyKuaJieInfo.h"
 #import "ToolManager.h"
 #import "PayDingJinVC.h"
-#import "JJRDetailVC.h"
+#import "MyDetialViewController.h"
 #import "ClueCommunityViewController.h"
 #import "GJGCChatFriendViewController.h"
 #import "MP3PlayerManager.h"
@@ -193,11 +193,10 @@
 #pragma mark--发布线索的经纪人跳转
 -(void)jjrTapAction
 {
-    JJRDetailVC * jjrV = allocAndInit(JJRDetailVC);
-    jjrV.jjrID = [_xiansuoDic objectForKey:@"brokerid"];
-    PushView(self, jjrV);
-    
-    
+   
+    MyDetialViewController * myDetialViewController = [[MyDetialViewController alloc]init];
+    myDetialViewController.userID = [_xiansuoDic objectForKey:@"brokerid"];
+    [self.navigationController pushViewController:myDetialViewController animated:YES];
 }
 #pragma mark  View
 -(void)addTheXSV:(CGFloat)orgY

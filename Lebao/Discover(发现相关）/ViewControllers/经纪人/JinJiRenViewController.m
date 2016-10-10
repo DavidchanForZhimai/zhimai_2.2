@@ -9,7 +9,7 @@
 #import "JinJiRenViewController.h"
 #import "JJRCell.h"
 #import "MJRefresh.h"
-#import "JJRDetailVC.h"
+#import "MyDetialViewController.h"
 #import "JingJiRenVC.h"
 #import "AppDelegate.h"
 #import "MyXSDetailVC.h"
@@ -235,9 +235,10 @@
 }
 -(void)jjrAction:(UIGestureRecognizer *)sender
 {
-    JJRDetailVC * jjrV = [[JJRDetailVC alloc]init];
-    jjrV.jjrID = [_jjrJsonArr[sender.view.tag-500] objectForKey:@"id"];
-    [self.navigationController pushViewController:jjrV animated:YES];
+  
+    MyDetialViewController * myDetialViewController = [[MyDetialViewController alloc]init];
+    myDetialViewController.userID = [_jjrJsonArr[sender.view.tag-500] objectForKey:@"id"];
+    [self.navigationController pushViewController:myDetialViewController animated:YES];
 }
 -(void)guanzhuAction:(UIButton *)sender
 {

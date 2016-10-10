@@ -11,7 +11,7 @@
 #import "MyKuaJieInfo.h"
 #import "HomeInfo.h"
 #import "MJRefresh.h"
-#import "JJRDetailVC.h"
+#import "MyDetialViewController.h"
 @interface MyGuanZhuVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *myTab;
 @property (assign,nonatomic)int page;
@@ -176,9 +176,9 @@
 }
 -(void)jjrAction:(UIGestureRecognizer *)sender
 {
-    JJRDetailVC * jjrV = [[JJRDetailVC alloc]init];
-    jjrV.jjrID = [_jsonArr[sender.view.tag-500] objectForKey:@"uid"];
-    [self.navigationController pushViewController:jjrV animated:YES];
+    MyDetialViewController * myDetialViewController = [[MyDetialViewController alloc]init];
+    myDetialViewController.userID = [_jsonArr[sender.view.tag-500] objectForKey:@"uid"];
+    [self.navigationController pushViewController:myDetialViewController animated:YES];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

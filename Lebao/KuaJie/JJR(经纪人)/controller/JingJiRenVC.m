@@ -12,7 +12,7 @@
 #import "JJRDetailInfo.h"
 #import "HomeInfo.h"
 #import "ToolManager.h"
-#import "JJRDetailVC.h"
+#import "MyDetialViewController.h"
 #import "CoreArchive.h"
 #import "ViewController.h"//选择地址
 @interface JingJiRenVC ()<UITableViewDelegate,UITableViewDataSource>
@@ -271,9 +271,11 @@
 }
 -(void)jjrAction:(UIGestureRecognizer *)sender
 {
-    JJRDetailVC * jjrV = [[JJRDetailVC alloc]init];
-    jjrV.jjrID = [_jsonArr[sender.view.tag-500] objectForKey:@"id"];
-    [self.navigationController pushViewController:jjrV animated:YES];
+    
+    MyDetialViewController * myDetialViewController = [[MyDetialViewController alloc]init];
+    myDetialViewController.userID = [_jsonArr[sender.view.tag-500] objectForKey:@"id"];
+    [self.navigationController pushViewController:myDetialViewController animated:YES];
+    
 }
 -(BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
 {

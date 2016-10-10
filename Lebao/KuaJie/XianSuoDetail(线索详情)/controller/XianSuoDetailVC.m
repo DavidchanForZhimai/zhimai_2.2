@@ -8,7 +8,7 @@
 
 #import "XianSuoDetailVC.h"
 #import "LinQuCell.h"
-#import "JJRDetailVC.h"
+#import "MyDetialViewController.h"
 #import "PayDingJinVC.h"
 #import "XianSuoDetailInfo.h"
 #import "ToolManager.h"
@@ -534,11 +534,11 @@
 }
 -(void)touxiangAction
 {
-    JJRDetailVC * jjrV = allocAndInit(JJRDetailVC);
-    jjrV.jjrID  = [_xiansDic objectForKey:@"brokerid"];
-    [self.navigationController pushViewController:jjrV animated:YES];
-    
 
+    MyDetialViewController * myDetialViewController = [[MyDetialViewController alloc]init];
+    myDetialViewController.userID = [_xiansDic objectForKey:@"brokerid"];
+    [self.navigationController pushViewController:myDetialViewController animated:YES];
+   
 }
 -(void)addTheDuiHuaV:(CGFloat)orgY
 {
@@ -822,10 +822,9 @@
 -(void)txTapAction:(UITapGestureRecognizer *)sender
 {
     
-    JJRDetailVC* jjrV =  [[JJRDetailVC alloc]init];
-    jjrV.jjrID = [_coopArr[sender.view.tag - 200] objectForKey:@"id"];
-    
-    PushView(self, jjrV);
+    MyDetialViewController * myDetialViewController = [[MyDetialViewController alloc]init];
+    myDetialViewController.userID = [_coopArr[sender.view.tag - 200] objectForKey:@"id"];
+    [self.navigationController pushViewController:myDetialViewController animated:YES];
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
