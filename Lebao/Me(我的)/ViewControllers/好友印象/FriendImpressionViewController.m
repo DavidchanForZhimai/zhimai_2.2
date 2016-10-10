@@ -22,6 +22,7 @@
 @property(nonatomic,copy)NSString *headimgurl;
 @property(nonatomic,copy)NSString *nickname;
 @property(nonatomic,copy)NSString *openid;
+@property(nonatomic,copy)NSString *relation_label;
 @property(nonatomic,copy)NSMutableArray *labels;
 @end
 @implementation FriendImpressionData
@@ -105,7 +106,14 @@
 {
     
     [[ToolManager shareInstance] imageView:userICon setImageWithURL:data.headimgurl placeholderType:PlaceholderTypeUserHead];
-    userName.text = [NSString stringWithFormat:@"%@ (同事)",data.nickname];
+    if (data.relation_label&&![data.relation_label isEqualToString:@""]) {
+        userName.text = [NSString stringWithFormat:@"%@ (%@)",data.nickname,data.relation_label];
+    }
+    else
+    {
+      userName.text = [NSString stringWithFormat:@"%@",data.nickname];  
+    }
+    
     NSMutableAttributedString *str = [[NSMutableAttributedString alloc]initWithString:userName.text];
     
     [str addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:24*SpacedFonts] range:[userName.text rangeOfString:@"(同事)"]];

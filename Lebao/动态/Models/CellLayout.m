@@ -27,44 +27,7 @@
         //线索类型
         if (self.statusModel.type == DTDataTypeClue) {
             
-//            LWImageStorage * _avatarStorage = [[LWImageStorage alloc] initWithIdentifier:@"avatar"];
-//            UIImage *image = [UIImage imageNamed:@"icon_dongtai_biaoqian"];
-//            _avatarStorage.contents = image;
-//            _avatarStorage.backgroundColor = [UIColor clearColor];
-//            _avatarStorage.cornerBorderColor = [UIColor clearColor];
-//            _avatarStorage.frame = CGRectMake(8, 15,image.size.width,image.size.height);
-//            [self addStorage:_avatarStorage];
-//            
-//            LWTextStorage* nameTextStorage = [[LWTextStorage alloc] init];
-//            nameTextStorage.text = @"线索";
-//            nameTextStorage.font = Size(22.0);
-//            nameTextStorage.frame = _avatarStorage.frame;
-//            nameTextStorage.textColor = WhiteColor;
-//            nameTextStorage.textAlignment = NSTextAlignmentCenter;
-//            nameTextStorage.backgroundColor = [UIColor clearColor];
-//            [self addStorage:nameTextStorage];
-//            
-//            
-//            LWTextStorage* textStorage = [[LWTextStorage alloc] init];
-//            textStorage.text = self.statusModel.typeinfo.title;
-//            textStorage.font = Size(30.0);
-//            textStorage.frame = frame(20, 10, APPWIDTH - 40, 84);
-//            textStorage.textColor = WhiteColor;
-//            textStorage.linespacing = 5;
-//            textStorage.textAlignment = NSTextAlignmentCenter;
-//            textStorage.textBackgroundColor = [UIColor clearColor];
-//            [self addStorage:textStorage];
-//            
-//            LWTextStorage* textStorage2 = [[LWTextStorage alloc] init];
-//            textStorage2.text = [NSString stringWithFormat:@"%@人领取",self.statusModel.typeinfo.count];
-//            NSLog(@"textStorage2.text =%@",textStorage2.text);
-//            textStorage2.font = Size(24.0);
-//            textStorage2.frame = frame(20, textStorage.height - 30, textStorage.width - 20 , 30);
-//            textStorage2.textColor = WhiteColor;
-//            textStorage2.textAlignment = NSTextAlignmentRight;
-//            textStorage2.backgroundColor = [UIColor clearColor];
-//            [self addStorage:textStorage2];
-            
+
             self.cellHeight = 114;
         }
         //其他类型
@@ -131,7 +94,7 @@
         contentTextStorage.font = Size(26.0);
         contentTextStorage.textColor = [UIColor colorWithRed:0.1294 green:0.1333 blue:0.1333 alpha:1.0];
        
-        contentTextStorage.frame = CGRectMake(industryTextStorage.left, industryTextStorage.bottom + 10.0f, SCREEN_WIDTH - 80.0f, CGFLOAT_MAX);
+        contentTextStorage.frame = CGRectMake(_avatarStorage.left, industryTextStorage.bottom + 10.0f, SCREEN_WIDTH - 2*_avatarStorage.left, CGFLOAT_MAX);
         if ([statusModel.address isEqualToString:@""]&&[statusModel.workyear isEqualToString:@""]) {
             contentTextStorage.frame = CGRectMake(nameTextStorage.left, nameTextStorage.bottom + 10.0f, SCREEN_WIDTH - 80.0f, CGFLOAT_MAX);
         }
@@ -164,13 +127,13 @@
 //                                        linkColor:RGB(113, 129, 161, 1)
 //                                   highlightColor:RGB(0, 0, 0, 0.15)];
         //发布的图片模型 imgsStorage
-        CGFloat imageWidth = (SCREEN_WIDTH - 100.0f)/3.0f;
+        CGFloat imageWidth = (SCREEN_WIDTH - 40.0)/3.0f;
         NSInteger imageCount = [statusModel.pic count];
         NSMutableArray* imageStorageArray = [[NSMutableArray alloc] initWithCapacity:imageCount];
         NSMutableArray* imagePositionArray = [[NSMutableArray alloc] initWithCapacity:imageCount];
        
         if (self.statusModel.type ==DTDataTypeArticle) {
-                self.websiteRect = CGRectMake(nameTextStorage.left,contentTextStorage.bottom + 5.0f,SCREEN_WIDTH - nameTextStorage.left - 10,40.0);
+                self.websiteRect = CGRectMake(_avatarStorage.left,contentTextStorage.bottom + 5.0f,SCREEN_WIDTH - 2*_avatarStorage.left,40.0);
 
                 _wetbImageStorage = [[LWImageStorage alloc] init];
                 statusModel.typeinfo.imgurl = [[ToolManager shareInstance] urlAppend:statusModel.typeinfo.imgurl];
@@ -182,7 +145,7 @@
                     
                 }
                 _wetbImageStorage.clipsToBounds = YES;
-                _wetbImageStorage.frame = CGRectMake(nameTextStorage.left + 2.5f, contentTextStorage.bottom + 7.5 , 35.0f, 35.0f);
+                _wetbImageStorage.frame = CGRectMake(_avatarStorage.left + 2.5f, contentTextStorage.bottom + 7.5 , 35.0f, 35.0f);
                 [imageStorageArray addObject:_wetbImageStorage];
             
                if (self.statusModel.isshow_title) {
@@ -204,7 +167,7 @@
             NSInteger row = 0;
             NSInteger column = 0;
             if (imageCount == 1) {
-                CGRect imageRect = CGRectMake(nameTextStorage.left,
+                CGRect imageRect = CGRectMake(_avatarStorage.left,
                                               contentBottom + 10.0 + (row * (imageWidth + 7.5f)),
                                               imageWidth*1.7,
                                               imageWidth*1.7);
@@ -221,8 +184,8 @@
                 [imageStorageArray addObject:imageStorage];
             } else {
                 for (NSInteger i = 0; i < imageCount; i ++) {
-                    CGRect imageRect = CGRectMake(nameTextStorage.left + (column * (imageWidth + 7.5f)),
-                                                  contentBottom + 10.0 +(row * (imageWidth + 7.5f)),
+                    CGRect imageRect = CGRectMake(_avatarStorage.left + (column * (imageWidth + 10.0f)),
+                                                  contentBottom + 10.0 +(row * (imageWidth + 10.0f)),
                                                   imageWidth,
                                                   imageWidth);
                     NSString* imagePositionString = NSStringFromCGRect(imageRect);
@@ -259,10 +222,10 @@
         dateTextStorage.font = Size(22);
         dateTextStorage.textColor = [UIColor colorWithRed:0.7216 green:0.7294 blue:0.7333 alpha:1.0];
         
-        dateTextStorage.frame = CGRectMake(nameTextStorage.left, contentBottom + 10.0f, SCREEN_WIDTH - 80.0f, CGFLOAT_MAX);
+        dateTextStorage.frame = CGRectMake(_avatarStorage.left, contentBottom + 10.0f, SCREEN_WIDTH - 80.0f, CGFLOAT_MAX);
         if (lastImageStorage) {
              
-        dateTextStorage.frame = CGRectMake(nameTextStorage.left, lastImageStorage.bottom + 10.0f, SCREEN_WIDTH - 80.0f, CGFLOAT_MAX);
+        dateTextStorage.frame = CGRectMake(_avatarStorage.left, lastImageStorage.bottom + 10.0f, SCREEN_WIDTH - 80.0f, CGFLOAT_MAX);
 
         }
         
@@ -333,7 +296,7 @@
             int rowCount = 0;
             for (int i =0; i<count; i++) {
               
-                CGRect priseRect = CGRectMake(nameTextStorage.left + (rowCount * (priseWidth + 7.5f)),
+                CGRect priseRect = CGRectMake(_avatarStorage.left + (rowCount * (priseWidth + 7.5f)),
                                               likeImageSotrage.top - 6.0 +(row-1)*(priseWidth + 7.5f),
                                               priseWidth,
                                               priseWidth);
@@ -366,7 +329,7 @@
                 
                 rowCount++;
                 offsetY =((priseWidth + 7.5)*row - 4);
-                if ((nameTextStorage.left + (rowCount + 1)*(priseWidth + 7.5f))>APPWIDTH) {
+                if ((_avatarStorage.left + (rowCount + 1)*(priseWidth + 7.5f))>APPWIDTH) {
                     
                     rowCount = 0;
                     row +=1;
@@ -754,7 +717,7 @@
         LWImageStorage* commentBgStorage = [[LWImageStorage alloc] init];
         NSArray* commentTextStorages = @[];
         CGRect commentBgPosition = CGRectZero;
-        CGRect rect = CGRectMake(nameTextStorage.left - 28,dateTextStorage.bottom + 5.0f, SCREEN_WIDTH - 80, 20);
+        CGRect rect = CGRectMake(_avatarStorage.left,dateTextStorage.bottom + 5.0f, SCREEN_WIDTH -_avatarStorage.left*2, 20);
         CGFloat offsetY = 0.0f;
         //点赞
         LWImageStorage* likeImageSotrage = [[LWImageStorage alloc] init];
@@ -778,7 +741,7 @@
                     count =5;
                     moreImageSotrage.tag = 20;//更多
                     moreImageSotrage.contents = [UIImage imageNamed:@"dongtai_gengduozan"];
-                    moreImageSotrage.frame = CGRectMake(nameTextStorage.left + (5 * (priseWidth + 8.0)),likeImageSotrage.top,20.0, 20.0);
+                    moreImageSotrage.frame = CGRectMake(_avatarStorage.left + (5 * (priseWidth + 8.0)),likeImageSotrage.top,20.0, 20.0);
                 }
                 else
                 {

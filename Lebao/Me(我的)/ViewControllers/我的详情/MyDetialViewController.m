@@ -211,7 +211,15 @@
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
         
-        [UILabel createLabelWithFrame:frame(20, 0, 100, 40) text:@"我的动态" fontSize:14 textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:cell];
+        NSString *title;
+        if (headerModel.isme) {
+            title = @"我的动态";
+        }
+        else
+        {
+           title = @"他的动态";
+        }
+        [UILabel createLabelWithFrame:frame(20, 0, 100, 40) text:title fontSize:14 textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:cell];
         
         UILabel *label =  [UILabel createLabelWithFrame:frame(APPWIDTH - 100, 0, 70, 40) text:headerModel.dynamic_count fontSize:12 textColor:LightBlackTitleColor textAlignment:NSTextAlignmentRight inView:cell];
         label.tag =888;
@@ -280,14 +288,14 @@
     BaseButton *renmai = [self addViewWithFrame:frame(0, self.userView.y + self.userView.height + 10, APPWIDTH/3, 40) andTitle:@"人脉" rangeText:headerModel.connection_count andView:_viewHeader];
     renmai.didClickBtnBlock = ^
     {
-        NSLog(@"人脉");
+//        NSLog(@"人脉");
         
     };
     //约见成功
     BaseButton *yuejian = [self addViewWithFrame:frame(CGRectGetMaxX(renmai.frame),renmai.y,renmai.width, renmai.height) andTitle:@"约见成功" rangeText:headerModel.success_count andView:_viewHeader];
     yuejian.didClickBtnBlock = ^
     {
-        NSLog(@"约见成功");
+//        NSLog(@"约见成功");
         
     };
     
@@ -295,7 +303,7 @@
     BaseButton *xiangyue = [self addViewWithFrame:frame(CGRectGetMaxX(yuejian.frame),yuejian.y,yuejian.width, yuejian.height) andTitle:@"想约" rangeText:headerModel.want_count andView:_viewHeader];
     xiangyue.didClickBtnBlock = ^
     {
-        NSLog(@"想约");
+//        NSLog(@"想约");
         
     };
     
