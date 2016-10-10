@@ -114,13 +114,12 @@
     //新版本提示
     [[ToolManager shareInstance]update];
     
-    [self navViewTitle:@"约见"];
-    
-    [self setTabbarIndex:0];
+   
     self.view.backgroundColor=AppViewBGColor;
     [self addTabView];
     [self addYrBtn];
-    
+    [self setTabbarIndex:0];
+     [self navViewTitle:@"约见"];
     _page = 1;
     _isopen=NO;
     if (self.nearByManArr.count==0) {
@@ -135,86 +134,86 @@
 - (void)netWorkRefresh:(BOOL)isRefresh andIsLoadMoreData:(BOOL)isMoreLoadMoreData isShouldClearData:(BOOL)isShouldClearData//加载数据
 {
     
-//    [[LoCationManager shareInstance] creatLocationManager];
-//    [LoCationManager shareInstance].callBackLocation = ^(CLLocationCoordinate2D location)
-//    {
-//            测试用,要删掉
-            CLLocationCoordinate2D location;
-            location.latitude=24.491534;
-            location.longitude=118.180851;
-        NSMutableDictionary *param = [Parameter parameterWithSessicon];
-        [param setObject:[NSString stringWithFormat:@"%.6f",location.latitude] forKey:@"latitude"];
-        [param setObject:[NSString stringWithFormat:@"%.6f",location.longitude] forKey:@"longitude"];
-        [param setObject:@(_page) forKey:@"page"];
-        
-        [XLDataService putWithUrl:MeetMainURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-            //        NSLog(@"param====%@",param);
-            if (isRefresh) {
+    //    [[LoCationManager shareInstance] creatLocationManager];
+    //    [LoCationManager shareInstance].callBackLocation = ^(CLLocationCoordinate2D location)
+    //    {
+    //            测试用,要删掉
+    CLLocationCoordinate2D location;
+    location.latitude=24.491534;
+    location.longitude=118.180851;
+    NSMutableDictionary *param = [Parameter parameterWithSessicon];
+    [param setObject:[NSString stringWithFormat:@"%.6f",location.latitude] forKey:@"latitude"];
+    [param setObject:[NSString stringWithFormat:@"%.6f",location.longitude] forKey:@"longitude"];
+    [param setObject:@(_page) forKey:@"page"];
+    
+    [XLDataService putWithUrl:MeetMainURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+        //        NSLog(@"param====%@",param);
+        if (isRefresh) {
+            
+            
+            [[ToolManager shareInstance] endHeaderWithRefreshing:_yrTab];
+        }
+        if (isMoreLoadMoreData) {
+            [[ToolManager shareInstance] endFooterWithRefreshing:_yrTab];
+        }
+        if (isShouldClearData) {
+            [self.nearByManArr removeAllObjects];
+            [self.headimgArr removeAllObjects];
+            [self.headUserIdArr removeAllObjects];
+        }
+        if (dataObj) {
+            //            NSLog(@"meetObj====%@",dataObj);
+            MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
+            if (_page ==1) {
+                [[ToolManager shareInstance] moreDataStatus:_yrTab];
+            }
+            if (!modal.datas||modal.datas.count==0) {
                 
+                [[ToolManager shareInstance] noMoreDataStatus:_yrTab];
                 
-                [[ToolManager shareInstance] endHeaderWithRefreshing:_yrTab];
             }
-            if (isMoreLoadMoreData) {
-                [[ToolManager shareInstance] endFooterWithRefreshing:_yrTab];
-            }
-            if (isShouldClearData) {
-                [self.nearByManArr removeAllObjects];
-                [self.headimgArr removeAllObjects];
-                [self.headUserIdArr removeAllObjects];
-            }
-            if (dataObj) {
-                //            NSLog(@"meetObj====%@",dataObj);
-                MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
-                if (_page ==1) {
-                    [[ToolManager shareInstance] moreDataStatus:_yrTab];
-                }
-                if (!modal.datas||modal.datas.count==0) {
+            
+            if (modal.rtcode ==1) {
+                [[ToolManager shareInstance] dismiss];
+                for (MeetingData *data in modal.datas) {
+                    [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andMessageBtn:NO andOprationBtn:NO]];
                     
-                    [[ToolManager shareInstance] noMoreDataStatus:_yrTab];
-                    
-                }
-                
-                if (modal.rtcode ==1) {
-                    [[ToolManager shareInstance] dismiss];
-                    for (MeetingData *data in modal.datas) {
-                        [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andMessageBtn:NO andOprationBtn:NO]];
-                        
-                        if (data.imgurl!=nil) {
-                            [self.headimgArr addObject:data.imgurl];
-                            [self.headUserIdArr addObject:data.userid];
-                        }
-                        
-                        
-                        
+                    if (data.imgurl!=nil) {
+                        [self.headimgArr addObject:data.imgurl];
+                        [self.headUserIdArr addObject:data.userid];
                     }
                     
-                    _headView.headimgsArr=[NSArray arrayWithArray:self.headimgArr];
-                    _headView.userIdArr=[NSArray arrayWithArray:self.headUserIdArr];
-                    [_headView addEightImgView];
-                    _headView.nearManLab.text=[NSString stringWithFormat:@"最近有空 %d人",modal.count];
-                    _headView.midBtn.titleLabel.text=[NSString stringWithFormat:@"可约\n%d\n位经纪人",modal.count];
-                    _headView.midBtn.titleLabel.textAlignment=NSTextAlignmentCenter;
-                    NSMutableAttributedString *str=[[NSMutableAttributedString alloc]initWithString:_headView.midBtn.titleLabel.text];
-                    [str addAttribute:NSFontAttributeName value:Size(60) range:[_headView.midBtn.titleLabel.text rangeOfString:[NSString stringWithFormat:@"%d",modal.count]]];
-                    [_headView.midBtn setAttributedTitle:str forState:UIControlStateNormal];
-                    _headView.midBtn.titleLabel.numberOfLines=0;
-                    [_yrTab reloadData];
+                    
                     
                 }
-                else
-                {
-                    [[ToolManager shareInstance] showAlertMessage:modal.rtmsg];
-                }
+                
+                _headView.headimgsArr=[NSArray arrayWithArray:self.headimgArr];
+                _headView.userIdArr=[NSArray arrayWithArray:self.headUserIdArr];
+                [_headView addEightImgView];
+                _headView.nearManLab.text=[NSString stringWithFormat:@"最近有空 %d人",modal.count];
+                _headView.midBtn.titleLabel.text=[NSString stringWithFormat:@"可约\n%d\n位经纪人",modal.count];
+                _headView.midBtn.titleLabel.textAlignment=NSTextAlignmentCenter;
+                NSMutableAttributedString *str=[[NSMutableAttributedString alloc]initWithString:_headView.midBtn.titleLabel.text];
+                [str addAttribute:NSFontAttributeName value:Size(60) range:[_headView.midBtn.titleLabel.text rangeOfString:[NSString stringWithFormat:@"%d",modal.count]]];
+                [_headView.midBtn setAttributedTitle:str forState:UIControlStateNormal];
+                _headView.midBtn.titleLabel.numberOfLines=0;
+                [_yrTab reloadData];
                 
             }
             else
             {
-                [[ToolManager shareInstance] showInfoWithStatus];
+                [[ToolManager shareInstance] showAlertMessage:modal.rtmsg];
             }
             
-        }];
+        }
+        else
+        {
+            [[ToolManager shareInstance] showInfoWithStatus];
+        }
         
-//    };
+    }];
+    
+    //    };
     
     
     
@@ -238,7 +237,7 @@
 -(void)addTabView
 {
     _yrTab=[[UITableView alloc]init];
-    _yrTab.frame=CGRectMake(0,StatusBarHeight + NavigationBarHeight, APPWIDTH, APPHEIGHT-(StatusBarHeight + NavigationBarHeight + TabBarHeight));
+    _yrTab.frame=CGRectMake(0,NavigationBarHeight, APPWIDTH, APPHEIGHT-( NavigationBarHeight + TabBarHeight));
     _yrTab.delegate=self;
     _yrTab.dataSource=self;
     _yrTab.backgroundColor=[UIColor clearColor];
@@ -468,29 +467,50 @@
 
 -(void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset{
     
-    if(velocity.y>0)
+    if(velocity.y>0.0)
         
     {
         _yrTab.frame=CGRectMake(0,StatusBarHeight, APPWIDTH, APPHEIGHT-StatusBarHeight);
-        [self.navigationController setNavigationBarHidden:YES animated:YES];
-        [self.bottomView setHidden:YES];
-        [self.navigationBarView setHidden:YES];
-        [self.yrBtn setHidden:YES];
-        
+        [UIView animateWithDuration:0.5
+                         animations:^{
+                             [self.navigationController setNavigationBarHidden:YES animated:YES];
+                             self.bottomView.alpha=0;
+                             self.navigationBarView.alpha=0;
+                             self.yrBtn.alpha=0;
+                         }completion:^(BOOL finished) {
+                             [self.bottomView setHidden:YES];
+                             [self.navigationBarView setHidden:YES];
+                             [self.yrBtn setHidden:YES];
+                         }];
+  
     }
-    
     else
-        
     {
-        
-//        [self.navigationController setNavigationBarHidden:NO animated:YES];
-        _yrTab.frame=CGRectMake(0,StatusBarHeight + NavigationBarHeight, APPWIDTH, APPHEIGHT-(StatusBarHeight + NavigationBarHeight + TabBarHeight));
         [self.bottomView setHidden:NO];
         [self.navigationBarView setHidden:NO];
         [self.yrBtn setHidden:NO];
+        [UIView animateWithDuration:0.5
+                         animations:^{
+                             self.bottomView.alpha=1;
+                             self.navigationBarView.alpha=1;
+                             self.yrBtn.alpha=1;
+                         }completion:^(BOOL finished) {
+                             _yrTab.frame=CGRectMake(0, NavigationBarHeight, APPWIDTH, APPHEIGHT-( NavigationBarHeight + TabBarHeight));
+                         }];
     }
+//    if (self.bottomView.alpha==1||self.yrBtn.hidden==NO) {
+//         _yrTab.frame=CGRectMake(0, NavigationBarHeight, APPWIDTH, APPHEIGHT-( NavigationBarHeight + TabBarHeight));
+//    }
     
 }
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (self.bottomView.alpha!=1||self.yrBtn.hidden==YES){
+        _yrTab.frame=CGRectMake(0,StatusBarHeight, APPWIDTH, APPHEIGHT-StatusBarHeight);
+    }
+
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

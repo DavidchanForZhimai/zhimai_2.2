@@ -53,8 +53,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self setTabbarIndex:1];
-    [self navViewTitle:@"动态"];
     
     jjrpageNumb = 1;
     _jjrJsonArr = [[NSMutableArray alloc]init];
@@ -64,19 +62,22 @@
     [self getjjrJsonIsRefresh:NO andIsLoadMoreData:NO andShouldClearData:NO];
     //评论
     [self addToolBar];
+    [self setTabbarIndex:1];
+    [self navViewTitle:@"动态"];
+    
 }
 //动态数据加载
 -(void)getjjrJsonIsRefresh:(BOOL)isRefresh andIsLoadMoreData:(BOOL)isLoadMoreData andShouldClearData:(BOOL)shouldClearData
 {
     
     [[HomeInfo shareInstance]getHomePageDT:jjrpageNumb brokerid:nil andcallBack:^(BOOL issucced, NSString* info, NSDictionary* jsonDic) {
-//        NSLog(@"jsonDic =%@",jsonDic);
+        //        NSLog(@"jsonDic =%@",jsonDic);
         if (isRefresh) {
             [[ToolManager shareInstance] endHeaderWithRefreshing:_dtTab];
         }
         if (isLoadMoreData)
         {
-          [[ToolManager shareInstance] endFooterWithRefreshing:_dtTab];
+            [[ToolManager shareInstance] endFooterWithRefreshing:_dtTab];
         }
         
         if (issucced == YES) {
@@ -199,7 +200,7 @@
  */
 -(void)setButtomScr
 {
-    buttomScr = [[UIScrollView alloc]initWithFrame:CGRectMake(0,StatusBarHeight + NavigationBarHeight, APPWIDTH, APPHEIGHT-(StatusBarHeight + NavigationBarHeight + TabBarHeight))];
+    buttomScr = [[UIScrollView alloc]initWithFrame:CGRectMake(0,NavigationBarHeight, APPWIDTH, APPHEIGHT-( NavigationBarHeight + TabBarHeight))];
     buttomScr.backgroundColor = [UIColor clearColor];
     buttomScr.contentSize = CGSizeMake(APPWIDTH, frameHeight(buttomScr));
     buttomScr.scrollEnabled = YES;
@@ -227,7 +228,7 @@
     _dtTab.separatorStyle = UITableViewCellSeparatorStyleNone;
     [[ToolManager shareInstance] scrollView:_dtTab headerWithRefreshingBlock:^{
         jjrpageNumb = 1;
-         [self getjjrJsonIsRefresh:YES andIsLoadMoreData:NO andShouldClearData:YES];
+        [self getjjrJsonIsRefresh:YES andIsLoadMoreData:NO andShouldClearData:YES];
         
     }];
     [[ToolManager shareInstance] scrollView:_dtTab footerWithRefreshingBlock:^{
@@ -254,7 +255,7 @@
     {   PublishDynamicVC *publishDynamicVC  =  allocAndInit(PublishDynamicVC);
         publishDynamicVC.faBuSucceedBlock = ^
         {
-          
+            
             jjrpageNumb = 1;
             [self getjjrJsonIsRefresh:NO andIsLoadMoreData:NO andShouldClearData:YES];
         };
@@ -293,7 +294,7 @@
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-           return _jjrJsonArr.count;
+    return _jjrJsonArr.count;
     
 }
 -(BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
@@ -302,22 +303,22 @@
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-          static NSString* cellIdentifier = @"cellIdentifier";
-        TableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-        if (!cell) {
-            cell = [[TableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        }
-        cell.delegate = self;
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.indexPath = indexPath;
-        if (self.jjrJsonArr.count >= indexPath.row) {
-            CellLayout* cellLayout = self.jjrJsonArr[indexPath.row];
-            cell.cellLayout = cellLayout;
+    static NSString* cellIdentifier = @"cellIdentifier";
+    TableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (!cell) {
+        cell = [[TableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+    }
+    cell.delegate = self;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.indexPath = indexPath;
+    if (self.jjrJsonArr.count >= indexPath.row) {
+        CellLayout* cellLayout = self.jjrJsonArr[indexPath.row];
+        cell.cellLayout = cellLayout;
         
-       
         
-        }
-     return cell;
+        
+    }
+    return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -396,7 +397,7 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 
 {
-
+    
     [self postComment];
     return YES;
 }
@@ -782,7 +783,7 @@
 //    if (![CoreArchive strForKey:AddressID]) {
 //        [CoreArchive setStr:@"全国" key:LocationAddress];
 //        [CoreArchive setStr:@"0" key:AddressID];
-//        
+//
 //    }
 //    UIImage *upImage =[UIImage imageNamed:@"exhibition_up"];
 //    UILabel *lbUp = allocAndInit(UILabel);
@@ -796,50 +797,72 @@
 //    _selectedAddress.didClickBtnBlock =^
 //    {
 //        ViewController *vc=[[ViewController alloc]init];
-//        
+//
 //        [vc returnText:^(NSString *cityname,NSString *cityID) {
-//            
+//
 //            [weakSelf.selectedAddress setTitle:cityname forState:UIControlStateNormal];
 //
-//            
+//
 //        }];
-//        
+//
 //        [weakSelf.navigationController pushViewController:vc animated:NO];
 //    };
-//    
+//
 //
 //
 //}
-//#pragma mark 滑动隐藏导航栏
-////滑动隐藏导航栏 LiXingLe
-//
-//-(void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset{
-//    
-//    if(velocity.y>0)
-//        
-//    {
-//        buttomScr.frame=CGRectMake(0,StatusBarHeight, APPWIDTH, APPHEIGHT-StatusBarHeight);
-//        [self.navigationController setNavigationBarHidden:YES animated:YES];
-//        [self.bottomView setHidden:YES];
-//        [self.navigationBarView setHidden:YES];
-//        _toolBar.frame=CGRectMake(_toolBar.x, frameHeight(buttomScr), _toolBar.width, _toolBar.height);
-//
-//        
-//    }
-//    
-//    else
-//        
-//    {
-//        
-//        //        [self.navigationController setNavigationBarHidden:NO animated:YES];
-//        buttomScr.frame=CGRectMake(0,StatusBarHeight + NavigationBarHeight, APPWIDTH, APPHEIGHT-(StatusBarHeight + NavigationBarHeight + TabBarHeight));
-//        [self.bottomView setHidden:NO];
-//        [self.navigationBarView setHidden:NO];
-//        _toolBar.frame= CGRectMake(0,frameHeight(buttomScr), APPWIDTH, kToolBarH);;
-//    }
-//    
-//}
+#pragma mark 滑动隐藏导航栏
+//滑动隐藏导航栏 LiXingLe
 
+-(void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset{
+    
+    if(velocity.y>0)
+        
+    {
+        buttomScr.frame=CGRectMake(0,StatusBarHeight, APPWIDTH, APPHEIGHT-StatusBarHeight);
+        self.dtTab.frame=buttomScr.bounds;
+        _toolBar.frame=CGRectMake(_toolBar.x, frameHeight(buttomScr), _toolBar.width, _toolBar.height);
+        [UIView animateWithDuration:0.5
+                         animations:^{
+                             [self.navigationController setNavigationBarHidden:YES animated:YES];self.bottomView.alpha=0;
+                             self.navigationBarView.alpha=0;
+                         }completion:^(BOOL finished) {
+                             [self.bottomView setHidden:YES];
+                             [self.navigationBarView setHidden:YES];
+                             
+                         }];
+        
+    }
+    
+    else
+        
+    {
+        
+        [self.bottomView setHidden:NO];
+        [self.navigationBarView setHidden:NO];
+        
+        [UIView animateWithDuration:0.5
+                         animations:^{
+                             self.bottomView.alpha=1;
+                             self.navigationBarView.alpha=1;
+                         }completion:^(BOOL finished) {
+                             buttomScr.frame=CGRectMake(0, NavigationBarHeight, APPWIDTH, APPHEIGHT-( NavigationBarHeight + TabBarHeight));
+                             self.dtTab.frame=buttomScr.bounds;
+                             _toolBar.frame= CGRectMake(0,frameHeight(buttomScr), APPWIDTH, kToolBarH);
+                             
+                         }];
+    }
+    
+}
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (self.bottomView.alpha!=1||self.bottomView.hidden==YES){
+        buttomScr.frame=CGRectMake(0,StatusBarHeight, APPWIDTH, APPHEIGHT-StatusBarHeight);
+        self.dtTab.frame=buttomScr.bounds;
+        _toolBar.frame=CGRectMake(_toolBar.x, frameHeight(buttomScr), _toolBar.width, _toolBar.height);
+    }
+    
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -848,13 +871,13 @@
 
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end
