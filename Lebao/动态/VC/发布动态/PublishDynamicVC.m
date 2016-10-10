@@ -35,7 +35,7 @@
 #define MaxY(v)            CGRectGetMaxY((v).frame) //纵坐标加上控件的高度
 
 
-@interface PublishDynamicVC ()<UITextViewDelegate,UITextFieldDelegate,UICollectionViewDataSource, UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,UIImagePickerControllerDelegate,UINavigationControllerDelegate,XWDragCellCollectionViewDataSource, XWDragCellCollectionViewDelegate,UITextFieldDelegate,UIScrollViewDelegate,UIActionSheetDelegate,CooperateViewDelegate>
+@interface PublishDynamicVC ()<UITextViewDelegate,UITextFieldDelegate,UICollectionViewDataSource, UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,UIImagePickerControllerDelegate,UINavigationControllerDelegate,XWDragCellCollectionViewDataSource, XWDragCellCollectionViewDelegate,UITextFieldDelegate,UIScrollViewDelegate,UIActionSheetDelegate>
 {
     
     XWDragCellCollectionView *_collectionView;
@@ -44,6 +44,8 @@
     
     UIActionSheet *actionSheetTopic;
     NSMutableArray *objTopic;
+    
+    NSString *cooperate;
     
 }
 
@@ -240,7 +242,7 @@
         [[ToolManager shareInstance] showWithStatus:@"疯狂上传中..."];
         //        NSLog(@"self.phonelist =%@",self.phonelist);
         if (self.phonelist.count ==0) {
-            [[HomeInfo shareInstance] adddynamic:self.tfView.text imgs:nil andcallBack:^(BOOL issucced, NSString *info, NSDictionary *jsonDic) {
+            [[HomeInfo shareInstance] adddynamic:self.tfView.text cooperation_benefit:cooperate  imgs:nil andcallBack:^(BOOL issucced, NSString *info, NSDictionary *jsonDic) {
                 //                NSLog(@"%@",jsonDic);
                 if (issucced) {
                     if (_faBuSucceedBlock) {
@@ -267,7 +269,7 @@
                     [upLoadphotos addObject:images];
                     
                     if (upLoadphotos.count==self.phonelist.count) {
-                        [[HomeInfo shareInstance] adddynamic:self.tfView.text imgs:[upLoadphotos mj_JSONString] andcallBack:^(BOOL issucced, NSString *info, NSDictionary *jsonDic) {
+                        [[HomeInfo shareInstance] adddynamic:self.tfView.text cooperation_benefit:cooperate imgs:[upLoadphotos mj_JSONString] andcallBack:^(BOOL issucced, NSString *info, NSDictionary *jsonDic) {
                             
                             if (issucced) {
                                 [self.navigationController popViewControllerAnimated:YES];
@@ -487,28 +489,14 @@
     CGFloat dilH = 250;
     CooperateView *alertV = [[CooperateView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) LogFieldDefaultText:@"如果你展示的是自己的产品,可以将合作利益描述的更详细" andSuperView:self.navigationController.view];
     alertV.center = CGPointMake(APPWIDTH/2, APPHEIGHT/2-30);
-    alertV.delegate = self;
     alertV.titleStr = @"合作利益描述";
+    alertV.sureblock = ^(CooperateView *customAlertView,NSString *logFieldText)
+    {
+        cooperate = logFieldText;
+    };
 
 }
-#pragma mark - YXCustomAlertViewDelegate
-- (void) customAlertView:(CooperateView *) customAlertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    
-    if (buttonIndex==0) {
-        
-        [customAlertView dissMiss];
-        customAlertView = nil;
-        
-        
-    }else
-    {
-        
-        [customAlertView dissMiss];
-        customAlertView = nil;
-        
-    }
-}
+
 
 #pragma mark - UIActionSheetDelegate
 

@@ -159,13 +159,16 @@
 
 }
 //发布、保存动态
--(void)adddynamic:(NSString *)content imgs:(NSString *)imgs andcallBack:(HomePageCallbackType2)callback
+-(void)adddynamic:(NSString *)content  cooperation_benefit:(NSString *)cooperation_benefit imgs:(NSString *)imgs andcallBack:(HomePageCallbackType2)callback
 {
     NSString * url = [NSString stringWithFormat:@"%@dynamic/write",HOST_URL];
     NSMutableDictionary *parameters =  [Parameter parameterWithSessicon];
     [parameters setValue:content forKey:@"content"];
     if (imgs) {
          [parameters setValue:imgs forKey:@"img"];
+    }
+    if (cooperation_benefit &&![cooperation_benefit isEqualToString:@""]) {
+        [parameters setValue:cooperation_benefit forKey:@"cooperation_benefit"];
     }
    
 //    NSLog(@"parameters =%@ url =%@",parameters,url);
