@@ -88,8 +88,8 @@
                     PopView(self);
                 }
                 else{
-                NSDictionary *industryDic= dataObj[@"industry_label"];
-                for (id value in industryDic.allValues) {
+                NSArray *industryDic= dataObj[@"industry_label"];
+                for (id value in industryDic) {
                     if ([value isKindOfClass:[NSDictionary class]]) {
                       
                         [industry_label addObject:value];

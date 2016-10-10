@@ -127,6 +127,7 @@
     UIActionSheet *sheet;
     if (self.cellLayout.statusModel.me) {
         
+
         sheet = [[UIActionSheet alloc]initWithTitle:@"操作" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"删除",@"分享", nil];
         sheet.tag =88;
         [sheet showInView:self];

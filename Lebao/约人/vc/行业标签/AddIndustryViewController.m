@@ -33,7 +33,7 @@
 
 @implementation AddIndustryViewController
 {
-    NSDictionary *industrys;
+    NSMutableArray *industrys;
 }
 
 - (void)viewDidLoad {
@@ -55,7 +55,7 @@
         url = SaveFocusIndustryURL;
         
         NSMutableArray *industry = [NSMutableArray new];
-        for (id dic in industrys.allValues) {
+        for (id dic in industrys) {
             if ([dic isKindOfClass:[NSDictionary class]]) {
                 for (NSString *str in _hasTags) {
                     if ([dic[@"name"] isEqualToString:str]) {
@@ -88,22 +88,22 @@
                     PopView(self);
                 }
                 else{
-                    NSDictionary *industryDic= dataObj[@"industry_label"];
-                    industrys = dataObj[@"industrys"];
+                    NSMutableArray *industryDic= dataObj[@"industry_label"];
+                    industrys = [NSMutableArray arrayWithArray:dataObj[@"industrys"]];
                     NSArray *focus_industrys;
                     if (dataObj[@"focus_industrys"]&&[dataObj[@"focus_industrys"] isKindOfClass:[NSString class]]&&![dataObj[@"focus_industrys"] isEqualToString:@""]) {
                         focus_industrys = [dataObj[@"focus_industrys"] componentsSeparatedByString:@"/"];
                     }
-                    [focus_industrys enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                        
-                        if (industrys[obj][@"name"]) {
-                            [self.hasTags addObject:industrys[obj][@"name"]];
+                    for (id Value in industrys) {
+                        if ([Value isKindOfClass:[NSDictionary class]]) {
+                            
+                            if ([focus_industrys containsObject:Value[@"full_number"]] ) {
+                                [self.hasTags addObject:Value[@"name"]];
+                            }
                         }
-                        
-                
-                        
-                    }];
-                    for (id value in industryDic.allValues) {
+                    }
+                    
+                    for (id value in industryDic) {
                         if ([value isKindOfClass:[NSDictionary class]]) {
                         
                             [self.industry_label  addObject:value];

@@ -14,7 +14,7 @@
 #import "TheSecondaryHouseViewController.h"
 #import "TheSecondCarHomeViewController.h"
 #import "WetChatShareManager.h"
-
+#import "CooperateView.h"//发布分享文章
 
 #define ReleaseCollectURL [NSString stringWithFormat:@"%@release/collect",HttpURL]
 //路径
@@ -271,34 +271,40 @@
         {
             
            
+            CooperateView *cooperateView = [[CooperateView alloc]initAlertViewWithFrame:CGRectMake(20, 0, APPWIDTH - 40, APPHEIGHT) LogFieldDefaultText:@"想说点什么吗？" andSuperView:self.view];
+            cooperateView.titleStr=@"分享到动态";
+            cooperateView.center = self.view.center;
             
-         
-//          NSMutableDictionary *parame = [Parameter parameterWithSessicon];
-//            [parame setValue:@"测试动态分享" forKey:@"content"];
-//            [parame setValue:@"2" forKey:@"type"];
-//            [parame setValue:modal.ID forKey:@"acid"];
-//            
-//            [[ToolManager shareInstance] showWithStatus];
-//            [XLDataService postWithUrl:DynamicWriteURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-//                        NSLog(@"data =%@",dataObj);
-//                if (dataObj) {
-//                    if ([dataObj[@"rtcode"] integerValue] ==1) {
-//                        
-//                        [[ToolManager shareInstance] showSuccessWithStatus:@"分享成功！"];
-//                    }
-//                    else
-//                    {
-//                        [[ToolManager shareInstance] showInfoWithStatus:dataObj[@"rtmsg"]];
-//                    }
-//                }
-//                else
-//                {
-//                    [[ToolManager shareInstance] showInfoWithStatus];
-//                }
-//                
-//                
-//            }];
-//
+            cooperateView.sureblock = ^(CooperateView *customAlertView,NSString *logFieldText)
+            {
+                NSMutableDictionary *parame = [Parameter parameterWithSessicon];
+                [parame setValue:logFieldText forKey:@"content"];
+                [parame setValue:@"2" forKey:@"type"];
+                [parame setValue:modal.ID forKey:@"acid"];
+                
+                [[ToolManager shareInstance] showWithStatus];
+                [XLDataService postWithUrl:DynamicWriteURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+                    NSLog(@"data =%@ parame=%@",dataObj,parame);
+                    if (dataObj) {
+                        if ([dataObj[@"rtcode"] integerValue] ==1) {
+                            
+                            [[ToolManager shareInstance] showSuccessWithStatus:@"分享成功！"];
+                        }
+                        else
+                        {
+                            [[ToolManager shareInstance] showInfoWithStatus:dataObj[@"rtmsg"]];
+                        }
+                    }
+                    else
+                    {
+                        [[ToolManager shareInstance] showInfoWithStatus];
+                    }
+                    
+                    
+                }];
+                
+                
+            };
             
             
             

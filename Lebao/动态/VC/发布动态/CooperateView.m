@@ -88,13 +88,19 @@
     
 }
 
-
+- (instancetype) initAlertViewWithFrame:(CGRect)frame   LogFieldDefaultText:(NSString *)text andSuperView:(UIView *)superView
+{
+    self.oldText = text;
+    return [self initAlertViewWithFrame:frame andSuperView:superView];
+    
+}
 #pragma mark - Action
 - (void) leftCancelClick
 {
     if ([_delegate respondsToSelector:@selector(customAlertView:clickedButtonAtIndex:)]) {
         [_delegate customAlertView:self clickedButtonAtIndex:0];
     }
+    [self dissMiss];
 }
 
 - (void) confirmBtnClick
@@ -102,7 +108,10 @@
     if ([_delegate respondsToSelector:@selector(customAlertView:clickedButtonAtIndex:)]) {
         [_delegate customAlertView:self clickedButtonAtIndex:1];
     }
-    
+    if (_sureblock) {
+        _sureblock(self,_logField.text);
+    }
+    [self dissMiss];
 }
 
 
