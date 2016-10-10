@@ -53,6 +53,8 @@
 #define saveEvaluateURL [NSString stringWithFormat:@"%@meet/save-evaluate",HttpURL]
 //知脉头条
 #define HeadLineURL [NSString stringWithFormat:@"%@message/news",HttpURL]
+//vip/view
+#define vipviewURL [NSString stringWithFormat:@"%@vip/view",HttpURL]
 //请求参数
 #define DeviceToken @"deviceToken"
 #define KuserName @"username"

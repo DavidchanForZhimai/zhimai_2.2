@@ -55,7 +55,7 @@
     [self addTabView];
     _page = 1;
     _isopen=NO;
-    
+    [[ToolManager shareInstance]showWithStatus];
     [self netWorkRefresh:NO andIsLoadMoreData:NO isShouldClearData:NO];
     
     
@@ -68,7 +68,7 @@
 {
     NSMutableDictionary *param = [Parameter parameterWithSessicon];
     [param setObject:@(_page) forKey:@"page"];
-    NSLog(@"param====%@",param);
+
     [XLDataService putWithUrl:myConnectionsURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         if (isRefresh) {
             [[ToolManager shareInstance] endHeaderWithRefreshing:_yrTab];
@@ -79,7 +79,7 @@
         if (isShouldClearData) {
             [self.nearByManArr removeAllObjects];
                    }
-        NSLog(@"meetObj====%@",dataObj);
+
         if (dataObj) {
             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
             if (_page ==1) {
@@ -96,7 +96,7 @@
                     
                                   }
                 [_yrTab reloadData];
-                
+                [[ToolManager shareInstance] dismiss];
             }
             else
             {

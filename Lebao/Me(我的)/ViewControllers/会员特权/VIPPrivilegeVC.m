@@ -7,11 +7,54 @@
 //
 
 #import "VIPPrivilegeVC.h"
+#import "XLDataService.h"
+#import "VipPrivilegeCell.h"
+@interface privilegeData : NSObject
 
-@interface VIPPrivilegeVC ()
+@property(nonatomic,copy)NSString *ordinary;
+@property(nonatomic,copy)NSString *describe;
+@property(nonatomic,copy)NSString *vip;
+@end
 
-@property (weak, nonatomic) IBOutlet UIScrollView *mainScrollView;
+@interface pricesData : NSObject
+@property(nonatomic,assign)int days;
+@property(nonatomic,assign)int level;
+@property(nonatomic,assign)int price;
+@property(nonatomic,copy)NSString *price_unit;
+@end
 
+@interface vipModel : NSObject
+@property(nonatomic,assign)int vip;
+@property(nonatomic,assign)int authen;
+@property(nonatomic,assign)int rtcode;
+@property(nonatomic,copy)NSString *rtmsg;
+@property(nonatomic,copy)NSString *realname;
+@property(nonatomic,strong)NSArray<pricesData *> *prices;
+@property(nonatomic,strong)NSArray<privilegeData*> *privilege;
+@end
+@implementation vipModel
+
++ (NSDictionary *)objectClassInArray{
+    
+    return @{@"prices" : [pricesData class],@"privilege" : [privilegeData class]};
+
+}
+@end
+
+@implementation pricesData
+
+@end
+
+@implementation privilegeData
+
+@end
+
+@interface VIPPrivilegeVC ()<UITableViewDelegate,UITableViewDataSource>
+{
+    UITableView *vipTab;
+}
+
+@property (strong, nonatomic)NSMutableArray * allArr;
 @end
 
 @implementation VIPPrivilegeVC
@@ -33,21 +76,75 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self navViewTitleAndBackBtn:@"会员特权"];
+    _allArr=[[NSMutableArray alloc]init];
     
     [self creatUI];
+    [self netWork];
 }
 -(void)creatUI{
+
+    vipTab=[[UITableView alloc]initWithFrame:CGRectMake(0,64, APPWIDTH, APPHEIGHT-64-44) style:(UITableViewStyleGrouped)];
+    vipTab.delegate=self;
+    vipTab.dataSource=self;
+    vipTab.separatorStyle=UITableViewCellSeparatorStyleNone;
+    [self.view addSubview:vipTab];
+    vipTab.tableHeaderView=[self tabHeaderView];
+    
+    UIButton *vipBtn=[[UIButton alloc]initWithFrame:CGRectMake(0, APPHEIGHT-44, APPWIDTH, 44)];
+    vipBtn.backgroundColor=AppMainColor;
+    [vipBtn setTitle:@"快去升级为特权会员" forState:UIControlStateNormal];
+    [vipBtn addTarget:self action:@selector(vipAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:vipBtn];
+
+}
+
+- (void)netWork//加载数据
+{
+    
+    NSMutableDictionary *param = [Parameter parameterWithSessicon];
+    if (self.allArr.count==0) {
+        [[ToolManager shareInstance] showWithStatus];
+    }
+    //     NSLog(@"param====%@",param);
+    [XLDataService putWithUrl:vipviewURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+             if (dataObj) {
+                        NSLog(@"meetObj====%@",dataObj);
+            vipModel *modal = [vipModel mj_objectWithKeyValues:dataObj];
+
+            if (modal.rtcode ==1) {
+                [[ToolManager shareInstance]dismiss];
+               
+                    [self.allArr addObject:modal];
+                
+                vipTab.tableHeaderView = [self tabHeaderView];
+                
+                [vipTab reloadData];
+            }
+            else
+            {
+                [[ToolManager shareInstance] showAlertMessage:modal.rtmsg];
+            }
+        }
+        else
+        {
+            [[ToolManager shareInstance] showInfoWithStatus];
+        }
+        
+    }];
+    
+}
+-(UIView *)tabHeaderView
+{
     UIView *vipView=[[UIView alloc]init];
-    vipView.frame=CGRectMake(0,64, APPWIDTH, APPHEIGHT-64-44);
-    [self.mainScrollView addSubview:vipView];
+    vipView.frame=CGRectMake(0,0, APPWIDTH, 130);
     CALayer *toplayer=[[CALayer alloc]init];
     toplayer.frame=CGRectMake(0, 10, vipView.width, 70);
     toplayer.backgroundColor=[UIColor whiteColor].CGColor;
     [vipView.layer addSublayer:toplayer];
     
     UIImageView *headImagV=[[UIImageView alloc]init];//头像
-     headImagV.frame = CGRectMake(10, 23, 44, 44);
-     [[ToolManager shareInstance] imageView:headImagV setImageWithURL:_modal.imgurl placeholderType:PlaceholderTypeUserHead];
+    headImagV.frame = CGRectMake(10, 23, 44, 44);
+    [[ToolManager shareInstance] imageView:headImagV setImageWithURL:_modal.imgurl placeholderType:PlaceholderTypeUserHead];
     [vipView addSubview:headImagV];
     
     UILabel *nameLab=[[UILabel alloc]init];//名字
@@ -72,7 +169,7 @@
     if ([_modal.vip isEqualToString:@"1"]) {
         VIPimag=[UIImage imageNamed:@"[iconprofilevip]"];
     }else{
-    VIPimag=[UIImage imageNamed:@"[iconprofilevipweikaitong]"];
+        VIPimag=[UIImage imageNamed:@"[iconprofilevipweikaitong]"];
     }
     VIPImgV.frame=CGRectMake(CGRectGetMaxX(certifyImgV.frame)+5,certifyImgV.y, VIPimag.size.width, VIPimag.size.height);
     VIPImgV.image=VIPimag;
@@ -93,7 +190,8 @@
     
     UILabel *maneyLab=[[UILabel alloc]init];//钱
     maneyLab.font=Size(32);
-    maneyLab.text=@"198元/年";
+    vipModel *model=[_allArr firstObject];
+    maneyLab.text=[NSString stringWithFormat:@"%d元/年",model.prices[0].price];
     maneyLab.textColor=AppMainColor;
     maneyLab.frame= CGRectMake(vipView.width-maneyLab.text.length*16-10, CGRectGetMaxY(nameLab.frame)-3,maneyLab.text.length*16, 16);
     maneyLab.textAlignment=NSTextAlignmentRight;
@@ -103,26 +201,91 @@
     maneyLab.attributedText=str;
     maneyLab.numberOfLines=0;
     [vipView addSubview:maneyLab];
-    
-    UIImageView *vipPrivilegeImgV=[[UIImageView alloc]init];
-    UIImage *vipPrivilegeImg=[UIImage imageNamed:@"VIPprivilege.jpg"];
-    vipPrivilegeImgV.frame=CGRectMake(0, 90, APPWIDTH, APPWIDTH/vipPrivilegeImg.size.width*vipPrivilegeImg.size.height);
+    CALayer *viplablayer=[[CALayer alloc]init];
+    viplablayer.frame=CGRectMake(0, 90, APPWIDTH, 40);
+    viplablayer.backgroundColor=[UIColor whiteColor].CGColor;
+    [vipView.layer addSublayer:viplablayer];
+    UILabel *viplab=[[UILabel alloc]initWithFrame:CGRectMake(10, 90, APPWIDTH-10, 40)];
+    viplab.backgroundColor=[UIColor whiteColor];
+    viplab.text=@"会员特权";
+    [vipView addSubview:viplab];
 
-    vipPrivilegeImgV.image=vipPrivilegeImg;
-    [vipView addSubview:vipPrivilegeImgV];
     
-    vipView.frame=CGRectMake(0,64, APPWIDTH,CGRectGetMaxY(vipPrivilegeImgV.frame));
-//
-    self.mainScrollView.contentSize=CGSizeMake(0, vipView.height);
-    
-    
+    return vipView;
+}
+
+
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    if (section<self.allArr.count) {
+        vipModel *data =  self.allArr[section];
+        if (data.privilege.count!=0) {
+            return data.privilege.count+1;
+        }
+        return data.privilege.count;
+    }
+    return 0;
     
 }
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 40;
+}
+-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *footview=[[UIView alloc]init];
+    footview.frame=CGRectMake(0, 0, APPWIDTH, 10);
+    footview.backgroundColor=[UIColor whiteColor];
+    return footview;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 10;
+}
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    VipPrivilegeCell *cell=[tableView dequeueReusableCellWithIdentifier:@"vipCell"];
+    if (!cell) {
+        cell=[[VipPrivilegeCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"vipCell"];
+    }
+    vipModel *model=_allArr[indexPath.section];
+    if (indexPath.row==0) {
+        cell.lab1.text=@"权限";
+        cell.lab2.text=@"免费";
+        cell.lab3.text=@"收费";
+        cell.lab1.backgroundColor=AppViewBGColor;
+        cell.lab2.backgroundColor=AppViewBGColor;
+        cell.lab3.backgroundColor=AppViewBGColor;
+    }else
+    {
+        privilegeData * data = model.privilege[indexPath.row-1];
+        cell.lab1.text=data.describe;
+        cell.lab2.text=data.ordinary;
+        cell.lab3.text=data.vip;
+        cell.lab1.backgroundColor=[UIColor whiteColor];
+        cell.lab2.backgroundColor=[UIColor whiteColor];
+        cell.lab3.backgroundColor=[UIColor whiteColor];
+
+    }
+    
+    
+    
+    
+    return cell;
+}
+-(void)vipAction:(UIButton *)sender
+{
+    
+}
+-(BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath//高亮
+{
+    return NO;
+}
+
 - (void)buttonAction:(UIButton *)sender
 {
     PopView(self);
-}
-- (IBAction)vipBtnClick:(UIButton *)sender {
 }
 
 

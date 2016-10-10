@@ -181,7 +181,7 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    //隐藏顶部的分割线
+    
     UIView *headView = [[UIView alloc]init];
     headView.backgroundColor = AppViewBGColor;
     headView.height = 50;
