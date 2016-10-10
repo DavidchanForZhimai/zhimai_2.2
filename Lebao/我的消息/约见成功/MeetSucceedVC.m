@@ -69,7 +69,7 @@
 
 -(void)reflashRow:(NSNotification *)notification
 {
-   
+    
     NSMutableArray *arr;
     UITableView *tab;
     if (_meetMeBtn.selected==YES) {
@@ -79,7 +79,7 @@
         arr=_iMeetArr;
         tab=_iMeetTab;
     }
-
+    
     for (int i =0;i<arr.count;i++) {
         
         WantMeetLayout *layout =arr[i];
@@ -91,7 +91,7 @@
             [tab reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
         }
     }
-
+    
 }
 
 /**
@@ -222,7 +222,7 @@
             [[ToolManager shareInstance]endFooterWithRefreshing:tabView];
         }if (isShouldClearData) {
             [arr removeAllObjects];
-
+            
         }
         if (dataObj) {
             
@@ -420,15 +420,15 @@
     if (btn.tag==1110) {
         [[MP3PlayerManager shareInstance] downLoadAudioWithUrl:url  finishDownLoadBloak:^(BOOL succeed) {
             if (succeed) {
-//                [(UIImageView *)btn startAnimating];
-                btn.tag=1111;
                 
+                btn.tag=1111;
+                [btn setImage:[UIImage imageNamed:@"meet_yuyindianbo"] forState:UIControlStateNormal];
                 [[MP3PlayerManager shareInstance] audioPlayerWithURl:topath];
                 [MP3PlayerManager shareInstance].playFinishBlock = ^(BOOL succeed)
                 {
                     if (succeed) {
                         btn.tag=1110;
-//                        [(UIImageView *)btn stopAnimating];
+                        [btn setImage:[UIImage imageNamed:@"meet_yuyin"] forState:UIControlStateNormal];
                     }
                     
                 };
@@ -440,7 +440,7 @@
     }else if (btn.tag==1111){
         btn.tag=1110;
         [[MP3PlayerManager shareInstance] pausePlayer];
-//        [(UIImageView *)btn stopAnimating];
+        //        [(UIImageView *)btn stopAnimating];
     }
     
     

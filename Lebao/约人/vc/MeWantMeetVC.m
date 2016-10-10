@@ -562,7 +562,7 @@
     if (btn.tag==1110) {
         [[MP3PlayerManager shareInstance] downLoadAudioWithUrl:_url  finishDownLoadBloak:^(BOOL succeed) {
             if (succeed) {
-                //                [(btn.tag startAnimating];
+                
                 btn.tag=1111;
                 [btn setImage:[UIImage imageNamed:@"meet_yuyindianbo"] forState:UIControlStateNormal];
                 [[MP3PlayerManager shareInstance] audioPlayerWithURl:topath];
@@ -570,7 +570,7 @@
                 {
                     if (succeed) {
                         btn.tag=1110;
-                        //                        [(UIImageView *)sender.view stopAnimating];
+                       
                         [btn setImage:[UIImage imageNamed:@"meet_yuyin"] forState:UIControlStateNormal];
                     }
                     
@@ -584,7 +584,7 @@
         btn.tag=1110;
         [[MP3PlayerManager shareInstance] pausePlayer];
         [btn setImage:[UIImage imageNamed:@"meet_yuyin"] forState:UIControlStateNormal];
-        //        [(UIImageView *)sender.view stopAnimating];
+        
     }
 
 }

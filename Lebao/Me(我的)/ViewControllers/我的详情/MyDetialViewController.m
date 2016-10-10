@@ -712,7 +712,7 @@
                 [self navViewTitleAndBackBtn:headerModel.realname];
                 if (!headerModel.isme) {
                     [self addBottomView];
-                    _myDetailTV.frame = CGRectMake(0, _myDetailTV.y,_myDetailTV.width, APPHEIGHT - (_myDetailTV.y) -TabBarHeight);
+                    _myDetailTV.frame = CGRectMake(0, _myDetailTV.y,_myDetailTV.width, APPHEIGHT - (_myDetailTV.y) -44);
                 }else{
                    
                     [self.view addSubview:self.edit];

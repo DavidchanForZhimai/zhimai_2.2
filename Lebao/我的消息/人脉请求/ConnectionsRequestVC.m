@@ -246,9 +246,9 @@
             
             if (model.rtcode==1) {
                 NSString *str;
-                if(btn.tag==2221){
+                if(btn.tag==2222){
                     str=@"您已拒绝";
-                }else if (btn.tag==2222){
+                }else if (btn.tag==2221){
                     str=@"您已同意";
                 }
 
