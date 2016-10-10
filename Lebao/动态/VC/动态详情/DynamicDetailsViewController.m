@@ -18,6 +18,10 @@
 #import "GallopUtils.h"
 #import "StatusModel.h"
 #import "MyProductDetailViewController.h"
+
+#import "XianSuoDetailVC.h"
+#import "MyXSDetailVC.h"
+#import "MyLQDetailVC.h"
 #define kToolBarH 44
 #define kTextFieldH 30
 @interface DynamicDetailsViewController ()<UITableViewDelegate,UITableViewDataSource,TableViewCellDelegate,UIScrollViewDelegate,UITextFieldDelegate>
@@ -574,7 +578,31 @@
     detail.imageurl = layout.statusModel.imgurl;
     PushView(self, detail);
 }
-
+#pragma mark
+#pragma mark 点击进入线索
+- (void)tableViewCell:(TableViewCell *)cell didClickedLikeButtonWithClueID:(NSString *)clueID atIndexPath:(NSIndexPath *)indexPath
+{
+//    NSLog(@"clueID =%@",clueID);
+    CellLayout *layout =_jjrJsonArr[indexPath.row];
+    if (layout.statusModel.typeinfo.iscoop) {
+        //跳转我的领取线索详情
+        MyLQDetailVC* myLqV =  [[MyLQDetailVC alloc]init];
+        myLqV.xiansuoID = clueID;
+        [self.navigationController pushViewController:myLqV animated:YES];
+        return;
+    }
+    if (layout.statusModel.typeinfo.isself) {
+        //跳转我的发布线索详情
+        MyXSDetailVC* myxiansuoV =  [[MyXSDetailVC alloc]init];
+        myxiansuoV.xiansuoID = clueID;
+        [self.navigationController pushViewController:myxiansuoV animated:YES];
+        
+        return;
+    }
+    XianSuoDetailVC * xiansuoV =  [[XianSuoDetailVC alloc]init];
+    xiansuoV.xs_id =clueID;
+    [self.navigationController pushViewController:xiansuoV animated:YES];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -420,7 +420,7 @@
     if (btn.tag==1110) {
         [[MP3PlayerManager shareInstance] downLoadAudioWithUrl:url  finishDownLoadBloak:^(BOOL succeed) {
             if (succeed) {
-                [(UIImageView *)btn startAnimating];
+//                [(UIImageView *)btn startAnimating];
                 btn.tag=1111;
                 
                 [[MP3PlayerManager shareInstance] audioPlayerWithURl:topath];
@@ -428,7 +428,7 @@
                 {
                     if (succeed) {
                         btn.tag=1110;
-                        [(UIImageView *)btn stopAnimating];
+//                        [(UIImageView *)btn stopAnimating];
                     }
                     
                 };
@@ -440,7 +440,7 @@
     }else if (btn.tag==1111){
         btn.tag=1110;
         [[MP3PlayerManager shareInstance] pausePlayer];
-        [(UIImageView *)btn stopAnimating];
+//        [(UIImageView *)btn stopAnimating];
     }
     
     

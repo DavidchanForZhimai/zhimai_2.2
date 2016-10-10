@@ -146,6 +146,8 @@ typedef NS_ENUM(NSUInteger,DTDataType) {
 
 @property (nonatomic, copy) NSString *imgurl;//文章，显示图片
 
+@property (nonatomic, assign) BOOL iscoop;
 
+@property (nonatomic, assign) BOOL isself;
 @end
 
