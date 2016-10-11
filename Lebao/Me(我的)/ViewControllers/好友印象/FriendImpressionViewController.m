@@ -106,18 +106,20 @@
 {
     
     [[ToolManager shareInstance] imageView:userICon setImageWithURL:data.headimgurl placeholderType:PlaceholderTypeUserHead];
+    NSString *relation_label;
     if (data.relation_label&&![data.relation_label isEqualToString:@""]) {
-        userName.text = [NSString stringWithFormat:@"%@ (%@)",data.nickname,data.relation_label];
+        relation_label =[NSString stringWithFormat:@"(%@)",data.relation_label];
+       
     }
     else
     {
-      userName.text = [NSString stringWithFormat:@"%@",data.nickname];  
+       relation_label =@"";
     }
-    
+     userName.text = [NSString stringWithFormat:@"%@ %@",data.nickname,relation_label];
     NSMutableAttributedString *str = [[NSMutableAttributedString alloc]initWithString:userName.text];
     
-    [str addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:24*SpacedFonts] range:[userName.text rangeOfString:@"(同事)"]];
-     [str addAttribute:NSForegroundColorAttributeName value:LightBlackTitleColor range:[userName.text rangeOfString:@"(同事)"]];
+    [str addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:24*SpacedFonts] range:[userName.text rangeOfString:relation_label]];
+     [str addAttribute:NSForegroundColorAttributeName value:LightBlackTitleColor range:[userName.text rangeOfString:relation_label]];
     userName.attributedText = str;
     
     time.text = [data.createtime updateTime];
