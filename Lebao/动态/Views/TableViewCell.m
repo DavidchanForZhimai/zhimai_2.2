@@ -127,7 +127,6 @@
     UIActionSheet *sheet;
     if (self.cellLayout.statusModel.me) {
         
-
         sheet = [[UIActionSheet alloc]initWithTitle:@"操作" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"删除",@"分享", nil];
         sheet.tag =88;
         [sheet showInView:self];
@@ -135,17 +134,10 @@
     }
     else
     {
-        if (self.cellLayout.statusModel.isfollow) {
-            sheet = [[UIActionSheet alloc]initWithTitle:@"操作" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"取消关注",@"举报",@"分享", nil];
+      
+            sheet = [[UIActionSheet alloc]initWithTitle:@"操作" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"举报",@"分享", nil];
             sheet.tag =888;
             [sheet showInView:self];
-        }
-        else
-        {
-            UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:@"操作" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"关注",@"举报",@"分享", nil];
-            sheet.tag =8888;
-            [sheet showInView:self];
-        }
         
     }
     
@@ -187,9 +179,7 @@
     }
     else
     {
-        if (buttonIndex<3) {
-            
-            if (buttonIndex==2)
+            if (buttonIndex==1)
             {
                 //分享
                 //获取最后一张图片的模型
@@ -210,11 +200,14 @@
                 
                 return;
             }
+          else if(buttonIndex==0)
+          {
+              [[ToolManager shareInstance] showAlertMessage:@"举报成功"];
+          }
             
-            [self.delegate tableViewCell:self didClickedLikeButtonWithIsSelf:self.cellLayout.statusModel.me andDynamicID:[NSString stringWithFormat:@"%ld",self.cellLayout.statusModel.ID] atIndexPath:_indexPath andIndex:buttonIndex];
+//            [self.delegate tableViewCell:self didClickedLikeButtonWithIsSelf:self.cellLayout.statusModel.me andDynamicID:[NSString stringWithFormat:@"%ld",self.cellLayout.statusModel.ID] atIndexPath:_indexPath andIndex:buttonIndex];
         }
-        
-    }
+    
     
     
 }
