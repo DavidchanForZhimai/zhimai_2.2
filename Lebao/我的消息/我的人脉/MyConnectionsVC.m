@@ -18,6 +18,7 @@
 #import "MeetPaydingVC.h"
 #import "NSString+Extend.h"
 #import "GJGCChatFriendViewController.h"
+#import "MyDetialViewController.h"
 @interface MyConnectionsVC ()<UITableViewDelegate,UITableViewDataSource,EjectViewDelegate,MeettingTableViewDelegate,UIAlertViewDelegate>
 {
     BOOL audioMark;
@@ -241,6 +242,16 @@
     alertV.title2Str=@"您需要打赏一定的约见费";
     alertV.indexth=indexPath;
 }
+#pragma mark - MeettingTableViewCellDelegate 头像按钮点击
+-(void)tableViewCellDidSeleteHeadImg:(LWImageStorage *)imageStoragen andIndexPath:(NSIndexPath *)indexPath
+{
+    MyDetialViewController *myDetialViewCT=allocAndInit(MyDetialViewController);
+    MeetingCellLayout *layout=(MeetingCellLayout *)self.nearByManArr[indexPath.row];
+    MeetingData *data = layout.model;
+    myDetialViewCT.userID=data.userid;
+    [self.navigationController pushViewController:myDetialViewCT animated:YES];
+}
+
 //对话按钮的点击
 - (void)tableViewCellDidSeleteMessageBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath{
     GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];

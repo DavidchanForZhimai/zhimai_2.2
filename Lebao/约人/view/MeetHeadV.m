@@ -107,7 +107,7 @@
     _wantMeBtn.layer.borderWidth=2;
     
     _wantMeBtn.layer.borderColor=[UIColor colorWithWhite:1.0 alpha:0.3].CGColor;
-    _wantMeBtn.titleLabel.textColor=WhiteColor;
+    [_wantMeBtn setTitleColor:WhiteColor forState:UIControlStateNormal];
     _wantMeBtn.titleLabel.font = Size(20);
     _wantMeBtn.titleLabel.textAlignment = NSTextAlignmentCenter;
 
@@ -119,7 +119,7 @@
     _meWantBtn.frame=CGRectMake(APPWIDTH-80, bgImgV.frame.size.height-80, 60, 60);
     _meWantBtn.layer.cornerRadius=30;
     _meWantBtn.layer.borderWidth=2;
-    _meWantBtn.titleLabel.textColor=WhiteColor;
+    [_meWantBtn setTitleColor:WhiteColor forState:UIControlStateNormal];
     _meWantBtn.layer.borderColor=[UIColor colorWithWhite:1.0 alpha:0.3].CGColor;
     
     _meWantBtn.titleLabel.font = Size(20);
@@ -167,7 +167,7 @@
    
     _midBtn.titleLabel.font=Size(22);
     _midBtn.titleLabel.textColor=AppMainColor;
-    _midBtn.titleLabel.text=@"可约\n0\n位经纪人";
+    _midBtn.titleLabel.text=@"可添加\n0\n位人脉";
     _midBtn.titleLabel.textAlignment=NSTextAlignmentCenter;
     NSMutableAttributedString *str=[[NSMutableAttributedString alloc]initWithString:_midBtn.titleLabel.text];
     [str addAttribute:NSFontAttributeName value:Size(60) range:[_midBtn.titleLabel.text rangeOfString:@"0"]];

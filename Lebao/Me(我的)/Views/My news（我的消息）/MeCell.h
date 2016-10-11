@@ -13,6 +13,7 @@
 @property(nonatomic,strong)UILabel *authen;
 @property(nonatomic,strong)UILabel *message;
 @property(nonatomic,strong)UILabel *detail;
+@property(nonatomic,strong)UILabel *lab;
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier cellHeight:(float)cellHeight cellWidth:(float)cellWidth;
 
 - (void)setLeftImage:(NSString *)img  Title:(NSString *)title isShowLine:(BOOL)isShowLine;

@@ -12,6 +12,8 @@
 @property(nonatomic,copy) NSString *  syscount;//=1 有未读系统消息
 @property(nonatomic,copy) NSString *  corsscount;//=1 有未读跨界消息
 @property(nonatomic,copy) NSString *  cuscount;//=1 有未读客服消息
+
+
 @end
 
 @interface NotificationData : NSObject

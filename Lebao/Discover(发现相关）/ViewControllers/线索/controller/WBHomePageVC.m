@@ -219,7 +219,7 @@
             }else{
             imgUrl = [NSString stringWithFormat:@"%@%@",IMG_URL,[_xsJsonArr[indexPath.row]objectForKey:@"imgurl"]];
             }
-            cell.renzhImg.image = [[_xsJsonArr[indexPath.row]objectForKey:@"authen"] intValue]==3?[UIImage imageNamed:@"renzhen"]:[UIImage imageNamed:@"weirenzhen"];
+            cell.renzhImg.image = [[_xsJsonArr[indexPath.row]objectForKey:@"authen"] intValue]==3?[UIImage imageNamed:@"[iconprofilerenzhen]"]:[UIImage imageNamed:@"[iconprofileweirenzhen]"];
             [[ToolManager shareInstance] imageView:cell.headImg  setImageWithURL:imgUrl placeholderType:PlaceholderTypeUserHead];
            
             cell.userNameLab.text = [_xsJsonArr[indexPath.row] objectForKey:@"realname"];

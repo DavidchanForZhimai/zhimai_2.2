@@ -261,10 +261,11 @@
             }
         
         }
-        if (indexPath.row==1) {
+       else if (indexPath.row==1) {
             cell.message.hidden = YES;
         }
-        if (indexPath.row==2) {
+       else if (indexPath.row==2) {
+           cell.lab.text=[NSString stringWithFormat:@"%d个",modal.count];
             cell.message.hidden =![modal.cuscount boolValue];
         }
         

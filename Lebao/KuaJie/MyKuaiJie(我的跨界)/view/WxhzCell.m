@@ -56,8 +56,8 @@
     _positionLab.textAlignment = NSTextAlignmentLeft;
     [_nextV addSubview:_positionLab];
     
-    _renzhImg = [[UIImageView alloc]initWithFrame:CGRectMake(_userNameLab.frame.origin.x+_userNameLab.frame.size.width, 18, 14, 14)];
-    _renzhImg.image = [UIImage imageNamed:@"renzhen"];
+    _renzhImg = [[UIImageView alloc]initWithFrame:CGRectMake(_userNameLab.frame.origin.x+_userNameLab.frame.size.width, 18,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.width, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.height)];
+    _renzhImg.image = [UIImage imageNamed:@"[iconprofileweirenzhen]"];
     [_nextV addSubview:_renzhImg];
     
     _timeLab = [[UILabel alloc]initWithFrame:CGRectMake(customV.frame.size.width-160, 15, 150, 20)];

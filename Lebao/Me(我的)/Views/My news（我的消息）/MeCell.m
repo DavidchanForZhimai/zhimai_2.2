@@ -45,7 +45,10 @@
         [_message setRound];
         _message.backgroundColor =[UIColor colorWithRed:0.8667 green:0.0941 blue:0.1255 alpha:1.0];
         _message.hidden = YES;
+        _lab=[UILabel createLabelWithFrame:frame(CGRectGetMaxX(_title.frame),0,APPWIDTH- CGRectGetMaxX(_title.frame)-30, cellHeight) text:@"" fontSize:28.0*SpacedFonts textColor:hexColor(5a5a5a) textAlignment:NSTextAlignmentRight inView:self];
+        _lab.textAlignment=NSTextAlignmentRight;
         
+        [self addSubview:_lab];
        _line = [UILabel CreateLineFrame:frame(frameX(_title) , cellHeight - 0.5, cellWidth -(frameX(_title)), 0.5) inView:self];
         
     }

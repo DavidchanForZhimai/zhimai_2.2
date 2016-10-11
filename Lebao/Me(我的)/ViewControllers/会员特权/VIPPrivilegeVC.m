@@ -162,7 +162,7 @@
     }else{
         certifyimag=[UIImage imageNamed:@"[iconprofileweirenzhen]"];
     }
-    certifyImgV.frame=CGRectMake(CGRectGetMaxX(nameLab.frame)+10, CGRectGetMaxY(nameLab.frame)-certifyimag.size.height, certifyimag.size.width,certifyimag.size.height);
+    certifyImgV.frame=CGRectMake(CGRectGetMaxX(nameLab.frame)+5, CGRectGetMaxY(nameLab.frame)-certifyimag.size.height, certifyimag.size.width,certifyimag.size.height);
     certifyImgV.image=certifyimag;
     [vipView addSubview:certifyImgV];
     

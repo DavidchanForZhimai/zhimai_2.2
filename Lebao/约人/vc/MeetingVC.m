@@ -47,13 +47,14 @@
         if (dataObj) {
             NSLog(@"meetObj====%@",dataObj);
             MeetNumModel *modal = [MeetNumModel mj_objectWithKeyValues:dataObj];
-            _headView.meWantBtn.titleLabel.text=[NSString stringWithFormat:@"%d\n我想约见",modal.invited];
+            [_headView.meWantBtn setTitle:[NSString stringWithFormat:@"%d\n我想约见",modal.invited] forState:UIControlStateNormal];
+            
             NSMutableAttributedString *text1 = [[NSMutableAttributedString alloc]initWithString:_headView.meWantBtn.titleLabel.text];
             [text1 addAttribute:NSFontAttributeName value:Size(40) range:[_headView.meWantBtn.titleLabel.text rangeOfString:[NSString stringWithFormat:@"%d",modal.invited]]];
             [_headView.meWantBtn setAttributedTitle:text1 forState:UIControlStateNormal];
             _headView.meWantBtn.titleLabel.numberOfLines = 0;
-            
-            _headView.wantMeBtn.titleLabel.text=[NSString stringWithFormat:@"%d\n想约见我",modal.beinvited];
+
+            [_headView.wantMeBtn setTitle:[NSString stringWithFormat:@"%d\n想约见我",modal.beinvited] forState:UIControlStateNormal];
             NSMutableAttributedString *text = [[NSMutableAttributedString alloc]initWithString:_headView.wantMeBtn.titleLabel.text];
             [text addAttribute:NSFontAttributeName value:Size(40) range:[_headView.wantMeBtn.titleLabel.text rangeOfString:[NSString stringWithFormat:@"%d",modal.beinvited]]];
             [_headView.wantMeBtn setAttributedTitle:text forState:UIControlStateNormal];
@@ -123,9 +124,7 @@
      [self navViewTitle:@"约见"];
     _page = 1;
     _isopen=NO;
-    if (self.nearByManArr.count==0) {
-        [[ToolManager shareInstance] showWithStatus];
-    }
+   
     
     
     [self netWorkRefresh:NO andIsLoadMoreData:NO isShouldClearData:NO];
@@ -142,6 +141,11 @@
 //    CLLocationCoordinate2D location;
 //    location.latitude=24.491534;
 //    location.longitude=118.180851;
+            if (self.nearByManArr.count==0) {
+                [[ToolManager shareInstance] showWithStatus];
+            }
+
+
     NSMutableDictionary *param = [Parameter parameterWithSessicon];
     [param setObject:[NSString stringWithFormat:@"%.6f",location.latitude] forKey:@"latitude"];
     [param setObject:[NSString stringWithFormat:@"%.6f",location.longitude] forKey:@"longitude"];
@@ -163,7 +167,7 @@
             [self.headUserIdArr removeAllObjects];
         }
         if (dataObj) {
-//                        NSLog(@"meetObj====%@",dataObj);
+                        NSLog(@"meetObj====%@",dataObj);
             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
             if (_page ==1) {
                 [[ToolManager shareInstance] moreDataStatus:_yrTab];
@@ -192,7 +196,7 @@
                 _headView.userIdArr=[NSArray arrayWithArray:self.headUserIdArr];
                 [_headView addEightImgView];
                 _headView.nearManLab.text=[NSString stringWithFormat:@"最近有空 %d人",modal.count];
-                _headView.midBtn.titleLabel.text=[NSString stringWithFormat:@"可约\n%d\n位经纪人",modal.count];
+                _headView.midBtn.titleLabel.text=[NSString stringWithFormat:@"可添加\n%d\n位人脉",modal.count];
                 _headView.midBtn.titleLabel.textAlignment=NSTextAlignmentCenter;
                 NSMutableAttributedString *str=[[NSMutableAttributedString alloc]initWithString:_headView.midBtn.titleLabel.text];
                 [str addAttribute:NSFontAttributeName value:Size(60) range:[_headView.midBtn.titleLabel.text rangeOfString:[NSString stringWithFormat:@"%d",modal.count]]];
@@ -413,7 +417,7 @@
     alertV.title2Str=@"您需要打赏一定的约见费";
     alertV.indexth=indexPath;
 }
-
+#pragma mark - MeettingTableViewCellDelegate 头像按钮点击
 -(void)tableViewCellDidSeleteHeadImg:(LWImageStorage *)imageStoragen andIndexPath:(NSIndexPath *)indexPath
 {
     MyDetialViewController *myDetialViewCT=allocAndInit(MyDetialViewController);
@@ -506,12 +510,18 @@
 }
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (self.bottomView.alpha!=1||self.yrBtn.hidden==YES){
+    if (self.bottomView.alpha!=1||self.yrBtn.hidden){
         _yrTab.frame=CGRectMake(0,StatusBarHeight, APPWIDTH, APPHEIGHT-StatusBarHeight);
     }
 
 }
-
+-(void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
+{
+    if (self.bottomView.alpha!=1||self.bottomView.hidden){
+        _yrTab.frame=CGRectMake(0,StatusBarHeight, APPWIDTH, APPHEIGHT-StatusBarHeight);
+    }
+    
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

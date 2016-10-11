@@ -479,11 +479,13 @@
     txTap.numberOfTapsRequired = 1;
     [headImg addGestureRecognizer:txTap];
     
-    UILabel * userNameLab = [[UILabel alloc]initWithFrame:CGRectMake(headImg.frame.origin.x+headImg.frame.size.width+10, 7, 55, 25)];
+    UILabel * userNameLab = [[UILabel alloc]initWithFrame:CGRectMake(headImg.frame.origin.x+headImg.frame.size.width+10, 7, 55, 15)];
     userNameLab.font = [UIFont systemFontOfSize:15];
     userNameLab.textColor = [UIColor blackColor];
     userNameLab.text =[_xiansDic objectForKey:@"realname"];
+    userNameLab.frame = CGRectMake(CGRectGetMaxX(headImg.frame)+10,7, [userNameLab.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(APPWIDTH/2.0, userNameLab.size.height)].width, userNameLab.height);
     userNameLab.textAlignment = NSTextAlignmentLeft;
+    
     [_txV addSubview:userNameLab];
     
     UIImageView * posImg = [[UIImageView alloc]initWithFrame:CGRectMake(userNameLab.frame.origin.x, 37, 11, 11)];
@@ -497,9 +499,12 @@
     _positionLab.text = [_xiansDic objectForKey:@"area"];
     [_txV addSubview:_positionLab];
     
-    UIImageView * renzhImg = [[UIImageView alloc]initWithFrame:CGRectMake(userNameLab.frame.origin.x+userNameLab.frame.size.width, 13, 14, 14)];
-    renzhImg.image = [[_xiansDic objectForKey:@"authen"] intValue]==3?[UIImage imageNamed:@"renzhen"]:[UIImage imageNamed:@"weirenzhen"];
-    [_txV addSubview:renzhImg];
+    UIImageView * renzhImgV = [[UIImageView alloc]initWithFrame:CGRectMake(userNameLab.frame.origin.x+userNameLab.frame.size.width, 13, 14, 14)];
+    UIImage *certifyimag = [[_xiansDic objectForKey:@"authen"] intValue]==3?[UIImage imageNamed:@"[iconprofilerenzhen]"]:[UIImage imageNamed:@"[iconprofileweirenzhen]"];
+    renzhImgV.image=certifyimag;
+    renzhImgV.frame=CGRectMake(CGRectGetMaxX(userNameLab.frame)+3, CGRectGetMaxY(userNameLab.frame)-certifyimag.size.height, certifyimag.size.width,certifyimag.size.height);
+
+    [_txV addSubview:renzhImgV];
 
     UILabel * timeLab = [[UILabel alloc]initWithFrame:CGRectMake(_txV.frame.size.width-160, 7, 150, 20)];
     timeLab.backgroundColor = [UIColor clearColor];
@@ -530,7 +535,7 @@
 
 
     [_txV addSubview:timeLab];
-    [self addTheDuiHuaV:_txV.frame.origin.y+_txV.frame.size.height];
+//    [self addTheDuiHuaV:_txV.frame.origin.y+_txV.frame.size.height];
 }
 -(void)touxiangAction
 {
@@ -540,27 +545,27 @@
     [self.navigationController pushViewController:myDetialViewController animated:YES];
    
 }
--(void)addTheDuiHuaV:(CGFloat)orgY
-{
-    _duihuaV = [[UIView alloc]initWithFrame:CGRectMake(10, orgY, SCREEN_WIDTH-20, 36)];
-    _duihuaV.backgroundColor = [UIColor colorWithRed:0.976 green:0.965 blue:0.969 alpha:1.000];
-    [_bottomScr addSubview:_duihuaV];
-    UIButton * duihuaBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    duihuaBtn.frame = CGRectMake((_duihuaV.frame.size.width-150)/2, 5, 150, 31);
-    duihuaBtn.backgroundColor = [UIColor clearColor];
-    [duihuaBtn.titleLabel setTextAlignment:NSTextAlignmentCenter];
-    [duihuaBtn setImage:[UIImage imageNamed:@"liantianzhuse"] forState:UIControlStateNormal];
-    [duihuaBtn setTitle:@"跟Ta对话" forState:UIControlStateNormal];
-    [duihuaBtn setTitleColor:[UIColor colorWithRed:0.290 green:0.569 blue:0.973 alpha:1.000]forState:UIControlStateNormal];
-      [duihuaBtn setImageEdgeInsets:UIEdgeInsetsMake(0, -30, 0, 0)];
-    [duihuaBtn.titleLabel setFont:[UIFont systemFontOfSize:13]];
-    [duihuaBtn addTarget: self action:@selector(duihuaAction) forControlEvents:UIControlEventTouchUpInside];
-    [_duihuaV addSubview:duihuaBtn];
-}
+//-(void)addTheDuiHuaV:(CGFloat)orgY
+//{
+//    _duihuaV = [[UIView alloc]initWithFrame:CGRectMake(10, orgY, SCREEN_WIDTH-20, 36)];
+//    _duihuaV.backgroundColor = [UIColor colorWithRed:0.976 green:0.965 blue:0.969 alpha:1.000];
+//    [_bottomScr addSubview:_duihuaV];
+//    UIButton * duihuaBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    duihuaBtn.frame = CGRectMake((_duihuaV.frame.size.width-150)/2, 5, 150, 31);
+//    duihuaBtn.backgroundColor = [UIColor clearColor];
+//    [duihuaBtn.titleLabel setTextAlignment:NSTextAlignmentCenter];
+//    [duihuaBtn setImage:[UIImage imageNamed:@"liantianzhuse"] forState:UIControlStateNormal];
+//    [duihuaBtn setTitle:@"跟Ta对话" forState:UIControlStateNormal];
+//    [duihuaBtn setTitleColor:[UIColor colorWithRed:0.290 green:0.569 blue:0.973 alpha:1.000]forState:UIControlStateNormal];
+//      [duihuaBtn setImageEdgeInsets:UIEdgeInsetsMake(0, -30, 0, 0)];
+//    [duihuaBtn.titleLabel setFont:[UIFont systemFontOfSize:13]];
+//    [duihuaBtn addTarget: self action:@selector(duihuaAction) forControlEvents:UIControlEventTouchUpInside];
+//    [_duihuaV addSubview:duihuaBtn];
+//}
 #pragma mark 线索View
 -(void)addTheXsV
 {
-    _xsDetailV = [[UIView alloc]initWithFrame:CGRectMake(10, 181-64, SCREEN_WIDTH-20, 0)];
+    _xsDetailV = [[UIView alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(_txV.frame)+10, SCREEN_WIDTH-20, 0)];
     _xsDetailV.backgroundColor = [UIColor whiteColor];
     [_bottomScr addSubview:_xsDetailV];
     
@@ -772,7 +777,9 @@
         }else{
             imgUrl = [NSString stringWithFormat:@"%@%@",IMG_URL,[_coopArr[indexPath.row]objectForKey:@"imgurl"]];
         }
-        cell.renzhImg.image = [[_coopArr[indexPath.row]objectForKey:@"authen"] intValue]==3?[UIImage imageNamed:@"renzhen"]:[UIImage imageNamed:@"weirenzhen"];
+        
+        cell.renzhImg.image = [[_coopArr[indexPath.row]objectForKey:@"authen"] intValue]==3?[UIImage imageNamed:@"[iconprofilerenzhen]"]:[UIImage imageNamed:@"[iconprofileweirenzhen]"];
+
        [[ToolManager shareInstance] imageView:cell.headImg setImageWithURL:imgUrl placeholderType:PlaceholderTypeUserHead];
         cell.headImg.tag = 200+indexPath.row;
         cell.headImg.userInteractionEnabled = YES;

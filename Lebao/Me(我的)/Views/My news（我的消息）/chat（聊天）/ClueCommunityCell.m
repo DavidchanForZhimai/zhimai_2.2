@@ -58,16 +58,16 @@
     userNameLb.text = data.realname;
 
     if (data.authen ==3) {
-        isAuthen.image = [UIImage imageNamed:@"renzhen"];
+        isAuthen.image = [UIImage imageNamed:@"[iconprofilerenzhen]"];
        
         
     }
     else
     {
-        isAuthen.image = [UIImage imageNamed:@"weirenzhen"];
+        isAuthen.image = [UIImage imageNamed:@"[iconprofileweirenzhen]"];
     }
     CGSize size = [data.realname sizeWithFont:userNameLb.font maxSize:CGSizeMake(100, 24*SpacedFonts)];
-    isAuthen.frame = frame(frameX(userNameLb) + size.width + 5, frameY(isAuthen), frameWidth(isAuthen), frameHeight(isAuthen));
+    isAuthen.frame = frame(frameX(userNameLb) + size.width + 5, frameY(isAuthen), [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
     
     userContent.text = data.content;
     CGSize size2 = [userContent.text sizeWithFont:Size(24) maxSize:CGSizeMake(frameWidth(userContent), 1000)];

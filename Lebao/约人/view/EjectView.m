@@ -39,7 +39,7 @@
         self.middleView.frame = superView.frame;
         [superView addSubview:_middleView];
         
-        self.money=@"100";
+        self.money=@"20";
         self.backgroundColor = [UIColor whiteColor];
         self.layer.cornerRadius = 15;
         self.center = CGPointMake([UIScreen mainScreen].bounds.size.width/2, _centerY);
@@ -52,7 +52,7 @@
         [self addSubview:_titleLabel2];
         
         btn1=[UIButton buttonWithType:UIButtonTypeCustom];
-        [btn1 setTitle:@"100元" forState:UIControlStateNormal];
+        [btn1 setTitle:@"20元" forState:UIControlStateNormal];
         btn1.frame=CGRectMake(20, CGRectGetMaxY(_titleLabel2.frame)+15, (self.frame.size.width-20*4+10)/3.0, 30);
         btn1.layer.borderWidth=1;
         btn1.selected=YES;
@@ -195,8 +195,8 @@
         sender.layer.borderColor=[UIColor colorWithRed:0.298 green:0.627 blue:0.996 alpha:1.000].CGColor;
         btn2.layer.borderColor=[UIColor grayColor].CGColor;
         btn3.layer.borderColor=[UIColor grayColor].CGColor;
-        self.money=@"100";
-        otherMoneyField.text=@"100";
+        self.money=@"20";
+        otherMoneyField.text=@"20";
         [self changeAllFrameWithHeight:0];
     }
     if (sender.tag==101) {
@@ -206,8 +206,8 @@
          sender.layer.borderColor=[UIColor colorWithRed:0.298 green:0.627 blue:0.996 alpha:1.000].CGColor;
         btn1.layer.borderColor=[UIColor grayColor].CGColor;
         btn3.layer.borderColor=[UIColor grayColor].CGColor;
-        self.money=@"200";
-        otherMoneyField.text=@"200";
+        self.money=@"50";
+        otherMoneyField.text=@"50";
         [self changeAllFrameWithHeight:0];
     }
     if (sender.tag==102) {

@@ -109,8 +109,8 @@
     _positionLab.text = [_xiansuoDic objectForKey:@"area"];
     [tapV addSubview:_positionLab];
     
-    UIImageView * renzhImg = [[UIImageView alloc]initWithFrame:CGRectMake(_userNameLab.frame.origin.x+_userNameLab.frame.size.width, 13, 14, 14)];
-    renzhImg.image = [[_xiansuoDic objectForKey:@"authen"]intValue]==3?[UIImage imageNamed:@"renzhen"]:[UIImage imageNamed:@"weirenzhen"];
+    UIImageView * renzhImg = [[UIImageView alloc]initWithFrame:CGRectMake(_userNameLab.frame.origin.x+_userNameLab.frame.size.width, 13, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.height)];
+    renzhImg.image = [[_xiansuoDic objectForKey:@"authen"]intValue]==3?[UIImage imageNamed:@"[iconprofilerenzhen]"]:[UIImage imageNamed:@"[iconprofilerenzhen]"];
     [tapV addSubview:renzhImg];
     
     _timeLab = [[UILabel alloc]initWithFrame:CGRectMake(jjrV.frame.size.width-160, 7, 150, 20)];

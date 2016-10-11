@@ -61,8 +61,8 @@
     _positionLab.textAlignment = NSTextAlignmentLeft;
     [_btnV addSubview:_positionLab];
     
-    _renzhImg = [[UIImageView alloc]initWithFrame:CGRectMake(_userNameLab.frame.origin.x+_userNameLab.frame.size.width, 18, 14, 14)];
-    _renzhImg.image = [UIImage imageNamed:@"renzhen"];
+    _renzhImg = [[UIImageView alloc]initWithFrame:CGRectMake(_userNameLab.frame.origin.x+_userNameLab.frame.size.width, 18, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height)];
+    _renzhImg.image = [UIImage imageNamed:@"[iconprofileweirenzhen]"];
     [_btnV addSubview:_renzhImg];
 }
 -(void)addTheRighgtV

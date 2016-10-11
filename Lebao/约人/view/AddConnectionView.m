@@ -34,7 +34,7 @@
         self.middleView.frame = superView.frame;
         [superView addSubview:_middleView];
         
-        self.money=@"100";
+        self.money=@"1";
         self.backgroundColor = [UIColor whiteColor];
         self.layer.cornerRadius = 15;
         self.center = CGPointMake([UIScreen mainScreen].bounds.size.width/2, _centerY);
@@ -47,7 +47,7 @@
         [self addSubview:_titleLabel2];
         
         btn1=[UIButton buttonWithType:UIButtonTypeCustom];
-        [btn1 setTitle:@"100元" forState:UIControlStateNormal];
+        [btn1 setTitle:@"1元" forState:UIControlStateNormal];
         btn1.frame=CGRectMake(20, CGRectGetMaxY(_titleLabel2.frame)+15, (self.frame.size.width-20*4+10)/3.0, 30);
         btn1.layer.borderWidth=1;
         btn1.selected=YES;
@@ -59,7 +59,7 @@
         [btn1 addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:btn1];
         btn2=[UIButton buttonWithType:UIButtonTypeCustom];
-        [btn2 setTitle:@"200元" forState:UIControlStateNormal];
+        [btn2 setTitle:@"2元" forState:UIControlStateNormal];
         btn2.frame=CGRectMake(20*2-5+(self.frame.size.width-20*4+10)/3.0, CGRectGetMaxY(_titleLabel2.frame)+15, (self.frame.size.width-20*4+10)/3.0, 30);
         btn2.layer.borderWidth=1;
         [btn2 setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
@@ -70,7 +70,7 @@
         [btn2 addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:btn2];
         btn3=[UIButton buttonWithType:UIButtonTypeCustom];
-        [btn3 setTitle:@"300元" forState:UIControlStateNormal];
+        [btn3 setTitle:@"5元" forState:UIControlStateNormal];
         btn3.frame=CGRectMake(20*3-10+(self.frame.size.width-20*4+10)/3.0*2, CGRectGetMaxY(_titleLabel2.frame)+15, (self.frame.size.width-20*4+10)/3.0, 30);
         [btn3 setTitleColor:[UIColor colorWithRed:0.298 green:0.627 blue:0.996 alpha:1.000] forState:UIControlStateSelected];
         btn3.layer.borderWidth=1;
@@ -92,7 +92,7 @@
         _logField.layer.cornerRadius=8;
         _logField.delegate=self;
         _logField.backgroundColor=[UIColor whiteColor];
-        _logField.text=@"100";
+        _logField.text=@"1";
         [self addSubview:_logField];
         
         
@@ -142,8 +142,8 @@
         sender.layer.borderColor=[UIColor colorWithRed:0.298 green:0.627 blue:0.996 alpha:1.000].CGColor;
         btn2.layer.borderColor=[UIColor grayColor].CGColor;
         btn3.layer.borderColor=[UIColor grayColor].CGColor;
-        _logField.text=@"100";
-        self.money=@"100";
+        _logField.text=@"1";
+        self.money=@"1";
         
     }
     if (sender.tag==101) {
@@ -153,8 +153,8 @@
         sender.layer.borderColor=[UIColor colorWithRed:0.298 green:0.627 blue:0.996 alpha:1.000].CGColor;
         btn1.layer.borderColor=[UIColor grayColor].CGColor;
         btn3.layer.borderColor=[UIColor grayColor].CGColor;
-        _logField.text=@"200";
-        self.money=@"200";
+        _logField.text=@"2";
+        self.money=@"2";
       
     }
     if (sender.tag==102) {
@@ -164,8 +164,8 @@
         sender.layer.borderColor=[UIColor colorWithRed:0.298 green:0.627 blue:0.996 alpha:1.000].CGColor;
         btn2.layer.borderColor=[UIColor grayColor].CGColor;
         btn1.layer.borderColor=[UIColor grayColor].CGColor;
-        _logField.text=@"300";
-        self.money=@"300";
+        _logField.text=@"5";
+        self.money=@"5";
     }
 }
 

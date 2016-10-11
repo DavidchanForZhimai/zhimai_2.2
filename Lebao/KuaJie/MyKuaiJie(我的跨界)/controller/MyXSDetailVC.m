@@ -325,8 +325,8 @@
     [lqrV addSubview:_positionLab];
     _positionLab.attributedText = diingjAtr;
     [lqrV addSubview:_positionLab];
-    UIImageView * renzhImg = [[UIImageView alloc]initWithFrame:CGRectMake(_userNameLab.frame.origin.x+_userNameLab.frame.size.width, 18, 14, 14)];
-    renzhImg.image = [[_coopArr[0] objectForKey:@"authen"]intValue]==3?[UIImage imageNamed:@"renzhen"]:[UIImage imageNamed:@"weirenzhen"];
+    UIImageView * renzhImg = [[UIImageView alloc]initWithFrame:CGRectMake(_userNameLab.frame.origin.x+_userNameLab.frame.size.width, 18, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.height)];
+    renzhImg.image = [[_coopArr[0] objectForKey:@"authen"]intValue]==3?[UIImage imageNamed:@"[iconprofilerenzhen]"]:[UIImage imageNamed:@"[iconprofileweirenzhen]"];
     [lqrV addSubview:renzhImg];
     
     _timeLab = [[UILabel alloc]initWithFrame:CGRectMake(lqrV.frame.size.width-160, 15, 150, 20)];
@@ -963,7 +963,7 @@
                 imgUrl = [NSString stringWithFormat:@"%@%@",IMG_URL,[_coopArr[indexPath.row]objectForKey:@"imgurl"]];
             }
 
-            cell.renzhImg.image = [[_coopArr[indexPath.row]objectForKey:@"authen"]intValue] == 3?[UIImage imageNamed:@"renzhen"]:[UIImage imageNamed:@"weirenzhen"];
+            cell.renzhImg.image = [[_coopArr[indexPath.row]objectForKey:@"authen"]intValue] == 3?[UIImage imageNamed:@"[iconprofilerenzhen]"]:[UIImage imageNamed:@"[iconprofileweirenzhen]"];
             [[ToolManager shareInstance]imageView:cell.headImg setImageWithURL:imgUrl placeholderType:PlaceholderTypeUserHead];
             cell.userNameLab.text = [_coopArr[indexPath.row]objectForKey:@"realname"];
             cell.positionLab.text = [_coopArr[indexPath.row]objectForKey:@"area"];
@@ -1011,7 +1011,7 @@
             cell = [[JJRCell alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 98)];
             
             cell.backgroundColor = [UIColor clearColor];
-            cell.renzhImg.image = [[_recomArr[indexPath.row]objectForKey:@"authen"] intValue]==3?[UIImage imageNamed:@"renzhen"]:[UIImage imageNamed:@"weirenzhen"];
+            cell.renzhImg.image = [[_recomArr[indexPath.row]objectForKey:@"authen"] intValue]==3?[UIImage imageNamed:@"[iconprofilerenzhen]"]:[UIImage imageNamed:@"[iconprofileweirenzhen]"];
 
             NSString * imgUrl;
             if ([[_recomArr[indexPath.row]objectForKey:@"imgurl"] rangeOfString:@"http"].location != NSNotFound) {

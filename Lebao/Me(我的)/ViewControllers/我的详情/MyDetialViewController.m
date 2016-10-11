@@ -18,7 +18,7 @@
 #import "MeetPaydingVC.h"
 #import "XLDataService.h"
 #import "MeetingModel.h"
-
+#import "GJGCChatFriendViewController.h"
 #define TagHeight 22
 #define MininumTagWidth (APPWIDTH - 120)/5.0
 #define MaxinumTagWidth (APPWIDTH - 20)
@@ -586,34 +586,65 @@
     
 }
 #pragma mark --bottomView底部view
--(void)addBottomView
+-(void)addBottomViewWithBtnStr:(int)btnStr
 {
-    UIView *bottomView=allocAndInit(UIView);
-    bottomView.frame=CGRectMake(0, APPHEIGHT-44, APPWIDTH, 44);
-    float addConnectionsBtnW = APPWIDTH/3.6;
-    UIImage *image = [UIImage imageNamed:@"addConnections"];
+//    NSLog(@"btnStr=====%d",btnStr);
+//    UIView *bottomView=allocAndInit(UIView);
+//    bottomView.frame=CGRectMake(0, APPHEIGHT-44, APPWIDTH, 44);
+//    float addConnectionsBtnW = APPWIDTH/3.6;
+//    UIImage *image = [UIImage imageNamed:@"addConnections"];
     
-    BaseButton *addConnectionsBtn=[[BaseButton alloc]initWithFrame:CGRectMake(0, 0,addConnectionsBtnW, 44) setTitle:@"加人脉" titleSize:12 titleColor:[UIColor grayColor] backgroundImage:nil iconImage:[UIImage imageNamed:@"addConnections"] highlightImage:nil setTitleOrgin:CGPointMake(bottomView.height - 17,(addConnectionsBtnW - 36)/2.0-image.size.width) setImageOrgin:CGPointMake(5,(addConnectionsBtnW -image.size.width)/2.0) inView:bottomView];
     
-    addConnectionsBtn.didClickBtnBlock = ^
-    {
-        CGFloat dilX = 25;
-        CGFloat dilH = 250;
-        AddConnectionView *alertV = [[AddConnectionView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.navigationController.view];
-        alertV.center = CGPointMake(APPWIDTH/2, APPHEIGHT/2-30);
-        alertV.delegate = self;
-        alertV.titleStr = @"提示";
-        alertV.title2Str=@"打赏让加人脉更顺畅!";
-    };
+    UIButton *addConnectionsBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+    addConnectionsBtn.frame=CGRectMake(0,APPHEIGHT-TabBarHeight,APPWIDTH, TabBarHeight);
+    addConnectionsBtn.backgroundColor=WhiteColor;
+    NSString *titleStr;
+    if (btnStr==0) {
+        titleStr=@"添加人脉";
+        addConnectionsBtn.tag=2222;
+        addConnectionsBtn.userInteractionEnabled=YES;
+        [addConnectionsBtn setTitleColor:WhiteColor forState:UIControlStateNormal];
+        addConnectionsBtn.backgroundColor=AppMainColor;
+    }else if (btnStr==1) {
+        titleStr=@"等待对方通过";
+        addConnectionsBtn.tag=2223;
+        addConnectionsBtn.userInteractionEnabled=NO;
+        [addConnectionsBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+        addConnectionsBtn.backgroundColor=[UIColor lightGrayColor];
+    }else if (btnStr==2) {
+        titleStr=@"等待您的通过";
+        addConnectionsBtn.tag=2224;
+        addConnectionsBtn.userInteractionEnabled=NO;
+        [addConnectionsBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+        addConnectionsBtn.backgroundColor=[UIColor lightGrayColor];
+    }else if (btnStr==3) {
+        titleStr=@"对话";
+        addConnectionsBtn.tag=2225;
+        addConnectionsBtn.userInteractionEnabled=YES;
+        [addConnectionsBtn setTitleColor:WhiteColor forState:UIControlStateNormal];
+        addConnectionsBtn.backgroundColor=AppMainColor;
+    }
+    [addConnectionsBtn setTitle:titleStr forState:UIControlStateNormal];
+    [addConnectionsBtn addTarget:self action:@selector(addConnectionsBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:addConnectionsBtn];
     
-    UIButton *meetBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    [meetBtn setTitle:@"立即约见" forState:UIControlStateNormal];
-    meetBtn.titleLabel.font = [UIFont systemFontOfSize:14];
-    [meetBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    meetBtn.backgroundColor=AppMainColor;
-    meetBtn.frame=CGRectMake(addConnectionsBtn.width, 0, APPWIDTH - addConnectionsBtn.width, 44);
-    [bottomView addSubview:meetBtn];
-    [self.view addSubview:bottomView];
+    
+    
+//    BaseButton *addConnectionsBtn=[[BaseButton alloc]initWithFrame:CGRectMake(0, 0,addConnectionsBtnW, 44) setTitle:@"加人脉" titleSize:12 titleColor:[UIColor grayColor] backgroundImage:nil iconImage:[UIImage imageNamed:@"addConnections"] highlightImage:nil setTitleOrgin:CGPointMake(bottomView.height - 17,(addConnectionsBtnW - 36)/2.0-image.size.width) setImageOrgin:CGPointMake(5,(addConnectionsBtnW -image.size.width)/2.0) inView:bottomView];
+//    
+//    addConnectionsBtn.didClickBtnBlock = ^
+//    {
+//        CGFloat dilX = 25;
+//        CGFloat dilH = 250;
+//        AddConnectionView *alertV = [[AddConnectionView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.navigationController.view];
+//        alertV.center = CGPointMake(APPWIDTH/2, APPHEIGHT/2-30);
+//        alertV.delegate = self;
+//        alertV.titleStr = @"提示";
+//        alertV.title2Str=@"打赏让加人脉更顺畅!";
+//    };
+//    
+
+//    [self.view addSubview:bottomView];
     
     
     
@@ -623,6 +654,31 @@
 {
     PopView(self);
 }
+-(void)addConnectionsBtnClick:(UIButton *)sender
+{
+    if (sender.tag==2222) {
+        CGFloat dilX = 25;
+                CGFloat dilH = 250;
+                AddConnectionView *alertV = [[AddConnectionView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.navigationController.view];
+                alertV.center = CGPointMake(APPWIDTH/2, APPHEIGHT/2-30);
+                alertV.delegate = self;
+                alertV.titleStr = @"提示";
+                alertV.title2Str=@"打赏让加人脉更顺畅!";
+    }else if (sender.tag==2223) {
+    }else if (sender.tag==2224) {
+    }else if (sender.tag==2225) {
+        GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
+        talk.talkType = GJGCChatFriendTalkTypePrivate;
+        talk.toId =headerModel.Id;
+        talk.toUserName =headerModel.realname;
+        GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
+        privateChat.type = MessageTypeNormlPage;
+        [self.navigationController pushViewController:privateChat animated:YES];
+
+    }
+}
+
+
 #pragma mark - YXCustomAlertViewDelegate
 - (void) customAlertView:(AddConnectionView *) customAlertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -684,7 +740,7 @@
     [param setObject:_userID forKey:@"id"];
     [[ToolManager shareInstance] showWithStatus];
     [XLDataService putWithUrl:detailManURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        //        NSLog(@"dataObj =%@",dataObj);
+                NSLog(@"dataObj =%@",dataObj);
         if (dataObj) {
             headerModel = [HeaderModel mj_objectWithKeyValues:dataObj[@"data"]];
             if ([dataObj[@"rtcode"] integerValue]==1) {
@@ -711,8 +767,8 @@
                 
                 [self navViewTitleAndBackBtn:headerModel.realname];
                 if (!headerModel.isme) {
-                    [self addBottomView];
-                    _myDetailTV.frame = CGRectMake(0, _myDetailTV.y,_myDetailTV.width, APPHEIGHT - (_myDetailTV.y) -44);
+                    [self addBottomViewWithBtnStr:[dataObj[@"relation"] intValue] ];
+                    _myDetailTV.frame = CGRectMake(0, _myDetailTV.y,_myDetailTV.width, APPHEIGHT - (_myDetailTV.y) -TabBarHeight);
                 }else{
                    
                     [self.view addSubview:self.edit];

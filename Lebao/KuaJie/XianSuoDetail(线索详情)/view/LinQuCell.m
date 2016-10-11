@@ -28,7 +28,7 @@
     [self addSubview:_headImg];
     
     
-    _userNameLab = [[UILabel alloc]initWithFrame:CGRectMake(_headImg.frame.origin.x+_headImg.frame.size.width+10, 7, 55, 25)];
+    _userNameLab = [[UILabel alloc]initWithFrame:CGRectMake(_headImg.frame.origin.x+_headImg.frame.size.width+10, 7, 55, 15)];
     _userNameLab.font = [UIFont systemFontOfSize:15];
     _userNameLab.textColor = [UIColor blackColor];
     _userNameLab.textAlignment = NSTextAlignmentLeft;
@@ -40,8 +40,11 @@
     _dingjLab.textAlignment = NSTextAlignmentLeft;
     [self addSubview:_dingjLab];
     
+    UIImage *certifyimag = [UIImage imageNamed:@"[iconprofilerenzhen]"];
     _renzhImg = [[UIImageView alloc]initWithFrame:CGRectMake(_userNameLab.frame.origin.x+_userNameLab.frame.size.width, 13, 14, 14)];
-    _renzhImg.image = [UIImage imageNamed:@"renzhen"];
+    
+    _renzhImg=[[UIImageView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(_userNameLab.frame)+5, CGRectGetMaxY(_userNameLab.frame)-certifyimag.size.height, certifyimag.size.width,certifyimag.size.height)];
+    _renzhImg.image=certifyimag;
     [self addSubview:_renzhImg];
     
     _timeLab = [[UILabel alloc]initWithFrame:CGRectMake(frame.size.width-160, 7, 150, 25)];

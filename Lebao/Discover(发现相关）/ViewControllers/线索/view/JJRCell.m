@@ -41,13 +41,13 @@
     _headImg = [[UIImageView alloc]initWithFrame:CGRectMake(10, (customV.frame.size.height-41)/2.0, 41, 41)];
     [_nextV addSubview:_headImg];
     
-    _userNameLab = [[UILabel alloc]initWithFrame:CGRectMake(_headImg.frame.origin.x+_headImg.frame.size.width+10, 12, 55, 25)];
+    _userNameLab = [[UILabel alloc]initWithFrame:CGRectMake(_headImg.frame.origin.x+_headImg.frame.size.width+10, 12, 55, 15)];
     _userNameLab.font = [UIFont systemFontOfSize:15];
     _userNameLab.textColor = [UIColor blackColor];
     _userNameLab.textAlignment = NSTextAlignmentLeft;
     [_nextV addSubview:_userNameLab];
     
-    UIImageView * posImg = [[UIImageView alloc]initWithFrame:CGRectMake(_userNameLab.frame.origin.x, 42, 11, 11)];
+    UIImageView * posImg = [[UIImageView alloc]initWithFrame:CGRectMake(_userNameLab.frame.origin.x, 42, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.height)];
     posImg.image = [UIImage imageNamed:@"dizhi"];
     [_nextV addSubview:posImg];
     

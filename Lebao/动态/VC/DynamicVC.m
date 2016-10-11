@@ -890,10 +890,17 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
   
-    if (self.bottomView.alpha!=1||self.bottomView.hidden==YES){
+    if (self.bottomView.alpha!=1||self.bottomView.hidden){
         self.dtTab.frame=CGRectMake(0,StatusBarHeight, APPWIDTH, APPHEIGHT-StatusBarHeight);
         }
     
+}
+-(void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
+{
+    if (self.bottomView.alpha!=1||self.bottomView.hidden){
+        self.dtTab.frame=CGRectMake(0,StatusBarHeight, APPWIDTH, APPHEIGHT-StatusBarHeight);
+    }
+
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
