@@ -15,7 +15,7 @@
 #import "GJGCChatFriendViewController.h"
 #import "LinQuRenVC.h"
 #import "ClueCommunityViewController.h"
-#import "AuthenticationViewController.h"
+#import "AuthenticationHomeViewController.h"
 #import "NSString+Extend.h"
 #import "MP3PlayerManager.h"
 @interface XianSuoDetailVC ()<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate>
@@ -954,7 +954,7 @@
             
             if ([[_xiansDic objectForKey:@"isredirect"] intValue]==1) {
                 
-                PushView(self, allocAndInit(AuthenticationViewController));
+                PushView(self, allocAndInit(AuthenticationHomeViewController));
             }
             
         }];
