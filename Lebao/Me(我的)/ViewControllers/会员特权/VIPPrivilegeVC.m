@@ -9,6 +9,7 @@
 #import "VIPPrivilegeVC.h"
 #import "XLDataService.h"
 #import "VipPrivilegeCell.h"
+#import "MeetPaydingVC.h"
 @interface privilegeData : NSObject
 
 @property(nonatomic,copy)NSString *ordinary;
@@ -135,6 +136,7 @@
 }
 -(UIView *)tabHeaderView
 {
+    vipModel *model=[_allArr firstObject];
     UIView *vipView=[[UIView alloc]init];
     vipView.frame=CGRectMake(0,0, APPWIDTH, 130);
     CALayer *toplayer=[[CALayer alloc]init];
@@ -166,7 +168,7 @@
     
     UIImageView *VIPImgV=[[UIImageView alloc]init];//vip
     UIImage *VIPimag;
-    if ([_modal.vip isEqualToString:@"1"]) {
+    if (model.vip ==1) {
         VIPimag=[UIImage imageNamed:@"[iconprofilevip]"];
     }else{
         VIPimag=[UIImage imageNamed:@"[iconprofilevipweikaitong]"];
@@ -178,7 +180,7 @@
     UILabel *messageLab=[[UILabel alloc]init];//提醒是否开通vip
     messageLab.font=Size(24);
     messageLab.textColor=[UIColor lightGrayColor];
-    if ([_modal.vip isEqualToString:@"1"]) {
+    if (model.vip ==1) {
         messageLab.text=@"您已经是会员";
     }else{
         messageLab.text=@"您还开通会员";
@@ -190,7 +192,7 @@
     
     UILabel *maneyLab=[[UILabel alloc]init];//钱
     maneyLab.font=Size(32);
-    vipModel *model=[_allArr firstObject];
+    
     maneyLab.text=[NSString stringWithFormat:@"%d元/年",model.prices[0].price];
     maneyLab.textColor=AppMainColor;
     maneyLab.frame= CGRectMake(vipView.width-maneyLab.text.length*16-10, CGRectGetMaxY(nameLab.frame)-3,maneyLab.text.length*16, 16);
@@ -276,7 +278,19 @@
 }
 -(void)vipAction:(UIButton *)sender
 {
-    
+    vipModel *model=[_allArr firstObject];
+    MeetPaydingVC * payVC = [[MeetPaydingVC alloc]init];
+    NSMutableDictionary *param=[Parameter parameterWithSessicon];
+    [param setObject:@(model.prices[0].price) forKey:@"price"];
+    payVC.param=param;
+    payVC.jineStr =[NSString stringWithFormat:@"%d",model.prices[0].price];
+    payVC.whatZfType=2;
+    payVC.succeedBlock = ^(BOOL succeed)
+    {
+        UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"恭喜您!" message:@"成为尊贵的知脉会员!" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:nil, nil];
+        [successAlertV show];
+    };
+    [self.navigationController pushViewController:payVC animated:YES];
 }
 -(BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath//高亮
 {

@@ -8,6 +8,8 @@
 
 #import "BaseViewController.h"
 #import "MeViewController.h"
+
+
 @interface VIPPrivilegeVC : BaseViewController
 
 @property (nonatomic,strong)MeViewModal *modal;

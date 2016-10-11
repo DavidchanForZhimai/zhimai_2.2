@@ -280,7 +280,7 @@
         payVC.param=param;
         payVC.jineStr = customAlertView.money;
         payVC.audioData=customAlertView.audioData;
-        
+        payVC.whatZfType=0;
         [self.navigationController pushViewController:payVC animated:YES];
         
         

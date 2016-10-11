@@ -24,7 +24,7 @@
 @property(nonatomic,copy)NSString *position;
 @property(nonatomic,copy)NSString *ID;
 @property(nonatomic,copy)NSString *share_url;
-@property(assign)BOOL vip;
+@property(assign)int vip;
 @property(nonatomic,copy)NSString *authen;
 
 @end
@@ -93,7 +93,7 @@
             authen = @"[iconprofileweirenzhen]";
         }
         NSString *vip;
-        if (model.vip ) {
+        if (model.vip==1) {
             vip = @"[iconprofilevip]";
         }
         else

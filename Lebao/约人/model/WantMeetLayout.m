@@ -44,7 +44,7 @@
             authen = @"[iconprofileweirenzhen]";
         }
         NSString *vip;
-        if ([model.vip boolValue]) {
+        if ([model.vip isEqualToString:@"1"]) {
             vip = @"[iconprofilevip]";
         }
         else

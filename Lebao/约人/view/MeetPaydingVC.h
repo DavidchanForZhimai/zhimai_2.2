@@ -8,7 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void(^SucceedBlock)(BOOL succeed);
 @interface MeetPaydingVC : UIViewController
+@property (nonatomic,copy)SucceedBlock succeedBlock;
+
 
 @property (weak, nonatomic) IBOutlet UILabel *dingjinLab;//定金
 @property (weak, nonatomic) IBOutlet UIImageView *zhimaiImg;//图片

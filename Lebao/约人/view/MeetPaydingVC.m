@@ -24,6 +24,7 @@ typedef enum {
 typedef enum{
     meetType=0,
     addConnections=1,
+    vipType=2,
 }whatZfType;
 @property (assign,nonatomic)int moneyType;
 
@@ -129,7 +130,7 @@ typedef enum{
         zhifuType  = @"app";
     }
     [self.param setObject:zhifuType forKey:@"paytype"];
-    if (_whatZfType!=addConnections) {
+    if (_whatZfType==meetType) {
         MeetingVC *iWantMeetVC =  allocAndInit(MeetingVC);
         
         if (_audioData) {
@@ -223,7 +224,7 @@ typedef enum{
         }
         
     }
-    else
+    else if (_whatZfType==addConnections)
     { NSLog(@"self.param=%@",self.param);
         [XLDataService putWithUrl:addConnectionsURL param:self.param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
             if(dataObj){
@@ -261,6 +262,49 @@ typedef enum{
             }
             
         }];
+    }else if (_whatZfType==vipType)
+    { NSLog(@"self.param=%@",self.param);
+    
+        [XLDataService putWithUrl:vipOpenURL param:self.param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+            if(dataObj){
+                
+                MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
+                NSLog(@"dataObj=%@",dataObj);
+                if (model.rtcode==1) {
+                    
+                    if (_moneyType==weixinzhifuType) {
+                        [[WetChatPayManager shareInstance]wxPay:dataObj[@"datas"] succeedMeg:@"发送成功！" recharge:@"0" wetChatPaySucceed:^(NSString *payMoney) {
+                              [self.navigationController popViewControllerAnimated:YES];
+                            if (_succeedBlock) {
+                                _succeedBlock(YES);
+                            }
+                            
+                        }];
+                        return ;
+                        
+                    }
+                    [self.navigationController popViewControllerAnimated:YES];
+                    if (_succeedBlock) {
+                        _succeedBlock(YES);
+                    }
+                   
+
+                    
+                }
+                
+                else
+                {
+                    [[ToolManager shareInstance] showAlertMessage:model.rtmsg];
+                }
+                NSLog(@"model.rtmsg=========dataobj=%@",model.rtmsg);
+            }else
+            {
+                [[ToolManager shareInstance] showInfoWithStatus];
+                
+            }
+            
+        }];
+
     }
 }
 

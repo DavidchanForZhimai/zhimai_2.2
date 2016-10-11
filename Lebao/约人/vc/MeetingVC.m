@@ -45,6 +45,7 @@
     [XLDataService putWithUrl:WantURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         
         if (dataObj) {
+            NSLog(@"meetObj====%@",dataObj);
             MeetNumModel *modal = [MeetNumModel mj_objectWithKeyValues:dataObj];
             _headView.meWantBtn.titleLabel.text=[NSString stringWithFormat:@"%d\n我想约见",modal.invited];
             NSMutableAttributedString *text1 = [[NSMutableAttributedString alloc]initWithString:_headView.meWantBtn.titleLabel.text];
@@ -162,7 +163,7 @@
             [self.headUserIdArr removeAllObjects];
         }
         if (dataObj) {
-            //            NSLog(@"meetObj====%@",dataObj);
+//                        NSLog(@"meetObj====%@",dataObj);
             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
             if (_page ==1) {
                 [[ToolManager shareInstance] moreDataStatus:_yrTab];
@@ -451,7 +452,7 @@
         payVC.param=param;
         payVC.jineStr = customAlertView.money;
         payVC.audioData=customAlertView.audioData;
-        
+        payVC.whatZfType=0;
         [self.navigationController pushViewController:payVC animated:YES];
         
         

@@ -53,6 +53,8 @@
 #define saveEvaluateURL [NSString stringWithFormat:@"%@meet/save-evaluate",HttpURL]
 //知脉头条
 #define HeadLineURL [NSString stringWithFormat:@"%@message/news",HttpURL]
+//开通VIP
+#define vipOpenURL [NSString stringWithFormat:@"%@vip/open",HttpURL]
 //vip/view
 #define vipviewURL [NSString stringWithFormat:@"%@vip/view",HttpURL]
 //请求参数
