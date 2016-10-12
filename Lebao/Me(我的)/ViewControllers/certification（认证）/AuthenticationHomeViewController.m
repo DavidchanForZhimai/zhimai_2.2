@@ -185,14 +185,7 @@
                 [[UpLoadImageManager shareInstance] upLoadImageType:@"authen" image:image   imageBlock:^(UpLoadImageModal * upLoadImageModal) {
                         NSMutableDictionary * parame = [Parameter parameterWithSessicon];
                     
-                        [parame setObject:Industry forKey:Industry];
-                    
-                        [parame setObject:@"code" forKey:@"code"];
-                    
-                        [parame setObject:@"realname" forKey:@"realname"];
-                    
                         [parame setObject:upLoadImageModal.imgurl forKey:@"cardpic"];
-                        [parame setObject:upLoadImageModal.imgurl forKey:@"idcard"];
                     
                         [XLDataService postWithUrl:SaveAuthenURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
                     
