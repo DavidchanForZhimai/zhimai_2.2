@@ -25,7 +25,7 @@
 
 #import "LWCornerRadiusHelper.h"
 #import "GallopUtils.h"
-
+#import "UIImage+Cut.h"
 @implementation LWCornerRadiusHelper
 
 
@@ -52,10 +52,13 @@
         CGFloat width;
         CGFloat height;
         CGFloat cornerRadius;
+        UIImage* img;
         if (arr.count > 3) {
             cornerRadius = [arr[0] floatValue];
             width = [arr[1] floatValue];
             height = [arr[2] floatValue];
+            
+            
             if (width > 0 && height > 0) {
                 if (width>height) {
                     imageSize = CGSizeMake(width * [GallopUtils contentsScale], width * [GallopUtils contentsScale]);
@@ -65,6 +68,23 @@
             }else{
                 imageSize = CGSizeMake(100.0f, 100.0f);
             }
+            float imageH;
+            float imageX;
+            float imageY;
+            if (image.size.height>image.size.width) {
+                imageH = image.size.width;
+                imageX = 0;
+                imageY = (image.size.height - image.size.width)/2.0;
+                
+            }else
+            {
+                imageH = image.size.height;
+                imageX = (image.size.width - image.size.height)/2.0;
+                imageY = 0;
+            }
+            img = [image cutWithFrame:CGRectMake(imageX, imageY, imageH, imageH)];
+            
+            
         } else {
             if (image.size.height > image.size.width) {
                 imageSize = CGSizeMake(image.size.height, image.size.height);
@@ -74,11 +94,14 @@
             if (imageSize.height > 100.0f) {
                 imageSize = CGSizeMake(100.0f, 100.0f);
             }
+            img = image;
+            
         }
         int w = imageSize.width;
         int h = imageSize.height;
         int radius = cornerRadius * [GallopUtils contentsScale];
-        UIImage* img = image;
+      
+
         CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
         CGContextRef context = CGBitmapContextCreate(NULL, w, h, 8, 4 * w, colorSpace, kCGImageAlphaPremultipliedFirst);
         CGRect rect = CGRectMake(0, 0, w, h);
@@ -98,6 +121,8 @@
 }
 
 static void _addRadiusdRectToPath(CGContextRef context, CGRect rect, float ovalWidth,float ovalHeight) {
+    
+ 
     float fw, fh;
     if (ovalWidth == 0 || ovalHeight == 0) {
         CGContextAddRect(context, rect);
