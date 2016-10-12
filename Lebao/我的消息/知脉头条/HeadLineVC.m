@@ -75,7 +75,6 @@
 @interface HeadLineVC ()<UITableViewDelegate,UITableViewDataSource>
 {
     UITableView *headLineTab;
-    int count;
 }
 @property(nonatomic,assign)int page;
 @property(nonatomic,strong)NSMutableArray *headLineArr;
@@ -95,7 +94,6 @@
     [self navViewTitleAndBackBtn:@"知脉头条"];
     [self creadTab];
     _page = 1;
-    count=0;
     if (self.headLineArr.count==0) {
         [[ToolManager shareInstance] showWithStatus];
     }
@@ -142,13 +140,13 @@
         }
         if (isShouldClearData) {
             [self.headLineArr removeAllObjects];
-            count=0;
+           
 
         }
         if (dataObj) {
                 NSLog(@"meetObj====%@",dataObj);
             newsModel *modal = [newsModel mj_objectWithKeyValues:dataObj];
-            count=modal.count;
+           
             if (_page ==1) {
                 [[ToolManager shareInstance] moreDataStatus:headLineTab];
             }
@@ -210,7 +208,8 @@
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 5;
+    newsData *data = self.headLineArr[section];
+    return 1 + data.subtitle.count;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
@@ -221,7 +220,7 @@
     return 50;
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return count;
+    return self.headLineArr.count;
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath{
 
