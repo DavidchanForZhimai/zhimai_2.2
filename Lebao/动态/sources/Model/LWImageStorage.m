@@ -136,10 +136,11 @@ static void _LWCroppedImageBackingSizeAndDrawRectInBounds(CGSize sourceImageSize
         self.userInteractionEnabled = YES;
         self.placeholder = nil;
         self.fadeShow = YES;
-        self.clipsToBounds = NO;
+        self.clipsToBounds = YES;
         self.contentsScale = [GallopUtils contentsScale];
         self.needRerendering = NO;
         self.needResize = NO;
+      
     }
     return self;
 }

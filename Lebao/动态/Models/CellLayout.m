@@ -295,7 +295,7 @@
                 int row = 1;
                 int rowCount = 0;
                 for (int i =0; i<count; i++) {
-                    
+                   
                     CGRect priseRect = CGRectMake(CGRectGetMaxX( likeImageSotrage.frame) + 5 + (rowCount * (priseWidth + 7.5f)),
                                                   likeImageSotrage.top - 6.0 +(row-1)*(priseWidth + 7.5f),
                                                   priseWidth,
@@ -304,7 +304,7 @@
                     [prisePositionArray addObject:prisePositionString];
                     
                     LWImageStorage* priseStorage = [[LWImageStorage alloc] initWithIdentifier:@"prise"];
-                    
+                   
                     priseStorage.contents = statusModel.like[i].imgurl;
                     priseStorage.placeholder = [UIImage imageNamed:@"defaulthead"];
                     if ([statusModel.like[i].imgurl isEqualToString:ImageURLS]) {
@@ -319,10 +319,10 @@
                         }
                     }
                     
-                    priseStorage.cornerRadius = priseWidth/2.0;
-                    priseStorage.cornerBackgroundColor = [UIColor whiteColor];
-                    priseStorage.backgroundColor = [UIColor whiteColor];
                     priseStorage.frame = priseRect;
+                    priseStorage.clipsToBounds = YES;
+                    priseStorage.cornerRadius =priseWidth/2.0;
+                    priseStorage.backgroundColor = [UIColor whiteColor];
                     priseStorage.tag = 10+i;
                     
                     [priseStorageArray addObject:priseStorage];

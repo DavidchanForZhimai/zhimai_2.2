@@ -37,7 +37,7 @@
     if (self) {
         self.identifier = identifier;
         self.tag = -1;
-        self.clipsToBounds = NO;
+        self.clipsToBounds = YES;
         self.opaque = YES;
         self.hidden = NO;
         self.alpha = 1.0f;
