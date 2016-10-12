@@ -17,6 +17,7 @@
 #import "DXAlertView.h"
 #import "DiscoverHomePageViewController.h"
 #import "CoreArchive.h"
+#import "XIAlertView.h"
 #define K_API_KEY @"tN6GvEjtvS7y58YG9ek0UlU6"
 static BOOL isBackGroundActivateApplication;
 @implementation AppDelegate (BDPush)
@@ -37,7 +38,7 @@ static BOOL isBackGroundActivateApplication;
     
     // 在 App 启动时注册百度云推送服务，需要提供 Apikey
     
-    [BPush registerChannel:launchOptions apiKey:K_API_KEY pushMode:BPushModeProduction withFirstAction:@"打开" withSecondAction:@"回复" withCategory:@"test" useBehaviorTextInput:YES isDebug:YES];
+    [BPush registerChannel:launchOptions apiKey:K_API_KEY pushMode:BPushModeDevelopment withFirstAction:@"打开" withSecondAction:@"回复" withCategory:@"test" useBehaviorTextInput:YES isDebug:YES];
     
     // 禁用地理位置推送 需要再绑定接口前调用。
     
@@ -378,6 +379,11 @@ static BOOL isBackGroundActivateApplication;
         }
 
         
+    }
+    else if ([notifacion[@"api"][@"goto"] isEqualToString:@"meet"])
+    {
+        
+        [[XIAlertView alloc]jueJianSucceedView:nav data:notifacion];
     }
     else
     {
