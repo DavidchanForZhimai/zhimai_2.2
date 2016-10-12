@@ -18,6 +18,7 @@
 #import "CoreArchive.h"
 #import "CALayer+Transition.h"
 #import "LoCationManager.h"
+#import "NSString+Extend.h"
 #define jjrTabTag 120
 @interface JinJiRenViewController ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate>
 {
@@ -190,6 +191,8 @@
             [[ToolManager shareInstance] imageView:cell.headImg  setImageWithURL:imgUrl placeholderType:PlaceholderTypeUserHead];
             
             cell.userNameLab.text = [_jjrJsonArr[indexPath.row] objectForKey:@"realname"];
+            cell.userNameLab.frame = CGRectMake(cell.userNameLab.x,7, [cell.userNameLab.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(APPWIDTH/2.0, cell.userNameLab.size.height)].width, cell.userNameLab.height);
+                    cell.renzhImg.frame =CGRectMake(cell.userNameLab.frame.origin.x+cell.userNameLab.frame.size.width+5, 7, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
             cell.positionLab.text = [_jjrJsonArr[indexPath.row]objectForKey:@"area"];
             if ([[_jjrJsonArr[indexPath.row]objectForKey:@"industry"] isEqualToString:BAOXIAN]) {
                 cell.hanyeLab.text = @"保险";

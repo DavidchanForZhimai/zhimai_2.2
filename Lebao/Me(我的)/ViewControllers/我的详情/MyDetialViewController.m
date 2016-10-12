@@ -603,27 +603,26 @@
         titleStr=@"添加人脉";
         addConnectionsBtn.tag=2222;
         addConnectionsBtn.userInteractionEnabled=YES;
-        [addConnectionsBtn setTitleColor:WhiteColor forState:UIControlStateNormal];
-        addConnectionsBtn.backgroundColor=AppMainColor;
+        [addConnectionsBtn setTitleColor:AppMainColor forState:UIControlStateNormal];
+        
     }else if (btnStr==1) {
         titleStr=@"等待对方通过";
         addConnectionsBtn.tag=2223;
         addConnectionsBtn.userInteractionEnabled=NO;
         [addConnectionsBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        addConnectionsBtn.backgroundColor=[UIColor lightGrayColor];
     }else if (btnStr==2) {
         titleStr=@"等待您的通过";
         addConnectionsBtn.tag=2224;
         addConnectionsBtn.userInteractionEnabled=NO;
         [addConnectionsBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        addConnectionsBtn.backgroundColor=[UIColor lightGrayColor];
     }else if (btnStr==3) {
         titleStr=@"对话";
         addConnectionsBtn.tag=2225;
         addConnectionsBtn.userInteractionEnabled=YES;
-        [addConnectionsBtn setTitleColor:WhiteColor forState:UIControlStateNormal];
-        addConnectionsBtn.backgroundColor=AppMainColor;
+        [addConnectionsBtn setTitleColor:AppMainColor forState:UIControlStateNormal];
+    
     }
+    addConnectionsBtn.backgroundColor=AppViewBGColor;
     [addConnectionsBtn setTitle:titleStr forState:UIControlStateNormal];
     [addConnectionsBtn addTarget:self action:@selector(addConnectionsBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:addConnectionsBtn];
@@ -738,6 +737,7 @@
 {
     NSMutableDictionary *param=[Parameter parameterWithSessicon];
     [param setObject:_userID forKey:@"id"];
+    NSLog(@"id =%@",_userID);
     [[ToolManager shareInstance] showWithStatus];
     [XLDataService putWithUrl:detailManURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
                 NSLog(@"dataObj =%@",dataObj);

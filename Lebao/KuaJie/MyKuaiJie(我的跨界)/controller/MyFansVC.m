@@ -12,6 +12,7 @@
 #import "HomeInfo.h"
 #import "MJRefresh.h"
 #import "MyDetialViewController.h"
+#import "NSString+Extend.h"
 @interface MyFansVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (assign,nonatomic)int page;
 @property (strong,nonatomic)NSMutableArray * jsonArr;
@@ -132,6 +133,9 @@
         cell.renzhImg.image = [[_jsonArr[indexPath.row]objectForKey:@"authen"] intValue]==3?[UIImage imageNamed:@"renzhen"]:[UIImage imageNamed:@"weirenzhen"];
         [[ToolManager shareInstance] imageView:cell.headImg  setImageWithURL:imgUrl placeholderType:PlaceholderTypeUserHead];
         cell.userNameLab.text = [_jsonArr[indexPath.row] objectForKey:@"realname"];
+        cell.userNameLab.frame = CGRectMake(cell.userNameLab.x,7, [cell.userNameLab.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(APPWIDTH/2.0, cell.userNameLab.size.height)].width, cell.userNameLab.height);
+
+                cell.renzhImg.frame =CGRectMake(cell.userNameLab.frame.origin.x+cell.userNameLab.frame.size.width+5, 7, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
         cell.positionLab.text =[_jsonArr[indexPath.row] objectForKey:@"area"];
         if ([[_jsonArr[indexPath.row]objectForKey:@"industry"] isEqualToString:BAOXIAN]) {
             cell.hanyeLab.text = @"保险";

@@ -794,6 +794,8 @@
         txTap.numberOfTapsRequired = 1;
         [cell.headImg addGestureRecognizer:txTap];
         cell.userNameLab.text = [_coopArr[indexPath.row]objectForKey:@"realname"];
+        cell.userNameLab.frame = CGRectMake(cell.userNameLab.x,7, [cell.userNameLab.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(APPWIDTH/2.0, cell.userNameLab.size.height)].width, cell.userNameLab.height);
+        cell.renzhImg.frame =CGRectMake(cell.userNameLab.frame.origin.x+cell.userNameLab.frame.size.width+5,CGRectGetMaxY(cell.userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
         NSString * str1 = @"定金:";
         NSString * str2 = [_coopArr[indexPath.row]objectForKey:@"deposit"];
         NSString * djStr = [str1 stringByAppendingString:str2];

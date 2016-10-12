@@ -28,6 +28,7 @@
 #import "StatusModel.h"
 #import "CellLayout.h"
 #import "FabuKuaJieVC.h"
+#import "NSString+Extend.h"
 #define kToolBarH 44
 #define kTextFieldH 30
 #define xsTabTag  110
@@ -223,6 +224,8 @@
             [[ToolManager shareInstance] imageView:cell.headImg  setImageWithURL:imgUrl placeholderType:PlaceholderTypeUserHead];
            
             cell.userNameLab.text = [_xsJsonArr[indexPath.row] objectForKey:@"realname"];
+            cell.userNameLab.frame = CGRectMake(cell.userNameLab.x,7, [cell.userNameLab.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(APPWIDTH/2.0, cell.userNameLab.size.height)].width, cell.userNameLab.height);
+                     cell.renzhImg.frame =CGRectMake(cell.userNameLab.frame.origin.x+cell.userNameLab.frame.size.width+5,CGRectGetMaxY(cell.userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
             cell.positionLab.text = [_xsJsonArr[indexPath.row] objectForKey:@"area"];
             NSString * timStr = [_xsJsonArr[indexPath.row] objectForKey:@"createtime"];
             NSTimeInterval time=[timStr doubleValue];

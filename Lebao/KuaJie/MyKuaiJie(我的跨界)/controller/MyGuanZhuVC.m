@@ -12,6 +12,7 @@
 #import "HomeInfo.h"
 #import "MJRefresh.h"
 #import "MyDetialViewController.h"
+#import "NSString+Extend.h"
 @interface MyGuanZhuVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *myTab;
 @property (assign,nonatomic)int page;
@@ -130,7 +131,9 @@
             imgUrl = [NSString stringWithFormat:@"%@%@",IMG_URL,[_jsonArr[indexPath.row]objectForKey:@"imgurl"]];
         }
         cell.renzhImg.image = [[_jsonArr[indexPath.row]objectForKey:@"authen"] intValue]==3?[UIImage imageNamed:@"renzhen"]:[UIImage imageNamed:@"weirenzhen"];
-
+        cell.userNameLab.frame = CGRectMake(cell.userNameLab.x,7, [cell.userNameLab.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(APPWIDTH/2.0, cell.userNameLab.size.height)].width, cell.userNameLab.height);
+        
+        cell.renzhImg.frame =CGRectMake(cell.userNameLab.frame.origin.x+cell.userNameLab.frame.size.width, 18, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
         [[ToolManager shareInstance] imageView:cell.headImg  setImageWithURL:imgUrl placeholderType:PlaceholderTypeUserHead];
         cell.userNameLab.text = [_jsonArr[indexPath.row] objectForKey:@"realname"];
         cell.positionLab.text =[_jsonArr[indexPath.row] objectForKey:@"area"];

@@ -90,7 +90,7 @@
     _nearManLab.textColor=[UIColor colorWithRed:0.424 green:0.427 blue:0.431 alpha:1.000];
     _nearManLab.textAlignment=NSTextAlignmentLeft;
     _nearManLab.font=[UIFont systemFontOfSize:15];
-    _nearManLab.text=@"最近有空 99999999人";
+    
     [self addSubview:_nearManLab];
     
     

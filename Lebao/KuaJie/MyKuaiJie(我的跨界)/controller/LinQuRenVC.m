@@ -10,6 +10,7 @@
 #import "LinQuCell.h"
 #import "MJRefresh.h"
 #import "MyKuaJieInfo.h"
+#import "NSString+Extend.h"
 @interface LinQuRenVC ()<UITableViewDelegate,UITableViewDataSource>
 {
     int jsonPage;
@@ -139,6 +140,8 @@
             [cell addSubview:xzImg];
         }
         cell.userNameLab.text = [_jsonArr[indexPath.row] objectForKey:@"realname"];
+         cell.userNameLab.frame = CGRectMake(cell.userNameLab.x,7, [cell.userNameLab.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(APPWIDTH/2.0, cell.userNameLab.size.height)].width, cell.userNameLab.height);
+                cell.renzhImg.frame =CGRectMake(cell.userNameLab.frame.origin.x+cell.userNameLab.frame.size.width+5, 7, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
         NSString * str1 = @"定金:";
         NSString * str2 = [NSString stringWithFormat:@"%@元",[_jsonArr[indexPath.row] objectForKey:@"deposit"]];
         NSString * djStr = [str1 stringByAppendingString:str2];

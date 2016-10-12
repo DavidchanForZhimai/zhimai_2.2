@@ -45,7 +45,7 @@
     [customV addSubview:_btnV];
 
     
-    _userNameLab = [[UILabel alloc]initWithFrame:CGRectMake(_headImg.frame.origin.x+_headImg.frame.size.width+10, 12, 55, 25)];
+    _userNameLab = [[UILabel alloc]initWithFrame:CGRectMake(_headImg.frame.origin.x+_headImg.frame.size.width+10, 12, 55, 15)];
     _userNameLab.font = [UIFont systemFontOfSize:15];
     _userNameLab.textColor = [UIColor blackColor];
     _userNameLab.textAlignment = NSTextAlignmentLeft;

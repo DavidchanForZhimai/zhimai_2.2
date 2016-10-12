@@ -12,5 +12,6 @@
 
 @property (nonatomic,assign)int invited;
 @property (nonatomic,assign)int beinvited;
-
+@property (nonatomic,assign)int cansee;
+@property (nonatomic,copy)NSString *userid;
 @end

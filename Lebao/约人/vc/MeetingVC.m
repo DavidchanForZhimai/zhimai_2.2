@@ -27,6 +27,7 @@
 @property (nonatomic,strong)UIButton *yrBtn;
 @property (nonatomic,strong)MeetHeadV *headView;
 @property (nonatomic,assign)int page;
+@property (nonatomic,copy)NSString *userid;
 @property (nonatomic,strong)NSMutableArray *nearByManArr;
 @property (nonatomic,strong)NSMutableArray *headimgArr;
 @property (nonatomic,strong)NSMutableArray *headUserIdArr;
@@ -47,6 +48,7 @@
         if (dataObj) {
             NSLog(@"meetObj====%@",dataObj);
             MeetNumModel *modal = [MeetNumModel mj_objectWithKeyValues:dataObj];
+            _userid=modal.userid;
             [_headView.meWantBtn setTitle:[NSString stringWithFormat:@"%d\n我想约见",modal.invited] forState:UIControlStateNormal];
             
             NSMutableAttributedString *text1 = [[NSMutableAttributedString alloc]initWithString:_headView.meWantBtn.titleLabel.text];
@@ -59,7 +61,12 @@
             [text addAttribute:NSFontAttributeName value:Size(40) range:[_headView.wantMeBtn.titleLabel.text rangeOfString:[NSString stringWithFormat:@"%d",modal.beinvited]]];
             [_headView.wantMeBtn setAttributedTitle:text forState:UIControlStateNormal];
             _headView.wantMeBtn.titleLabel.numberOfLines = 0;
-            
+            _headView.midBtn.titleLabel.text=[NSString stringWithFormat:@"可添加\n%d\n位人脉",modal.cansee];
+            _headView.midBtn.titleLabel.textAlignment=NSTextAlignmentCenter;
+            NSMutableAttributedString *str=[[NSMutableAttributedString alloc]initWithString:_headView.midBtn.titleLabel.text];
+            [str addAttribute:NSFontAttributeName value:Size(60) range:[_headView.midBtn.titleLabel.text rangeOfString:[NSString stringWithFormat:@"%d",modal.cansee]]];
+            [_headView.midBtn setAttributedTitle:str forState:UIControlStateNormal];
+            _headView.midBtn.titleLabel.numberOfLines=0;
         }  else
         {
             [[ToolManager shareInstance] showInfoWithStatus];
@@ -196,12 +203,7 @@
                 _headView.userIdArr=[NSArray arrayWithArray:self.headUserIdArr];
                 [_headView addEightImgView];
                 _headView.nearManLab.text=[NSString stringWithFormat:@"最近有空 %d人",modal.count];
-                _headView.midBtn.titleLabel.text=[NSString stringWithFormat:@"可添加\n%d\n位人脉",modal.count];
-                _headView.midBtn.titleLabel.textAlignment=NSTextAlignmentCenter;
-                NSMutableAttributedString *str=[[NSMutableAttributedString alloc]initWithString:_headView.midBtn.titleLabel.text];
-                [str addAttribute:NSFontAttributeName value:Size(60) range:[_headView.midBtn.titleLabel.text rangeOfString:[NSString stringWithFormat:@"%d",modal.count]]];
-                [_headView.midBtn setAttributedTitle:str forState:UIControlStateNormal];
-                _headView.midBtn.titleLabel.numberOfLines=0;
+               
                 [_yrTab reloadData];
                 
             }
@@ -392,6 +394,11 @@
         [cell.meetingBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         cell.meetingBtn.userInteractionEnabled=YES;
         cell.meetingBtn.titleLabel.font=[UIFont systemFontOfSize:14];
+    }
+    if ([layout.model.userid isEqualToString:_userid]) {
+        cell.meetingBtn.hidden=YES;
+    }else{
+        cell.meetingBtn.hidden=NO;
     }
     
     [cell setDelegate:self];

@@ -64,7 +64,7 @@
                 [btn1 addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:btn1];
         btn2=[UIButton buttonWithType:UIButtonTypeCustom];
-        [btn2 setTitle:@"200元" forState:UIControlStateNormal];
+        [btn2 setTitle:@"50元" forState:UIControlStateNormal];
         btn2.frame=CGRectMake(20*2-5+(self.frame.size.width-20*4+10)/3.0, CGRectGetMaxY(_titleLabel2.frame)+15, (self.frame.size.width-20*4+10)/3.0, 30);
         btn2.layer.borderWidth=1;
         [btn2 setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
@@ -95,7 +95,7 @@
         otherMoneyField.layer.cornerRadius=8;
         otherMoneyField.delegate=self;
 //        otherMoneyField.keyboardType=UIKeyboardTypePhonePad;
-        otherMoneyField.text=@"100";
+        otherMoneyField.text=@"20";
         otherMoneyField.backgroundColor=[UIColor whiteColor];
         [self addSubview:otherMoneyField];
         

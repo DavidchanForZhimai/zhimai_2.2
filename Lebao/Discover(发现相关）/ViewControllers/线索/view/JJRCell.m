@@ -47,7 +47,7 @@
     _userNameLab.textAlignment = NSTextAlignmentLeft;
     [_nextV addSubview:_userNameLab];
     
-    UIImageView * posImg = [[UIImageView alloc]initWithFrame:CGRectMake(_userNameLab.frame.origin.x, 42, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.height)];
+    UIImageView * posImg = [[UIImageView alloc]initWithFrame:CGRectMake(_userNameLab.frame.origin.x, 42, 14,14)];
     posImg.image = [UIImage imageNamed:@"dizhi"];
     [_nextV addSubview:posImg];
     

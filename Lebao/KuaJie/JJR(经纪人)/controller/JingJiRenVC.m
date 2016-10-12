@@ -15,6 +15,7 @@
 #import "MyDetialViewController.h"
 #import "CoreArchive.h"
 #import "ViewController.h"//选择地址
+#import "NSString+Extend.h"
 @interface JingJiRenVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UIView *buttomV;
 @property (weak, nonatomic) IBOutlet UIButton *baoxianBtn;
@@ -228,6 +229,8 @@
    
         cell.renzhImg.image = [[_jsonArr[indexPath.row]objectForKey:@"authen"] intValue]==3?[UIImage imageNamed:@"renzhen"]:[UIImage imageNamed:@"weirenzhen"];
         cell.userNameLab.text = [_jsonArr[indexPath.row] objectForKey:@"realname"];
+        cell.userNameLab.frame = CGRectMake(cell.userNameLab.x,7, [cell.userNameLab.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(APPWIDTH/2.0, cell.userNameLab.size.height)].width, cell.userNameLab.height);
+        cell.renzhImg.frame =CGRectMake(cell.userNameLab.frame.origin.x+cell.userNameLab.frame.size.width+5, 7, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
         cell.positionLab.text = [_jsonArr[indexPath.row]objectForKey:@"area"];
         if ([[_jsonArr[indexPath.row]objectForKey:@"industry"] isEqualToString:BAOXIAN]) {
             cell.hanyeLab.text = @"保险";
