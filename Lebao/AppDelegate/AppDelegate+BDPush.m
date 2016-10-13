@@ -172,19 +172,6 @@ static BOOL isBackGroundActivateApplication;
         }
         
     }
-
-    for ( UINavigationController * subnav in self.mainTab.viewControllers) {
-        for (UIViewController *subVC in subnav.viewControllers) {
-    
-            if ([subVC isKindOfClass:[MeetingVC class]]) {
-                
-                MeetingVC *wBHomePageVC = (MeetingVC *)subVC;
-                [wBHomePageVC.homePageBtn setImage:[UIImage imageNamed:@"xinxi"] forState:UIControlStateNormal];
-                
-            }
-        }
-        
-    }
     
     if ([notifacion[@"api"][@"goto"] isEqualToString:@"msg"]) {
        

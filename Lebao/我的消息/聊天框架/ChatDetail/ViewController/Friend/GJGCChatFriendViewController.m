@@ -1521,13 +1521,14 @@ GJCUCaptureViewControllerDelegate>
         {
             contentModel.sendStatus = GJGCChatFriendSendMessageStatusFaild;
             
+            [[ToolManager shareInstance] showInfoWithStatus:dataObj[@"rtmsg"]];
         }
         
     }
     else
     {
         contentModel.sendStatus = GJGCChatFriendSendMessageStatusFaild;
-       
+        [[ToolManager shareInstance] showInfoWithStatus:dataObj[@"rtmsg"]];
     }
   
     if (index<self.dataSourceManager.chatListArray.count) {
