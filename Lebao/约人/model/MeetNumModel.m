@@ -9,6 +9,14 @@
 #import "MeetNumModel.h"
 
 @implementation MeetNumModel
++ (NSDictionary *)objectClassInArray{
+    return @{@"cansee_datas" : [canseeDatas class]};
+}
+
+@end
+
+
+@implementation canseeDatas
 
 
 

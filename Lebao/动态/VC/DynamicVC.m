@@ -33,7 +33,7 @@
 
     UIButton * jjrBtn;
     int jjrpageNumb;
-    
+    float OffsetY;
     UIImageView *_toolBar;
     UITextField *_textField;
     UIButton  *_sendBtn;
@@ -68,7 +68,7 @@
     //评论
     [self setTabbarIndex:1];
     [self navViewTitle:@"动态"];
-    
+    OffsetY=0;
     
     _toolBarView = [[UIScrollView alloc]initWithFrame:CGRectMake(self.view.x,StatusBarHeight + NavigationBarHeight, self.view.width, self.view.height -(StatusBarHeight + NavigationBarHeight+ TabBarHeight))];
     _toolBarView.backgroundColor = [UIColor clearColor];
@@ -847,60 +847,40 @@
 //}
 #pragma mark 滑动隐藏导航栏
 //滑动隐藏导航栏 LiXingLe
-
--(void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset{
-    
-    
-    if(velocity.y>0)
-        
-    {
-        self.dtTab.frame=CGRectMake(0,StatusBarHeight, APPWIDTH, APPHEIGHT-StatusBarHeight);
-
-        [UIView animateWithDuration:0.5
-                         animations:^{
-                             [self.navigationController setNavigationBarHidden:YES animated:YES];self.bottomView.alpha=0;
-                             self.navigationBarView.alpha=0;
-                         }completion:^(BOOL finished) {
-                             [self.bottomView setHidden:YES];
-                             [self.navigationBarView setHidden:YES];
-                             
-                         }];
-        
-    }
-    
-    else
-        
-    {
-        
-        [self.bottomView setHidden:NO];
-        [self.navigationBarView setHidden:NO];
-        
-        [UIView animateWithDuration:0.5
-                         animations:^{
-                             self.bottomView.alpha=1;
-                             self.navigationBarView.alpha=1;
-                         }completion:^(BOOL finished) {
-                             self.dtTab.frame=CGRectMake(0, NavigationBarHeight, APPWIDTH, APPHEIGHT-( NavigationBarHeight + TabBarHeight));
-                           
-                             
-                         }];
-    }
-    
-}
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
   
-    if (self.bottomView.alpha!=1||self.bottomView.hidden){
-        self.dtTab.frame=CGRectMake(0,StatusBarHeight, APPWIDTH, APPHEIGHT-StatusBarHeight);
+    if (scrollView.contentOffset.y>0&&scrollView.contentOffset.y-OffsetY>20)   {
+        if (self.bottomView.y==(APPHEIGHT-self.bottomView.height)) {
+            self.dtTab.frame=CGRectMake(0,StatusBarHeight, APPWIDTH, APPHEIGHT-StatusBarHeight);
+            [UIView animateWithDuration:0.5
+                             animations:^{
+                                 [self.navigationController setNavigationBarHidden:YES animated:YES];
+                                 self.bottomView.frame=CGRectMake(self.bottomView.x,APPHEIGHT, self.bottomView.width, self.bottomView.height);
+                                 self.navigationBarView.frame=CGRectMake(self.navigationBarView.x, -self.navigationBarView.height, self.navigationBarView.width, self.navigationBarView.height);
+                             }completion:^(BOOL finished) {
+                             }];
+            
         }
-    
-}
--(void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
-{
-    if (self.bottomView.alpha!=1||self.bottomView.hidden){
-        self.dtTab.frame=CGRectMake(0,StatusBarHeight, APPWIDTH, APPHEIGHT-StatusBarHeight);
+        OffsetY=scrollView.contentOffset.y;
+    }
+    else if (scrollView.contentOffset.y>0&&scrollView.contentOffset.y-OffsetY<-20)
+    {
+        if (self.bottomView.y==APPHEIGHT) {
+            [UIView animateWithDuration:0.5
+                             animations:^{
+                                 [self.navigationController setNavigationBarHidden:YES animated:YES];
+                                 self.bottomView.frame=CGRectMake(self.bottomView.x,APPHEIGHT- self.bottomView.height, self.bottomView.width, self.bottomView.height);
+                                 self.navigationBarView.frame=CGRectMake(self.navigationBarView.x,0, self.navigationBarView.width, self.navigationBarView.height);
+                                 self.dtTab.frame=CGRectMake(0, NavigationBarHeight, APPWIDTH, APPHEIGHT-( NavigationBarHeight + TabBarHeight));
+                             }completion:^(BOOL finished) {
+                                 
+                             }];
+        }
+        OffsetY=scrollView.contentOffset.y;
     }
 
+    
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

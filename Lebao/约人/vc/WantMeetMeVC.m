@@ -544,7 +544,8 @@ if (layout.model.tel&&layout.model.tel!=nil) {
 
     }
     if (alertView.tag==10000) {
-        WantMeetLayout *layout=self.oprationArr[clickRow.row];        NSMutableDictionary *parame=[Parameter parameterWithSessicon];
+        WantMeetLayout *layout=self.oprationArr[clickRow.row];
+        NSMutableDictionary *parame=[Parameter parameterWithSessicon];
         
         if (buttonIndex==0) {
             [parame setObject:@"refuse" forKey:@"conduct"];
