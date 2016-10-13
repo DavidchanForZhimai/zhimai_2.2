@@ -95,7 +95,7 @@
     [param setObject:@(_page) forKey:@"page"];
     [param setObject:@"" forKey:@"keyword"];
     [param setObject:@"" forKey:@"industrys"];
-//     NSLog(@"param====%@",param);
+     NSLog(@"param====%@",param);
     [XLDataService putWithUrl:canseeURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
        
         if (isRefresh) {
@@ -109,7 +109,7 @@
             [self.allMeetArr removeAllObjects];
         }
         if (dataObj) {
-//            NSLog(@"meetObj====%@",dataObj);
+            NSLog(@"meetObj====%@",dataObj);
             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
             if (_page ==1) {
                 [[ToolManager shareInstance] moreDataStatus:self.tableView];
@@ -123,7 +123,7 @@
             if (modal.rtcode ==1) {
                 [[ToolManager shareInstance]dismiss];
                         for (MeetingData *data in modal.datas) {
-                    [self.allMeetArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andMessageBtn:YES andOprationBtn:NO]];
+                    [self.allMeetArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andMessageBtn:YES andOprationBtn:NO andTime:NO]];
                 }
                  [self.tableView reloadData];
             }
@@ -205,6 +205,7 @@
         [param setObject:customAlertView.money forKey:@"reward"];
         [XLDataService putWithUrl:addConnectionsURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
             if(dataObj){
+                NSLog(@"dataobj===%@",dataObj);
                 MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
                 if (model.rtcode==1) {
                     UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"添加人脉请求已发出,请耐心等待" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];

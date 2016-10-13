@@ -13,7 +13,7 @@
 #import "NSString+Extend.h"
 @implementation MeetingCellLayout
 
-- (MeetingCellLayout *)initCellLayoutWithModel:(MeetingData *)model andMeetBtn:(BOOL)meetBtn andMessageBtn:(BOOL)messageBtn andOprationBtn:(BOOL)oprationBtn
+- (MeetingCellLayout *)initCellLayoutWithModel:(MeetingData *)model andMeetBtn:(BOOL)meetBtn andMessageBtn:(BOOL)messageBtn andOprationBtn:(BOOL)oprationBtn andTime:(BOOL)isTime
 {
     self = [super init];
     if (self) {
@@ -184,6 +184,12 @@
             }
         }
         _line2Rect  = CGRectMake(0, resourceTextStorageheight + 10, APPWIDTH, 0.5);
+               [self addStorage:_avatarStorage];
+        [self addStorage:nameTextStorage];
+        [self addStorage:industryTextStorage];
+        [self addStorage:productTextStorage];
+        [self addStorage:resourceTextStorage];
+        if (isTime) {
         float distance=[model.distance floatValue]/1000.00;
         LWTextStorage* distanceLab=[[LWTextStorage alloc]initWithFrame:CGRectMake(_avatarStorage.left,_line2Rect.origin.y+8, nameTextStorage.width, nameTextStorage.height)];
         distanceLab.text=[NSString stringWithFormat:@"%.2lfkm",distance];
@@ -193,13 +199,9 @@
         timerLab.textAlignment=NSTextAlignmentRight;
         timerLab.textColor=[UIColor colorWithRed:0.482 green:0.486 blue:0.494 alpha:1.000];
         timerLab.font=Size(26.0);
-        [self addStorage:_avatarStorage];
-        [self addStorage:nameTextStorage];
-        [self addStorage:industryTextStorage];
-        [self addStorage:productTextStorage];
-        [self addStorage:resourceTextStorage];
         [self addStorage:distanceLab];
         [self addStorage:timerLab];
+        }
         self.cellHeight = [self suggestHeightWithBottomMargin:20];
         self.cellMarginsRect = frame(0, self.cellHeight - 10, APPWIDTH, 10);
         

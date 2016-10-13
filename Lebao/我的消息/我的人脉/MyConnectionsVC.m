@@ -82,6 +82,7 @@
                    }
 
         if (dataObj) {
+            NSLog(@"Mydataobj====%@",dataObj);
             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
             if (_page ==1) {
                 [[ToolManager shareInstance] moreDataStatus:_yrTab];
@@ -93,7 +94,7 @@
             if (modal.rtcode ==1) {
               
                 for (MeetingData *data in modal.datas) {
-                    [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andMessageBtn:YES andOprationBtn:NO]];
+                    [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andMessageBtn:YES andOprationBtn:NO andTime:NO]];
                     
                                   }
                 [_yrTab reloadData];
@@ -238,8 +239,8 @@
     EjectView *alertV = [[EjectView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.navigationController.view];
     alertV.center = CGPointMake(APPWIDTH/2, APPHEIGHT/2-30);
     alertV.delegate = self;
-    alertV.titleStr = @"提示";
-    alertV.title2Str=@"您需要打赏一定的约见费";
+    alertV.titleStr = @"温馨提示";
+    alertV.title2Str=@"意思一下,打赏让“约”来的正式一点";
     alertV.indexth=indexPath;
 }
 #pragma mark - MeettingTableViewCellDelegate 头像按钮点击
@@ -267,7 +268,22 @@
     [self.navigationController pushViewController:privateChat animated:YES];
 
 }
+-(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
 
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        [self.nearByManArr removeObjectAtIndex:indexPath.row];
+        // Delete the row from the data source.
+        [_yrTab deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        
+    }
+    else if (editingStyle == UITableViewCellEditingStyleInsert) {
+        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
+    }
+}
 #pragma mark - YXCustomAlertViewDelegate
 - (void) customAlertView:(EjectView *) customAlertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {

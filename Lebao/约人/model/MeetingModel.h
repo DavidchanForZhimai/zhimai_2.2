@@ -9,10 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "BaseModal.h"
 @interface MeetingModel : BaseModal
-
+@property(nonatomic,strong)NSString *userid;
 @end
 
 @interface MeetingData : NSObject
+@property(nonatomic,assign)BOOL isSelf;
 @property(nonatomic,strong)NSString *authen;
 @property(nonatomic,strong)NSString *distance;
 @property(nonatomic,strong)NSString *imgurl;

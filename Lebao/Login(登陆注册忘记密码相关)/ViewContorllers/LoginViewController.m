@@ -221,7 +221,6 @@ typedef enum {
           [sendcaptchaParam setObject:@"2" forKey:@"type"];
 //          NSLog(@"sendcaptchaParam =%@",sendcaptchaParam);
           [XLDataService postWithUrl:LoginURL param:sendcaptchaParam modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-    
               if (error) {
                   
                   [[ToolManager shareInstance] showInfoWithStatus];

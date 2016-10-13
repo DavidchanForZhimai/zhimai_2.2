@@ -149,6 +149,7 @@ typedef enum{
                              if (_moneyType==weixinzhifuType) {
                                  [[WetChatPayManager shareInstance]wxPay:dataObj[@"datas"] succeedMeg:@"发布成功！" recharge:@"0" wetChatPaySucceed:^(NSString *payMoney) {
                                      UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:nil message:@"请求已发出,请耐心等待对方答复" delegate:self cancelButtonTitle:@"确认" otherButtonTitles: nil];                                     PushView(self, iWantMeetVC);
+                                     
                                      [successAlertV show];
                                  }];
                                  return ;
@@ -156,8 +157,6 @@ typedef enum{
                              }
                              
                              UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:nil message:@"请求已发出,请耐心等待对方答复" delegate:self cancelButtonTitle:@"确认" otherButtonTitles: nil];
-                             //                             successAlertV.tag=666;
-                             //                             successAlertV.cancelButtonIndex=2;
                              PushView(self, iWantMeetVC);
                              [successAlertV show];
                              

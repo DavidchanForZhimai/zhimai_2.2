@@ -26,6 +26,7 @@
 
 @interface vipModel : NSObject
 @property(nonatomic,assign)int vip;
+@property(nonatomic,assign)int vipdays;
 @property(nonatomic,assign)int authen;
 @property(nonatomic,assign)int rtcode;
 @property(nonatomic,copy)NSString *rtmsg;
@@ -53,6 +54,7 @@
 @interface VIPPrivilegeVC ()<UITableViewDelegate,UITableViewDataSource>
 {
     UITableView *vipTab;
+    UIButton *vipBtn;
 }
 
 @property (strong, nonatomic)NSMutableArray * allArr;
@@ -91,9 +93,10 @@
     [self.view addSubview:vipTab];
     vipTab.tableHeaderView=[self tabHeaderView];
     
-    UIButton *vipBtn=[[UIButton alloc]initWithFrame:CGRectMake(0, APPHEIGHT-44, APPWIDTH, 44)];
+    vipBtn=[[UIButton alloc]initWithFrame:CGRectMake(0, APPHEIGHT-44, APPWIDTH, 44)];
     vipBtn.backgroundColor=AppMainColor;
-    [vipBtn setTitle:@"快去升级为特权会员" forState:UIControlStateNormal];
+    
+    
     [vipBtn addTarget:self action:@selector(vipAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:vipBtn];
 
@@ -116,7 +119,11 @@
                 [[ToolManager shareInstance]dismiss];
                
                     [self.allArr addObject:modal];
-                
+                if (modal.vip!=1) {
+                    [vipBtn setTitle:@"快去升级为特权会员" forState:UIControlStateNormal];
+                }else{
+                    [vipBtn setTitle:@"继续购买特权会员天数" forState:UIControlStateNormal];
+                }
                 vipTab.tableHeaderView = [self tabHeaderView];
                 
                 [vipTab reloadData];
@@ -181,7 +188,8 @@
     messageLab.font=Size(24);
     messageLab.textColor=[UIColor lightGrayColor];
     if (model.vip ==1) {
-        messageLab.text=@"您已经是会员";
+        messageLab.text=[NSString stringWithFormat:@"您的会员时间还有%d天",model.vipdays];
+        messageLab.textColor=[UIColor orangeColor];
     }else{
         messageLab.text=@"您还开通会员";
     }
@@ -287,7 +295,13 @@
     payVC.whatZfType=2;
     payVC.succeedBlock = ^(BOOL succeed)
     {
-        UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"恭喜您!" message:@"成为尊贵的知脉会员!" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:nil, nil];
+        NSString *str;
+        if (model.vip!=1) {
+            str=@"成为尊贵的知脉会员!";
+        }else{
+            str=@"会员天数又增加了365天!";
+        }
+        UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"恭喜您!" message:str delegate:self cancelButtonTitle:@"确认" otherButtonTitles:nil, nil];
         [successAlertV show];
     };
     [self.navigationController pushViewController:payVC animated:YES];

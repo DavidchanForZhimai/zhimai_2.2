@@ -15,6 +15,7 @@
     UIButton *btn1;
     UIButton *btn2;
     UIButton *btn3;
+    UIButton *btn4;
     UIButton *audioBtn;//录音按键切换按钮
     UITextField *otherMoneyField;
     UIButton *cancelBtn;
@@ -39,7 +40,7 @@
         self.middleView.frame = superView.frame;
         [superView addSubview:_middleView];
         
-        self.money=@"20";
+        self.money=@"1";
         self.backgroundColor = [UIColor whiteColor];
         self.layer.cornerRadius = 15;
         self.center = CGPointMake([UIScreen mainScreen].bounds.size.width/2, _centerY);
@@ -52,8 +53,8 @@
         [self addSubview:_titleLabel2];
         
         btn1=[UIButton buttonWithType:UIButtonTypeCustom];
-        [btn1 setTitle:@"20元" forState:UIControlStateNormal];
-        btn1.frame=CGRectMake(20, CGRectGetMaxY(_titleLabel2.frame)+15, (self.frame.size.width-20*4+10)/3.0, 30);
+        [btn1 setTitle:@"1元" forState:UIControlStateNormal];
+        btn1.frame=CGRectMake(20, CGRectGetMaxY(_titleLabel2.frame)+15, (self.frame.size.width-20*4+10)/4.0, 30);
         btn1.layer.borderWidth=1;
         btn1.selected=YES;
         [btn1 setTitleColor:[UIColor colorWithRed:0.298 green:0.627 blue:0.996 alpha:1.000] forState:UIControlStateSelected];
@@ -64,8 +65,8 @@
                 [btn1 addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:btn1];
         btn2=[UIButton buttonWithType:UIButtonTypeCustom];
-        [btn2 setTitle:@"50元" forState:UIControlStateNormal];
-        btn2.frame=CGRectMake(20*2-5+(self.frame.size.width-20*4+10)/3.0, CGRectGetMaxY(_titleLabel2.frame)+15, (self.frame.size.width-20*4+10)/3.0, 30);
+        [btn2 setTitle:@"5元" forState:UIControlStateNormal];
+        btn2.frame=CGRectMake(20+10+(self.frame.size.width-20*4+10)/4.0, CGRectGetMaxY(_titleLabel2.frame)+15, (self.frame.size.width-20*4+10)/4.0, 30);
         btn2.layer.borderWidth=1;
         [btn2 setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
                 [btn2 setTitleColor:[UIColor colorWithRed:0.298 green:0.627 blue:0.996 alpha:1.000] forState:UIControlStateSelected];
@@ -75,8 +76,8 @@
                 [btn2 addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:btn2];
         btn3=[UIButton buttonWithType:UIButtonTypeCustom];
-        [btn3 setTitle:@"其他" forState:UIControlStateNormal];
-        btn3.frame=CGRectMake(20*3-10+(self.frame.size.width-20*4+10)/3.0*2, CGRectGetMaxY(_titleLabel2.frame)+15, (self.frame.size.width-20*4+10)/3.0, 30);
+        [btn3 setTitle:@"10元" forState:UIControlStateNormal];
+        btn3.frame=CGRectMake(20+20+(self.frame.size.width-20*4+10)/4.0*2, CGRectGetMaxY(_titleLabel2.frame)+15, (self.frame.size.width-20*4+10)/4.0, 30);
                 [btn3 setTitleColor:[UIColor colorWithRed:0.298 green:0.627 blue:0.996 alpha:1.000] forState:UIControlStateSelected];
         btn3.layer.borderWidth=1;
         [btn3 setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
@@ -86,6 +87,18 @@
                 [btn3 addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:btn3];
         
+        btn4=[UIButton buttonWithType:UIButtonTypeCustom];
+        [btn4 setTitle:@"其他" forState:UIControlStateNormal];
+        btn4.frame=CGRectMake(20+30+(self.frame.size.width-20*4+10)/4.0*3, CGRectGetMaxY(_titleLabel2.frame)+15, (self.frame.size.width-20*4+10)/4.0, 30);
+        [btn4 setTitleColor:[UIColor colorWithRed:0.298 green:0.627 blue:0.996 alpha:1.000] forState:UIControlStateSelected];
+        btn4.layer.borderWidth=1;
+        [btn4 setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+        btn4.layer.borderColor=[UIColor grayColor].CGColor;
+        btn4.layer.cornerRadius=13;
+        btn4.tag=103;
+        [btn4 addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:btn4];
+
         
         otherMoneyField=[[UITextField alloc]initWithFrame:CGRectMake(20,CGRectGetMaxY(btn1.frame)+15,self.frame.size.width-40, 0)];
         otherMoneyField.layer.borderColor=[[UIColor colorWithWhite:0.9 alpha:1] CGColor];
@@ -95,7 +108,7 @@
         otherMoneyField.layer.cornerRadius=8;
         otherMoneyField.delegate=self;
 //        otherMoneyField.keyboardType=UIKeyboardTypePhonePad;
-        otherMoneyField.text=@"20";
+        otherMoneyField.text=@"1";
         otherMoneyField.backgroundColor=[UIColor whiteColor];
         [self addSubview:otherMoneyField];
         
@@ -189,37 +202,39 @@
 {
     
     if (sender.tag==100) {
-        sender.selected=YES;
-        btn2.selected=NO;
-        btn3.selected=NO;
-        sender.layer.borderColor=[UIColor colorWithRed:0.298 green:0.627 blue:0.996 alpha:1.000].CGColor;
-        btn2.layer.borderColor=[UIColor grayColor].CGColor;
-        btn3.layer.borderColor=[UIColor grayColor].CGColor;
-        self.money=@"20";
-        otherMoneyField.text=@"20";
+
+        self.money=@"1";
+        otherMoneyField.text=@"1";
         [self changeAllFrameWithHeight:0];
     }
     if (sender.tag==101) {
-        sender.selected=YES;
-        btn1.selected=NO;
-        btn3.selected=NO;
-         sender.layer.borderColor=[UIColor colorWithRed:0.298 green:0.627 blue:0.996 alpha:1.000].CGColor;
-        btn1.layer.borderColor=[UIColor grayColor].CGColor;
-        btn3.layer.borderColor=[UIColor grayColor].CGColor;
-        self.money=@"50";
-        otherMoneyField.text=@"50";
+
+        self.money=@"5";
+        otherMoneyField.text=@"5";
         [self changeAllFrameWithHeight:0];
     }
     if (sender.tag==102) {
-        sender.selected=YES;
-        btn2.selected=NO;
-        btn1.selected=NO;
-         sender.layer.borderColor=[UIColor colorWithRed:0.298 green:0.627 blue:0.996 alpha:1.000].CGColor;
-        btn2.layer.borderColor=[UIColor grayColor].CGColor;
-        btn1.layer.borderColor=[UIColor grayColor].CGColor;
+
+        self.money=@"10";
+        otherMoneyField.text=@"10";
+        [self changeAllFrameWithHeight:0];
+    }
+    if (sender.tag==103) {
+
         [self changeAllFrameWithHeight:32];
         self.money=otherMoneyField.text;
     }
+    
+    btn1.selected=NO;
+    btn2.selected=NO;
+    btn3.selected=NO;
+    btn4.selected=NO;
+    sender.selected=YES;
+    btn1.layer.borderColor=[UIColor grayColor].CGColor;
+    btn2.layer.borderColor=[UIColor grayColor].CGColor;
+    btn3.layer.borderColor=[UIColor grayColor].CGColor;
+    btn4.layer.borderColor=[UIColor grayColor].CGColor;
+    sender.layer.borderColor=sender.tintColor.CGColor;
 }
 
 

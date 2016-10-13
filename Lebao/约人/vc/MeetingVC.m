@@ -27,7 +27,6 @@
 @property (nonatomic,strong)UIButton *yrBtn;
 @property (nonatomic,strong)MeetHeadV *headView;
 @property (nonatomic,assign)int page;
-@property (nonatomic,copy)NSString *userid;
 @property (nonatomic,strong)NSMutableArray *nearByManArr;
 @property (nonatomic,strong)NSMutableArray *headimgArr;
 @property (nonatomic,strong)NSMutableArray *headUserIdArr;
@@ -48,7 +47,6 @@
         if (dataObj) {
             NSLog(@"meetObj====%@",dataObj);
             MeetNumModel *modal = [MeetNumModel mj_objectWithKeyValues:dataObj];
-            _userid=modal.userid;
             [_headView.meWantBtn setTitle:[NSString stringWithFormat:@"%d\n我想约见",modal.invited] forState:UIControlStateNormal];
             
             NSMutableAttributedString *text1 = [[NSMutableAttributedString alloc]initWithString:_headView.meWantBtn.titleLabel.text];
@@ -141,13 +139,13 @@
 - (void)netWorkRefresh:(BOOL)isRefresh andIsLoadMoreData:(BOOL)isMoreLoadMoreData isShouldClearData:(BOOL)isShouldClearData//加载数据
 {
     
-        [[LoCationManager shareInstance] creatLocationManager];
-        [LoCationManager shareInstance].callBackLocation = ^(CLLocationCoordinate2D location)
-        {
+//        [[LoCationManager shareInstance] creatLocationManager];
+//        [LoCationManager shareInstance].callBackLocation = ^(CLLocationCoordinate2D location)
+//        {
     //            测试用,要删掉
-//    CLLocationCoordinate2D location;
-//    location.latitude=24.491534;
-//    location.longitude=118.180851;
+    CLLocationCoordinate2D location;
+    location.latitude=24.491534;
+    location.longitude=118.180851;
             if (self.nearByManArr.count==0) {
                 [[ToolManager shareInstance] showWithStatus];
             }
@@ -174,8 +172,11 @@
             [self.headUserIdArr removeAllObjects];
         }
         if (dataObj) {
-                        NSLog(@"meetObj====%@",dataObj);
+//         NSLog(@"meetObj====%@",dataObj);
+        
+           
             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
+            
             if (_page ==1) {
                 [[ToolManager shareInstance] moreDataStatus:_yrTab];
             }
@@ -188,7 +189,8 @@
             if (modal.rtcode ==1) {
                 [[ToolManager shareInstance] dismiss];
                 for (MeetingData *data in modal.datas) {
-                    [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andMessageBtn:NO andOprationBtn:NO]];
+                    data.isSelf = [data.userid  isEqualToString:modal.userid];
+                    [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andMessageBtn:NO andOprationBtn:NO andTime:YES]];
                     
                     if (data.imgurl!=nil) {
                         [self.headimgArr addObject:data.imgurl];
@@ -220,7 +222,7 @@
         
     }];
     
-        };
+//        };
     
     
     
@@ -395,12 +397,15 @@
         cell.meetingBtn.userInteractionEnabled=YES;
         cell.meetingBtn.titleLabel.font=[UIFont systemFontOfSize:14];
     }
-    if ([layout.model.userid isEqualToString:_userid]) {
+
+    
+    if (data.isSelf) {
         cell.meetingBtn.hidden=YES;
+        cell.meetingBtn.backgroundColor=AppViewBGColor;
+        cell.meetingBtn.userInteractionEnabled=NO;
     }else{
         cell.meetingBtn.hidden=NO;
     }
-    
     [cell setDelegate:self];
     
     return cell;
@@ -420,8 +425,8 @@
     EjectView *alertV = [[EjectView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.navigationController.view];
     alertV.center = CGPointMake(APPWIDTH/2, APPHEIGHT/2-30);
     alertV.delegate = self;
-    alertV.titleStr = @"提示";
-    alertV.title2Str=@"您需要打赏一定的约见费";
+    alertV.titleStr = @"温馨提示";
+    alertV.title2Str=@"意思一下,打赏让“约”来的正式一点";
     alertV.indexth=indexPath;
 }
 #pragma mark - MeettingTableViewCellDelegate 头像按钮点击
@@ -450,7 +455,7 @@
         MeetPaydingVC * payVC = [[MeetPaydingVC alloc]init];
         MeetingCellLayout *layout=(MeetingCellLayout *)self.nearByManArr[customAlertView.indexth.row];
         MeetingData *model = layout.model;
-        NSLog(@"model=%@",model);
+//        NSLog(@"model=%@",model);
         NSMutableDictionary *param=[Parameter parameterWithSessicon];
         [param setObject:model.userid forKey:@"userid"];
         [param setObject:customAlertView.money forKey:@"reward"];
@@ -472,6 +477,7 @@
         
     }
 }
+
 
 
 #pragma mark 滑动隐藏导航栏

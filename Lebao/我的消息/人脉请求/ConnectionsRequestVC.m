@@ -99,7 +99,7 @@
             if (modal.rtcode ==1) {
                 
                 for (MeetingData *data in modal.datas) {
-                    [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andMessageBtn:NO andOprationBtn:YES]];
+                    [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andMessageBtn:NO andOprationBtn:YES andTime:NO]];
                     
                 }
                 

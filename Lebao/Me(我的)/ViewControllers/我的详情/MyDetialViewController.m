@@ -118,7 +118,7 @@
         industryTextStorage.textColor = [UIColor colorWithRed:0.549 green:0.5569 blue:0.5608 alpha:1.0];
         industryTextStorage.font = Size(24.0);
         industryTextStorage.frame = CGRectMake(nameTextStorage.left, nameTextStorage.bottom + 8, nameTextStorage.width, CGFLOAT_MAX);
-
+        
         industryTextStorage.textAlignment = NSTextAlignmentCenter;
         [LWTextParser parseEmojiWithTextStorage:industryTextStorage];
         
@@ -160,18 +160,19 @@
 @implementation MyDetialViewController
 {
     HeaderModel *headerModel;
+    UIButton *addConnectionsBtn;
 }
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+    [self netWork];
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self navViewTitleAndBackBtn:@"个人详情"];
     [self.view addSubview:self.myDetailTV];
-    [self netWork];
+    
 }
 
 #pragma mark
@@ -217,7 +218,7 @@
         }
         else
         {
-           title = @"他的动态";
+            title = @"他的动态";
         }
         [UILabel createLabelWithFrame:frame(20, 0, 100, 40) text:title fontSize:14 textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:cell];
         
@@ -262,7 +263,7 @@
     if (_myDetailTV) {
         return _myDetailTV;
     }
-   
+    
     _myDetailTV = [[UITableView alloc]initWithFrame:CGRectMake(0, StatusBarHeight + NavigationBarHeight, APPWIDTH, APPHEIGHT - (StatusBarHeight + NavigationBarHeight)) style:UITableViewStyleGrouped];
     _myDetailTV.delegate = self;
     _myDetailTV.dataSource = self;
@@ -288,14 +289,14 @@
     BaseButton *renmai = [self addViewWithFrame:frame(0, self.userView.y + self.userView.height + 10, APPWIDTH/3, 40) andTitle:@"人脉" rangeText:headerModel.connection_count andView:_viewHeader];
     renmai.didClickBtnBlock = ^
     {
-//        NSLog(@"人脉");
+        //        NSLog(@"人脉");
         
     };
     //约见成功
     BaseButton *yuejian = [self addViewWithFrame:frame(CGRectGetMaxX(renmai.frame),renmai.y,renmai.width, renmai.height) andTitle:@"约见成功" rangeText:headerModel.success_count andView:_viewHeader];
     yuejian.didClickBtnBlock = ^
     {
-//        NSLog(@"约见成功");
+        //        NSLog(@"约见成功");
         
     };
     
@@ -303,7 +304,7 @@
     BaseButton *xiangyue = [self addViewWithFrame:frame(CGRectGetMaxX(yuejian.frame),yuejian.y,yuejian.width, yuejian.height) andTitle:@"想约" rangeText:headerModel.want_count andView:_viewHeader];
     xiangyue.didClickBtnBlock = ^
     {
-//        NSLog(@"想约");
+        //        NSLog(@"想约");
         
     };
     
@@ -588,14 +589,14 @@
 #pragma mark --bottomView底部view
 -(void)addBottomViewWithBtnStr:(int)btnStr
 {
-//    NSLog(@"btnStr=====%d",btnStr);
-//    UIView *bottomView=allocAndInit(UIView);
-//    bottomView.frame=CGRectMake(0, APPHEIGHT-44, APPWIDTH, 44);
-//    float addConnectionsBtnW = APPWIDTH/3.6;
-//    UIImage *image = [UIImage imageNamed:@"addConnections"];
+    //    NSLog(@"btnStr=====%d",btnStr);
+    //    UIView *bottomView=allocAndInit(UIView);
+    //    bottomView.frame=CGRectMake(0, APPHEIGHT-44, APPWIDTH, 44);
+    //    float addConnectionsBtnW = APPWIDTH/3.6;
+    //    UIImage *image = [UIImage imageNamed:@"addConnections"];
     
     
-    UIButton *addConnectionsBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+    addConnectionsBtn=[UIButton buttonWithType:UIButtonTypeCustom];
     addConnectionsBtn.frame=CGRectMake(0,APPHEIGHT-TabBarHeight,APPWIDTH, TabBarHeight);
     addConnectionsBtn.backgroundColor=WhiteColor;
     NSString *titleStr;
@@ -620,7 +621,7 @@
         addConnectionsBtn.tag=2225;
         addConnectionsBtn.userInteractionEnabled=YES;
         [addConnectionsBtn setTitleColor:AppMainColor forState:UIControlStateNormal];
-    
+        
     }
     addConnectionsBtn.backgroundColor=AppViewBGColor;
     [addConnectionsBtn setTitle:titleStr forState:UIControlStateNormal];
@@ -629,21 +630,21 @@
     
     
     
-//    BaseButton *addConnectionsBtn=[[BaseButton alloc]initWithFrame:CGRectMake(0, 0,addConnectionsBtnW, 44) setTitle:@"加人脉" titleSize:12 titleColor:[UIColor grayColor] backgroundImage:nil iconImage:[UIImage imageNamed:@"addConnections"] highlightImage:nil setTitleOrgin:CGPointMake(bottomView.height - 17,(addConnectionsBtnW - 36)/2.0-image.size.width) setImageOrgin:CGPointMake(5,(addConnectionsBtnW -image.size.width)/2.0) inView:bottomView];
-//    
-//    addConnectionsBtn.didClickBtnBlock = ^
-//    {
-//        CGFloat dilX = 25;
-//        CGFloat dilH = 250;
-//        AddConnectionView *alertV = [[AddConnectionView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.navigationController.view];
-//        alertV.center = CGPointMake(APPWIDTH/2, APPHEIGHT/2-30);
-//        alertV.delegate = self;
-//        alertV.titleStr = @"提示";
-//        alertV.title2Str=@"打赏让加人脉更顺畅!";
-//    };
-//    
-
-//    [self.view addSubview:bottomView];
+    //    BaseButton *addConnectionsBtn=[[BaseButton alloc]initWithFrame:CGRectMake(0, 0,addConnectionsBtnW, 44) setTitle:@"加人脉" titleSize:12 titleColor:[UIColor grayColor] backgroundImage:nil iconImage:[UIImage imageNamed:@"addConnections"] highlightImage:nil setTitleOrgin:CGPointMake(bottomView.height - 17,(addConnectionsBtnW - 36)/2.0-image.size.width) setImageOrgin:CGPointMake(5,(addConnectionsBtnW -image.size.width)/2.0) inView:bottomView];
+    //
+    //    addConnectionsBtn.didClickBtnBlock = ^
+    //    {
+    //        CGFloat dilX = 25;
+    //        CGFloat dilH = 250;
+    //        AddConnectionView *alertV = [[AddConnectionView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.navigationController.view];
+    //        alertV.center = CGPointMake(APPWIDTH/2, APPHEIGHT/2-30);
+    //        alertV.delegate = self;
+    //        alertV.titleStr = @"提示";
+    //        alertV.title2Str=@"打赏让加人脉更顺畅!";
+    //    };
+    //
+    
+    //    [self.view addSubview:bottomView];
     
     
     
@@ -657,12 +658,12 @@
 {
     if (sender.tag==2222) {
         CGFloat dilX = 25;
-                CGFloat dilH = 250;
-                AddConnectionView *alertV = [[AddConnectionView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.navigationController.view];
-                alertV.center = CGPointMake(APPWIDTH/2, APPHEIGHT/2-30);
-                alertV.delegate = self;
-                alertV.titleStr = @"提示";
-                alertV.title2Str=@"打赏让加人脉更顺畅!";
+        CGFloat dilH = 250;
+        AddConnectionView *alertV = [[AddConnectionView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.navigationController.view];
+        alertV.center = CGPointMake(APPWIDTH/2, APPHEIGHT/2-30);
+        alertV.delegate = self;
+        alertV.titleStr = @"提示";
+        alertV.title2Str=@"打赏让加人脉更顺畅!";
     }else if (sender.tag==2223) {
     }else if (sender.tag==2224) {
     }else if (sender.tag==2225) {
@@ -673,7 +674,7 @@
         GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
         privateChat.type = MessageTypeNormlPage;
         [self.navigationController pushViewController:privateChat animated:YES];
-
+        
     }
 }
 
@@ -693,6 +694,11 @@
                 
                 if (model.rtcode==1) {
                     UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"添加人脉请求已发出,请耐心等待" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+                    
+                    addConnectionsBtn.tag=2223;
+                    addConnectionsBtn.userInteractionEnabled=NO;
+                    [addConnectionsBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+                    [addConnectionsBtn setTitle:@"等待对方通过" forState:UIControlStateNormal];
                     [successAlertV show];
                 }
                 
@@ -740,7 +746,7 @@
     NSLog(@"id =%@",_userID);
     [[ToolManager shareInstance] showWithStatus];
     [XLDataService putWithUrl:detailManURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-                NSLog(@"dataObj =%@",dataObj);
+        NSLog(@"dataObj =%@",dataObj);
         if (dataObj) {
             headerModel = [HeaderModel mj_objectWithKeyValues:dataObj[@"data"]];
             if ([dataObj[@"rtcode"] integerValue]==1) {
@@ -770,10 +776,10 @@
                     [self addBottomViewWithBtnStr:[dataObj[@"relation"] intValue] ];
                     _myDetailTV.frame = CGRectMake(0, _myDetailTV.y,_myDetailTV.width, APPHEIGHT - (_myDetailTV.y) -TabBarHeight);
                 }else{
-                   
+                    
                     [self.view addSubview:self.edit];
                     _myDetailTV.frame = CGRectMake(0, _myDetailTV.y,_myDetailTV.width, APPHEIGHT - (_myDetailTV.y));
-                        
+                    
                 }
                 _myDetailTV.tableHeaderView = self.viewHeader;
                 _myDetailTV.tableFooterView = self.viewFooter;

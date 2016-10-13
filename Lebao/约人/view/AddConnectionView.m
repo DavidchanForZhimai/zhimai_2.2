@@ -134,39 +134,26 @@
 //赏金按钮
 -(void)btnClick:(UIButton *)sender
 {
-    
     if (sender.tag==100) {
-        sender.selected=YES;
-        btn2.selected=NO;
-        btn3.selected=NO;
-        sender.layer.borderColor=[UIColor colorWithRed:0.298 green:0.627 blue:0.996 alpha:1.000].CGColor;
-        btn2.layer.borderColor=[UIColor grayColor].CGColor;
-        btn3.layer.borderColor=[UIColor grayColor].CGColor;
         _logField.text=@"1";
         self.money=@"1";
-        
     }
     if (sender.tag==101) {
-        sender.selected=YES;
-        btn1.selected=NO;
-        btn3.selected=NO;
-        sender.layer.borderColor=[UIColor colorWithRed:0.298 green:0.627 blue:0.996 alpha:1.000].CGColor;
-        btn1.layer.borderColor=[UIColor grayColor].CGColor;
-        btn3.layer.borderColor=[UIColor grayColor].CGColor;
         _logField.text=@"2";
         self.money=@"2";
-      
     }
     if (sender.tag==102) {
-        sender.selected=YES;
-        btn2.selected=NO;
-        btn1.selected=NO;
-        sender.layer.borderColor=[UIColor colorWithRed:0.298 green:0.627 blue:0.996 alpha:1.000].CGColor;
-        btn2.layer.borderColor=[UIColor grayColor].CGColor;
-        btn1.layer.borderColor=[UIColor grayColor].CGColor;
         _logField.text=@"5";
         self.money=@"5";
     }
+    btn1.selected=NO;
+    btn2.selected=NO;
+    btn3.selected=NO;
+    sender.selected=YES;
+    btn1.layer.borderColor=[UIColor grayColor].CGColor;
+    btn2.layer.borderColor=[UIColor grayColor].CGColor;
+    btn3.layer.borderColor=[UIColor grayColor].CGColor;
+    sender.layer.borderColor=sender.tintColor.CGColor;
 }
 
 
