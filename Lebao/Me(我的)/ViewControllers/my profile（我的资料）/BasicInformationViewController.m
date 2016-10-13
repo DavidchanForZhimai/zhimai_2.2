@@ -95,6 +95,7 @@
     [self navViewTitleAndBackBtn:@"个人资料"];
     _saveBtn = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 50, StatusBarHeight, 50, NavigationBarHeight) setTitle:@"完成" titleSize:28*SpacedFonts titleColor:BlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:[UIColor clearColor] inView:self.view];
     __weak BasicInformationViewController *weakSelf = self;
+    _saveBtn.hidden = YES;
     _saveBtn.didClickBtnBlock = ^
     {
         [weakSelf modity:weakSelf];
@@ -677,6 +678,7 @@
     [XLDataService postWithUrl:MemberURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
 //        NSLog(@"dataObj == %@",dataObj);
         if (dataObj) {
+            
             _modal = [BasicInfoModal mj_objectWithKeyValues:dataObj];
             if (![_modal.mylabels isEqualToString:@""]) {
                 [self.personsTags addObjectsFromArray:[_modal.mylabels componentsSeparatedByString:@","]];
@@ -732,6 +734,7 @@
              _basicInfoTableView.tableFooterView = self.tagsView;
             [_basicInfoTableView endUpdates];
             if (_modal.rtcode ==1) {
+                 _saveBtn.hidden = NO;
                 
                 NSString *pathDocuments = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
                 
@@ -943,9 +946,16 @@
         [cell  showTitle:@"从业年限" icon:nil bg:nil detail:_modal.workyears canEdit:YES];
         break;
     case 4:
+        {
+             NSString *focus =@"";
+            NSLog(@"_modal.focus_industrys =%@",_modal.focus_industrys);
+            if (_modal.focus_industrys && ![_modal.focus_industrys isEqualToString:@""]) {
+                focus = [NSString stringWithFormat:@"%ld个",[_modal.focus_industrys componentsSeparatedByString:@"/"].count];
+            }
             
-        [cell  showTitle:@"关注的行业" icon:nil bg:nil detail:@"" canEdit:YES];
+        [cell  showTitle:@"关注的行业" icon:nil bg:nil detail:focus canEdit:YES];
             break;
+        }
 
         
     }
@@ -1169,7 +1179,7 @@
     [parame setObject:_modal.mylabels forKey:@"mylabels"];
     [parame setObject:_modal.filllabels forKey:@"filllabels"];
 
-    NSLog(@"parame =%@",parame);
+//    NSLog(@"parame =%@",parame);
     [XLDataService postWithUrl:SaveMemberURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         if (dataObj) {
             if ([dataObj[@"rtcode"] intValue] ==1) {

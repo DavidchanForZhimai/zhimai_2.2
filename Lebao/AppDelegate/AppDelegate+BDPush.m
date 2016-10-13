@@ -18,6 +18,8 @@
 #import "DiscoverHomePageViewController.h"
 #import "CoreArchive.h"
 #import "XIAlertView.h"
+
+#import "BHBPlaySoundTool.h"//推送声音
 #define K_API_KEY @"tN6GvEjtvS7y58YG9ek0UlU6"
 static BOOL isBackGroundActivateApplication;
 @implementation AppDelegate (BDPush)
@@ -125,7 +127,7 @@ static BOOL isBackGroundActivateApplication;
 // 当 DeviceToken 获取失败时，系统会回调此方法
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {  
-    NSLog(@"DeviceToken 获取失败，原因：%@",error);
+//    NSLog(@"DeviceToken 获取失败，原因：%@",error);
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
@@ -142,7 +144,12 @@ static BOOL isBackGroundActivateApplication;
 }
 - (void)notifacionApi:(NSDictionary *)notifacion isAleat:(BOOL)isAleat
 {
-    NSLog(@"notifacion =%@",notifacion);
+//    NSLog(@"notifacion =%@",notifacion);
+    //应用在前台的提示声音
+    if (isAleat) {
+         [[BHBPlaySoundTool sharedPlaySoundTool] playWithSoundName:@"open"];
+    }
+   
     
     UINavigationController * nav = (UINavigationController *)self.mainTab.selectedViewController;
     
@@ -150,7 +157,7 @@ static BOOL isBackGroundActivateApplication;
     UIViewController * baseVC = (UIViewController *)nav.visibleViewController;
     //当前四大tab之一
     for (UIViewController *view in nav.viewControllers) {
-        NSLog(@"view =%@",view);
+//        NSLog(@"view =%@",view);
         if ([NSStringFromClass([view class]) isEqualToString:@"DiscoverHomePageViewController"]||[NSStringFromClass([view class]) isEqualToString:@"DynamicVC"]||[NSStringFromClass([view class]) isEqualToString:@"NotificationViewController"]||[NSStringFromClass([view class]) isEqualToString:@"MeetingVC"]) {
             BaseViewController *baseView = (BaseViewController *)view;
             [baseView pushMessage];

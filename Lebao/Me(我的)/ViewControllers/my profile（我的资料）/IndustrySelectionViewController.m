@@ -66,7 +66,7 @@
     NSString *url =@"";
     if (isSave) {
         url = SaveIndustryURL;
-        NSLog(@"saveIndustry_label =%@",saveIndustry_label);
+//        NSLog(@"saveIndustry_label =%@",saveIndustry_label);
         [parame setValue:saveIndustry_label[@"code"] forKey:@"industry"];
         [[ToolManager shareInstance] showWithStatus:@"保存行业..."];
     }
@@ -78,7 +78,7 @@
     }
     
     [XLDataService postWithUrl:url param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        NSLog(@"parame =%@ data = %@ ",parame,dataObj);
+//        NSLog(@"parame =%@ data = %@ ",parame,dataObj);
         if (dataObj) {
             if ([dataObj[@"rtcode"] intValue] ==1) {
                 [[ToolManager shareInstance] dismiss];

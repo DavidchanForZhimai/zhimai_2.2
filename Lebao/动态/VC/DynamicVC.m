@@ -74,7 +74,7 @@
     _toolBarView.backgroundColor = [UIColor clearColor];
     _toolBarView.hidden = YES;
     _toolBarView.userInteractionEnabled = YES;
-    _toolBarView.delegate =self;
+    
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(toolBarViewRemove)];
     tap.numberOfTapsRequired = 1;
     UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(toolBarViewRemove)];
