@@ -38,18 +38,19 @@
             _avatarStorage.frame =CGRectMake(10, 10, 40, 40);
             _avatarPosition = CGRectMake(10, 10, 40, 40);
             
-            NSString *renzen;
+            NSString *renzen=@"";
+            NSString *vip=@"";
             if (statusModel.authen==3) {
                 renzen = @"[iconprofilerenzhen]";
             }
-            else
-            {
-                renzen=@"[iconprofileweirenzhen]";
+            if (statusModel.vip) {
+                 vip = @"[iconprofilevip]";
             }
+            
             //名字模型 nameTextStorage
             LWTextStorage* nameTextStorage = [[LWTextStorage alloc] init];
             
-            nameTextStorage.text = [NSString stringWithFormat:@"%@ %@",statusModel.realname,renzen];
+            nameTextStorage.text = [NSString stringWithFormat:@"%@ %@ %@",statusModel.realname,renzen,vip];
             nameTextStorage.font = Size(28.0);
             nameTextStorage.frame = CGRectMake(_avatarStorage.right + 6, 15.0f, SCREEN_WIDTH - (_avatarStorage.right + 6 + 30), CGFLOAT_MAX);
             [nameTextStorage lw_addLinkWithData:[NSString stringWithFormat:@"%ld",statusModel.brokerid]
@@ -76,12 +77,16 @@
             
             //行业
             LWTextStorage* industryTextStorage = [[LWTextStorage alloc] init];
-            if (statusModel.address.length>0) {
-                industryTextStorage.text = [NSString stringWithFormat:@"%@  %@",statusModel.address,statusModel.workyear];
+            NSString *com =@"";
+            if (statusModel.address) {
+                com = statusModel.address;
+            }
+            if (statusModel.position.length>0) {
+                industryTextStorage.text = [NSString stringWithFormat:@"%@  %@\n%@",statusModel.position,statusModel.workyear,com];
             }
             else
             {
-                industryTextStorage.text = [NSString stringWithFormat:@"%@",statusModel.workyear];
+                industryTextStorage.text = [NSString stringWithFormat:@"%@\n%@",statusModel.workyear,com];
             }
             
             industryTextStorage.textColor = [UIColor colorWithRed:0.549 green:0.5569 blue:0.5608 alpha:1.0];
@@ -506,19 +511,20 @@
             LWImageStorage * _avatarStorage = [[LWImageStorage alloc] initWithIdentifier:@"avatar"];
             _avatarStorage.frame =CGRectMake(10, 10, 40, 40);
             _avatarPosition = CGRectMake(10, 10, 40, 40);
-            
-            NSString *renzen;
+            NSString *renzen=@"";
+            NSString *vip=@"";
             if (statusModel.authen==3) {
-                renzen = @"[renzhen]";
+                renzen = @"[iconprofilerenzhen]";
             }
-            else
-            {
-                renzen=@"[weirenzhen]";
+            if (statusModel.vip) {
+                vip = @"[iconprofilevip]";
             }
+            
             //名字模型 nameTextStorage
             LWTextStorage* nameTextStorage = [[LWTextStorage alloc] init];
             
-            nameTextStorage.text = [NSString stringWithFormat:@"%@ %@",statusModel.realname,renzen];
+            nameTextStorage.text = [NSString stringWithFormat:@"%@ %@ %@",statusModel.realname,renzen,vip];
+
             nameTextStorage.font = Size(28.0);
             nameTextStorage.frame = CGRectMake(_avatarStorage.right + 6, 15.0f, SCREEN_WIDTH - (_avatarStorage.right + 6 + 30), CGFLOAT_MAX);
             [nameTextStorage lw_addLinkWithData:[NSString stringWithFormat:@"%ld",statusModel.brokerid]

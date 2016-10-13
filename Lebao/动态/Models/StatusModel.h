@@ -88,6 +88,9 @@ typedef NS_ENUM(NSUInteger,DTDataType) {
 @property (nonatomic, assign) BOOL  isshow_title;
 @property (nonatomic, copy) NSString *cooperation_benefit;
 
+@property(nonatomic,strong)NSString *position;//职位
+@property(nonatomic,assign)BOOL vip;//vip
+
 @end
 
 @interface StatusPic : NSObject

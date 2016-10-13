@@ -19,6 +19,7 @@
 #import "XLDataService.h"
 #import "MeetingModel.h"
 #import "GJGCChatFriendViewController.h"
+#import "LWImageBrowser.h"
 #define TagHeight 22
 #define MininumTagWidth (APPWIDTH - 120)/5.0
 #define MaxinumTagWidth (APPWIDTH - 20)
@@ -66,25 +67,25 @@
     self = [super init];
     if (self) {
         //用户头像
-        LWImageStorage *_avatarStorage = [[LWImageStorage alloc]initWithIdentifier:@"avatar"];
-        _avatarStorage.frame = CGRectMake((APPWIDTH - 44)/2.0, 13, 44, 44);
-        model.imgurl = [[ToolManager shareInstance] urlAppend:model.imgurl];
-        //        NSLog(@"model.imgurl  =%@",model.imgurl );
-        _avatarStorage.contents = model.imgurl;
-        _avatarStorage.placeholder = [UIImage imageNamed:@"defaulthead"];
-        if ([model.imgurl isEqualToString:ImageURLS]) {
-            
-            _avatarStorage.contents = [UIImage imageNamed:@"defaulthead"];
-            
-        }
-        _avatarStorage.cornerRadius = _avatarStorage.width/2.0;
+//        LWImageStorage *_avatarStorage = [[LWImageStorage alloc]initWithIdentifier:@"avatar"];
+//        _avatarStorage.frame = CGRectMake((APPWIDTH - 44)/2.0, 13, 44, 44);
+//        model.imgurl = [[ToolManager shareInstance] urlAppend:model.imgurl];
+//        //        NSLog(@"model.imgurl  =%@",model.imgurl );
+//        _avatarStorage.contents = model.imgurl;
+//        _avatarStorage.placeholder = [UIImage imageNamed:@"defaulthead"];
+//        if ([model.imgurl isEqualToString:ImageURLS]) {
+//            
+//            _avatarStorage.contents = [UIImage imageNamed:@"defaulthead"];
+//            
+//        }
+//        _avatarStorage.cornerRadius = _avatarStorage.width/2.0;
         //用户名
         //名字模型 nameTextStorage
         LWTextStorage* nameTextStorage = [[LWTextStorage alloc] init];
         nameTextStorage.text = model.realname;
         nameTextStorage.font = Size(28.0);
         nameTextStorage.textColor = BlackTitleColor;
-        nameTextStorage.frame = CGRectMake(0, _avatarStorage.bottom + 8, SCREEN_WIDTH , CGFLOAT_MAX);
+        nameTextStorage.frame = CGRectMake(0, 65, SCREEN_WIDTH , CGFLOAT_MAX);
         nameTextStorage.textAlignment = NSTextAlignmentCenter;
         //行业
         LWTextStorage* industryTextStorage = [[LWTextStorage alloc] init];
@@ -97,22 +98,16 @@
         if (model.workyears&&model.workyears.length>0) {
             industryTextStorage.text=[NSString stringWithFormat:@"%@从业%@年\n",industryTextStorage.text,model.workyears];
         }
-        NSString *authen;
+        NSString *authen=@"";
         if ([model.authen isEqualToString:@"3"]) {
             authen = @"[iconprofilerenzhen]";
         }
-        else
-        {
-            authen = @"[iconprofileweirenzhen]";
-        }
-        NSString *vip;
+        
+        NSString *vip=@"";
         if ([model.vip isEqualToString:@"1"]) {
             vip = @"[iconprofilevip]";
         }
-        else
-        {
-            vip = @"[iconprofilevipweikaitong]";
-        }
+        
         industryTextStorage.text =[NSString stringWithFormat:@"%@ %@ %@ ",industryTextStorage.text,authen,vip];
         
         industryTextStorage.textColor = [UIColor colorWithRed:0.549 green:0.5569 blue:0.5608 alpha:1.0];
@@ -122,7 +117,7 @@
         industryTextStorage.textAlignment = NSTextAlignmentCenter;
         [LWTextParser parseEmojiWithTextStorage:industryTextStorage];
         
-        [self addStorage:_avatarStorage];
+//        [self addStorage:_avatarStorage];
         [self addStorage:nameTextStorage];
         [self addStorage:industryTextStorage];
         self.height  = [self suggestHeightWithBottomMargin:60.0];
@@ -135,6 +130,7 @@
 
 @property(nonatomic,strong)UITableView *myDetailTV;
 @property(nonatomic,strong)LWAsyncDisplayView *userView;
+@property(nonatomic,strong)UIImageView *userIcon;
 @property(nonatomic,strong)HeaderViewLayout *headerViewLayout;
 @property(nonatomic,strong)BaseButton *edit;
 @property(nonatomic,strong)UIView *viewHeader;
@@ -162,17 +158,13 @@
     HeaderModel *headerModel;
     UIButton *addConnectionsBtn;
 }
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self netWork];
-}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self navViewTitleAndBackBtn:@"个人详情"];
     [self.view addSubview:self.myDetailTV];
-    
+    [self netWork];
 }
 
 #pragma mark
@@ -324,9 +316,58 @@
     }
     
     _userView = [[LWAsyncDisplayView alloc]initWithFrame:frame(0, 10, APPWIDTH, self.headerViewLayout.height - 60)];
+    _userView.userInteractionEnabled = YES;
+    
+    [_userView addSubview:self.userIcon];
+    
     return _userView;
     
 }
+- (UIImageView *)userIcon
+{
+    if (!_userIcon) {
+        _userIcon = [[UIImageView alloc]initWithFrame:CGRectMake((APPWIDTH - 44)/2.0, 13, 44, 44)];
+        _userIcon.userInteractionEnabled = YES;
+        UITapGestureRecognizer *tap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(imageViewTap:)];
+        tap.numberOfTapsRequired = 1;
+        [_userIcon addGestureRecognizer:tap];
+        
+    }
+    return _userIcon;
+}
+-(void)imageViewTap:(UITapGestureRecognizer *)sender
+{
+    
+   
+    LWImageBrowserModel* imageModel  = [[LWImageBrowserModel alloc]initWithplaceholder:nil thumbnailURL:[NSURL URLWithString:[[ToolManager shareInstance] urlAppend:headerModel.imgurl]] HDURL:[self bigImageUrl:headerModel.imgurl]imageViewSuperView:_userView positionAtSuperView:_userIcon.frame index:0];
+    
+    LWImageBrowser* imageBrowser = [[LWImageBrowser alloc] initWithParentViewController:self
+                                                                            imageModels:@[imageModel]
+                                                                           currentIndex:0];
+    imageBrowser.view.backgroundColor = [UIColor blackColor];
+    [imageBrowser show];
+    
+}
+#pragma mark
+#pragma mark 图片url处理
+- (NSURL *)bigImageUrl:(NSString *)str
+{
+    NSURL *url;
+    
+    NSArray *strs = [str componentsSeparatedByString:@"/"];
+    NSMutableArray *urls= [NSMutableArray arrayWithArray:strs];
+    NSMutableString *replaceStr =[NSMutableString stringWithString:strs[strs.count - 1]] ;
+    if ([replaceStr hasPrefix:@"s"]) {
+        ;
+        [replaceStr deleteCharactersInRange:NSMakeRange(0, 1)];
+        [urls replaceObjectAtIndex:strs.count - 1 withObject:replaceStr];
+    }
+    
+    url = [NSURL URLWithString:[[ToolManager shareInstance] urlAppend:[urls componentsJoinedByString:@"/"]] ];
+
+    return url;
+}
+
 - (void)setHeaderViewLayout:(HeaderViewLayout *)headerViewLayout
 {
     if (_headerViewLayout == headerViewLayout) {
@@ -334,6 +375,8 @@
     }
     _headerViewLayout = headerViewLayout;
     self.userView.layout = headerViewLayout;
+    
+    [[ToolManager shareInstance] imageView:self.userIcon setImageWithURL:headerModel.imgurl placeholderType:PlaceholderTypeUserHead];
     
 }
 
@@ -743,10 +786,11 @@
 {
     NSMutableDictionary *param=[Parameter parameterWithSessicon];
     [param setObject:_userID forKey:@"id"];
-    NSLog(@"id =%@",_userID);
+//    NSLog(@"id =%@",_userID);
+   
     [[ToolManager shareInstance] showWithStatus];
     [XLDataService putWithUrl:detailManURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        NSLog(@"dataObj =%@",dataObj);
+//        NSLog(@"dataObj =%@",dataObj);
         if (dataObj) {
             headerModel = [HeaderModel mj_objectWithKeyValues:dataObj[@"data"]];
             if ([dataObj[@"rtcode"] integerValue]==1) {
