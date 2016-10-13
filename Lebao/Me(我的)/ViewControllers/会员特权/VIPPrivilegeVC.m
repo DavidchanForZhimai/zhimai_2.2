@@ -165,7 +165,7 @@
     
     UIImageView *certifyImgV=[[UIImageView alloc]init];//认证
     UIImage *certifyimag;
-    if (_modal.authen) {
+    if (_modal.authen==3) {
         certifyimag=[UIImage imageNamed:@"[iconprofilerenzhen]"];
     }else{
         certifyimag=[UIImage imageNamed:@"[iconprofileweirenzhen]"];

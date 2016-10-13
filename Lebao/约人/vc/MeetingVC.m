@@ -117,9 +117,9 @@
         }
 
         if (dataObj) {
-            NSLog(@"meetObj====%@",dataObj);
             MeetNumModel *modal = [MeetNumModel mj_objectWithKeyValues:dataObj];
  
+           
             NSMutableAttributedString *text1 = [[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"%d\n我想约见",modal.invited]];
             [text1 addAttribute:NSFontAttributeName value:Size(40) range:[[NSString stringWithFormat:@"%d\n我想约见",modal.invited] rangeOfString:[NSString stringWithFormat:@"%d",modal.invited]]];
             [_headView.meWantBtn setAttributedTitle:text1 forState:UIControlStateNormal];
@@ -186,7 +186,7 @@
 
         }
         if (dataObj) {
-//         NSLog(@"meetObj====%@",dataObj);
+         NSLog(@"meetObj====%@",dataObj);
         
            
             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
@@ -448,7 +448,7 @@
 - (void)tableViewCellDidSeleteMeetingBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath
 {
     //do something
-    if (_isopen) {
+
        [[ToolManager shareInstance] showWithStatus];
         NSMutableDictionary *param = [Parameter parameterWithSessicon];
         [param setObject:@"invited" forKey:@"type"];
@@ -484,9 +484,7 @@
             }
             
         }];
-    }else{
-        [[ToolManager shareInstance] showAlertMessage:@"您还未有空,不能约见他人(⊙o⊙)哦"];
-                   }
+
    
 }
 #pragma mark - MeettingTableViewCellDelegate 头像按钮点击

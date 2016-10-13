@@ -23,6 +23,7 @@
 @interface NotificationViewController ()<UITableViewDelegate, UITableViewDataSource>
 {
     NSString * num;
+    NSString * connection_count;
 }
 @property(nonatomic,strong)UITableView *notificationView;
 @property(nonatomic,strong)NSMutableArray *notificationArray;
@@ -105,8 +106,8 @@
      NSMutableDictionary *param = [Parameter parameterWithSessicon];
     [XLDataService putWithUrl:numbelConnectionsURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         if (dataObj) {
-            NSLog(@"dataObj===%@",dataObj);
             num=dataObj[@"request_count"];
+            connection_count=dataObj[@"connection_count"];
             [self.notificationView beginUpdates];
             self.notificationView.tableHeaderView = self.headerView;
             [self.notificationView endUpdates];
@@ -266,7 +267,7 @@
             cell.message.hidden = YES;
         }
        else if (indexPath.row==2) {
-           cell.lab.text=[NSString stringWithFormat:@"%d个",modal.connection_count];
+           cell.lab.text=[NSString stringWithFormat:@"%@个",connection_count];
             cell.message.hidden =![modal.cuscount boolValue];
         }
         

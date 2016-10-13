@@ -41,7 +41,7 @@
         }
         else
         {
-            authen = @"[iconprofileweirenzhen]";
+            authen = @"";
         }
         NSString *vip;
         if ([model.vip isEqualToString:@"1"]) {
@@ -49,7 +49,7 @@
         }
         else
         {
-            vip = @"[iconprofilevipweikaitong]";
+            vip = @"";
         }
         //名字模型 nameTextStorage
         LWTextStorage* nameTextStorage = [[LWTextStorage alloc] init];
@@ -64,10 +64,10 @@
         [LWTextParser parseEmojiWithTextStorage:nameTextStorage];
         
         
-        //行业
+        //职业
         LWTextStorage* industryTextStorage = [[LWTextStorage alloc] init];
-        if (model.industry&&model.industry.length>0) {
-            industryTextStorage.text =[NSString stringWithFormat:@"%@  ",[Parameter industryForChinese:model.industry]];
+        if (model.position&&model.position.length>0) {
+            industryTextStorage.text =[NSString stringWithFormat:@"%@  ",model.position];
         }
         if (model.workyears&&model.workyears.length>0) {
             industryTextStorage.text=[NSString stringWithFormat:@"%@从业%@年",industryTextStorage.text,model.workyears];
@@ -77,6 +77,17 @@
         industryTextStorage.textColor = [UIColor colorWithRed:0.549 green:0.5569 blue:0.5608 alpha:1.0];
         industryTextStorage.font = Size(24.0);
         industryTextStorage.frame = CGRectMake(nameTextStorage.left, nameTextStorage.bottom + 8, nameTextStorage.width, CGFLOAT_MAX);
+        //公司
+        LWTextStorage* addressStorage = [[LWTextStorage alloc] init];
+        addressStorage.text =[NSString stringWithFormat:@"%@  ",model.address];
+        addressStorage.textColor = [UIColor colorWithRed:0.549 green:0.5569 blue:0.5608 alpha:1.0];
+        addressStorage.font = Size(24.0);
+        addressStorage.frame = CGRectMake(industryTextStorage.left, industryTextStorage.bottom + 8, industryTextStorage.width, CGFLOAT_MAX);
+        if (![model.address isEqualToString:@""]) {
+            _line1Rect  = CGRectMake(0, addressStorage.bottom + 10, APPWIDTH, 0.5);
+        }else{
+            _line1Rect  = CGRectMake(0, _avatarStorage.bottom + 10, APPWIDTH, 0.5);
+        }
         
         if (meetBtn) {
             //约见按钮
@@ -87,7 +98,7 @@
             _messageBtnRect=CGRectMake(APPWIDTH-83, 20, 30, 30);
         }
         
-        _line1Rect  = CGRectMake(0, _avatarStorage.bottom + 10, APPWIDTH, 0.5);
+        
         if (model.audio&&model.audio!=nil) {//语音按钮
             _audioBtnRect=CGRectMake(5, _line1Rect.origin.y, nameTextStorage.left-10, nameTextStorage.left-10);
         }
@@ -151,6 +162,7 @@
         [self addStorage:_avatarStorage];
         [self addStorage:nameTextStorage];
         [self addStorage:industryTextStorage];
+        [self addStorage:addressStorage];
         [self addStorage:meetReasonTextStorage];
         [self addStorage:MeetGiveTextStorage];
         [self addStorage:distanceLab];

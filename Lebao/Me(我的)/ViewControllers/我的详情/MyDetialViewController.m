@@ -157,6 +157,7 @@
 {
     HeaderModel *headerModel;
     UIButton *addConnectionsBtn;
+    AddConnectionView *alertV;
 }
 
 - (void)viewDidLoad {
@@ -702,11 +703,17 @@
     if (sender.tag==2222) {
         CGFloat dilX = 25;
         CGFloat dilH = 250;
-        AddConnectionView *alertV = [[AddConnectionView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.navigationController.view];
+        alertV = [[AddConnectionView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.navigationController.view];
         alertV.center = CGPointMake(APPWIDTH/2, APPHEIGHT/2-30);
         alertV.delegate = self;
         alertV.titleStr = @"提示";
         alertV.title2Str=@"打赏让加人脉更顺畅!";
+        UITapGestureRecognizer *recognizerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapBehind:)];
+        
+        [recognizerTap setNumberOfTapsRequired:1];
+        recognizerTap.cancelsTouchesInView = NO;
+        [[UIApplication sharedApplication].keyWindow addGestureRecognizer:recognizerTap];
+
     }else if (sender.tag==2223) {
     }else if (sender.tag==2224) {
     }else if (sender.tag==2225) {
@@ -718,6 +725,16 @@
         privateChat.type = MessageTypeNormlPage;
         [self.navigationController pushViewController:privateChat animated:YES];
         
+    }
+}
+#pragma mark - 点击空白处消失
+- (void)handleTapBehind:(UITapGestureRecognizer *)sender {
+    if (sender.state == UIGestureRecognizerStateEnded){
+        CGPoint location = [sender locationInView:nil];
+        if (![alertV pointInside:[alertV convertPoint:location fromView:alertV.window] withEvent:nil]){
+            [alertV.window removeGestureRecognizer:sender];
+            [alertV dissMiss];
+        }
     }
 }
 

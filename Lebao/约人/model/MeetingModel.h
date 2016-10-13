@@ -18,6 +18,7 @@
 @property(nonatomic,strong)NSString *distance;
 @property(nonatomic,strong)NSString *imgurl;
 @property(nonatomic,strong)NSString *industry;
+@property(nonatomic,strong)NSString *position;
 @property(nonatomic,strong)NSString *realname;
 @property(nonatomic,strong)NSString *synopsis;
 @property(nonatomic,strong)NSString *time;
@@ -27,6 +28,7 @@
 @property(nonatomic,strong)NSString *match;
 @property(nonatomic,strong)NSString *resource;
 @property(nonatomic,strong)NSString *vip;
+@property(nonatomic,strong)NSString *address;
 
 @property(nonatomic,strong)NSString *remark;//文字备注
 @property(nonatomic,strong)NSString *audio;//语音备注

@@ -27,6 +27,6 @@
 @property(nonatomic,strong)NSArray *headimgsArr;
 @property(nonatomic,strong)NSArray *userIdArr;
 @property(nonatomic,weak) id<MeetHeadVDelegate>delegate;
-
+@property(nonatomic,strong)NSMutableArray *headLayer;
 -(void)addEightImgView;
 @end
