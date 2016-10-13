@@ -253,7 +253,7 @@
         NSDictionary *dict = _sectionArray[indexPath.row];
         [cell setLeftImage:dict[@"image"] Title:dict[@"name"] isShowLine:[dict[@"show"] boolValue]];
         if (indexPath.row==0) {
-            if ([modal.syscount boolValue]||[modal.corsscount boolValue]) {
+            if ([modal.syscount boolValue]) {
                 cell.message.hidden = NO;
             }
             else

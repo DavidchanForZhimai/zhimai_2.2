@@ -20,7 +20,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch
     
-    [];
+    //延迟进入
+     [NSThread sleepForTimeInterval:1.0];
+    
      UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
      self.window = window;
     [self.window makeKeyAndVisible];
