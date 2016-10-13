@@ -105,7 +105,8 @@
      NSMutableDictionary *param = [Parameter parameterWithSessicon];
     [XLDataService putWithUrl:numbelConnectionsURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         if (dataObj) {
-            num=dataObj[@"count"];
+            NSLog(@"dataObj===%@",dataObj);
+            num=dataObj[@"request_count"];
             [self.notificationView beginUpdates];
             self.notificationView.tableHeaderView = self.headerView;
             [self.notificationView endUpdates];
@@ -265,7 +266,7 @@
             cell.message.hidden = YES;
         }
        else if (indexPath.row==2) {
-           cell.lab.text=[NSString stringWithFormat:@"%d个",modal.count];
+           cell.lab.text=[NSString stringWithFormat:@"%d个",modal.connection_count];
             cell.message.hidden =![modal.cuscount boolValue];
         }
         

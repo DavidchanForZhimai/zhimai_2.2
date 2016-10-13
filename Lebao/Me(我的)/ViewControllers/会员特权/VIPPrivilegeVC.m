@@ -10,6 +10,7 @@
 #import "XLDataService.h"
 #import "VipPrivilegeCell.h"
 #import "MeetPaydingVC.h"
+#import "NSString+Extend.h"
 @interface privilegeData : NSObject
 
 @property(nonatomic,copy)NSString *ordinary;
@@ -157,9 +158,9 @@
     [vipView addSubview:headImagV];
     
     UILabel *nameLab=[[UILabel alloc]init];//名字
-    nameLab.font=Size(28);
+    nameLab.font=[UIFont systemFontOfSize:15];
     nameLab.text=_modal.realname;
-    nameLab.frame= CGRectMake(CGRectGetMaxX(headImagV.frame) + 10, headImagV.y+3,_modal.realname.length*14, 14);
+    nameLab.frame= CGRectMake(CGRectGetMaxX(headImagV.frame) + 10, headImagV.y+3,[nameLab.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(APPWIDTH,15)].width, 15);
     [vipView addSubview:nameLab];
     
     UIImageView *certifyImgV=[[UIImageView alloc]init];//认证

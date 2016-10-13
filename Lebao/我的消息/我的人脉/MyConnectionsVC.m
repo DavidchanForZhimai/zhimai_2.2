@@ -268,6 +268,7 @@
     [self.navigationController pushViewController:privateChat animated:YES];
 
 }
+#pragma mark - 删除人脉
 -(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     return YES;
 }
@@ -275,9 +276,39 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [self.nearByManArr removeObjectAtIndex:indexPath.row];
-        // Delete the row from the data source.
-        [_yrTab deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        NSMutableDictionary *param = [Parameter parameterWithSessicon];
+            [param setObject:@"relivev" forKey:@"conduct"];
+        MeetingCellLayout *layout1=self.nearByManArr[indexPath.row];
+        MeetingData *data=layout1.model;
+        [param setObject:data.meetId forKey:@"id"];
+        NSLog(@"param====%@",param);
+        
+        [XLDataService putWithUrl:conductConnectionsURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+            NSLog(@"conductObj=%@",dataObj);
+            if (dataObj) {
+                MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
+                
+                if (model.rtcode==1) {
+
+                    [self.nearByManArr removeObjectAtIndex:indexPath.row];
+                    // Delete the row from the data source.
+                    [_yrTab deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                }
+                
+                else
+                {
+                    [[ToolManager shareInstance] showAlertMessage:model.rtmsg];
+                }
+                NSLog(@"model.rtmsg=========dataobj=%@",model.rtmsg);
+            }else
+            {
+                [[ToolManager shareInstance] showInfoWithStatus];
+                
+            }
+            
+            
+        }];
+
         
     }
     else if (editingStyle == UITableViewCellEditingStyleInsert) {

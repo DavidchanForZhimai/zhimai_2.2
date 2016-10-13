@@ -14,6 +14,7 @@
 @property(nonatomic,strong) NSString *rtmsg;
 @property(nonatomic,assign) int allpage;
 @property(nonatomic,assign) int count;
+@property(nonatomic,assign) int connection_count;
 @property(nonatomic,strong) NSMutableArray  *datas;
 
 @end

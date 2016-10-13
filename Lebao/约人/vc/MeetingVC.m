@@ -119,22 +119,20 @@
         if (dataObj) {
             NSLog(@"meetObj====%@",dataObj);
             MeetNumModel *modal = [MeetNumModel mj_objectWithKeyValues:dataObj];
-            [_headView.meWantBtn setTitle:[NSString stringWithFormat:@"%d\n我想约见",modal.invited] forState:UIControlStateNormal];
-            
-            NSMutableAttributedString *text1 = [[NSMutableAttributedString alloc]initWithString:_headView.meWantBtn.titleLabel.text];
-            [text1 addAttribute:NSFontAttributeName value:Size(40) range:[_headView.meWantBtn.titleLabel.text rangeOfString:[NSString stringWithFormat:@"%d",modal.invited]]];
+ 
+            NSMutableAttributedString *text1 = [[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"%d\n我想约见",modal.invited]];
+            [text1 addAttribute:NSFontAttributeName value:Size(40) range:[[NSString stringWithFormat:@"%d\n我想约见",modal.invited] rangeOfString:[NSString stringWithFormat:@"%d",modal.invited]]];
             [_headView.meWantBtn setAttributedTitle:text1 forState:UIControlStateNormal];
             _headView.meWantBtn.titleLabel.numberOfLines = 0;
             
-            [_headView.wantMeBtn setTitle:[NSString stringWithFormat:@"%d\n想约见我",modal.beinvited] forState:UIControlStateNormal];
-            NSMutableAttributedString *text = [[NSMutableAttributedString alloc]initWithString:_headView.wantMeBtn.titleLabel.text];
-            [text addAttribute:NSFontAttributeName value:Size(40) range:[_headView.wantMeBtn.titleLabel.text rangeOfString:[NSString stringWithFormat:@"%d",modal.beinvited]]];
+            NSMutableAttributedString *text = [[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"%d\n想约见我",modal.beinvited]];
+            [text addAttribute:NSFontAttributeName value:Size(40) range:[[NSString stringWithFormat:@"%d\n想约见我",modal.beinvited] rangeOfString:[NSString stringWithFormat:@"%d",modal.beinvited]]];
             [_headView.wantMeBtn setAttributedTitle:text forState:UIControlStateNormal];
             _headView.wantMeBtn.titleLabel.numberOfLines = 0;
-            _headView.midBtn.titleLabel.text=[NSString stringWithFormat:@"可添加\n%d\n位人脉",modal.cansee];
+
             _headView.midBtn.titleLabel.textAlignment=NSTextAlignmentCenter;
-            NSMutableAttributedString *str=[[NSMutableAttributedString alloc]initWithString:_headView.midBtn.titleLabel.text];
-            [str addAttribute:NSFontAttributeName value:Size(60) range:[_headView.midBtn.titleLabel.text rangeOfString:[NSString stringWithFormat:@"%d",modal.cansee]]];
+            NSMutableAttributedString *str=[[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"可添加\n%d\n位人脉",modal.cansee]];
+            [str addAttribute:NSFontAttributeName value:Size(60) range:[[NSString stringWithFormat:@"可添加\n%d\n位人脉",modal.cansee] rangeOfString:[NSString stringWithFormat:@"%d",modal.cansee]]];
             [_headView.midBtn setAttributedTitle:str forState:UIControlStateNormal];
             _headView.midBtn.titleLabel.numberOfLines=0;
             
