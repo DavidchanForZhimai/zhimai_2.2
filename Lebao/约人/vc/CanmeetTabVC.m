@@ -36,7 +36,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     _page=1;
-    [self navViewTitleAndBackBtn:@""];
+    [self navViewTitleAndBackBtn:@"可约见"];
 //    //搜索按钮
 //    BaseButton *search = [[BaseButton alloc]initWithFrame:frame(60*ScreenMultiple, StatusBarHeight + 7, APPWIDTH - 120*ScreenMultiple, NavigationBarHeight - 14) setTitle:@"搜索" titleSize:28*SpacedFonts titleColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:[UIColor clearColor] inView:self.view];
 //    [search setRoundWithfloat:search.height/2.0];
