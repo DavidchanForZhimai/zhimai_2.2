@@ -149,10 +149,18 @@
     if (_scrollView) {
         return _scrollView;
     }
-    _scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, StatusBarHeight +NavigationBarHeight, APPWIDTH, APPHEIGHT - StatusBarHeight +NavigationBarHeight)];
+    _scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, StatusBarHeight +NavigationBarHeight, APPWIDTH, APPHEIGHT - (StatusBarHeight  +NavigationBarHeight))];
     _scrollView.backgroundColor = [UIColor clearColor];
     [_scrollView addSubview:self.bgHead];
     [_scrollView addSubview:self.bg];
+    
+    NSLog(@"%f %f",CGRectGetMaxY(_bg.frame)+ 10,_scrollView.height);
+    if (CGRectGetMaxY(_bg.frame)+ 10>_scrollView.height) {
+        NSLog(@"2222222");
+        _scrollView.contentSize = CGSizeMake(APPWIDTH, CGRectGetMaxY(_bg.frame)+ 10);
+        
+    }
+
     return _scrollView;
     
 }
@@ -179,11 +187,6 @@
     _bg.image = imagebg;
     _bg.userInteractionEnabled = YES;
 
-    if (CGRectGetMaxY(_bg.frame)+ 10>self.scrollView.height) {
-        
-        self.scrollView.contentSize = CGSizeMake(APPWIDTH, CGRectGetMaxY(_bg.frame)+ 10);
-        
-    }
     return _bg;
 }
 - (BaseButton *)wxFriend
@@ -289,6 +292,7 @@
                 [_bg addSubview:self.lb2];
                 [_bg addSubview:self.wxFriend];
                 [_bg addSubview:self.wxTimeLine];
+                
             }
             else
             {
