@@ -205,22 +205,28 @@
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
         
-        NSString *title;
-        if (headerModel.isme) {
-            title = @"我的动态";
-        }
-        else
-        {
-            title = @"他的动态";
-        }
-        [UILabel createLabelWithFrame:frame(20, 0, 100, 40) text:title fontSize:14 textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:cell];
         
+        UILabel *dt =  [UILabel createLabelWithFrame:frame(20, 0, 100, 40) text:@"他的动态" fontSize:14 textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:cell];
+        dt.tag = 88;
         UILabel *label =  [UILabel createLabelWithFrame:frame(APPWIDTH - 100, 0, 70, 40) text:headerModel.dynamic_count fontSize:12 textColor:LightBlackTitleColor textAlignment:NSTextAlignmentRight inView:cell];
         label.tag =888;
         
         cell.accessoryType =UITableViewCellAccessoryDisclosureIndicator;
     }
+    NSString *title;
+    if (headerModel.isme) {
+        title = @"我的动态";
+    }
+    else
+    {
+        title = @"他的动态";
+    }
+
+    UILabel *dt = [cell viewWithTag:88];
+    dt.text = title;
+    
     UILabel *label = [cell viewWithTag:888];
+    
     label.text = headerModel.dynamic_count;
     return cell;
 }
@@ -228,7 +234,8 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     OtherDynamicdViewController *otherDynamicdVC =[[OtherDynamicdViewController alloc]init];
-    otherDynamicdVC.dynamicdName = @"我的动态";
+    
+    otherDynamicdVC.dynamicdName = headerModel.realname;
     otherDynamicdVC.dynamicdID   = _userID;
     [self.navigationController pushViewController:otherDynamicdVC animated:YES];
 }

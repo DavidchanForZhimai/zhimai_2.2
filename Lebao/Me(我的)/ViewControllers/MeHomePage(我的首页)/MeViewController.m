@@ -277,7 +277,7 @@
                 
                 OtherDynamicdViewController *otherDynamicdVC = allocAndInit(OtherDynamicdViewController);
                 otherDynamicdVC.dynamicdID = modal.ID;
-                otherDynamicdVC.dynamicdName = @"我的动态";
+                otherDynamicdVC.dynamicdName = modal.realname;
                 [nav pushViewController:otherDynamicdVC animated:YES];
                 
             }];
