@@ -20,6 +20,7 @@
 @interface AddIndustryViewController ()<DWTagsViewDelegate>
 
 @property(nonatomic,strong)DWTagsView *hasTagsView;//已关注标签
+@property(nonatomic,strong)NSMutableArray *hasTags;//已关注标签
 @property(nonatomic,strong)DWTagsView *newsClassTagsView;//新热门标签 类型
 @property(nonatomic,strong)DWTagsView *newsTagsView;//新热门标签
 @property(nonatomic,copy)NSMutableArray *newsTags;//新标签
@@ -41,9 +42,11 @@
     // Do any additional setup after loading the view.
     self.view.backgroundColor = WhiteColor;
     [self navViewTitleAndBackBtn:@"选择关注行业"];
-
-    [self netWorkIsSave:NO];
-    
+    if (_isShouldLoadData) {
+         [self netWorkIsSave:NO];
+    }
+   
+   
 }
 #pragma mark
 #pragma mark netWork
@@ -51,16 +54,18 @@
 {
     NSMutableDictionary *parame = [Parameter parameterWithSessicon];
     NSString *url =@"";
+    NSMutableArray *industry;
+    NSMutableArray *industryname;
     if (isSave) {
         url = SaveFocusIndustryURL;
-        
-        NSMutableArray *industry = [NSMutableArray new];
+        industry = [NSMutableArray new];
+        industryname = [NSMutableArray new];
         for (id dic in industrys) {
             if ([dic isKindOfClass:[NSDictionary class]]) {
                 for (NSString *str in _hasTags) {
                     if ([dic[@"name"] isEqualToString:str]) {
                         [industry addObject:dic[@"full_number"]];
-                        
+                        [industryname addObject:dic[@"name"]];
                     }
                 }
                 
@@ -78,50 +83,21 @@
     }
     
     [XLDataService postWithUrl:url param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        NSLog(@"parame =%@ data = %@ ",parame,dataObj);
+
         if (dataObj) {
             if ([dataObj[@"rtcode"] intValue] ==1) {
                 [[ToolManager shareInstance] dismiss];
                 
                 if (isSave) {
-                   
+                    if (self.addTagsfinishBlock) {
+                        self.addTagsfinishBlock(industry,industryname);
+                    }
                     PopView(self);
                 }
                 else{
-                    NSMutableArray *industryDic= dataObj[@"industry_label"];
-                    industrys = [NSMutableArray arrayWithArray:dataObj[@"industrys"]];
-                    NSArray *focus_industrys;
-                    if (dataObj[@"focus_industrys"]&&[dataObj[@"focus_industrys"] isKindOfClass:[NSString class]]&&![dataObj[@"focus_industrys"] isEqualToString:@""]) {
-                        focus_industrys = [dataObj[@"focus_industrys"] componentsSeparatedByString:@"/"];
-                    }
-                    for (id Value in industrys) {
-                        if ([Value isKindOfClass:[NSDictionary class]]) {
-                            
-                            if ([focus_industrys containsObject:Value[@"full_number"]] ) {
-                                [self.hasTags addObject:Value[@"name"]];
-                            }
-                        }
-                    }
-                    
-                    for (id value in industryDic) {
-                        if ([value isKindOfClass:[NSDictionary class]]) {
-                        
-                            [self.industry_label  addObject:value];
-                            [self.classNewsTags addObject:value[@"name"]];
-                        }
-                    }
+                    self.data = dataObj;
                    
                 }
-                 self.hasTagsView.tagsArray = self.hasTags;
-                self.newsClassTagsView.tagsArray = self.classNewsTags;
-                [self.view addSubview:self.finishBtn];
-                [self.view addSubview:self.hasTagsView];
-                [self.view addSubview:self.newsLb];
-                [self.view addSubview:self.newsClassTagsView];
-                [self.view addSubview:self.newsTagsView];
-                
-                [self resetFrame];
-                
                 
             }
             else
@@ -142,7 +118,43 @@
     }];
     
 }
-
+- (void)setData:(id)data
+{
+        NSMutableArray *industryDic= data[@"industry_label"];
+        industrys = [NSMutableArray arrayWithArray:data[@"industrys"]];
+        NSArray *focus_industrys;
+        if (data[@"focus_industrys"]&&[data[@"focus_industrys"] isKindOfClass:[NSString class]]&&![data[@"focus_industrys"] isEqualToString:@""]) {
+            focus_industrys = [data[@"focus_industrys"] componentsSeparatedByString:@"/"];
+        }
+        for (id Value in industrys) {
+            if ([Value isKindOfClass:[NSDictionary class]]) {
+                
+                if ([focus_industrys containsObject:Value[@"full_number"]] ) {
+                    [self.hasTags addObject:Value[@"name"]];
+                }
+            }
+        }
+        
+        for (id value in industryDic) {
+            if ([value isKindOfClass:[NSDictionary class]]) {
+                
+                [self.industry_label  addObject:value];
+                [self.classNewsTags addObject:value[@"name"]];
+            }
+        }
+        
+        self.hasTagsView.tagsArray = self.hasTags;
+        self.newsClassTagsView.tagsArray = self.classNewsTags;
+        [self.view addSubview:self.finishBtn];
+        [self.view addSubview:self.hasTagsView];
+        [self.view addSubview:self.newsLb];
+        [self.view addSubview:self.newsClassTagsView];
+        [self.view addSubview:self.newsTagsView];
+        
+        [self resetFrame];
+        
+    
+}
 #pragma mark getter
 - (BaseButton *)finishBtn
 {

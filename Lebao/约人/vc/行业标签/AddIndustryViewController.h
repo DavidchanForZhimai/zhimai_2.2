@@ -8,8 +8,9 @@
 
 #import "BaseViewController.h"
 
-typedef void (^AddTagsFinishBlock)(NSArray *tags);
+typedef void (^AddTagsFinishBlock)(NSMutableArray *tags,NSMutableArray*tagsName);
 @interface AddIndustryViewController : BaseViewController
-@property(nonatomic,strong)NSMutableArray *hasTags;//已关注标签
+@property(nonatomic,strong)id data;
+@property(nonatomic,assign)BOOL isShouldLoadData;
 @property(nonatomic,copy)AddTagsFinishBlock addTagsfinishBlock;
 @end

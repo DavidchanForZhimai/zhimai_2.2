@@ -92,24 +92,24 @@
     }
     _addHasLb = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 38 , _hasLb.y,28, _hasLb.height) setTitle:@"添加" titleSize:28*SpacedFonts titleColor:BlackTitleColor textAlignment:NSTextAlignmentRight backgroundColor:[UIColor clearColor] inView:nil];
     _addHasLb.shouldAnmial = NO;
-    __weak typeof(self) weakSelf = self;
+//    __weak typeof(self) weakSelf = self;
     _addHasLb.didClickBtnBlock = ^
     {
-        __strong typeof(weakSelf) strongSelf =weakSelf;
-        AddIndustryViewController *addIndustryVC = allocAndInit(AddIndustryViewController);
-        addIndustryVC.hasTags = weakSelf.hasTags;
-        addIndustryVC.addTagsfinishBlock = ^(NSArray *tags)
-        {
-          
-            for (id str  in strongSelf.hasTags) {
-                [strongSelf.hasTagsView removeTagWithName:str];
-            }
-            for (id str  in tags) {
-                [strongSelf.hasTagsView addTag:str];
-            }
-                    
-        };
-        PushView(weakSelf, addIndustryVC);
+//        __strong typeof(weakSelf) strongSelf =weakSelf;
+//        AddIndustryViewController *addIndustryVC = allocAndInit(AddIndustryViewController);
+      
+//        addIndustryVC.addTagsfinishBlock = ^(NSArray *tags)
+//        {
+//          
+//            for (id str  in strongSelf.hasTags) {
+//                [strongSelf.hasTagsView removeTagWithName:str];
+//            }
+//            for (id str  in tags) {
+//                [strongSelf.hasTagsView addTag:str];
+//            }
+//                    
+//        };
+//        PushView(weakSelf, addIndustryVC);
     };
     return _addHasLb;
 }

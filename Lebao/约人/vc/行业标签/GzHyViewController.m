@@ -9,16 +9,26 @@
 #import "GzHyViewController.h"
 #import "AddIndustryViewController.h"
 #import "DWTagsView.h"
+#import "XLDataService.h"
+#define FocusIndustryURL [NSString stringWithFormat:@"%@user/focus-industry",HttpURL]
 #define ViewStartX StatusBarHeight + NavigationBarHeight
 @interface GzHyViewController ()<DWTagsViewDelegate>
 @property(nonatomic,strong)DWTagsView *hasTagsView;//已关注标签
 @property(nonatomic,copy)NSMutableArray *hasTags;//已关注标签
 @property(nonatomic,strong)BaseButton *addHasLb;//添加关注标签
 
+@property(nonatomic,strong)id data;//数据
 @end
 
 @implementation GzHyViewController
-
+{
+    ;
+}
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -26,10 +36,59 @@
     [self navViewTitleAndBackBtn:@"关注行业"];
     [self.view addSubview:self.hasTagsView];
     [self.view addSubview:self.addHasLb];
-    
+    [self netWork];
     
 }
 
+#pragma mark
+#pragma mark netWork
+- (void)netWork
+{
+    NSMutableDictionary *parame = [Parameter parameterWithSessicon];
+    [[ToolManager shareInstance] showWithStatus];
+    [XLDataService postWithUrl:FocusIndustryURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+        if (dataObj) {
+            if ([dataObj[@"rtcode"] intValue] ==1) {
+                [[ToolManager shareInstance] dismiss];
+                [self.hasTags removeAllObjects];
+                [self.hasTagsView removeAllTags];
+                
+               NSMutableArray * industrys = [NSMutableArray arrayWithArray:dataObj[@"industrys"]];
+                NSArray *focus_industrys;
+                if (dataObj[@"focus_industrys"]&&[dataObj[@"focus_industrys"] isKindOfClass:[NSString class]]&&![dataObj[@"focus_industrys"] isEqualToString:@""]) {
+                    focus_industrys = [dataObj[@"focus_industrys"] componentsSeparatedByString:@"/"];
+                }
+                for (id Value in industrys) {
+                    if ([Value isKindOfClass:[NSDictionary class]]) {
+                        
+                        if ([focus_industrys containsObject:Value[@"full_number"]] ) {
+                            [self.hasTags addObject:Value[@"name"]];
+                            [self.hasTagsView addTag:Value[@"name"]];
+                        }
+                    }
+                }
+
+                _data = dataObj;
+                self.addHasLb.hidden = NO;
+            }
+            else
+            {
+                
+                [[ToolManager shareInstance] showInfoWithStatus:dataObj[@"rtmsg"]];
+            }
+            
+        }
+        else
+        {
+            
+            [[ToolManager shareInstance] showInfoWithStatus];
+        }
+        
+        
+        
+    }];
+    
+}
 
 #pragma mark getter
 - (BaseButton *)addHasLb
@@ -39,23 +98,18 @@
     }
     _addHasLb = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 50 ,StatusBarHeight,50, NavigationBarHeight) setTitle:@"添加" titleSize:28*SpacedFonts titleColor:BlackTitleColor textAlignment:NSTextAlignmentRight backgroundColor:[UIColor clearColor] inView:nil];
     _addHasLb.shouldAnmial = NO;
+    _addHasLb.hidden = YES;
     __weak typeof(self) weakSelf = self;
     _addHasLb.didClickBtnBlock = ^
     {
-        __strong typeof(weakSelf) strongSelf =weakSelf;
+
         AddIndustryViewController *addIndustryVC = allocAndInit(AddIndustryViewController);
-        addIndustryVC.hasTags = weakSelf.hasTags;
-        addIndustryVC.addTagsfinishBlock = ^(NSArray *tags)
+        addIndustryVC.data = weakSelf.data;
+        addIndustryVC.addTagsfinishBlock = ^(NSMutableArray *tags,NSMutableArray*tagsName)
         {
-            
-            for (id str  in strongSelf.hasTags) {
-                [strongSelf.hasTagsView removeTagWithName:str];
-            }
-            for (id str  in tags) {
-                [strongSelf.hasTagsView addTag:str];
-            }
-            
+           [weakSelf netWork];
         };
+     
         PushView(weakSelf, addIndustryVC);
     };
     return _addHasLb;
@@ -94,7 +148,7 @@
     if (_hasTags) {
         return _hasTags;
     }
-    _hasTags = [[NSMutableArray alloc]initWithObjects:@"销售",@"销售",@"销售",nil];
+    _hasTags = [[NSMutableArray alloc]init];
     return _hasTags;
 }
 

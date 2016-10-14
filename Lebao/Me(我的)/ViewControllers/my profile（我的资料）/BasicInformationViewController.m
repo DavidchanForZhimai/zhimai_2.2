@@ -1109,7 +1109,12 @@
             case 4:
             {
                 AddIndustryViewController *industrySelectionVC = [[AddIndustryViewController alloc]init];
-            
+                industrySelectionVC.addTagsfinishBlock = ^(NSMutableArray *tags,NSMutableArray*tagsName)
+                {
+                    _modal.focus_industrys = [tags componentsJoinedByString:@"/"];
+                    [_basicInfoTableView reloadData];
+                };
+                industrySelectionVC.isShouldLoadData = YES;
                 PushView(self, industrySelectionVC);
             }
                 break;
