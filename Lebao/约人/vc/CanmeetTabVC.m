@@ -37,16 +37,16 @@
     [super viewDidLoad];
     _page=1;
     [self navViewTitleAndBackBtn:@""];
-    //搜索按钮
-    BaseButton *search = [[BaseButton alloc]initWithFrame:frame(60*ScreenMultiple, StatusBarHeight + 7, APPWIDTH - 120*ScreenMultiple, NavigationBarHeight - 14) setTitle:@"搜索" titleSize:28*SpacedFonts titleColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:[UIColor clearColor] inView:self.view];
-    [search setRoundWithfloat:search.height/2.0];
-    [search setBorder:LineBg width:0.5];
-    __weak typeof(self) weakSelf= self;
-    search.didClickBtnBlock = ^{
-        
-        PushView(weakSelf, allocAndInit(SearchAndAddTagsViewController));
-        
-    };
+//    //搜索按钮
+//    BaseButton *search = [[BaseButton alloc]initWithFrame:frame(60*ScreenMultiple, StatusBarHeight + 7, APPWIDTH - 120*ScreenMultiple, NavigationBarHeight - 14) setTitle:@"搜索" titleSize:28*SpacedFonts titleColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:[UIColor clearColor] inView:self.view];
+//    [search setRoundWithfloat:search.height/2.0];
+//    [search setBorder:LineBg width:0.5];
+//    __weak typeof(self) weakSelf= self;
+//    search.didClickBtnBlock = ^{
+//        
+//        PushView(weakSelf, allocAndInit(SearchAndAddTagsViewController));
+//        
+//    };
     [self addTabView];
 
      [self netWorkRefresh:NO andIsLoadMoreData:NO isShouldClearData:NO];
