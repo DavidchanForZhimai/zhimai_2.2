@@ -157,7 +157,7 @@
 {
     HeaderModel *headerModel;
     UIButton *addConnectionsBtn;
-    AddConnectionView *alertV;
+    AddConnectionView *alertV; 
 }
 
 - (void)viewDidLoad {

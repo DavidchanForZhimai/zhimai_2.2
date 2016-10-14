@@ -457,7 +457,7 @@
         }
     }
 //      NSLog(@"clickRow.row,==%ld clickRow = %ld",indexPath.row,clickRow.row);
-         UIAlertView *alertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"是否取消约见%@",layout.model.realname] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+         UIAlertView *alertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"是否取消约见%@\n退回赏金%@元",layout.model.realname,layout.model.reward] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
         alertV.tag=10000;
         [alertV show];
         
