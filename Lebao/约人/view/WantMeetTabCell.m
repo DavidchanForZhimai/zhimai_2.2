@@ -146,8 +146,8 @@
 {
     //    NSLog(@"lwAsyncDisplayView.tag=%li",imageStorage.tag);
     if (imageStorage.tag == 888) {
-        if ([_delegate respondsToSelector:@selector(tableViewCellDidSeleteHeadImg: andIndexPath:)] &&[_delegate conformsToProtocol:@protocol(WantMeettingTableViewDelegate)]) {
-            [_delegate tableViewCellDidSeleteHeadImg:imageStorage andIndexPath:_indexPath];
+        if ([_delegate respondsToSelector:@selector(tableViewCellDidSeleteHeadImg:layout:)] &&[_delegate conformsToProtocol:@protocol(WantMeettingTableViewDelegate)]) {
+            [_delegate tableViewCellDidSeleteHeadImg:imageStorage layout:_cellLayout];
         }
     }
     

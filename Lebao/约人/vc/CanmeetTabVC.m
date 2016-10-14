@@ -262,10 +262,8 @@
     }
 }
 
--(void)tableViewCellDidSeleteHeadImg:(LWImageStorage *)imageStoragen andIndexPath:(NSIndexPath *)indexPath
-{
+-(void)tableViewCellDidSeleteHeadImg:(LWImageStorage *)imageStoragen layout:(MeetingCellLayout *)layout{
     MyDetialViewController *myDetialViewCT=allocAndInit(MyDetialViewController);
-    MeetingCellLayout *layout=self.allMeetArr[indexPath.row];
     MeetingData *data=layout.model;
     myDetialViewCT.userID=data.userid;
     [self.navigationController pushViewController:myDetialViewCT animated:YES];

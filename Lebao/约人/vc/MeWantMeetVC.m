@@ -13,6 +13,7 @@
 #import "XLDataService.h"
 #import "MP3PlayerManager.h"
 #import "GJGCChatFriendViewController.h"
+#import "MyDetialViewController.h"
 @interface MeWantMeetVC ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,UITextFieldDelegate,WantMeettingTableViewDelegate>
 {
     UIScrollView * buttomScr;
@@ -588,7 +589,15 @@
     }
 
 }
-
+#pragma mark - MeettingTableViewCellDelegate 头像按钮点击
+-(void)tableViewCellDidSeleteHeadImg:(LWImageStorage *)imageStoragen layout:(WantMeetLayout *)layout
+{
+    
+    MyDetialViewController *myDetialViewCT=allocAndInit(MyDetialViewController);
+    MeetingData *data = layout.model;
+    myDetialViewCT.userID=data.userid;
+    [self.navigationController pushViewController:myDetialViewCT animated:YES];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

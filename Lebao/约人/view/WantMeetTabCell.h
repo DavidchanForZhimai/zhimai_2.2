@@ -16,7 +16,7 @@
 //语音按钮
 - (void)tableViewCellDidSeleteAudioBtn:(UIButton *)btn layout:(WantMeetLayout*)layout andIndexPath:(NSIndexPath *)indexPath;
 //点击头像
-- (void)tableViewCellDidSeleteHeadImg:(LWImageStorage *)imageStoragen andIndexPath:(NSIndexPath *)indexPath;
+- (void)tableViewCellDidSeleteHeadImg:(LWImageStorage *)imageStoragen layout:(WantMeetLayout*)layout;
 @optional
 //电话按钮
 - (void)tableViewCellDidSeleteTelBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath;

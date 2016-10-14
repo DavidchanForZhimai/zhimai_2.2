@@ -17,11 +17,11 @@
 //对话按钮
 - (void)tableViewCellDidSeleteMessageBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath;
 //同意和拒绝按钮
-- (void)tableViewCellDidSeleteAgreeAndRefuseBtn:(UIButton *)btn layout:(MeetingCellLayout *)layout andIndexPath:(NSIndexPath *)indexPath;
+- (void)tableViewCellDidSeleteAgreeAndRefuseBtn:(UIButton *)btn layout:(MeetingCellLayout *)layout;
 ////拒绝按钮
 //- (void)tableViewCellDidSeleteRefuseBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath;
 //点击头像
-- (void)tableViewCellDidSeleteHeadImg:(LWImageStorage *)imageStoragen andIndexPath:(NSIndexPath *)indexPath;
+- (void)tableViewCellDidSeleteHeadImg:(LWImageStorage *)imageStoragen layout:(MeetingCellLayout *)layout;
 @end
 @interface MeettingTableViewCell : UITableViewCell
 @property(nonatomic,strong)MeetingCellLayout *cellLayout;

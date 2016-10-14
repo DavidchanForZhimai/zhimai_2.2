@@ -17,9 +17,13 @@
 #import "EjectView.h"
 #import "MeetPaydingVC.h"
 #import "NSString+Extend.h"
+#import "GJGCChatFriendViewController.h"
+#import "MyDetialViewController.h"
 @interface ConnectionsRequestVC ()<UITableViewDelegate,UITableViewDataSource,MeettingTableViewDelegate,UIAlertViewDelegate>
 {
     BOOL audioMark;
+    NSIndexPath * clickRow;
+    MeetingData *telMessData;
 }
 @property (nonatomic,strong)UITableView *yrTab;
 @property (nonatomic,assign)int page;
@@ -71,6 +75,9 @@
     NSMutableDictionary *param = [Parameter parameterWithSessicon];
     [param setObject:@(_page) forKey:@"page"];
     NSLog(@"param====%@",param);
+    if (self.nearByManArr.count==0) {
+        [[ToolManager shareInstance] showWithStatus];
+    }
     [XLDataService putWithUrl:requestcountConnectionsURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         
         if (isRefresh) {
@@ -97,7 +104,7 @@
             }
             
             if (modal.rtcode ==1) {
-                
+                [[ToolManager shareInstance] dismiss];
                 for (MeetingData *data in modal.datas) {
                     [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andMessageBtn:NO andOprationBtn:YES andTime:NO]];
                     
@@ -219,10 +226,9 @@
 #pragma mark
 #pragma mark - MeettingTableViewCellDelegate 同意和拒绝按钮地点击
 //同意和拒绝按钮
-- (void)tableViewCellDidSeleteAgreeAndRefuseBtn:(UIButton *)btn layout:(MeetingCellLayout *)layout andIndexPath:(NSIndexPath *)indexPath
+- (void)tableViewCellDidSeleteAgreeAndRefuseBtn:(UIButton *)btn layout:(MeetingCellLayout *)layout
 {
-    NSIndexPath * clickRow;
-    NSLog(@"btn=====%ld",btn.tag);
+    
     for (int i =0; i<self.nearByManArr.count; i++) {
         if ([layout isEqual:(MeetingCellLayout*)self.nearByManArr[i]]) {
             clickRow = [NSIndexPath indexPathForRow:i inSection:0];
@@ -234,9 +240,9 @@
     }else if (btn.tag==2222){
         [param setObject:@"refuse" forKey:@"conduct"];
     }
-    MeetingCellLayout *layout1=self.nearByManArr[indexPath.row];
-    MeetingData *data=layout1.model;
-    [param setObject:data.meetId forKey:@"id"];
+    MeetingCellLayout *layout1=self.nearByManArr[clickRow.row];
+    telMessData=layout1.model;
+    [param setObject:telMessData.meetId forKey:@"id"];
     NSLog(@"param====%@",param);
 
     [XLDataService putWithUrl:conductConnectionsURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
@@ -245,18 +251,20 @@
             MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
             
             if (model.rtcode==1) {
-                NSString *str;
                 if(btn.tag==2222){
-                    str=@"您已拒绝";
-                }else if (btn.tag==2221){
-                    str=@"您已同意";
-                }
+                    UIAlertView *success=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"您已拒绝%@的人脉添加请求",telMessData.realname] delegate:nil cancelButtonTitle:@"继续操作" otherButtonTitles: nil];
+                    [self.nearByManArr removeObjectAtIndex:clickRow.row];
+                    [self.yrTab deleteRowsAtIndexPaths:[NSArray arrayWithObjects:clickRow, nil] withRowAnimation:UITableViewRowAnimationRight];
+                    [success show];
 
-                UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:str delegate:self cancelButtonTitle:nil otherButtonTitles:@"对话",@"电话联系",@"继续操作", nil];
-                [self.nearByManArr removeObjectAtIndex:clickRow.row];
-                [self.yrTab deleteRowsAtIndexPaths:[NSArray arrayWithObjects:clickRow, nil] withRowAnimation:UITableViewRowAnimationRight];
-                successAlertV.cancelButtonIndex=2;
-                [successAlertV show];
+                }else if (btn.tag==2221){
+                    UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"您已同意%@的人脉添加请求",telMessData.realname] delegate:self cancelButtonTitle:nil otherButtonTitles:@"对话",@"电话联系",@"继续操作", nil];
+                    [self.nearByManArr removeObjectAtIndex:clickRow.row];
+                    [self.yrTab deleteRowsAtIndexPaths:[NSArray arrayWithObjects:clickRow, nil] withRowAnimation:UITableViewRowAnimationRight];
+                    successAlertV.cancelButtonIndex=2;
+                    successAlertV.delegate=self;
+                    [successAlertV show];
+                }
             }
             
             else
@@ -275,6 +283,32 @@
     
     
     
+}
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+        if (buttonIndex==0) {
+            GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
+            talk.talkType = GJGCChatFriendTalkTypePrivate;
+            talk.toId =telMessData.userid;
+            talk.toUserName =telMessData.realname;
+            GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
+            privateChat.type = MessageTypeNormlPage;
+            [self.navigationController pushViewController:privateChat animated:YES];
+        }else if(buttonIndex==1){
+            NSString *str=[NSString stringWithFormat:@"tel://%@",telMessData.tel];
+            NSURL *url=[NSURL URLWithString:str];
+            [[UIApplication sharedApplication]openURL:url];
+        }else if(buttonIndex==2){
+        }
+   
+}
+#pragma mark - MeettingTableViewCellDelegate 头像按钮点击
+-(void)tableViewCellDidSeleteHeadImg:(LWImageStorage *)imageStoragen layout:(MeetingCellLayout *)layout
+{
+    MyDetialViewController *myDetialViewCT=allocAndInit(MyDetialViewController);
+    MeetingData *data = layout.model;
+    myDetialViewCT.userID=data.userid;
+    [self.navigationController pushViewController:myDetialViewCT animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {

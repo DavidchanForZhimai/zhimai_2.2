@@ -15,7 +15,7 @@
 #import "MP3PlayerManager.h"
 #import "XLDataService.h"
 #import "MeetingModel.h"
-#import "GJGCChatFriendViewController.h"
+
 @interface MeetPaydingVC ()<UIAlertViewDelegate>
 typedef enum {
     zhimaizhifuType=0,//知脉支付

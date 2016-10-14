@@ -13,6 +13,7 @@
 #import "XLDataService.h"
 #import "MP3PlayerManager.h"
 #import "GJGCChatFriendViewController.h"
+#import "MyDetialViewController.h"
 @interface WantMeetMeVC ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,UITextFieldDelegate,WantMeettingTableViewDelegate>
 {
     UIScrollView * buttomScr;
@@ -448,7 +449,7 @@
         }
     }
 
-   UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"同意约见后,您将获得%@元约见打赏",layout.model.reward] delegate:self cancelButtonTitle:@"拒绝" otherButtonTitles:@"同意", nil];
+   UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"同意约见后,您将获得%@元约见打赏",layout.model.reward] delegate:self cancelButtonTitle:nil otherButtonTitles:@"拒绝",@"同意", nil];
     alertView.tag=10000;
     [alertView show];
    
@@ -563,6 +564,7 @@ if (layout.model.tel&&layout.model.tel!=nil) {
                 
                 
                 if (model.rtcode==1) {
+                    
                     [self.oprationArr removeObjectAtIndex:clickRow.row];
                     [self.oprationTab deleteRowsAtIndexPaths:[NSArray arrayWithObjects:clickRow, nil] withRowAnimation:UITableViewRowAnimationAutomatic];
                 }
@@ -582,7 +584,15 @@ if (layout.model.tel&&layout.model.tel!=nil) {
     }
     
 }
-
+#pragma mark - MeettingTableViewCellDelegate 头像按钮点击
+-(void)tableViewCellDidSeleteHeadImg:(LWImageStorage *)imageStoragen layout:(WantMeetLayout *)layout
+{
+    
+    MyDetialViewController *myDetialViewCT=allocAndInit(MyDetialViewController);
+    MeetingData *data = layout.model;
+    myDetialViewCT.userID=data.userid;
+    [self.navigationController pushViewController:myDetialViewCT animated:YES];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

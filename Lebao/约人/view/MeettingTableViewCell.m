@@ -71,8 +71,8 @@
 {
 //    NSLog(@"lwAsyncDisplayView.tag=%li",imageStorage.tag);
     if (imageStorage.tag == 888) {
-        if ([_delegate respondsToSelector:@selector(tableViewCellDidSeleteHeadImg: andIndexPath:)] &&[_delegate conformsToProtocol:@protocol(MeettingTableViewDelegate)]) {
-            [_delegate tableViewCellDidSeleteHeadImg:imageStorage andIndexPath:_indexPath];
+        if ([_delegate respondsToSelector:@selector(tableViewCellDidSeleteHeadImg: layout:)] &&[_delegate conformsToProtocol:@protocol(MeettingTableViewDelegate)]) {
+            [_delegate tableViewCellDidSeleteHeadImg:imageStorage layout:_cellLayout];
         }
     }
 
@@ -182,8 +182,8 @@
 - (void)agreeAndrefuseBtnClick:(UIButton *)sender
 {
    
-    if ([_delegate conformsToProtocol:@protocol(MeettingTableViewDelegate)]&&[_delegate respondsToSelector:@selector(tableViewCellDidSeleteAgreeAndRefuseBtn: layout: andIndexPath:)]) {
-        [_delegate tableViewCellDidSeleteAgreeAndRefuseBtn:sender layout:_cellLayout andIndexPath:_indexPath];
+    if ([_delegate conformsToProtocol:@protocol(MeettingTableViewDelegate)]&&[_delegate respondsToSelector:@selector(tableViewCellDidSeleteAgreeAndRefuseBtn: layout:)]) {
+        [_delegate tableViewCellDidSeleteAgreeAndRefuseBtn:sender layout:_cellLayout];
     }
 }
 //- (void)agreeBtnClick:(UIButton *)sender

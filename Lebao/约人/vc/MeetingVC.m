@@ -154,13 +154,13 @@
 - (void)netWorkRefresh:(BOOL)isRefresh andIsLoadMoreData:(BOOL)isMoreLoadMoreData isShouldClearData:(BOOL)isShouldClearData//加载数据
 {
     
-        [[LoCationManager shareInstance] creatLocationManager];
-        [LoCationManager shareInstance].callBackLocation = ^(CLLocationCoordinate2D location)
-        {
+//        [[LoCationManager shareInstance] creatLocationManager];
+//        [LoCationManager shareInstance].callBackLocation = ^(CLLocationCoordinate2D location)
+//        {
     //            测试用,要删掉
-//    CLLocationCoordinate2D location;
-//    location.latitude=24.491534;
-//    location.longitude=118.180851;
+    CLLocationCoordinate2D location;
+    location.latitude=24.491534;
+    location.longitude=118.180851;
             if (self.nearByManArr.count==0) {
                 [[ToolManager shareInstance] showWithStatus];
             }
@@ -228,7 +228,7 @@
         
     }];
     
-        };
+//        };
     
     
     
@@ -326,6 +326,8 @@
                                     _yrBtn.tag=1001;
                                     [_yrBtn setBackgroundImage:[UIImage imageNamed:@"yiyoukong"] forState:UIControlStateNormal];
                                     [[ToolManager shareInstance]dismiss];
+                                    
+//                                    [self netWorkRefresh:YES andIsLoadMoreData:NO isShouldClearData:YES];                                   
                                 }
 //                                else if (model.rtcode ==4001) {
 //                                    [[ToolManager shareInstance]dismiss];
@@ -488,10 +490,10 @@
    
 }
 #pragma mark - MeettingTableViewCellDelegate 头像按钮点击
--(void)tableViewCellDidSeleteHeadImg:(LWImageStorage *)imageStoragen andIndexPath:(NSIndexPath *)indexPath
+-(void)tableViewCellDidSeleteHeadImg:(LWImageStorage *)imageStoragen layout:(MeetingCellLayout *)layout
 {
+
     MyDetialViewController *myDetialViewCT=allocAndInit(MyDetialViewController);
-    MeetingCellLayout *layout=(MeetingCellLayout *)self.nearByManArr[indexPath.row];
     MeetingData *data = layout.model;
     myDetialViewCT.userID=data.userid;
     [self.navigationController pushViewController:myDetialViewCT animated:YES];

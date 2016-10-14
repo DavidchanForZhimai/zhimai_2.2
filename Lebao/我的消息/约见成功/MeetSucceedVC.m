@@ -447,7 +447,7 @@
     
 }
 #pragma mark 头像按钮点击事件
--(void)tableViewCellDidSeleteHeadImg:(LWImageStorage *)imageStoragen andIndexPath:(NSIndexPath *)indexPath
+-(void)tableViewCellDidSeleteHeadImg:(LWImageStorage *)imageStoragen layout:(WantMeetLayout *)layout
 {
     NSMutableArray *arr;
     if (_meetMeBtn.selected==YES) {
@@ -456,7 +456,6 @@
         arr=_iMeetArr;
     }
     MyDetialViewController *myDetialViewCT=allocAndInit(MyDetialViewController);
-    WantMeetLayout *layout=(WantMeetLayout *)arr[indexPath.row];
     MeetingData *data = layout.model;
     myDetialViewCT.userID=data.userid;
     [self.navigationController pushViewController:myDetialViewCT animated:YES];
