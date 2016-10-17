@@ -258,10 +258,10 @@
                     [success show];
 
                 }else if (btn.tag==2221){
-                    UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"您已同意%@的人脉添加请求",telMessData.realname] delegate:self cancelButtonTitle:nil otherButtonTitles:@"对话",@"电话联系",@"继续操作", nil];
+                    UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"您已同意%@的人脉添加请求",telMessData.realname] delegate:self cancelButtonTitle:nil otherButtonTitles:@"对话",@"继续操作", nil];
                     [self.nearByManArr removeObjectAtIndex:clickRow.row];
                     [self.yrTab deleteRowsAtIndexPaths:[NSArray arrayWithObjects:clickRow, nil] withRowAnimation:UITableViewRowAnimationRight];
-                    successAlertV.cancelButtonIndex=2;
+                    successAlertV.cancelButtonIndex=1;
                     successAlertV.delegate=self;
                     [successAlertV show];
                 }
@@ -295,9 +295,9 @@
             privateChat.type = MessageTypeNormlPage;
             [self.navigationController pushViewController:privateChat animated:YES];
         }else if(buttonIndex==1){
-            NSString *str=[NSString stringWithFormat:@"tel://%@",telMessData.tel];
-            NSURL *url=[NSURL URLWithString:str];
-            [[UIApplication sharedApplication]openURL:url];
+//            NSString *str=[NSString stringWithFormat:@"tel://%@",telMessData.tel];
+//            NSURL *url=[NSURL URLWithString:str];
+//            [[UIApplication sharedApplication]openURL:url];
         }else if(buttonIndex==2){
         }
    

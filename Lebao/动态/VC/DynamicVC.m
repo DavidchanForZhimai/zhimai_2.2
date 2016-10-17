@@ -864,7 +864,7 @@
         }
         OffsetY=scrollView.contentOffset.y;
     }
-    else if (scrollView.contentOffset.y>0&&scrollView.contentOffset.y-OffsetY<-20)
+    else if (scrollView.contentOffset.y<(scrollView.contentSize.height-scrollView.height)&&scrollView.contentOffset.y-OffsetY<-20)
     {
         if (self.bottomView.y==APPHEIGHT) {
             [UIView animateWithDuration:0.5

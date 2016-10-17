@@ -47,11 +47,7 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    //新版本提示
-    [[ToolManager shareInstance]update];
-    
     [self navViewTitleAndBackBtn:@"我的人脉"];
-    
     self.view.backgroundColor=AppViewBGColor;
     [self addTabView];
     _page = 1;
@@ -82,7 +78,7 @@
                    }
 
         if (dataObj) {
-            NSLog(@"Mydataobj====%@",dataObj);
+//            NSLog(@"Mydataobj====%@",dataObj);
             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
             if (_page ==1) {
                 [[ToolManager shareInstance] moreDataStatus:_yrTab];

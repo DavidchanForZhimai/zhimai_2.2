@@ -814,7 +814,7 @@
    
     [[ToolManager shareInstance] showWithStatus];
     [XLDataService putWithUrl:detailManURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-//        NSLog(@"dataObj =%@",dataObj);
+        NSLog(@"dataObj =%@",dataObj);
         if (dataObj) {
             headerModel = [HeaderModel mj_objectWithKeyValues:dataObj[@"data"]];
             if ([dataObj[@"rtcode"] integerValue]==1) {

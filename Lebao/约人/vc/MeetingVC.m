@@ -154,13 +154,13 @@
 - (void)netWorkRefresh:(BOOL)isRefresh andIsLoadMoreData:(BOOL)isMoreLoadMoreData isShouldClearData:(BOOL)isShouldClearData//加载数据
 {
     
-//        [[LoCationManager shareInstance] creatLocationManager];
-//        [LoCationManager shareInstance].callBackLocation = ^(CLLocationCoordinate2D location)
-//        {
+        [[LoCationManager shareInstance] creatLocationManager];
+        [LoCationManager shareInstance].callBackLocation = ^(CLLocationCoordinate2D location)
+        {
     //            测试用,要删掉
-    CLLocationCoordinate2D location;
-    location.latitude=24.491534;
-    location.longitude=118.180851;
+//    CLLocationCoordinate2D location;
+//    location.latitude=24.491534;
+//    location.longitude=118.180851;
             if (self.nearByManArr.count==0) {
                 [[ToolManager shareInstance] showWithStatus];
             }
@@ -228,7 +228,7 @@
         
     }];
     
-//        };
+        };
     
     
     
@@ -550,7 +550,7 @@
 //滑动隐藏导航栏 LiXingLe
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    
+
     if (scrollView.contentOffset.y>0&&scrollView.contentOffset.y-OffsetY>20)   {
         if (self.bottomView.y==(APPHEIGHT-self.bottomView.height)) {
             _yrTab.frame=CGRectMake(0,StatusBarHeight, APPWIDTH, APPHEIGHT-StatusBarHeight);
@@ -566,7 +566,7 @@
         }
                OffsetY=scrollView.contentOffset.y;
     }
-    else if (scrollView.contentOffset.y>0&&scrollView.contentOffset.y-OffsetY<-20)
+    else if (scrollView.contentOffset.y<(scrollView.contentSize.height-scrollView.height)&&scrollView.contentOffset.y-OffsetY<-20)
     {
          if (self.bottomView.y==APPHEIGHT) {
 
