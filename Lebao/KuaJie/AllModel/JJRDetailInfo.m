@@ -7,6 +7,7 @@
 //
 
 #import "JJRDetailInfo.h"
+#import "XLDataService.h"
 @interface JJRDetailInfo ()
 
 @property AFHTTPRequestOperationManager *manager;
@@ -42,38 +43,35 @@
     NSMutableDictionary *parameters =  [Parameter parameterWithSessicon];
     
     if (city_ID || city_ID == 0) {
-//        dic = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%d",pageNub],@"page",userName,@"username",passWord,@"password",[NSString stringWithFormat:@"%d",city_ID],@"cityid",type,@"type",nil];
+        //        dic = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%d",pageNub],@"page",userName,@"username",passWord,@"password",[NSString stringWithFormat:@"%d",city_ID],@"cityid",type,@"type",nil];
         [parameters setValue:type forKey:@"type"];
         [parameters setValue:@(city_ID) forKey:@"cityid"];
         [parameters setValue:@(pageNub) forKey:@"page"];
-    
+        
     }else{
-//        dic = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%d",pageNub],@"page",userName,@"username",passWord,@"password",type,@"type",nil];
+        //        dic = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%d",pageNub],@"page",userName,@"username",passWord,@"password",type,@"type",nil];
         [parameters setValue:type forKey:@"type"];
         [parameters setValue:@(pageNub) forKey:@"page"];
     }
     [[ToolManager shareInstance]showWithStatus];
-    [self.manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [XLDataService postWithUrl:url param:parameters modelClass:nil responseBlock:^(id responseObject, NSError *error) {
         if ([[responseObject objectForKey:@"rtcode"] intValue]==1) {
-           
+            
             callback(YES,nil,[responseObject objectForKey:@"datas"]);
         }else
         {
             callback(NO,[responseObject objectForKey:@"rtmsg"],nil);
         }
         
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//        NSLog(@"查找更多经纪人列表错误error==%@",error);
-        callback(NO,@"请检查您的网络",nil);
-    }];
+    } ];
 }
 -(void)getJJRDetailWithJjrId:(NSString *)jjrID andCallBack:(JjrDetailCallbackType2)callback
 {
     NSString * url = [NSString stringWithFormat:@"%@broker/agentdetail",HOST_URL];
-     NSMutableDictionary *parameters =  [Parameter parameterWithSessicon];
+    NSMutableDictionary *parameters =  [Parameter parameterWithSessicon];
     [parameters setValue:jjrID forKey:@"id"];
     [[ToolManager shareInstance]showWithStatus];
-    [self.manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [XLDataService postWithUrl:url param:parameters modelClass:nil responseBlock:^(id responseObject, NSError *error) {
         if ([[responseObject objectForKey:@"rtcode"] intValue]==1) {
             [[ToolManager shareInstance]dismiss];
             callback(YES,nil,responseObject);
@@ -82,11 +80,8 @@
             callback(NO,[responseObject objectForKey:@"rtmsg"],nil);
         }
         
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//        NSLog(@"经纪人详情错误error==%@",error);
-        callback(NO,@"请检查您的网络",nil);
     }];
-
+    
 }
 -(void)getMoreFuwuWithID:(NSString *)jjrid andPage:(int)page andCallBack:(JjrDetailCallbackType1)callback
 {
@@ -96,7 +91,7 @@
     [parameters setValue:jjrid forKey:@"id"];
     [parameters setValue:@(page) forKey:@"page"];
     [[ToolManager shareInstance]showWithStatus];
-    [self.manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [XLDataService postWithUrl:url param:parameters modelClass:nil responseBlock:^(id responseObject, NSError *error) {
         if ([[responseObject objectForKey:@"rtcode"] intValue]==1) {
             
             callback(YES,nil,[responseObject objectForKey:@"datas"]);
@@ -105,11 +100,8 @@
             callback(NO,[responseObject objectForKey:@"rtmsg"],nil);
         }
         
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//        NSLog(@"经纪人详情错误error==%@",error);
-        callback(NO,@"请检查您的网络",nil);
     }];
-
+    
 }
 -(void)getMoreXianSuoWithID:(NSString *)jjrid andPage:(int)page andCallBack:(JjrDetailCallbackType1)callback
 {
@@ -119,7 +111,7 @@
     [parameters setValue:jjrid forKey:@"id"];
     [parameters setValue:@(page) forKey:@"page"];
     [[ToolManager shareInstance]showWithStatus];
-    [self.manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [XLDataService postWithUrl:url param:parameters modelClass:nil responseBlock:^(id responseObject, NSError *error) {
         if ([[responseObject objectForKey:@"rtcode"] intValue]==1) {
             [[ToolManager shareInstance]dismiss];
             callback(YES,nil,[responseObject objectForKey:@"datas"]);
@@ -128,10 +120,7 @@
             callback(NO,[responseObject objectForKey:@"rtmsg"],nil);
         }
         
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//        NSLog(@"经纪人详情错误error==%@",error);
-        callback(NO,@"请检查您的网络",nil);
     }];
-
+    
 }
 @end

@@ -16,6 +16,9 @@
     if ([CoreArchive strForKey:KuserName]&&[CoreArchive strForKey:passWord]) {
         [parameter setObject:[CoreArchive strForKey:KuserName] forKey:KuserName];
         [parameter setObject:[CoreArchive strForKey:passWord] forKey:passWord];
+        if ([CoreArchive strForKey:DeviceToken]) {
+            [parameter setObject:[CoreArchive strForKey:DeviceToken] forKey:@"channelid"];
+        }
     }
     
     
@@ -30,7 +33,7 @@
     }
     else
     {
-       
+        
         return NO;
     }
     
@@ -58,16 +61,16 @@
 {
     NSString *str= @"other";
     if ([industry isEqualToString:@"保险"]) {
-      
+        
         str =@"insurance";
     }
     if ([industry isEqualToString:@"金融"]) {
-     
-          str =@"finance";
+        
+        str =@"finance";
     }
     if ([industry isEqualToString:@"房产"]) {
-     
-          str =@"property";
+        
+        str =@"property";
     }
     if ([industry isEqualToString:@"车行"]) {
         str =@"car";
@@ -111,6 +114,6 @@
     }
     
     return str;
-
+    
 }
 @end

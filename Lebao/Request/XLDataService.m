@@ -8,18 +8,40 @@
 
 #import "XLDataService.h"
 #import "AFNetworking.h"
-
+#import "BaseModal.h"
+#import "ToolManager.h"
 static id dataObj;
-
+static XLDataService *xLDataService;
+static UIAlertView *letout;
+@interface XLDataService()<UIAlertViewDelegate>
+@end
 @implementation XLDataService
 
+
 + (void)getWithUrl:(NSString *)url param:(id)param modelClass:(Class)modelClass responseBlock:(responseBlock)responseDataBlock {
-        [XLNetworkRequest getRequest:url params:param success:^(id responseObj) {
-        //数组、字典转化为模型数组
-           
-        dataObj = [self modelTransformationWithResponseObj:responseObj modelClass:modelClass];
-        responseDataBlock(dataObj, nil);
+    [XLNetworkRequest getRequest:url params:param success:^(id responseObj) {
         
+        BaseModal *model = [BaseModal mj_objectWithKeyValues:responseObj];
+        //登录退出
+        if (model.rtcode ==2) {
+            [[ToolManager shareInstance] dismiss];
+            
+            if (!letout) {
+                if (!xLDataService) {
+                    xLDataService = [[self alloc] init];
+                }
+                letout = [[UIAlertView alloc]initWithTitle:@"被迫退出" message:@"您的帐号在别处已登陆！" delegate:xLDataService cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                
+            }
+            [letout show];
+        }
+        else
+        {
+            if (responseObj) {
+                dataObj = [self modelTransformationWithResponseObj:responseObj modelClass:modelClass];
+            }
+            responseDataBlock(dataObj, nil);
+        }
     } failure:^(NSError *error) {
         
         responseDataBlock(nil, error);
@@ -27,14 +49,31 @@ static id dataObj;
 }
 
 + (void)postWithUrl:(NSString *)url param:(id)param modelClass:(Class)modelClass responseBlock:(responseBlock)responseDataBlock {
-       
-       [XLNetworkRequest postRequest:url params:param success:^(id responseObj) {
-           if (responseObj) {
-               dataObj = [self modelTransformationWithResponseObj:responseObj modelClass:modelClass];
-           }
+    
+    [XLNetworkRequest postRequest:url params:param success:^(id responseObj) {
         
-           
-        responseDataBlock(dataObj, nil);
+        BaseModal *model = [BaseModal mj_objectWithKeyValues:responseObj];
+        
+        //登录退出
+        if (model.rtcode ==2) {
+            [[ToolManager shareInstance] dismiss];
+            
+            if (!letout) {
+                if (!xLDataService) {
+                    xLDataService = [[self alloc] init];
+                }
+                letout = [[UIAlertView alloc]initWithTitle:@"被迫退出" message:@"您的帐号在别处已登陆！" delegate:xLDataService cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                
+            }
+            [letout show];
+        }
+        else
+        {
+            if (responseObj) {
+                dataObj = [self modelTransformationWithResponseObj:responseObj modelClass:modelClass];
+            }
+            responseDataBlock(dataObj, nil);
+        }
     } failure:^(NSError *error) {
         
         responseDataBlock(nil, error);
@@ -42,11 +81,30 @@ static id dataObj;
 }
 
 + (void)putWithUrl:(NSString *)url param:(id)param modelClass:(Class)modelClass responseBlock:(responseBlock)responseDataBlock {
-
-        [XLNetworkRequest putRequest:url params:param success:^(id responseObj) {
+    
+    [XLNetworkRequest putRequest:url params:param success:^(id responseObj) {
         
-        dataObj = [self modelTransformationWithResponseObj:responseObj modelClass:modelClass];
-        responseDataBlock(dataObj, nil);
+        BaseModal *model = [BaseModal mj_objectWithKeyValues:responseObj];
+        //登录退出
+        if (model.rtcode ==2) {
+            [[ToolManager shareInstance] dismiss];
+            
+            if (!letout) {
+                if (!xLDataService) {
+                    xLDataService = [[self alloc] init];
+                }
+                letout = [[UIAlertView alloc]initWithTitle:@"被迫退出" message:@"您的帐号在别处已登陆！" delegate:xLDataService cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                
+            }
+            [letout show];
+        }
+        else
+        {
+            if (responseObj) {
+                dataObj = [self modelTransformationWithResponseObj:responseObj modelClass:modelClass];
+            }
+            responseDataBlock(dataObj, nil);
+        }
     } failure:^(NSError *error) {
         
         responseDataBlock(nil, error);
@@ -55,25 +113,49 @@ static id dataObj;
 
 + (void)deleteWithUrl:(NSString *)url param:(id)param modelClass:(Class)modelClass responseBlock:(responseBlock)responseDataBlock {
     
-        [XLNetworkRequest deleteRequest:url params:param success:^(id responseObj) {
+    [XLNetworkRequest deleteRequest:url params:param success:^(id responseObj) {
         
-        dataObj = [self modelTransformationWithResponseObj:responseObj modelClass:modelClass];
-        responseDataBlock(dataObj, nil);
+        BaseModal *model = [BaseModal mj_objectWithKeyValues:responseObj];
+        //登录退出
+        if (model.rtcode ==2) {
+            [[ToolManager shareInstance] dismiss];
+            
+            if (!letout) {
+                if (!xLDataService) {
+                    xLDataService = [[self alloc] init];
+                }
+                letout = [[UIAlertView alloc]initWithTitle:@"被迫退出" message:@"您的帐号在别处已登陆！" delegate:xLDataService cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                
+            }
+            [letout show];
+        }
+        else
+        {
+            if (responseObj) {
+                dataObj = [self modelTransformationWithResponseObj:responseObj modelClass:modelClass];
+            }
+            responseDataBlock(dataObj, nil);
+        }
     } failure:^(NSError *error) {
         
         responseDataBlock(nil, error);
     }];
 }
 
+
 /**
  数组、字典转化为模型
  */
 + (id)modelTransformationWithResponseObj:(id)responseObj modelClass:(Class)modelClass {
     
-  
+    
     return responseObj;
 }
 
-
-
+#pragma mark
+#pragma mark - UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    [[ToolManager shareInstance] enterLoginView];
+}
 @end
