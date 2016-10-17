@@ -31,7 +31,7 @@ static UIAlertView *letout;
                 if (!xLDataService) {
                     xLDataService = [[self alloc] init];
                 }
-                letout = [[UIAlertView alloc]initWithTitle:@"被迫退出" message:@"您的帐号在别处已登陆！" delegate:xLDataService cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                letout = [[UIAlertView alloc]initWithTitle:@"帐号异常" message:model.rtmsg delegate:xLDataService cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
                 
             }
             [letout show];
@@ -64,7 +64,7 @@ static UIAlertView *letout;
                 if (!xLDataService) {
                     xLDataService = [[self alloc] init];
                 }
-                letout = [[UIAlertView alloc]initWithTitle:@"被迫退出" message:@"您的帐号在别处已登陆！" delegate:xLDataService cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                letout = [[UIAlertView alloc]initWithTitle:@"帐号异常" message:model.rtmsg delegate:xLDataService cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
                 
             }
             [letout show];
@@ -96,7 +96,7 @@ static UIAlertView *letout;
                 if (!xLDataService) {
                     xLDataService = [[self alloc] init];
                 }
-                letout = [[UIAlertView alloc]initWithTitle:@"被迫退出" message:@"您的帐号在别处已登陆！" delegate:xLDataService cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                letout = [[UIAlertView alloc]initWithTitle:@"帐号异常" message:model.rtmsg delegate:xLDataService cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
                 
             }
             [letout show];
@@ -128,7 +128,7 @@ static UIAlertView *letout;
                 if (!xLDataService) {
                     xLDataService = [[self alloc] init];
                 }
-                letout = [[UIAlertView alloc]initWithTitle:@"被迫退出" message:@"您的帐号在别处已登陆！" delegate:xLDataService cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                letout = [[UIAlertView alloc]initWithTitle:@"帐号异常" message:model.rtmsg delegate:xLDataService cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
                 
             }
             [letout show];
