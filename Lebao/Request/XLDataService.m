@@ -24,7 +24,7 @@ static UIAlertView *letout;
         BaseModal *model = [BaseModal mj_objectWithKeyValues:responseObj];
         //登录退出
         if (model.rtcode ==2) {
-            responseDataBlock(dataObj, nil);
+            responseDataBlock(responseObj, nil);
             [[ToolManager shareInstance] dismiss];
             
             if (!letout) {
@@ -57,7 +57,7 @@ static UIAlertView *letout;
         
         //登录退出
         if (model.rtcode ==2) {
-            responseDataBlock(dataObj, nil);
+            responseDataBlock(responseObj, nil);
             [[ToolManager shareInstance] dismiss];
             
             if (!letout) {
@@ -89,7 +89,7 @@ static UIAlertView *letout;
         BaseModal *model = [BaseModal mj_objectWithKeyValues:responseObj];
         //登录退出
         if (model.rtcode ==2) {
-            responseDataBlock(dataObj, nil);
+            responseDataBlock(responseObj, nil);
             [[ToolManager shareInstance] dismiss];
             
             if (!letout) {
@@ -121,7 +121,7 @@ static UIAlertView *letout;
         BaseModal *model = [BaseModal mj_objectWithKeyValues:responseObj];
         //登录退出
         if (model.rtcode ==2) {
-            responseDataBlock(dataObj, nil);
+            responseDataBlock(responseObj, nil);
             [[ToolManager shareInstance] dismiss];
             
             if (!letout) {

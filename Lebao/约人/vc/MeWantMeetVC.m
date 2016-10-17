@@ -394,7 +394,6 @@
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"tableView  -----------");
     WantMeetTabCell *cell=[tableView dequeueReusableCellWithIdentifier:@"WMCell"];
     if (!cell) {
         cell=[[WantMeetTabCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"WMCell"];

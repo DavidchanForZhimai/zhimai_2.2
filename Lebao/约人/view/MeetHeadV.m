@@ -62,32 +62,30 @@
     bgImgV.frame=CGRectMake(0, 0, APPWIDTH, 200);
     [self.layer addSublayer:bgImgV];
     
-    CALayer *vlayer1=[[CALayer alloc]init];
-    vlayer1.shouldRasterize=YES;
-    vlayer1.frame=CGRectMake((bgImgV.frame.size.width-110)/2.0, (bgImgV.frame.size.height-110)/2.0, 110, 110);
-    vlayer1.backgroundColor=[UIColor colorWithWhite:1.000 alpha:0.18].CGColor;
-    vlayer1.cornerRadius=vlayer1.frame.size.width/2.0;
-    [bgImgV addSublayer:vlayer1];
-    _timer1 =[NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(shake:) userInfo:vlayer1 repeats:YES];
-    [[NSRunLoop currentRunLoop] addTimer:_timer1 forMode:UITrackingRunLoopMode];
-    CALayer *vlayer2=[[CALayer alloc]init];
-    vlayer2.shouldRasterize=YES;
-    vlayer2.frame=CGRectMake((bgImgV.frame.size.width-95)/2.0, (bgImgV.frame.size.height-95)/2.0, 95, 95);
-    vlayer2.backgroundColor=[UIColor colorWithWhite:1.000 alpha:0.18].CGColor;
-    vlayer2.cornerRadius=vlayer2.frame.size.width/2.0;
-    [bgImgV addSublayer:vlayer2];
-    _timer2 =[NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(shake:) userInfo:vlayer2 repeats:YES];
-    [[NSRunLoop currentRunLoop] addTimer:_timer2 forMode:UITrackingRunLoopMode];
-    CALayer *vlayer3=[[CALayer alloc]init];
-    vlayer3.shouldRasterize=YES;
-    vlayer3.frame=CGRectMake((bgImgV.frame.size.width-80)/2.0, (bgImgV.frame.size.height-80)/2.0, 80, 80);
-    vlayer3.backgroundColor=[UIColor colorWithWhite:1.000 alpha:0.18].CGColor;
-    vlayer3.cornerRadius=vlayer3.frame.size.width/2.0;
-    [bgImgV addSublayer:vlayer3];
-    _timer3 =[NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(shake:) userInfo:vlayer3 repeats:YES];
-    [[NSRunLoop currentRunLoop] addTimer:_timer3 forMode:UITrackingRunLoopMode];
-    
-    
+    _vlayer1=[[CALayer alloc]init];
+    _vlayer1.shouldRasterize=YES;
+    _vlayer1.frame=CGRectMake((bgImgV.frame.size.width-110)/2.0, (bgImgV.frame.size.height-110)/2.0, 110, 110);
+    _vlayer1.backgroundColor=[UIColor colorWithWhite:1.000 alpha:0.18].CGColor;
+    _vlayer1.cornerRadius=_vlayer1.frame.size.width/2.0;
+    [bgImgV addSublayer:_vlayer1];
+
+    _vlayer2=[[CALayer alloc]init];
+    _vlayer2.shouldRasterize=YES;
+    _vlayer2.frame=CGRectMake((bgImgV.frame.size.width-95)/2.0, (bgImgV.frame.size.height-95)/2.0, 95, 95);
+    _vlayer2.backgroundColor=[UIColor colorWithWhite:1.000 alpha:0.18].CGColor;
+    _vlayer2.cornerRadius=_vlayer2.frame.size.width/2.0;
+    [bgImgV addSublayer:_vlayer2];
+
+    _vlayer3=[[CALayer alloc]init];
+    _vlayer3.shouldRasterize=YES;
+    _vlayer3.frame=CGRectMake((bgImgV.frame.size.width-80)/2.0, (bgImgV.frame.size.height-80)/2.0, 80, 80);
+    _vlayer3.backgroundColor=[UIColor colorWithWhite:1.000 alpha:0.18].CGColor;
+    _vlayer3.cornerRadius=_vlayer3.frame.size.width/2.0;
+    [bgImgV addSublayer:_vlayer3];
+
+    [self shakeToShow:_vlayer1];
+    [self shakeToShow:_vlayer2];
+    [self shakeToShow:_vlayer3];
     
     CALayer *underView=[[CALayer alloc]init];
     underView.frame=CGRectMake(0, CGRectGetMaxY(bgImgV.frame), APPWIDTH, 44);
@@ -282,7 +280,6 @@
 
 -(void)midBtnClick:(UIButton *)sender
 {
-    [self shakeToShow:sender];
     
     if ([self.delegate respondsToSelector:@selector(pushView:userInfo:)]&&[self.delegate conformsToProtocol:@protocol(MeetHeadVDelegate)]) {
         [_delegate pushView:allocAndInit(CanmeetTabVC) userInfo:nil];
@@ -300,28 +297,12 @@
 
 
 
-- (void) shakeToShow:(UIView*)aView//放大缩小动画
-{
-    CAKeyframeAnimation* animation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
-    animation.duration = 0.5;
-    
-    NSMutableArray *values = [NSMutableArray array];
-    [values addObject:[NSValue valueWithCATransform3D:CATransform3DMakeScale(0.1, 0.1, 1.0)]];
-    [values addObject:[NSValue valueWithCATransform3D:CATransform3DMakeScale(1.2, 1.2, 1.0)]];
-    [values addObject:[NSValue valueWithCATransform3D:CATransform3DMakeScale(0.9, 0.9, 1.0)]];
-    [values addObject:[NSValue valueWithCATransform3D:CATransform3DMakeScale(1.0, 1.0, 1.0)]];
-    animation.values = values;
-    [aView.layer addAnimation:animation forKey:nil];
-}
-
-
-- (void) shake:(NSTimer*)timer
+- (void) shakeToShow:(CALayer *)clayer
 {
     
-    CALayer *clayer = (CALayer *)timer.userInfo;
     CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
     animation.duration = 3.0;
-    animation.repeatCount = 1;
+    animation.repeatCount = CGFLOAT_MAX;
     animation.autoreverses = NO;
     animation.fromValue = [NSNumber numberWithFloat:1.1];
     animation.toValue = [NSNumber numberWithFloat:1.9];
@@ -334,11 +315,10 @@
     _anim1.timingFunction= [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     _anim1.repeatCount= CGFLOAT_MAX;
     _anim1.autoreverses= NO;
-    
     [clayer addAnimation:_anim1 forKey:nil];
     
-    _anim1 = nil;
-    
+    _anim1=nil;
+    animation=nil;
 }
 
 

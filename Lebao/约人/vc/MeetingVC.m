@@ -44,6 +44,11 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(refreshRow:) name:@"KRefreshMeetingViewNotifation" object:nil];
     
     [self netWorkHearViewIsShouldClearData:YES];
+    if (_headView) {
+        [self.headView shakeToShow:self.headView.vlayer1];
+        [self.headView shakeToShow:self.headView.vlayer2];
+        [self.headView shakeToShow:self.headView.vlayer3];
+    }
     
 }
 -(void)refreshRow:(NSNotification *)notification
@@ -229,9 +234,7 @@
     }];
     
         };
-    
-    
-    
+
 }
 
 -(void)addYrBtn
@@ -457,7 +460,7 @@
         [XLDataService putWithUrl:meetCheckedURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
 //                    NSLog(@"param====%@",param);
             if (dataObj) {
-//                         NSLog(@"meetObj====%@",dataObj);
+                         NSLog(@"me33333333333etObj====%@",dataObj);
                 MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
                 if (modal.rtcode ==1) {
                     [[ToolManager shareInstance] dismiss];
@@ -584,7 +587,10 @@
         OffsetY=scrollView.contentOffset.y;
     }
 }
-
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
