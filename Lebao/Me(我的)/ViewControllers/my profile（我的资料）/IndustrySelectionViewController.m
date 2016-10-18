@@ -9,7 +9,7 @@
 #import "IndustrySelectionViewController.h"
 #import "XLDataService.h"
 
-#define IndustryURL [NSString stringWithFormat:@"%@user/industry",HttpURL]
+
 #define SaveIndustryURL [NSString stringWithFormat:@"%@user/save-industry",HttpURL]
 
 @interface IndustrySelectionViewController()<UITableViewDelegate,UITableViewDataSource>
@@ -36,7 +36,7 @@
         if (saveIndustry_label&&![saveIndustry_label[@"full_number"] isEqualToString:@""]) {
             if (weakSelf.editBlock) {
                 
-               [weakSelf netWorkIsSave:YES];
+               [weakSelf netWork];
                 
             }
         }
@@ -56,55 +56,47 @@
     industry = [NSMutableArray new];
     industrySon_label = [NSMutableArray new];
     saveIndustry_label = [NSDictionary new];
-    [self netWorkIsSave:NO];
+    if (_dataObj) {
+        [self setdata:_dataObj];
+    }
+}
+- (void)setdata:(id)dataObj
+{
+ 
+    NSArray *industryDic= dataObj[@"industry_label"];
+    for (id value in industryDic) {
+        if ([value isKindOfClass:[NSDictionary class]]) {
+            
+            [industry_label addObject:value];
+            
+        }
+    }
+    [tableV1 reloadData];
+    [tableV2 reloadData];
+    if (industry_label.count>0) {
+        //选中tableV1的第一行
+        [self tableView:tableV1 didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+        [tableV1 selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionTop];
+    }
+ 
 }
 #pragma mark
 #pragma mark netWork
-- (void)netWorkIsSave:(BOOL )isSave
+- (void)netWork
 {
     NSMutableDictionary *parame = [Parameter parameterWithSessicon];
-    NSString *url =@"";
-    if (isSave) {
-        url = SaveIndustryURL;
-//        NSLog(@"saveIndustry_label =%@",saveIndustry_label);
-        [parame setValue:saveIndustry_label[@"code"] forKey:@"industry"];
-        [[ToolManager shareInstance] showWithStatus:@"保存行业..."];
-    }
-    else
-    {
-        url = IndustryURL;
-    [[ToolManager shareInstance] showWithStatus];
-        
-    }
-    
-    [XLDataService postWithUrl:url param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-//        NSLog(@"parame =%@ data = %@ ",parame,dataObj);
+  
+    [parame setValue:saveIndustry_label[@"code"] forKey:@"industry"];
+    [[ToolManager shareInstance] showWithStatus:@"保存行业..."];
+   
+    [XLDataService postWithUrl:SaveIndustryURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+
         if (dataObj) {
             if ([dataObj[@"rtcode"] intValue] ==1) {
                 [[ToolManager shareInstance] dismiss];
-                
-                if (isSave) {
-                    self.editBlock(saveIndustry_label[@"name"]);
-                    PopView(self);
-                }
-                else{
-                NSArray *industryDic= dataObj[@"industry_label"];
-                for (id value in industryDic) {
-                    if ([value isKindOfClass:[NSDictionary class]]) {
-                      
-                        [industry_label addObject:value];
-                        
-                    }
-                }
-                [tableV1 reloadData];
-                [tableV2 reloadData];
-                if (industry_label.count>0) {
-                    //选中tableV1的第一行
-                    [self tableView:tableV1 didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-                    [tableV1 selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionTop];
-                }
-                }
-
+       
+                self.editBlock(saveIndustry_label[@"name"]);
+                PopView(self);
                 
             }
             else

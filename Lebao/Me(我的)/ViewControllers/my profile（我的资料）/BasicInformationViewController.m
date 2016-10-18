@@ -22,7 +22,7 @@
 #define MininumTagWidth (APPWIDTH - 120)/5.0
 #define MaxinumTagWidth (APPWIDTH - 20)
 
-
+#define IndustryURL [NSString stringWithFormat:@"%@user/industry",HttpURL]
 //获取位置详情 URL:appinterface/areainfo
 #define AreainfoURL [NSString stringWithFormat:@"%@common/area-ios",HttpURL]
 //我的URL ：appinterface/personal
@@ -68,6 +68,9 @@
 @property(nonatomic,strong)DWTagsView *currentTagsView;//当前的标签
 @property(nonatomic,copy)NSMutableArray *currentTagsArray;//当前的标签数组
 @property(nonatomic,copy)NSMutableArray *currentDefalutTagsArray;//当前的选择标签数组
+
+
+@property(nonatomic,strong)id industryData;
 @end
 
 @implementation BasicInfoModal
@@ -77,6 +80,8 @@
 @implementation BasicInformationViewController
 {
     float footerHeight;
+    NSString *hangye;
+    
 }
 
 
@@ -87,6 +92,7 @@
     footerHeight = 220;
     [self navView];
     [self mainView];
+    
 }
 
 #pragma mark - Navi_View
@@ -678,7 +684,7 @@
     [XLDataService postWithUrl:MemberURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
 //        NSLog(@"dataObj == %@",dataObj);
         if (dataObj) {
-            
+            [self netWork]; //请求行业
             _modal = [BasicInfoModal mj_objectWithKeyValues:dataObj];
             if (![_modal.mylabels isEqualToString:@""]) {
                 [self.personsTags addObjectsFromArray:[_modal.mylabels componentsSeparatedByString:@","]];
@@ -938,9 +944,14 @@
         break;
             
     case 2:
-            
-        [cell  showTitle:@"行业" icon:nil bg:nil detail:_modal.industry canEdit:YES];
+        {
+         NSString *str = @"";
+            if (hangye) {
+                str =  hangye ;
+            }
+         [cell  showTitle:@"行业" icon:nil bg:nil detail:str canEdit:YES];
             break;
+        }
     case 3:
         
         [cell  showTitle:@"从业年限" icon:nil bg:nil detail:_modal.workyears canEdit:YES];
@@ -948,7 +959,7 @@
     case 4:
         {
              NSString *focus =@"";
-            NSLog(@"_modal.focus_industrys =%@",_modal.focus_industrys);
+//            NSLog(@"_modal.focus_industrys =%@",_modal.focus_industrys);
             if (_modal.focus_industrys && ![_modal.focus_industrys isEqualToString:@""]) {
                 focus = [NSString stringWithFormat:@"%ld个",[_modal.focus_industrys componentsSeparatedByString:@"/"].count];
             }
@@ -1077,13 +1088,17 @@
                 
             case 2:
             {
+                if (!_industryData) {
+                    
+                    [[ToolManager shareInstance] showInfoWithStatus:@"没有获取到行业相关数据！"];
+                }
             
                 IndustrySelectionViewController *industrySelectionVC = [[IndustrySelectionViewController alloc]init];
-                
+                industrySelectionVC.dataObj = _industryData;
                 industrySelectionVC.editBlock = ^(NSString *text)
                 {
                     
-                    _modal.industry = text;
+                    hangye  = text;
                     [_basicInfoTableView reloadData];
                     
                 };
@@ -1127,6 +1142,47 @@
         
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark
+#pragma mark netWork
+- (void)netWork
+{
+    NSMutableDictionary *parame = [Parameter parameterWithSessicon];
+    
+  
+    [XLDataService postWithUrl:IndustryURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+        
+        if (dataObj) {
+            if ([dataObj[@"rtcode"] intValue] ==1) {
+                
+                _industryData = dataObj;
+                NSMutableArray *industry = dataObj[@"industrys"];
+                for (NSDictionary *dic in industry) {
+                    if ([dic[@"full_number"] isEqualToString:_modal.industry]) {
+                        
+                        hangye = dic[@"name"];
+                    }
+                }
+                [_basicInfoTableView reloadData];
+            }
+            else
+            {
+                
+                [[ToolManager shareInstance] showInfoWithStatus:dataObj[@"rtmsg"]];
+            }
+            
+        }
+        else
+        {
+            
+            [[ToolManager shareInstance] showInfoWithStatus];
+        }
+        
+        
+        
+    }];
+    
 }
 - (void)modity:(BasicInformationViewController *)weakSelf;
 {

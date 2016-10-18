@@ -29,7 +29,7 @@
             [enterButton setImage:image forState:UIControlStateNormal];
             [enterButton setImage:image forState:UIControlStateHighlighted];
             enterButton.bounds = CGRectMake(0, 0,image.size.width/2.0, image.size.height/2.0);
-            enterButton.center = CGPointMake(APPWIDTH * 0.5, APPHEIGHT- image.size.height);
+            enterButton.center = CGPointMake(APPWIDTH * 0.5, 0.89*APPHEIGHT);
         }];
         
     }else{

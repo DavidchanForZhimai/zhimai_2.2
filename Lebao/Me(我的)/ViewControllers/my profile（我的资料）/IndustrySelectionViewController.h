@@ -10,4 +10,5 @@
 typedef void (^EditBlock)(NSString *text);
 @interface IndustrySelectionViewController : BaseViewController
 @property(nonatomic,copy)EditBlock editBlock;
+@property(nonatomic,strong)id dataObj;
 @end
