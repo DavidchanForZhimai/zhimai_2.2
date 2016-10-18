@@ -18,17 +18,18 @@
     BOOL canShow = [CoreNewFeatureVC canShowNewFeature];
     
     //测试代码，正式版本应该删除
-    //    canShow = YES;
+//    canShow = YES;
+   UIImage *image =  [UIImage imageNamed:@"btn_nor"];
     if(canShow){ // 初始化新特性界面
         self.window.rootViewController = [CoreNewFeatureVC newFeatureVCWithImageNames:@[@"new_feature_1_736h",@"new_feature_2_736h",@"new_feature_3_736h"] enterBlock:^{
             
             [self enter];
             
         } configuration:^(UIButton *enterButton) { // 配置进入按钮
-            [enterButton setImage: [UIImage imageNamed:@"btn_nor"] forState:UIControlStateNormal];
-            [enterButton setImage:[UIImage imageNamed:@"btn_pressed"] forState:UIControlStateHighlighted];
-            enterButton.bounds = CGRectMake(0, 0, 212/2.0, 48.0/2.0);
-            enterButton.center = CGPointMake(APPWIDTH * 0.5, APPHEIGHT* 0.92);
+            [enterButton setImage:image forState:UIControlStateNormal];
+            [enterButton setImage:image forState:UIControlStateHighlighted];
+            enterButton.bounds = CGRectMake(0, 0,image.size.width/2.0, image.size.height/2.0);
+            enterButton.center = CGPointMake(APPWIDTH * 0.5, APPHEIGHT- image.size.height);
         }];
         
     }else{
