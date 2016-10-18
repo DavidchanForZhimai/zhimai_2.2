@@ -71,8 +71,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:YES];
-    
-    
+    [self netWork];
 }
 
 
@@ -83,7 +82,7 @@
     _allArr=[[NSMutableArray alloc]init];
     
     [self creatUI];
-    [self netWork];
+    
 }
 -(void)creatUI{
 
@@ -105,7 +104,7 @@
 
 - (void)netWork//加载数据
 {
-    
+    [_allArr removeAllObjects];
     NSMutableDictionary *param = [Parameter parameterWithSessicon];
     if (self.allArr.count==0) {
         [[ToolManager shareInstance] showWithStatus];

@@ -106,7 +106,9 @@
     if (!_messageBtn) {
         _messageBtn=[UIButton buttonWithType:UIButtonTypeCustom];
         [_messageBtn setImage:[UIImage imageNamed:@"duihua"] forState:UIControlStateNormal];
+        _messageBtn.titleLabel.font=[UIFont systemFontOfSize:14];
         _messageBtn.layer.cornerRadius=15;
+        [_messageBtn setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
         [_messageBtn addTarget:self action:@selector(messageBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     

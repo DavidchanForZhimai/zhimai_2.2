@@ -39,4 +39,5 @@
 @property(nonatomic,assign)int isappoint;//是否邀请了
 @property(nonatomic,strong)NSString* tel;//是否邀请了
 @property(nonatomic,strong)NSString* evaluate;//是否评价了
+@property(nonatomic,assign)int relation;//是否添加好友
 @end

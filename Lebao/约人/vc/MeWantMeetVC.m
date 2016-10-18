@@ -469,7 +469,7 @@
     NSLog(@"我想约见打电话");
     clickRow=indexPath;
 
-    WantMeetLayout *layout=self.agreeArr[clickRow.row];
+    WantMeetLayout *layout=self.agreeArr[indexPath.row];
     if (layout.model.tel&&layout.model.tel!=nil) {
         
         UIAlertView *alertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"是否要拨打电话%@",layout.model.tel] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
@@ -534,7 +534,7 @@
 {
     GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
     talk.talkType = GJGCChatFriendTalkTypePrivate;
-    WantMeetLayout *layout=self.agreeArr[clickRow.row];
+    WantMeetLayout *layout=self.agreeArr[indexPath.row];
     talk.toId = layout.model.userid;
     talk.toUserName = layout.model.realname;
     
@@ -596,6 +596,10 @@
     MeetingData *data = layout.model;
     myDetialViewCT.userID=data.userid;
     [self.navigationController pushViewController:myDetialViewCT animated:YES];
+}
+-(void)dealloc
+{
+    [[MP3PlayerManager shareInstance]stopPlayer];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

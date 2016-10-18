@@ -66,13 +66,16 @@
         
         //职业
         LWTextStorage* industryTextStorage = [[LWTextStorage alloc] init];
-        if (model.position&&model.position.length>0) {
+        
+        if (model.position.length>0) {
             industryTextStorage.text =[NSString stringWithFormat:@"%@  ",model.position];
         }
-        if (model.workyears&&model.workyears.length>0) {
+        else{
+            industryTextStorage.text=@"";
+        }
+        if (model.workyears>0) {
             industryTextStorage.text=[NSString stringWithFormat:@"%@从业%@年",industryTextStorage.text,model.workyears];
         }
-        
         
         industryTextStorage.textColor = [UIColor colorWithRed:0.549 green:0.5569 blue:0.5608 alpha:1.0];
         industryTextStorage.font = Size(24.0);

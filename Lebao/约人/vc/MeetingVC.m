@@ -460,7 +460,6 @@
         [XLDataService putWithUrl:meetCheckedURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
 //                    NSLog(@"param====%@",param);
             if (dataObj) {
-                         NSLog(@"me33333333333etObj====%@",dataObj);
                 MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
                 if (modal.rtcode ==1) {
                     [[ToolManager shareInstance] dismiss];

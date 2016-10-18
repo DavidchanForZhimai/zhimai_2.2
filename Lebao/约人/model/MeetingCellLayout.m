@@ -63,13 +63,17 @@
         
         //职业
         LWTextStorage* industryTextStorage = [[LWTextStorage alloc] init];
-        if (model.position&&model.position.length>0) {
+
+        if (model.position.length>0) {
             industryTextStorage.text =[NSString stringWithFormat:@"%@  ",model.position];
         }
-        if (model.workyears&&model.workyears.length>0) {
+        else{
+            industryTextStorage.text=@"";
+        }
+        if (model.workyears>0) {
             industryTextStorage.text=[NSString stringWithFormat:@"%@从业%@年",industryTextStorage.text,model.workyears];
         }
-
+        
         
         industryTextStorage.textColor = [UIColor colorWithRed:0.549 green:0.5569 blue:0.5608 alpha:1.0];
         industryTextStorage.font = Size(24.0);
@@ -90,7 +94,14 @@
         _meetBtnRect = CGRectMake(APPWIDTH-70, 20, 60, 30);
         }
         if (messageBtn) {
-            _messageBtnRect=CGRectMake(APPWIDTH-50, 20, 30, 30);
+//            if (model.relation==0) {
+//                _messageBtnRect=CGRectMake(APPWIDTH-50, 20, 30, 30);
+//            }else if (model.relation==1) {
+//                _messageBtnRect = CGRectMake(APPWIDTH-70, 20, 60, 30);
+//            }else if (model.relation==3) {
+                _messageBtnRect = CGRectMake(APPWIDTH-70, 20, 60, 30);
+//            }
+            
         }
         
         if (oprationBtn) {
