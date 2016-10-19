@@ -14,5 +14,6 @@
 @property(nonatomic,strong)NSString *imageurl;
 @property(nonatomic,assign)BOOL isNoEdit;
 @property(nonatomic,strong)UIImage *shareImage;
+@property(nonatomic,strong)NSString *nav_title;
 @end
 

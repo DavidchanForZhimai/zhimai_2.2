@@ -270,7 +270,6 @@
         else
         {
             
-           
             CooperateView *cooperateView = [[CooperateView alloc]initAlertViewWithFrame:CGRectMake(20, 0, APPWIDTH - 40, APPHEIGHT) LogFieldDefaultText:@"想说点什么吗？" andSuperView:self.view];
             cooperateView.titleStr=@"分享到动态";
             cooperateView.center = self.view.center;
@@ -284,7 +283,6 @@
                 
                 [[ToolManager shareInstance] showWithStatus];
                 [XLDataService postWithUrl:DynamicWriteURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-                    NSLog(@"data =%@ parame=%@",dataObj,parame);
                     if (dataObj) {
                         if ([dataObj[@"rtcode"] integerValue] ==1) {
                             
@@ -379,6 +377,7 @@
         detail.ID =_modal.ID;
         detail.uid =_modal.uid;
         detail.imageurl = _modal.imgurl;
+        detail.nav_title = _modal.title;
         PushView(self, detail);
     }
     else

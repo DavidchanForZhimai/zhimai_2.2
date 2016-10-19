@@ -9,6 +9,7 @@
 #import "DWActionSheetView.h"
 #import "ToolManager.h"
 #import "UILabel+Extend.h"
+#import "BaseButton.h"
 #define kRowHeight 48.0f
 #define kRowLineHeight 0.5f
 #define kSeparatorHeight 5.0f
@@ -262,17 +263,41 @@
             [UILabel createLabelWithFrame:frame(0, offy - 5, width, 24*SpacedFonts) text:@"分享到" fontSize:24*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter inView:_actionSheetView];
             
             offy += 21;
+            NSArray *array;
+            float iconW = 0;
+            float iconX = 0;
+            if (_otherButtonTitles.count ==2) {
+                array = @[@"微信好友",@"朋友圈"];
+                iconW = APPWIDTH/(_otherButtonTitles.count+1);
+                iconX =iconW/3.0;
+            }
+           
+            if (_otherButtonTitles.count ==3) {
+                 array = @[@"知脉动态",@"微信好友",@"朋友圈"];
+                 iconW = APPWIDTH/_otherButtonTitles.count;
+                 iconX = 0;
+            }
+            
             for (int i = 0; i < _otherButtonTitles.count; i++)
             {
-                UIButton *btn = [[UIButton alloc] init];
+                UIImage *image = [UIImage imageNamed:_otherButtonTitles[i]];
+                NSString *title=@" ";
+                BaseButton *btn = [[BaseButton alloc] initWithFrame:frame(iconX + i*(iconW+iconX), offy, iconW, image.size.height + 15) setTitle:title titleSize:12 titleColor:LightBlackTitleColor backgroundImage:nil iconImage:image highlightImage:image setTitleOrgin:CGPointMake(image.size.height + 3, (iconW - title.length*12)/2.0 - image.size.height) setImageOrgin:CGPointMake(5, (iconW - image.size.height)/2.0) inView:_actionSheetView];
                 
-                btn.tag = i;
-                btn.backgroundColor = [UIColor whiteColor];
-
-                [btn setBackgroundImage:[UIImage imageNamed:_otherButtonTitles[i]] forState:UIControlStateNormal];
-                btn.frame = CGRectMake((width - 96*ScreenMultiple - 53*ScreenMultiple)/2 + (48 +53)*ScreenMultiple*i, offy, 48*ScreenMultiple, 48*ScreenMultiple);
-                btn.layer.cornerRadius = frameWidth(btn)/2.0;
-                btn.layer.masksToBounds =YES;
+             
+                __weak typeof(self) WeakSelf = self;
+                btn.didClickBtnBlock = ^
+                {
+                    int tag = i;
+                    if (_otherButtonTitles.count==3) {
+                        tag = i-1;
+                    }
+                    if (_selectShareViewRowBlock) {
+                        _selectShareViewRowBlock(WeakSelf,tag,_textView.text);
+                    }
+                    
+                    [WeakSelf dismiss];
+                };
                 [btn addTarget:self action:@selector(didSelectAction:) forControlEvents:UIControlEventTouchUpInside];
                 
                 [_actionSheetView addSubview:btn];
@@ -283,7 +308,7 @@
 
         }
         
-        offy += 22 + 48*ScreenMultiple;
+        offy += 80;
         _actionSheetHeight = offy;
         
         _actionSheetView.frame = CGRectMake(0, CGRectGetHeight(self.frame), CGRectGetWidth(self.frame), _actionSheetHeight);
@@ -310,6 +335,7 @@
     
     DWActionSheetView *actionSheetView = [[DWActionSheetView alloc] initShareViewWithTitle:title otherButtonTitles:otherButtonTitles handler:block];
     return actionSheetView;
+    
 }
 
 
@@ -333,11 +359,6 @@
         
         _selectRowBlock(self, index);
     }
-    
-    if (_selectShareViewRowBlock) {
-        _selectShareViewRowBlock(self,button.tag,_textView.text);
-    }
-    
     [self dismiss];
 }
 

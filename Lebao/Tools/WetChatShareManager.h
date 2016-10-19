@@ -21,6 +21,9 @@ typedef NS_ENUM(NSInteger,ShareType) {
 
 //邀请好友评价分享
 - (void)invateFriendShareTo:(NSString *)title desc:(NSString *)desc image:(UIImage *)image shareurl:(NSString *)url type:(ShareType)sharetype;
+
+//微信分享(知脉动态)
+- (void)shareToWeixinAndLocalApp:(NSString *)title desc:(NSString *)desc image:(UIImage *)image shareID:(NSString *)str isWxShareSucceedShouldNotice:(BOOL)isWxShareSucceedShouldNotice isAuthen:(BOOL)isAuthen InView:(UIViewController *)vc;
 //微信分享
 - (void)shareToWeixinApp:(NSString *)title desc:(NSString *)desc image:(UIImage *)image shareID:(NSString *)str isWxShareSucceedShouldNotice:(BOOL)isWxShareSucceedShouldNotice isAuthen:(BOOL)isAuthen;
 

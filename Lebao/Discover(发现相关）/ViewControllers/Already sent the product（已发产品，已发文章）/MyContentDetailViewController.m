@@ -54,7 +54,7 @@ typedef enum{
 //        [rightBtn addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
     
 //        [self navViewTitleAndBackBtn:@"文章详情" rightBtn:rightBtn];
-    [self navViewTitleAndBackBtn:@"文章详情"];
+    [self navViewTitleAndBackBtn:_nav_title];
     
 
 }
@@ -182,8 +182,8 @@ typedef enum{
     BaseButton *share = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 50, StatusBarHeight, 50, NavigationBarHeight) backgroundImage:nil iconImage:[UIImage imageNamed:@"icon_widelyspreaddetail_share"] highlightImage:nil inView:self.view];
     
     share.didClickBtnBlock = ^{
-
-     [[WetChatShareManager shareInstance] shareToWeixinApp:weakSelf.modal.datas.title desc:@"" image:weakSelf.shareImage  shareID:weakSelf.modal.datas.ID isWxShareSucceedShouldNotice:NO isAuthen:weakSelf.modal.datas.isgetclue];
+   
+     [[WetChatShareManager shareInstance] shareToWeixinAndLocalApp:weakSelf.modal.datas.title desc:@"" image:weakSelf.shareImage  shareID:weakSelf.modal.datas.ID isWxShareSucceedShouldNotice:NO isAuthen:weakSelf.modal.datas.isgetclue InView:self];
     };
 
 }
@@ -210,6 +210,7 @@ typedef enum{
         
     }else if (buttonIndex == 1) {
         
+  
         [[WetChatShareManager shareInstance] shareToWeixinApp: self.modal.datas.product_title desc:@"" image:_imageView.image  shareID: self.modal.datas.productid isWxShareSucceedShouldNotice:NO isAuthen: self.modal.datas.product_isgetclue];
     }
     

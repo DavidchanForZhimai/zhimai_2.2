@@ -15,6 +15,9 @@
 #import "WetChatAuthenManager.h"//微信授权
 #import "XLDataService.h"
 #import "DWActionSheetView.h"
+#import "CooperateView.h"
+#import "XLDataService.h"
+#define DynamicWriteURL [NSString stringWithFormat:@"%@dynamic/write",HttpURL]
 //红包文章/跨界传播 分享成功接口
 //URL:appinterface/wxsuccess
 #define Wxsuccess [NSString stringWithFormat:@"%@share/success",HttpURL]
@@ -260,18 +263,60 @@ static dispatch_once_t once;
             [parameter setObject:dic[@"value"] forKey:dic[@"key"]];
             
         }
-        [weakSelf shareToWeixinApp:title desc:desc image:image shareID:str isWxShareSucceedShouldNotice:isWxShareSucceedShouldNotice isLocalShare:YES localshareParme:parameter isAuthen:isAuthen];
+        [weakSelf shareToWeixinApp:title desc:desc image:image shareID:str isWxShareSucceedShouldNotice:isWxShareSucceedShouldNotice isLocalShare:YES localshareParme:parameter isAuthen:isAuthen isHaveLocalAppDTShare:NO InView:nil];
         
     }];
     _actionSheetView.tag =0;
 }
 #pragma mark
-#pragma mark 分享到微信
-- (void)shareToWeixinApp:(NSString *)title desc:(NSString *)desc  image:(UIImage *)image shareID:(NSString *)str isWxShareSucceedShouldNotice:(BOOL)isWxShareSucceedShouldNotice isLocalShare:(BOOL)isLocalShare localshareParme:(NSMutableDictionary *)shareparme isAuthen:(BOOL)isAuthen
+#pragma mark 分享到微信 (知脉App)
+- (void)shareToWeixinApp:(NSString *)title desc:(NSString *)desc  image:(UIImage *)image shareID:(NSString *)str isWxShareSucceedShouldNotice:(BOOL)isWxShareSucceedShouldNotice isLocalShare:(BOOL)isLocalShare localshareParme:(NSMutableDictionary *)shareparme isAuthen:(BOOL)isAuthen isHaveLocalAppDTShare:(BOOL)isHaveLocalAppDTShare InView:(UIViewController *)vc
 {
     _isWxShareSucceedShouldNotice = isWxShareSucceedShouldNotice;
-    DWActionSheetView *_actionSheetView =[DWActionSheetView showShareViewWithTitle:@"分享" otherButtonTitles:@[@"weixing",@"weixingpenyouquan"] handler:^(DWActionSheetView *actionSheetView, NSInteger buttonIndex, NSString *shareText) {
-        
+    NSArray *array =@[@"icon_weixin",@"icon_penyouquan"];
+    if (isHaveLocalAppDTShare) {
+       array = @[@"icon_zhimai",@"icon_weixin",@"icon_penyouquan"];
+    }
+    DWActionSheetView *_actionSheetView =[DWActionSheetView showShareViewWithTitle:@"分享" otherButtonTitles:array handler:^(DWActionSheetView *actionSheetView, NSInteger buttonIndex, NSString *shareText) {
+        //知脉动态
+        if (buttonIndex==-1) {
+            CooperateView *cooperateView = [[CooperateView alloc]initAlertViewWithFrame:CGRectMake(20, 0, APPWIDTH - 40, APPHEIGHT) LogFieldDefaultText:@"想说点什么吗？" andSuperView:vc.view];
+            cooperateView.titleStr=@"分享到动态";
+            cooperateView.center = vc.view.center ;
+            
+            cooperateView.sureblock = ^(CooperateView *customAlertView,NSString *logFieldText)
+            {
+                NSMutableDictionary *parame = [Parameter parameterWithSessicon];
+                if ([logFieldText isEqualToString:@"想说点什么吗？"]) {
+                    logFieldText = title;
+                }
+                [parame setValue:logFieldText forKey:@"content"];
+                [parame setValue:@"2" forKey:@"type"];
+                [parame setValue:str forKey:@"acid"];
+                
+                [[ToolManager shareInstance] showWithStatus];
+                [XLDataService postWithUrl:DynamicWriteURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+                    if (dataObj) {
+                        if ([dataObj[@"rtcode"] integerValue] ==1) {
+                            
+                            [[ToolManager shareInstance] showSuccessWithStatus:@"分享成功！"];
+                        }
+                        else
+                        {
+                            [[ToolManager shareInstance] showInfoWithStatus:dataObj[@"rtmsg"]];
+                        }
+                    }
+                    else
+                    {
+                        [[ToolManager shareInstance] showInfoWithStatus];
+                    }
+                    
+                    
+                }];
+                
+                
+            };
+        }
         if (![WXApi isWXAppInstalled]) {
             
             [[ToolManager shareInstance] showInfoWithStatus:@"未安装微信"];
@@ -355,9 +400,15 @@ static dispatch_once_t once;
     }];
     [_actionSheetView show];
 }
+//微信分享(知脉动态)
+- (void)shareToWeixinAndLocalApp:(NSString *)title desc:(NSString *)desc image:(UIImage *)image shareID:(NSString *)str isWxShareSucceedShouldNotice:(BOOL)isWxShareSucceedShouldNotice isAuthen:(BOOL)isAuthen  InView:(UIViewController *)vc
+{
+     [self shareToWeixinApp:title desc:desc image:image shareID:str isWxShareSucceedShouldNotice:isWxShareSucceedShouldNotice isLocalShare:NO localshareParme:nil isAuthen:isAuthen isHaveLocalAppDTShare:YES InView:vc];
+}
+//微信分享
 - (void)shareToWeixinApp:(NSString *)title desc:(NSString *)desc  image:(UIImage *)image shareID:(NSString *)str isWxShareSucceedShouldNotice:(BOOL)isWxShareSucceedShouldNotice isAuthen:(BOOL)isAuthen
 {
-    [self shareToWeixinApp:title desc:desc image:image shareID:str isWxShareSucceedShouldNotice:isWxShareSucceedShouldNotice isLocalShare:NO localshareParme:nil isAuthen:isAuthen];
+    [self shareToWeixinApp:title desc:desc image:image shareID:str isWxShareSucceedShouldNotice:isWxShareSucceedShouldNotice isLocalShare:NO localshareParme:nil isAuthen:isAuthen isHaveLocalAppDTShare:NO InView:nil];
 }
 #pragma mark
 #pragma mark - 微信回调
