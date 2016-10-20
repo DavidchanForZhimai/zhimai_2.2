@@ -247,7 +247,6 @@
         self.likeButton.hidden = YES;
         self.line.hidden = YES;
         self.webSiteBtn.hidden = YES;
-        self.webSiteimg.hidden = YES;
         self.clueTitle.hidden = NO;
         self.clueCount.hidden = NO;
         self.cooperation_benefit.hidden = YES;
@@ -262,7 +261,6 @@
         self.likeButton.hidden = NO;
         self.line.hidden = NO;
         self.webSiteBtn.hidden = NO;
-        self.webSiteimg.hidden = NO;
         self.clueCount.hidden = YES;
         
         if (self.cellLayout.statusModel.cooperation_benefit &&![self.cellLayout.statusModel.cooperation_benefit isEqualToString:@""]) {
@@ -332,8 +330,16 @@
         self.comentButton.frame = self.cellLayout.commentPosition;
         self.webSiteBtn.frame = self.cellLayout.websiteRect;
         self.webSiteBtn.titleEdgeInsets = UIEdgeInsetsMake(4,45, 4,10);
-        self.webSiteimg.frame = CGRectMake(4, 4, 37, 37);
-        [[ToolManager shareInstance] imageView:self.webSiteimg setImageWithURL:self.cellLayout.statusModel.typeinfo.imgurl placeholderType:PlaceholderTypeOther];
+        
+        if (self.cellLayout.statusModel.type == DTDataTypeArticle) {
+            self.webSiteimg.frame = CGRectMake(5, 5, 37, 37);
+            [[ToolManager shareInstance] imageView:self.webSiteimg setImageWithURL:self.cellLayout.statusModel.typeinfo.imgurl placeholderType:PlaceholderTypeOther];
+        }
+        else
+        {
+            self.webSiteimg.frame = CGRectZero;
+        }
+        
         if (self.cellLayout.statusModel.isshow_title) {
             [self.webSiteBtn setTitle:self.cellLayout.statusModel.ac_title forState:UIControlStateNormal];
         }
@@ -478,22 +484,26 @@
     if (!_webSiteBtn) {
         _webSiteBtn = [[BaseButton alloc]initWithFrame:CGRectZero setTitle:@"" titleSize:12 titleColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft backgroundColor:rgba(0, 0, 0, 0.05) inView:nil];
         _webSiteBtn.titleLabel.numberOfLines = 2;
+        _webSiteBtn.hidden = YES;
         [_webSiteBtn addSubview:self.webSiteimg];
+        _webSiteBtn.shouldAnmial = NO;
+        __weak typeof(self) weakSelf = self;
+        _webSiteBtn.didClickBtnBlock = ^
+        {
+            if ([weakSelf.delegate respondsToSelector:@selector(tableViewCell:didClickedLikeButtonWithArticleID: atIndexPath:)] &&[weakSelf.delegate conformsToProtocol:@protocol(TableViewCellDelegate)]) {
+                [weakSelf.delegate tableViewCell:weakSelf didClickedLikeButtonWithArticleID:weakSelf.cellLayout.statusModel.acid atIndexPath:weakSelf.indexPath];
+            }
+        };
     }
-    _webSiteBtn.shouldAnmial = NO;
-    __weak typeof(self) weakSelf = self;
-    _webSiteBtn.didClickBtnBlock = ^
-    {
-        if ([weakSelf.delegate respondsToSelector:@selector(tableViewCell:didClickedLikeButtonWithArticleID: atIndexPath:)] &&[weakSelf.delegate conformsToProtocol:@protocol(TableViewCellDelegate)]) {
-            [weakSelf.delegate tableViewCell:weakSelf didClickedLikeButtonWithArticleID:weakSelf.cellLayout.statusModel.acid atIndexPath:weakSelf.indexPath];
-        }
-    };
+    
+   
     return _webSiteBtn;
 }
 - (UIImageView *)webSiteimg
 {
     if (!_webSiteimg) {
-        _webSiteimg  = [[UIImageView alloc]init];
+        _webSiteimg  = [[UIImageView alloc]initWithFrame:CGRectZero];
+        
     }
     return _webSiteimg;
 }

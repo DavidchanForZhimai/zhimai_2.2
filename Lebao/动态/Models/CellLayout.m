@@ -140,15 +140,6 @@
             if (self.statusModel.type ==DTDataTypeArticle) {
                 self.websiteRect = CGRectMake(_avatarStorage.left,contentTextStorage.bottom + 5.0f,SCREEN_WIDTH - 2*_avatarStorage.left,45.0);
                 _wetbImageStorage = [[LWImageStorage alloc] init];
-//                statusModel.typeinfo.imgurl = [[ToolManager shareInstance] urlAppend:statusModel.typeinfo.imgurl];
-//                _wetbImageStorage.contents = statusModel.typeinfo.imgurl;
-//                _wetbImageStorage.placeholder = [UIImage imageNamed:@"icon_placeholder"];
-//                if ([statusModel.typeinfo.imgurl isEqualToString:ImageURLS]) {
-//                    
-//                    _wetbImageStorage.contents = [UIImage imageNamed:@"icon_placeholder"];
-//                    
-//                }
-//                _wetbImageStorage.clipsToBounds = YES;
                 _wetbImageStorage.frame = CGRectMake(_avatarStorage.left + 4.0f, contentTextStorage.bottom + 9.0f , 37.0f, 37.0f);
                 [imageStorageArray addObject:_wetbImageStorage];
                 
@@ -589,15 +580,6 @@
             if (self.statusModel.type ==DTDataTypeArticle) {
                 self.websiteRect = CGRectMake(_avatarStorage.left,contentTextStorage.bottom + 5.0f,SCREEN_WIDTH - 2*_avatarStorage.left,45.0);
                 _wetbImageStorage = [[LWImageStorage alloc] init];
-                statusModel.typeinfo.imgurl = [[ToolManager shareInstance] urlAppend:statusModel.typeinfo.imgurl];
-                _wetbImageStorage.contents = statusModel.typeinfo.imgurl;
-                _wetbImageStorage.placeholder = [UIImage imageNamed:@"icon_placeholder"];
-                if ([statusModel.typeinfo.imgurl isEqualToString:ImageURLS]) {
-                    
-                    _wetbImageStorage.contents = [UIImage imageNamed:@"icon_placeholder"];
-                    
-                }
-                _wetbImageStorage.clipsToBounds = YES;
                 _wetbImageStorage.frame = CGRectMake(_avatarStorage.left + 4.0f, contentTextStorage.bottom + 9.0f , 37.0f, 37.0f);
                 [imageStorageArray addObject:_wetbImageStorage];
                 
