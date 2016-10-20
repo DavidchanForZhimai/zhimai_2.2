@@ -53,13 +53,15 @@
     if (hangye&&![hangye isEqualToString:@""]) {
         [parameters setValue:[Parameter industryForCode:hangye]  forKey:@"industry"];
     }
+    NSLog(@"parameters =%@",parameters);
     [[ToolManager shareInstance]showWithStatus];
     [XLDataService postWithUrl:url param:parameters modelClass:nil responseBlock:^(id responseObject, NSError *error) {
         if ([[responseObject objectForKey:@"rtcode"] intValue]==1) {
             
             callback(YES,nil,[responseObject objectForKey:@"datas"]);
             //行业
-            [CoreArchive setStr:[Parameter industryChinese:responseObject[@"industry"]] key:Industry];
+
+//            [CoreArchive setStr:[Parameter industryChinese:responseObject[@"industry"]] key:Industry];
             //地址版本
             [CoreArchive setStr:responseObject[@"area_version"] key:AddressNewVersion];
             [CoreArchive setStr:responseObject[@"car_version"] key:KCarNewVersion];

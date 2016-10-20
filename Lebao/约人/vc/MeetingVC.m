@@ -148,6 +148,9 @@
                 }
                 
             }
+            _headView.headimgsArr=[NSArray arrayWithArray:self.headimgArr];
+            _headView.userIdArr=[NSArray arrayWithArray:self.headUserIdArr];
+            [_headView addEightImgView];
         }  else
         {
             [[ToolManager shareInstance] showInfoWithStatus];
@@ -212,9 +215,7 @@
                     [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andMessageBtn:NO andOprationBtn:NO andTime:YES]];
                 }
                 
-                _headView.headimgsArr=[NSArray arrayWithArray:self.headimgArr];
-                _headView.userIdArr=[NSArray arrayWithArray:self.headUserIdArr];
-                [_headView addEightImgView];
+  
                 _headView.nearManLab.text=[NSString stringWithFormat:@"最近有空 %d人",modal.count];
                
                 [_yrTab reloadData];
@@ -465,7 +466,7 @@
                     [[ToolManager shareInstance] dismiss];
                     CGFloat dilX = 25;
                     CGFloat dilH = 250;
-                    EjectView *alertV = [[EjectView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.navigationController.view];
+                    EjectView *alertV = [[EjectView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.view];
                     alertV.center = CGPointMake(APPWIDTH/2, APPHEIGHT/2-30);
                     alertV.delegate = self;
                     alertV.titleStr = @"温馨提示";

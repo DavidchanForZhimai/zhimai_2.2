@@ -125,6 +125,8 @@
         [self addSubview:verLine];
         self.frame=CGRectMake(0,0, frame.size.width, CGRectGetMaxY(confirmBtn.frame));
         self.center = CGPointMake([UIScreen mainScreen].bounds.size.width/2, _centerY);
+        
+        
     }
     
     return self;
@@ -204,6 +206,9 @@
         _middleView = [[UIView alloc] init];
         _middleView.backgroundColor = [UIColor blackColor];
         _middleView.alpha = 0.65;
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(dissMiss)];
+        tap.numberOfTapsRequired = 1;
+        [_middleView addGestureRecognizer:tap];
     }
     
     return _middleView;

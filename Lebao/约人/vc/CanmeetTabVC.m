@@ -17,7 +17,7 @@
 #import "AddConnectionView.h"
 @interface CanmeetTabVC ()<UITableViewDelegate,UITableViewDataSource,MeettingTableViewDelegate,UIAlertViewDelegate,EjectViewDelegate,AddConnectionViewDelegate>
 {
-    AddConnectionView *alertV;
+    AddConnectionView *alertView;
 }
 @property(nonatomic,assign)NSInteger page;
 @property(nonatomic,strong)NSMutableArray *allMeetArr;
@@ -55,7 +55,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     _page=1;
-    [self navViewTitleAndBackBtn:@"可约见"];
+    [self navViewTitleAndBackBtn:@"可添加"];
     //    //搜索按钮
     //    BaseButton *search = [[BaseButton alloc]initWithFrame:frame(60*ScreenMultiple, StatusBarHeight + 7, APPWIDTH - 120*ScreenMultiple, NavigationBarHeight - 14) setTitle:@"搜索" titleSize:28*SpacedFonts titleColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:[UIColor clearColor] inView:self.view];
     //    [search setRoundWithfloat:search.height/2.0];
@@ -228,34 +228,18 @@
 {
     CGFloat dilX = 25;
     CGFloat dilH = 250;
-    alertV = [[AddConnectionView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.navigationController.view];
-    alertV.center = CGPointMake(APPWIDTH/2, APPHEIGHT/2-30);
-    alertV.delegate = self;
-    alertV.titleStr = @"提示";
-    alertV.indexth=indexPath;
-    alertV.title2Str=@"打赏让加人脉更顺畅!";
-    UITapGestureRecognizer *recognizerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapBehind:)];
-    
-    [recognizerTap setNumberOfTapsRequired:1];
-    recognizerTap.cancelsTouchesInView = NO;
-    [[UIApplication sharedApplication].keyWindow addGestureRecognizer:recognizerTap];
-    
+    alertView = [[AddConnectionView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.view];
+    alertView.center = CGPointMake(APPWIDTH/2, APPHEIGHT/2-30);
+    alertView.delegate = self;
+    alertView.titleStr = @"提示";
+    alertView.indexth=indexPath;
+    alertView.title2Str=@"打赏让加人脉更顺畅!";
 }
-#pragma mark - 点击空白处消失
-- (void)handleTapBehind:(UITapGestureRecognizer *)sender {
-    if (sender.state == UIGestureRecognizerStateEnded){
-        CGPoint location = [sender locationInView:nil];
-        if (![alertV pointInside:[alertV convertPoint:location fromView:alertV.window] withEvent:nil]){
-            [alertV.window removeGestureRecognizer:sender];
-            [alertV dissMiss];
-        }
-    }
-}
+
 #pragma mark - YXCustomAlertViewDelegate
 - (void) customAlertView:(AddConnectionView *) customAlertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     MeetingCellLayout *layout=self.allMeetArr[customAlertView.indexth.row];
-    NSLog(@"customAlertView.indexth.row====%ld",customAlertView.indexth.row);
     MeetingData *model=layout.model;
     if (buttonIndex==0) {
         NSMutableDictionary *param=[Parameter parameterWithSessicon];

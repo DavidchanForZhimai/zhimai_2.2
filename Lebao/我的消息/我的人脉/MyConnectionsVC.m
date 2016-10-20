@@ -232,7 +232,7 @@
     
     CGFloat dilX = 25;
     CGFloat dilH = 250;
-    EjectView *alertV = [[EjectView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.navigationController.view];
+    EjectView *alertV = [[EjectView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.view];
     alertV.center = CGPointMake(APPWIDTH/2, APPHEIGHT/2-30);
     alertV.delegate = self;
     alertV.titleStr = @"温馨提示";

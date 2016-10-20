@@ -142,7 +142,7 @@
             money.font=Size(26.0);
             money.frame=CGRectMake(MeetGiveTextStorage.right + 10, MeetGiveTextStorage.top, SCREEN_WIDTH - (MeetGiveTextStorage.right) - 20, CGFLOAT_MAX);
             money.textColor = [UIColor colorWithRed:0.522 green:0.525 blue:0.529 alpha:1.000];
-            meetReasonStorageheight = money.bottom;
+            MeetGiveTextStorageheight = money.bottom;
             [self addStorage:money];
             
             

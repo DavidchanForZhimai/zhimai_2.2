@@ -89,13 +89,16 @@
         nameTextStorage.textAlignment = NSTextAlignmentCenter;
         //行业
         LWTextStorage* industryTextStorage = [[LWTextStorage alloc] init];
-        if (model.address&&model.address.length>0) {
+        if (model.address.length>0) {
             industryTextStorage.text =[NSString stringWithFormat:@"%@\n",model.address];
+        }else
+        {
+            industryTextStorage.text=@"";
         }
-        if (model.position&&model.position.length>0) {
+        if (model.position.length>0) {
             industryTextStorage.text =[NSString stringWithFormat:@"%@%@  ",industryTextStorage.text,model.position];
         }
-        if (model.workyears&&model.workyears.length>0) {
+        if (model.workyears.length>0) {
             industryTextStorage.text=[NSString stringWithFormat:@"%@从业%@年\n",industryTextStorage.text,model.workyears];
         }
         NSString *authen=@"";
@@ -157,9 +160,14 @@
 {
     HeaderModel *headerModel;
     UIButton *addConnectionsBtn;
-    AddConnectionView *alertV; 
+    AddConnectionView *alertV;
+    UITapGestureRecognizer *recognizerTap;
 }
-
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(reflashBtn:) name:@"KReflashCanMeet"  object:nil];
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -168,6 +176,12 @@
     [self netWork];
 }
 
+-(void)reflashBtn:(NSNotification *)notification
+{
+    if ([notification.object[@"relation"]isEqualToString:@"1"]) {
+        [self addBottomViewWithBtnStr:1];
+    }
+}
 #pragma mark
 #pragma mark UiTableViewDelegate
 
@@ -640,13 +654,6 @@
 #pragma mark --bottomView底部view
 -(void)addBottomViewWithBtnStr:(int)btnStr
 {
-    //    NSLog(@"btnStr=====%d",btnStr);
-    //    UIView *bottomView=allocAndInit(UIView);
-    //    bottomView.frame=CGRectMake(0, APPHEIGHT-44, APPWIDTH, 44);
-    //    float addConnectionsBtnW = APPWIDTH/3.6;
-    //    UIImage *image = [UIImage imageNamed:@"addConnections"];
-    
-    
     addConnectionsBtn=[UIButton buttonWithType:UIButtonTypeCustom];
     addConnectionsBtn.frame=CGRectMake(0,APPHEIGHT-TabBarHeight,APPWIDTH, TabBarHeight);
     addConnectionsBtn.backgroundColor=WhiteColor;
@@ -710,17 +717,13 @@
     if (sender.tag==2222) {
         CGFloat dilX = 25;
         CGFloat dilH = 250;
-        alertV = [[AddConnectionView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.navigationController.view];
+        alertV = [[AddConnectionView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.view];
         alertV.center = CGPointMake(APPWIDTH/2, APPHEIGHT/2-30);
         alertV.delegate = self;
         alertV.titleStr = @"提示";
         alertV.title2Str=@"打赏让加人脉更顺畅!";
-        UITapGestureRecognizer *recognizerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapBehind:)];
-        
-        [recognizerTap setNumberOfTapsRequired:1];
-        recognizerTap.cancelsTouchesInView = NO;
-        [[UIApplication sharedApplication].keyWindow addGestureRecognizer:recognizerTap];
-
+//        recognizerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapBehind:)];
+//        [alertV.window addGestureRecognizer:recognizerTap];
     }else if (sender.tag==2223) {
     }else if (sender.tag==2224) {
     }else if (sender.tag==2225) {
@@ -734,19 +737,23 @@
         
     }
 }
-#pragma mark - 点击空白处消失
-- (void)handleTapBehind:(UITapGestureRecognizer *)sender {
-    if (sender.state == UIGestureRecognizerStateEnded){
-        CGPoint location = [sender locationInView:nil];
-        if (![alertV pointInside:[alertV convertPoint:location fromView:alertV.window] withEvent:nil]){
-            [alertV.window removeGestureRecognizer:sender];
-            [alertV dissMiss];
-        }
-    }
-}
+//#pragma mark - 点击空白处消失
+//- (void)handleTapBehind:(UITapGestureRecognizer *)sender {
+//    NSLog(@"sdfsdfsdfsdfsdjhtrsasgdghfghmdfhdsdgfhgsfdmghdmhfdrs");
+//    if (sender.state == UIGestureRecognizerStateEnded){
+//        CGPoint location = [sender locationInView:nil];
+//        if (![alertV pointInside:[alertV convertPoint:location fromView:alertV.window] withEvent:nil]){
+//            [alertV.window removeGestureRecognizer:sender];
+//            if (alertV!=nil) {
+//                [alertV dissMiss];
+//            }
+//            
+//        }
+//    }
+//}
 
 
-#pragma mark - YXCustomAlertViewDelegate
+#pragma mark - AddConnectionViewDelegate
 - (void) customAlertView:(AddConnectionView *) customAlertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     
@@ -756,53 +763,37 @@
         [param setObject:customAlertView.money forKey:@"reward"];
         [XLDataService putWithUrl:addConnectionsURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
             if(dataObj){
-                
                 MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
-                
                 if (model.rtcode==1) {
-                    UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"添加人脉请求已发出,请耐心等待" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
-                    
-                    addConnectionsBtn.tag=2223;
-                    addConnectionsBtn.userInteractionEnabled=NO;
-                    [addConnectionsBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-                    [addConnectionsBtn setTitle:@"等待对方通过" forState:UIControlStateNormal];
+                    UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"添加人脉请求已发出,请耐心等待" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+                     [[NSNotificationCenter defaultCenter]postNotificationName:@"KReflashCanMeet" object:@{@"userid":headerModel.Id,@"relation":@"1"}];
                     [successAlertV show];
+                    [alertV.window removeGestureRecognizer:recognizerTap];
                 }
-                
                 else
                 {
                     [[ToolManager shareInstance] showAlertMessage:model.rtmsg];
                 }
-                
             }else
             {
                 [[ToolManager shareInstance] showInfoWithStatus];
-                
             }
             
         }];
         [customAlertView dissMiss];
-        customAlertView = nil;
-        
-        
+
     }else
     {
-        
         MeetPaydingVC * payVC = [[MeetPaydingVC alloc]init];
         NSMutableDictionary *param=[Parameter parameterWithSessicon];
         [param setObject:_userID forKey:@"beinvited"];
         [param setObject:customAlertView.money forKey:@"reward"];
-        
         payVC.param=param;
         payVC.jineStr = customAlertView.money;
         payVC.whatZfType=1;
-        
         [self.navigationController pushViewController:payVC animated:YES];
-        
-        
         [customAlertView dissMiss];
-        customAlertView = nil;
-        
+        [alertV.window removeGestureRecognizer:recognizerTap];
     }
 }
 #pragma mark 网络请求
@@ -890,6 +881,9 @@
     
     
     return btn;
+}
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

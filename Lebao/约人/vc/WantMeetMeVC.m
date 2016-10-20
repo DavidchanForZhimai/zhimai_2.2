@@ -593,8 +593,9 @@ if (layout.model.tel&&layout.model.tel!=nil) {
     myDetialViewCT.userID=data.userid;
     [self.navigationController pushViewController:myDetialViewCT animated:YES];
 }
--(void)dealloc
+-(void)viewDidDisappear:(BOOL)animated
 {
+    [super viewDidDisappear:animated];
     [[MP3PlayerManager shareInstance]stopPlayer];
 }
 - (void)didReceiveMemoryWarning {

@@ -235,7 +235,7 @@
         }
     }else
     {
-        for (int i;i<self.headimgsArr.count&&i<8;i++) {
+        for (int i=0;i<self.headimgsArr.count&&i<8;i++) {
             [self.headLayer[i] sd_setImageWithURL:[NSURL URLWithString:[[ToolManager shareInstance]urlAppend:_headimgsArr[i]]]placeholderImage:[UIImage imageNamed:@"defaulthead"]];
         }
     }

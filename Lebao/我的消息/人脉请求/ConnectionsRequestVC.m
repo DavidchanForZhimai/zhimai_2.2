@@ -51,9 +51,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    //新版本提示
-    [[ToolManager shareInstance]update];
-    
+
     [self navViewTitleAndBackBtn:@"人脉请求"];
     
     self.view.backgroundColor=AppViewBGColor;

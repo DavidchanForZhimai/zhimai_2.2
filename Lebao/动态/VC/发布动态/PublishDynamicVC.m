@@ -487,7 +487,7 @@
 {
     CGFloat dilX = 25;
     CGFloat dilH = 250;
-    CooperateView *alertV = [[CooperateView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) LogFieldDefaultText:@"如果你展示的是自己的产品,可以将合作利益描述的更详细" andSuperView:self.navigationController.view];
+    CooperateView *alertV = [[CooperateView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) LogFieldDefaultText:@"如果你展示的是自己的产品,可以将合作利益描述的更详细" andSuperView:self.view];
     alertV.center = CGPointMake(APPWIDTH/2, APPHEIGHT/2-30);
     alertV.titleStr = @"合作利益描述";
     alertV.sureblock = ^(CooperateView *customAlertView,NSString *logFieldText)

@@ -22,11 +22,7 @@
 #import "ViewController.h"//选择地址
 #import "LoCationManager.h"
 #import "MyKuaJieVC.h"//我的跨界
-#import "LWImageBrowser.h"
-#import "TableViewCell.h"
-#import "GallopUtils.h"
-#import "StatusModel.h"
-#import "CellLayout.h"
+
 #import "FabuKuaJieVC.h"
 #import "NSString+Extend.h"
 #define kToolBarH 44
@@ -38,16 +34,10 @@
 
     UIButton * xsBtn;
     int xspageNumb;
-    int jjrpageNumb;
-    
-    UIImageView *_toolBar;
-    UITextField *_textField;
-    UIButton  *_sendBtn;
 }
 @property (strong,nonatomic)NSMutableArray * xsJsonArr;
 @property (strong,nonatomic)NSMutableArray * fakeDatasource;
 @property (strong,nonatomic)UITableView *xsTab;
-@property (nonatomic,strong)TableViewCell *commentCell;
 @property (nonatomic,strong)NSIndexPath *commentIndex;
 @property (strong,nonatomic)BaseButton  *selectedIndustryBg;
 @property (strong,nonatomic)NSString  *hyStr;
@@ -88,7 +78,6 @@
     [self.view addSubview:self.homePageBtn];
     
     xspageNumb = 1;
-    jjrpageNumb = 1;
     _xsJsonArr = [[NSMutableArray alloc]init];
     self.navigationController.navigationBarHidden = YES;
     self.view.backgroundColor = [UIColor colorWithWhite:0.941 alpha:1.000];
@@ -112,8 +101,9 @@
 -(void)getxsJson
 {
     NSString *cityID =[CoreArchive strForKey:AddressID];
-    [[HomeInfo shareInstance]getHomePageXianSuo:xspageNumb andCityID:cityID.intValue  andhangye:_hyStr andCallBack:^(BOOL issucced, NSString *info, NSArray *jsonArr) {
+    [[HomeInfo shareInstance]getHomePageXianSuo:xspageNumb andCityID:cityID.intValue  andhangye:@"" andCallBack:^(BOOL issucced, NSString *info, NSArray *jsonArr) {
         if (issucced == YES) {
+//            NSLog(@"jsonArr=......===%@",jsonArr);
             if (jsonArr.count > 0) {
                 [[ToolManager shareInstance]dismiss];
                 for (NSDictionary * dic in jsonArr) {
@@ -133,13 +123,6 @@
 }
 
 
-#pragma mark - Getter
-
-- (void)sendAction:(UIButton *)sender
-{
-  
-  
-}
 #pragma mark----tableview写在这里
 -(void)addTheTab
 {
@@ -190,15 +173,13 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
    
-
-     
-        return 280;
+    return 280;
    
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     
-        return _xsJsonArr.count;
+    return _xsJsonArr.count;
     
 }
 -(BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
@@ -208,7 +189,6 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    if (tableView.tag == xsTabTag) {
         static NSString * idenfStr = @"xsCell";
         XSCell * cell = [tableView dequeueReusableCellWithIdentifier:idenfStr];
         if (!cell) {
@@ -249,7 +229,20 @@
             }
             cell.lookLab.text = [NSString stringWithFormat:@"查看:%@",[_xsJsonArr[indexPath.row] objectForKey:@"readcount"]];
             cell.commentLab.text = [NSString stringWithFormat:@"评论:%@",[_xsJsonArr[indexPath.row] objectForKey:@"commentnum"]];
-            [cell.hanyeBtn setTitle:[Parameter industryForChinese:[_xsJsonArr[indexPath.row]objectForKey:@"industry"]] forState:UIControlStateNormal];
+            
+            if ([[_xsJsonArr[indexPath.row]objectForKey:@"industry"] isEqualToString:BAOXIAN]) {
+                [cell.hanyeBtn setTitle:@"保险" forState:UIControlStateNormal];
+            }else if ([[_xsJsonArr[indexPath.row]objectForKey:@"industry"] isEqualToString:JINRONG])
+            {
+                [cell.hanyeBtn setTitle:@"金融" forState:UIControlStateNormal];
+            }else if ([[_xsJsonArr[indexPath.row]objectForKey:@"industry"] isEqualToString:FANGCHANG])
+            {
+                [cell.hanyeBtn setTitle:@"房产" forState:UIControlStateNormal];
+            }else if ([[_xsJsonArr[indexPath.row]objectForKey:@"industry"] isEqualToString:CHEHANG])
+            {
+                [cell.hanyeBtn setTitle:@"车行" forState:UIControlStateNormal];
+            }
+
 
             
             cell.titLab.text = [_xsJsonArr[indexPath.row] objectForKey:@"title"];
@@ -302,22 +295,10 @@
             tap.numberOfTouchesRequired = 1;
             cell.btnV.tag = 200+indexPath.row;
             [cell.btnV addGestureRecognizer:tap];
-            
+
         }
         return cell;
-    }else
-    {
-        static NSString* cellIdentifier = @"cellIdentifier";
-        TableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-        if (!cell) {
-            cell = [[TableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        }
-        cell.delegate = self;
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.indexPath = indexPath;
-            return cell;
 
-    }
 }
 
 #pragma mark----线索那边的头像那块view的点击事件
@@ -349,9 +330,9 @@
     xiansuoV.xs_id = [_xsJsonArr[sender.view.tag - 1000] objectForKey:@"id"];
     [self.navigationController pushViewController:xiansuoV animated:YES];
 }
-#pragma mark - 发布动态
+#pragma mark - 发布线索
 /**
- *  发布动态
+ *  发布线索
  */
 -(UIView *)addIssueTopV
 {
