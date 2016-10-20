@@ -138,33 +138,20 @@
             NSMutableArray* imagePositionArray = [[NSMutableArray alloc] initWithCapacity:imageCount];
             
             if (self.statusModel.type ==DTDataTypeArticle) {
-                self.websiteRect = CGRectMake(_avatarStorage.left,contentTextStorage.bottom + 5.0f,SCREEN_WIDTH - 2*_avatarStorage.left,40.0);
-                
+                self.websiteRect = CGRectMake(_avatarStorage.left,contentTextStorage.bottom + 5.0f,SCREEN_WIDTH - 2*_avatarStorage.left,45.0);
                 _wetbImageStorage = [[LWImageStorage alloc] init];
-                statusModel.typeinfo.imgurl = [[ToolManager shareInstance] urlAppend:statusModel.typeinfo.imgurl];
-                _wetbImageStorage.contents = statusModel.typeinfo.imgurl;
-                _wetbImageStorage.placeholder = [UIImage imageNamed:@"icon_placeholder"];
-                if ([statusModel.typeinfo.imgurl isEqualToString:ImageURLS]) {
-                    
-                    _wetbImageStorage.contents = [UIImage imageNamed:@"icon_placeholder"];
-                    
-                }
-                _wetbImageStorage.clipsToBounds = YES;
-                _wetbImageStorage.frame = CGRectMake(_avatarStorage.left + 2.5f, contentTextStorage.bottom + 7.5 , 35.0f, 35.0f);
+//                statusModel.typeinfo.imgurl = [[ToolManager shareInstance] urlAppend:statusModel.typeinfo.imgurl];
+//                _wetbImageStorage.contents = statusModel.typeinfo.imgurl;
+//                _wetbImageStorage.placeholder = [UIImage imageNamed:@"icon_placeholder"];
+//                if ([statusModel.typeinfo.imgurl isEqualToString:ImageURLS]) {
+//                    
+//                    _wetbImageStorage.contents = [UIImage imageNamed:@"icon_placeholder"];
+//                    
+//                }
+//                _wetbImageStorage.clipsToBounds = YES;
+                _wetbImageStorage.frame = CGRectMake(_avatarStorage.left + 4.0f, contentTextStorage.bottom + 9.0f , 37.0f, 37.0f);
                 [imageStorageArray addObject:_wetbImageStorage];
                 
-                if (self.statusModel.isshow_title) {
-                    LWTextStorage* detailTextStorage = [[LWTextStorage alloc] init];
-                    detailTextStorage.text = self.statusModel.ac_title;
-                    detailTextStorage.font = [UIFont fontWithName:@"Heiti SC" size:12.0f];
-                    detailTextStorage.textColor = RGB(40, 40, 40, 1);
-                    detailTextStorage.frame = CGRectMake(_wetbImageStorage.right + 10.0f, contentTextStorage.bottom + 17.5f, SCREEN_WIDTH - (_wetbImageStorage.right + 20.0), 20);
-                    detailTextStorage.linespacing = 0.5f;
-                    detailTextStorage.textAlignment = NSTextAlignmentLeft;
-                    [detailTextStorage lw_addLinkForWholeTextStorageWithData: @{@"type":@"Article",@"acid":self.statusModel.acid} linkColor:nil highLightColor:RGB(0, 0, 0, 0.15)];
-                    
-                    [self addStorage:detailTextStorage];
-                }
                 
             }
             
@@ -600,8 +587,7 @@
             NSMutableArray* imagePositionArray = [[NSMutableArray alloc] initWithCapacity:imageCount];
             
             if (self.statusModel.type ==DTDataTypeArticle) {
-                self.websiteRect = CGRectMake(_avatarStorage.left,contentTextStorage.bottom + 5.0f,SCREEN_WIDTH - 2*_avatarStorage.left,40.0);
-                
+                self.websiteRect = CGRectMake(_avatarStorage.left,contentTextStorage.bottom + 5.0f,SCREEN_WIDTH - 2*_avatarStorage.left,45.0);
                 _wetbImageStorage = [[LWImageStorage alloc] init];
                 statusModel.typeinfo.imgurl = [[ToolManager shareInstance] urlAppend:statusModel.typeinfo.imgurl];
                 _wetbImageStorage.contents = statusModel.typeinfo.imgurl;
@@ -612,21 +598,9 @@
                     
                 }
                 _wetbImageStorage.clipsToBounds = YES;
-                _wetbImageStorage.frame = CGRectMake(_avatarStorage.left + 2.5f, contentTextStorage.bottom + 7.5 , 35.0f, 35.0f);
+                _wetbImageStorage.frame = CGRectMake(_avatarStorage.left + 4.0f, contentTextStorage.bottom + 9.0f , 37.0f, 37.0f);
                 [imageStorageArray addObject:_wetbImageStorage];
                 
-                if (self.statusModel.isshow_title) {
-                    LWTextStorage* detailTextStorage = [[LWTextStorage alloc] init];
-                    detailTextStorage.text = self.statusModel.ac_title;
-                    detailTextStorage.font = [UIFont fontWithName:@"Heiti SC" size:12.0f];
-                    detailTextStorage.textColor = RGB(40, 40, 40, 1);
-                    detailTextStorage.frame = CGRectMake(_wetbImageStorage.right + 10.0f, contentTextStorage.bottom + 17.5f, SCREEN_WIDTH - (_wetbImageStorage.right + 20.0), 20);
-                    detailTextStorage.linespacing = 0.5f;
-                    detailTextStorage.textAlignment = NSTextAlignmentLeft;
-                    [detailTextStorage lw_addLinkForWholeTextStorageWithData: @{@"type":@"Article",@"acid":self.statusModel.acid} linkColor:nil highLightColor:RGB(0, 0, 0, 0.15)];
-                    
-                    [self addStorage:detailTextStorage];
-                }
                 
             }
             

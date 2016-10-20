@@ -27,7 +27,7 @@
 @property (nonatomic,strong) UIView* line;
 @property (nonatomic,strong) UIView* cellline;
 @property(nonatomic,strong)  BaseButton* webSiteBtn;
-
+@property(nonatomic,strong)  UIImageView* webSiteimg;
 //线索
 @property(nonatomic,strong)  BaseButton* clueTitle;
 @property(nonatomic,strong)  UILabel* clueCount;
@@ -44,7 +44,7 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.backgroundColor = [UIColor whiteColor];
-
+        
         [self.contentView addSubview:self.asyncDisplayView];
         [self.contentView addSubview:self.clueTitle];
         [self.contentView addSubview:self.avatarImage];
@@ -134,10 +134,10 @@
     }
     else
     {
-      
-            sheet = [[UIActionSheet alloc]initWithTitle:@"操作" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"举报",@"分享", nil];
-            sheet.tag =888;
-            [sheet showInView:self];
+        
+        sheet = [[UIActionSheet alloc]initWithTitle:@"操作" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"举报",@"分享", nil];
+        sheet.tag =888;
+        [sheet showInView:self];
         
     }
     
@@ -173,40 +173,40 @@
             }
             
             [[WetChatShareManager shareInstance] dynamicShareTo:_cellLayout.statusModel.sharetitle desc:_cellLayout.statusModel.content image:image shareurl:_cellLayout.statusModel.shareurl ];
-        
+            
         }
         
     }
     else
     {
-            if (buttonIndex==1)
-            {
-                //分享
-                //获取最后一张图片的模型
-                UIImage *image = [UIImage imageNamed:@"wx-logo.jpg"];
-                if (_cellLayout.imageStorageArray.count>0) {
-                    LWImageStorage* lastImageStorage = (LWImageStorage *)[_cellLayout.imageStorageArray firstObject];
-                    image= lastImageStorage.imageStorage;
-                }
-                else
-                {
-                    if (![_cellLayout.statusModel.imgurl isEqualToString:ImageURLS]) {
-                          image = _avatarImage.imageView.image;
-                    }
-                    
-                }
-                
-                [[WetChatShareManager shareInstance] dynamicShareTo:_cellLayout.statusModel.sharetitle desc:_cellLayout.statusModel.content image:image shareurl:_cellLayout.statusModel.shareurl ];
-                
-                return;
+        if (buttonIndex==1)
+        {
+            //分享
+            //获取最后一张图片的模型
+            UIImage *image = [UIImage imageNamed:@"wx-logo.jpg"];
+            if (_cellLayout.imageStorageArray.count>0) {
+                LWImageStorage* lastImageStorage = (LWImageStorage *)[_cellLayout.imageStorageArray firstObject];
+                image= lastImageStorage.imageStorage;
             }
-          else if(buttonIndex==0)
-          {
-              [[ToolManager shareInstance] showAlertMessage:@"举报成功"];
-          }
+            else
+            {
+                if (![_cellLayout.statusModel.imgurl isEqualToString:ImageURLS]) {
+                    image = _avatarImage.imageView.image;
+                }
+                
+            }
             
-//            [self.delegate tableViewCell:self didClickedLikeButtonWithIsSelf:self.cellLayout.statusModel.me andDynamicID:[NSString stringWithFormat:@"%ld",self.cellLayout.statusModel.ID] atIndexPath:_indexPath andIndex:buttonIndex];
+            [[WetChatShareManager shareInstance] dynamicShareTo:_cellLayout.statusModel.sharetitle desc:_cellLayout.statusModel.content image:image shareurl:_cellLayout.statusModel.shareurl ];
+            
+            return;
         }
+        else if(buttonIndex==0)
+        {
+            [[ToolManager shareInstance] showAlertMessage:@"举报成功"];
+        }
+        
+        //            [self.delegate tableViewCell:self didClickedLikeButtonWithIsSelf:self.cellLayout.statusModel.me andDynamicID:[NSString stringWithFormat:@"%ld",self.cellLayout.statusModel.ID] atIndexPath:_indexPath andIndex:buttonIndex];
+    }
     
     
     
@@ -230,10 +230,10 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-
+    
     self.clueTitle.frame = CGRectMake(10,10,SCREEN_WIDTH-20,self.cellLayout.cellHeight-30);
     [self.clueTitle setTitle:self.cellLayout.statusModel.typeinfo.title forState:UIControlStateNormal];
-  
+    
     self.clueCount.frame = CGRectMake(20,self.cellLayout.cellHeight-60,SCREEN_WIDTH-50,30);
     self.clueCount.text = [NSString stringWithFormat:@"%@人领取",self.cellLayout.statusModel.typeinfo.count];
     self.asyncDisplayView.frame = CGRectMake(0,0,SCREEN_WIDTH,self.cellLayout.cellHeight);
@@ -247,13 +247,14 @@
         self.likeButton.hidden = YES;
         self.line.hidden = YES;
         self.webSiteBtn.hidden = YES;
+        self.webSiteimg.hidden = YES;
         self.clueTitle.hidden = NO;
         self.clueCount.hidden = NO;
         self.cooperation_benefit.hidden = YES;
-}
+    }
     else
     {
-         self.clueTitle.hidden = YES;
+        self.clueTitle.hidden = YES;
         self.avatarImage.hidden = NO;
         self.likeLb.hidden = NO;
         self.comentButton.hidden = NO;
@@ -261,6 +262,7 @@
         self.likeButton.hidden = NO;
         self.line.hidden = NO;
         self.webSiteBtn.hidden = NO;
+        self.webSiteimg.hidden = NO;
         self.clueCount.hidden = YES;
         
         if (self.cellLayout.statusModel.cooperation_benefit &&![self.cellLayout.statusModel.cooperation_benefit isEqualToString:@""]) {
@@ -272,7 +274,7 @@
             {
                 self.cooperation_benefit.frame = CGRectMake(APPWIDTH - 65, 7, 55, 23);
             }
-
+            
             __weak typeof(self) weakSelf =self;
             _cooperation_benefit.didClickBtnBlock = ^
             {
@@ -280,13 +282,13 @@
                 alert.tintColor = AppMainColor;
                 [alert show];
             };
-
+            
         }
         else
         {
-           self.cooperation_benefit.hidden = YES;
+            self.cooperation_benefit.hidden = YES;
         }
-       
+        
         NSString *pinlun =[NSString stringWithFormat:@"%ld评论",self.cellLayout.statusModel.comment.count];
         if (_cellLayout.statusModel.comment.count ==0) {
             pinlun = @"评论";
@@ -319,22 +321,30 @@
         CGSize prisesize = [priseStr sizeWithFont:Size(22) maxSize:CGSizeMake(100, 22*SpacedFonts)];
         self.likeLb.frame = frame(self.cellLayout.prisePosition.origin.x +nomral.size.width + 15, self.cellLayout.prisePosition.origin.y + 2, prisesize.width, 22*SpacedFonts);
         self.likeLb.text = priseStr;
-       self.line.frame = self.cellLayout.lineRect;
+        self.line.frame = self.cellLayout.lineRect;
         self.moreImage.frame = frame(APPWIDTH -30, 10, 16, 16);
         self.moreImage.hidden = !_cellLayout.isShowMore;
         _avatarImage.frame = _cellLayout.avatarPosition;
         [_avatarImage setRound];
         [[ToolManager shareInstance] imageView:_avatarImage setImageWithURL:_cellLayout.statusModel.imgurl placeholderType:PlaceholderTypeUserHead];
+        
         self.likeButton.frame = self.cellLayout.prisePosition;
         self.comentButton.frame = self.cellLayout.commentPosition;
         self.webSiteBtn.frame = self.cellLayout.websiteRect;
+        self.webSiteBtn.titleEdgeInsets = UIEdgeInsetsMake(4,45, 4,10);
+        self.webSiteimg.frame = CGRectMake(4, 4, 37, 37);
+        [[ToolManager shareInstance] imageView:self.webSiteimg setImageWithURL:self.cellLayout.statusModel.typeinfo.imgurl placeholderType:PlaceholderTypeOther];
+        if (self.cellLayout.statusModel.isshow_title) {
+            [self.webSiteBtn setTitle:self.cellLayout.statusModel.ac_title forState:UIControlStateNormal];
+        }
+        
     }
     
     
     
-     self.cellline.frame = self.cellLayout.cellMarginsRect;
-   
-   
+    self.cellline.frame = self.cellLayout.cellMarginsRect;
+    
+    
 }
 
 - (void)extraAsyncDisplayIncontext:(CGContextRef)context size:(CGSize)size isCancelled:(LWAsyncDisplayIsCanclledBlock)isCancelled {
@@ -447,7 +457,7 @@
     if (_avatarImage) {
         return _avatarImage;
     }
-   _avatarImage = [[BaseButton alloc]initWithFrame:CGRectZero];
+    _avatarImage = [[BaseButton alloc]initWithFrame:CGRectZero];
     __weak typeof(self) weakSelf =self;
     _avatarImage.didClickBtnBlock = ^{
         if ([weakSelf.delegate respondsToSelector:@selector(tableViewCell:didClickedLikeButtonWithJJRId:)] &&
@@ -455,7 +465,7 @@
             StatusDatas *like = weakSelf.cellLayout .statusModel;
             [weakSelf.delegate tableViewCell:weakSelf didClickedLikeButtonWithJJRId:[NSString stringWithFormat:@"%ld",like.brokerid]];
         }
- 
+        
     };
     return _avatarImage;
     
@@ -464,9 +474,11 @@
 //文章
 - (BaseButton *)webSiteBtn
 {
-   
+    
     if (!_webSiteBtn) {
-        _webSiteBtn = [[BaseButton alloc]initWithFrame:CGRectZero setTitle:@"" titleSize:0 titleColor:WhiteColor textAlignment:NSTextAlignmentCenter backgroundColor: rgba(0, 0, 0, 0.05) inView:nil];
+        _webSiteBtn = [[BaseButton alloc]initWithFrame:CGRectZero setTitle:@"" titleSize:12 titleColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft backgroundColor:rgba(0, 0, 0, 0.05) inView:nil];
+        _webSiteBtn.titleLabel.numberOfLines = 2;
+        [_webSiteBtn addSubview:self.webSiteimg];
     }
     _webSiteBtn.shouldAnmial = NO;
     __weak typeof(self) weakSelf = self;
@@ -478,7 +490,13 @@
     };
     return _webSiteBtn;
 }
-
+- (UIImageView *)webSiteimg
+{
+    if (!_webSiteimg) {
+        _webSiteimg  = [[UIImageView alloc]init];
+    }
+    return _webSiteimg;
+}
 //线索背景
 - (BaseButton *)clueTitle
 {
@@ -487,7 +505,7 @@
     }
     __weak typeof(self) weakSelf = self;
     [_clueTitle setTitleColor:WhiteColor forState:UIControlStateNormal];
-      _clueTitle.backgroundColor = [UIColor colorWithRed:0.5843 green:0.7686 blue:1.0 alpha:1.0];
+    _clueTitle.backgroundColor = [UIColor colorWithRed:0.5843 green:0.7686 blue:1.0 alpha:1.0];
     _clueTitle.titleLabel.textAlignment = NSTextAlignmentCenter;
     _clueTitle.shouldAnmial = NO;
     _clueTitle.didClickBtnBlock = ^
@@ -526,7 +544,7 @@
     [_cooperation_benefit setBorder:LineBg width:0.5];
     _cooperation_benefit.titleLabel.textAlignment = NSTextAlignmentCenter;
     _cooperation_benefit.shouldAnmial = NO;
-   
+    
     return _cooperation_benefit;
 }
 
