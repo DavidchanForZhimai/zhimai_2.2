@@ -24,6 +24,8 @@
 @property(nonatomic,copy)NSString *position;
 @property(nonatomic,copy)NSString *ID;
 @property(nonatomic,copy)NSString *share_url;
+@property(nonatomic,copy)NSString *share_desc;
+@property(nonatomic,copy)NSString *share_title;
 @property(assign)int vip;
 @property(nonatomic,copy)NSString *authen;
 
@@ -154,9 +156,8 @@
     [_scrollView addSubview:self.bgHead];
     [_scrollView addSubview:self.bg];
     
-    NSLog(@"%f %f",CGRectGetMaxY(_bg.frame)+ 10,_scrollView.height);
     if (CGRectGetMaxY(_bg.frame)+ 10>_scrollView.height) {
-        NSLog(@"2222222");
+   
         _scrollView.contentSize = CGSizeMake(APPWIDTH, CGRectGetMaxY(_bg.frame)+ 10);
         
     }
@@ -201,7 +202,7 @@
     _wxFriend.didClickBtnBlock = ^
     {
         
-        [[WetChatShareManager shareInstance] invateFriendShareTo:[NSString stringWithFormat:@"我是%@,来评价我吧",weakSelf.model.realname] desc:[NSString stringWithFormat:@"我想知道我%@在你眼里是什么样的人！",weakSelf.model.realname] image: weakSelf.headerViewLayout.avatarStorage.imageStorage shareurl:weakSelf.model.share_url type:ShareWxFriendType];
+        [[WetChatShareManager shareInstance] invateFriendShareTo:weakSelf.model.share_title desc:weakSelf.model.share_desc image: weakSelf.headerViewLayout.avatarStorage.imageStorage shareurl:weakSelf.model.share_url type:ShareWxFriendType];
     };
     return _wxFriend;
 }
@@ -218,7 +219,7 @@
     _wxTimeLine.didClickBtnBlock = ^
     {
        
-         [[WetChatShareManager shareInstance] invateFriendShareTo:[NSString stringWithFormat:@"我是%@,来评价我吧",weakSelf.model.realname] desc:[NSString stringWithFormat:@"我想知道我%@在你眼里是什么样的人！",weakSelf.model.realname] image: weakSelf.headerViewLayout.avatarStorage.imageStorage shareurl:weakSelf.model.share_url type:ShareWxTimeLineType];
+         [[WetChatShareManager shareInstance] invateFriendShareTo:weakSelf.model.share_title desc:weakSelf.model.share_desc image: weakSelf.headerViewLayout.avatarStorage.imageStorage shareurl:weakSelf.model.share_url type:ShareWxTimeLineType];
     };
     return _wxTimeLine;
 }
@@ -279,7 +280,7 @@
     
     [[ToolManager shareInstance] showWithStatus];
     [XLDataService putWithUrl:UserMemberBriefs param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-//        NSLog(@"dataObj =%@",dataObj);
+        NSLog(@"dataObj =%@",dataObj);
         _model = [InvateFriendCommentModel mj_objectWithKeyValues:dataObj];
         if (dataObj) {
             

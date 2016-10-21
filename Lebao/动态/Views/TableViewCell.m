@@ -340,6 +340,7 @@
             self.webSiteimg.frame = CGRectZero;
         }
         
+
         if (self.cellLayout.statusModel.isshow_title) {
             [self.webSiteBtn setTitle:self.cellLayout.statusModel.ac_title forState:UIControlStateNormal];
         }

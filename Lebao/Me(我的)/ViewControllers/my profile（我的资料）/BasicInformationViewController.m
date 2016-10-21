@@ -1098,7 +1098,7 @@
                 industrySelectionVC.editBlock = ^(NSString *text)
                 {
                     
-                    hangye  = text;
+                     hangye  = text;
                     [_basicInfoTableView reloadData];
                     
                 };
@@ -1216,7 +1216,7 @@
     _modal.service = [service mj_JSONString];
     _modal.resource = [resource mj_JSONString];
     NSMutableDictionary *parame =[Parameter parameterWithSessicon];
-    if ([_modal.imgurl isEqualToString:@""]||[_modal.sex isEqualToString:@""]||[_modal.area isEqualToString:@""]||[_modal.realname isEqualToString:@""]||[_modal.tel isEqualToString:@""]||[_modal.address isEqualToString:@""]||[_modal.workyears isEqualToString:@""]||[_modal.industry isEqualToString:@""]||[_modal.position isEqualToString:@""]||[_modal.focus_industrys isEqualToString:@""]||[_modal.service isEqualToString:@""]||[_modal.resource isEqualToString:@""]||[_modal.mylabels isEqualToString:@""]) {
+    if ([_modal.imgurl isEqualToString:@""]||[_modal.sex isEqualToString:@""]||[_modal.area isEqualToString:@""]||[_modal.realname isEqualToString:@""]||[_modal.tel isEqualToString:@""]||[_modal.address isEqualToString:@""]||[_modal.workyears isEqualToString:@""]||[_modal.position isEqualToString:@""]||[_modal.service isEqualToString:@""]||[_modal.resource isEqualToString:@""]||[_modal.mylabels isEqualToString:@""]) {
         
         
         [[ToolManager shareInstance] showAlertMessage:@"请完善资料！！"];
@@ -1232,8 +1232,8 @@
     [parame setObject:_modal.address forKey:@"address"];
     [parame setObject:_modal.workyears forKey:@"workyears"];
     
-    [parame setObject:_modal.focus_industrys forKey:@"focus_industrys"];
-    [parame setObject:_modal.industry forKey:@"industry"];
+//    [parame setObject:_modal.focus_industrys forKey:@"focus_industrys"];
+//    [parame setObject:_modal.industry forKey:@"industry"];
     [parame setObject:_modal.position forKey:@"position"];
     [parame setObject:_modal.service forKey:@"service"];
     [parame setObject:_modal.resource forKey:@"resource"];

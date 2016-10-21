@@ -107,7 +107,7 @@ static dispatch_once_t once;
 - (void)shareImageToWXApp:(UIImage *)image
 {
     
-    DWActionSheetView *_actionSheetView =[DWActionSheetView showShareViewWithTitle:@"分享" otherButtonTitles:@[@"weixing",@"weixingpenyouquan"] handler:^(DWActionSheetView *actionSheetView, NSInteger buttonIndex, NSString *shareText) {
+    DWActionSheetView *_actionSheetView =[DWActionSheetView showShareViewWithTitle:@"分享" otherButtonTitles:@[@"icon_weixin",@"icon_penyouquan"] handler:^(DWActionSheetView *actionSheetView, NSInteger buttonIndex, NSString *shareText) {
         
         if (![WXApi isWXAppInstalled]) {
             
@@ -181,7 +181,7 @@ static dispatch_once_t once;
     if (![url hasPrefix:@"http://"]) {
         url = [NSString stringWithFormat:@"%@%@",HttpURL,url];
     }
-    DWActionSheetView *_actionSheetView =[DWActionSheetView showShareViewWithTitle:@"分享" otherButtonTitles:@[@"weixing",@"weixingpenyouquan"] handler:^(DWActionSheetView *actionSheetView, NSInteger buttonIndex, NSString *shareText) {
+    DWActionSheetView *_actionSheetView =[DWActionSheetView showShareViewWithTitle:@"分享" otherButtonTitles:@[@"icon_weixin",@"icon_penyouquan"] handler:^(DWActionSheetView *actionSheetView, NSInteger buttonIndex, NSString *shareText) {
         
         if (![WXApi isWXAppInstalled]) {
             
