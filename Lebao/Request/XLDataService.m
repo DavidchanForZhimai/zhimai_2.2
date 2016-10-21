@@ -59,7 +59,6 @@ static UIAlertView *letout;
         if (model.rtcode ==2) {
             responseDataBlock(responseObj, nil);
             [[ToolManager shareInstance] dismiss];
-            
             if (!letout) {
                 if (!xLDataService) {
                     xLDataService = [[self alloc] init];
@@ -71,14 +70,24 @@ static UIAlertView *letout;
         }
         else
         {
-            if (responseObj) {
+            
+            if (model.rtcode ==1) {
+                
+                [[ToolManager shareInstance] dismiss];
+                
                 dataObj = [self modelTransformationWithResponseObj:responseObj modelClass:modelClass];
+                responseDataBlock(dataObj, nil);
             }
-            responseDataBlock(dataObj, nil);
+            else
+            {
+                [[ToolManager shareInstance] showInfoWithStatus:model.rtmsg];
+            }
+            
         }
     } failure:^(NSError *error) {
         
-        responseDataBlock(nil, error);
+        
+        [[ToolManager shareInstance] showInfoWithStatus];
     }];
 }
 

@@ -638,7 +638,7 @@ static dispatch_once_t once;
     
     NSString *url = [[NSString alloc] initWithFormat:@"http://itunes.apple.com/cn/lookup?id=1112425830"];
     
-    [XLDataService postWithUrl:url param:nil modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+    [XLDataService putWithUrl:url param:nil modelClass:nil responseBlock:^(id dataObj, NSError *error) {
 //        NSLog(@"dataObj =%@",dataObj);
         NSNumber *number = dataObj[@"resultCount"];
         NSArray *array = dataObj[@"results"];

@@ -8,6 +8,7 @@
 
 #import "BaseViewController.h"
 
+typedef void (^SearchResultBlock) (NSString *str);
 @interface SearchAndAddTagsViewController : BaseViewController
-
+@property(nonatomic,copy)SearchResultBlock  searchResultBlock;
 @end

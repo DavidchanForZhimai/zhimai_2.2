@@ -9,16 +9,16 @@
 #import "SearchAndAddTagsViewController.h"
 #import "AddIndustryViewController.h"
 #import "DWTagsView.h"
+#import "XLDataService.h"
+#define MeetHotsURL [NSString stringWithFormat:@"%@meet/hots",HttpURL]
 #define TagHeight 30
 #define ViewStartX StatusBarHeight + NavigationBarHeight
-@interface SearchAndAddTagsViewController ()<DWTagsViewDelegate>
+@interface SearchAndAddTagsViewController ()<DWTagsViewDelegate,UISearchBarDelegate>
 @property(nonatomic,strong)UILabel *hotLb;//热门标签
 @property(nonatomic,strong)DWTagsView *hotTagsView;//热门标签
-@property(nonatomic,copy)NSMutableArray *hotTags;//热门标签
-@property(nonatomic,strong)DWTagsView *hasTagsView;//已关注标签
-@property(nonatomic,copy)NSMutableArray *hasTags;//已关注标签
-@property(nonatomic,strong)UILabel *hasLb;//已关注标签
-@property(nonatomic,strong)BaseButton *addHasLb;//添加关注标签
+@property(nonatomic,copy) NSMutableArray *hotTags;//热门标签
+@property(nonatomic,strong) UISearchBar * bar;
+
 @end
 
 @implementation SearchAndAddTagsViewController
@@ -30,22 +30,68 @@
     [self navViewTitleAndBackBtn:@""];
     [self.view addSubview:self.hotLb];
     [self.view addSubview:self.hotTagsView];
-    [self.view addSubview:self.hasLb];
-    [self.view addSubview:self.hasTagsView];
-    [self.view addSubview:self.addHasLb];
+    [self.view addSubview:self.bar];
+    [self netWork];
+}
+- (void)netWork
+{
     
-    [self resetFrame];
-    
+    [XLDataService postWithUrl:MeetHotsURL param:[Parameter parameterWithSessicon] modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+        _hotTags= dataObj[@"hots"];
+        for (NSString *str  in _hotTags) {
+            [_hotTagsView addTag:str];
+        }
+    }];
+
 }
 
-
 #pragma mark getter
+- (UISearchBar *)bar
+{
+    if (!_bar) {
+        _bar = [[UISearchBar alloc]initWithFrame:CGRectMake(40*ScreenMultiple, StatusBarHeight + 7, APPWIDTH - 60*ScreenMultiple, NavigationBarHeight - 14)];
+        _bar.backgroundColor = WhiteColor;
+        _bar.barStyle = UIBarStyleDefault;
+        _bar.tintColor = LineBg;
+        _bar.translucent = YES;
+        [_bar setBorder:LineBg width:0.5];
+        [_bar setRadius:_bar.height/2.0];
+        _bar.delegate = self;
+        _bar.placeholder=@"搜索";
+        float version = [[[UIDevice currentDevice] systemVersion] floatValue];
+        if ([_bar respondsToSelector:@selector(barTintColor)]) {
+            
+            float iosversion7_1 = 7.1;
+        
+            if (version >= iosversion7_1)        {
+                
+                [[[[_bar.subviews objectAtIndex:0] subviews] objectAtIndex:0] removeFromSuperview];
+    
+                [_bar setBackgroundColor:[UIColor clearColor]];
+                
+                
+                
+            }
+            
+            
+            else {            //iOS7.0
+                
+                [_bar setBarTintColor:[UIColor clearColor]];
+                [_bar setBackgroundColor:[UIColor clearColor]];
+                
+            }
+            
+        }
+        
+    }
+    return _bar;
+}
 - (UILabel *)hotLb
 {
     if (_hotLb) {
         return _hotLb;
     }
-    _hotLb = [UILabel createLabelWithFrame:frame(10, ViewStartX, APPWIDTH, 40) text:@"热门标签" fontSize:28*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:nil];
+    _hotLb = [UILabel createLabelWithFrame:frame(10, ViewStartX, APPWIDTH,40) text:@"热门标签" fontSize:28*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:nil];
     return _hotLb;
 }
 - (DWTagsView *)hotTagsView
@@ -53,12 +99,13 @@
     if (_hotTagsView) {
         return _hotTagsView;
     }
-    _hotTagsView = allocAndInitWithFrame(DWTagsView, frame(10, CGRectGetMaxY(_hotLb.frame), APPWIDTH -20, 70));
+    _hotTagsView = allocAndInitWithFrame(DWTagsView, frame(10, CGRectGetMaxY(_hotLb.frame), APPWIDTH -20, APPHEIGHT - CGRectGetMaxY(_hotLb.frame)));
     _hotTagsView.contentInsets = UIEdgeInsetsZero;
     _hotTagsView.tagInsets = UIEdgeInsetsMake(5, 15, 5, 15);
     _hotTagsView.tagBorderWidth = 0.5;
     _hotTagsView.tagcornerRadius = 5;
-    _hotTagsView.mininumTagWidth = (APPWIDTH - 30)/3.0;
+    _hotTagsView.mininumTagWidth = 40;
+    _hotTagsView.maximumTagWidth = APPWIDTH - 20;
     _hotTagsView.tagHeight  = TagHeight;
     _hotTagsView.tagBorderColor = LineBg;
     _hotTagsView.tagSelectedBorderColor = LineBg;
@@ -76,112 +123,42 @@
     return _hotTagsView;
     
 }
-- (UILabel *)hasLb
-{
-    if (_hasLb) {
-        return _hasLb;
-    }
-    _hasLb = [UILabel createLabelWithFrame:frame(10, _hotTagsView.height + _hotTagsView.y +20, APPWIDTH, 40) text:@"已关注的行业" fontSize:28*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:nil];
-    return _hasLb;
-}
-
-- (BaseButton *)addHasLb
-{
-    if (_addHasLb) {
-        return _addHasLb;
-    }
-    _addHasLb = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 38 , _hasLb.y,28, _hasLb.height) setTitle:@"添加" titleSize:28*SpacedFonts titleColor:BlackTitleColor textAlignment:NSTextAlignmentRight backgroundColor:[UIColor clearColor] inView:nil];
-    _addHasLb.shouldAnmial = NO;
-//    __weak typeof(self) weakSelf = self;
-    _addHasLb.didClickBtnBlock = ^
-    {
-//        __strong typeof(weakSelf) strongSelf =weakSelf;
-//        AddIndustryViewController *addIndustryVC = allocAndInit(AddIndustryViewController);
-      
-//        addIndustryVC.addTagsfinishBlock = ^(NSArray *tags)
-//        {
-//          
-//            for (id str  in strongSelf.hasTags) {
-//                [strongSelf.hasTagsView removeTagWithName:str];
-//            }
-//            for (id str  in tags) {
-//                [strongSelf.hasTagsView addTag:str];
-//            }
-//                    
-//        };
-//        PushView(weakSelf, addIndustryVC);
-    };
-    return _addHasLb;
-}
-
-- (DWTagsView *)hasTagsView
-{
-    if (_hasTagsView) {
-        return _hasTagsView;
-    }
-    _hasTagsView = allocAndInitWithFrame(DWTagsView, frame(10,_hasLb.y + _hasLb.height , APPWIDTH-20, 100));
-    _hasTagsView.contentInsets = UIEdgeInsetsZero;
-    _hasTagsView.tagInsets = UIEdgeInsetsMake(5, 15, 5, 15);
-    _hasTagsView.tagBorderWidth = 0.5;
-    _hasTagsView.tagcornerRadius = 5;
-    _hasTagsView.mininumTagWidth = (APPWIDTH - 30)/3.0;
-    _hasTagsView.tagHeight  = TagHeight;
-    _hasTagsView.tagBorderColor = LineBg;
-    _hasTagsView.tagSelectedBorderColor = LineBg;
-    _hasTagsView.tagBackgroundColor = [UIColor whiteColor];
-    _hasTagsView.lineSpacing = 5;
-    _hasTagsView.interitemSpacing = 5;
-    _hasTagsView.tagFont = [UIFont systemFontOfSize:14];
-    _hasTagsView.tagTextColor = BlackTitleColor;
-    _hasTagsView.tagSelectedBackgroundColor = _hasTagsView.tagBackgroundColor;
-    _hasTagsView.tagSelectedTextColor = _hasTagsView.tagTextColor;
-    
-    _hasTagsView.delegate = self;
-    _hasTagsView.tagsArray = self.hasTags;
-    return _hasTagsView;
-}
-
 - (NSMutableArray *)hotTags
 {
     if (_hotTags) {
         return _hotTags;
     }
-    _hotTags = [[NSMutableArray alloc]initWithObjects:@"销售",@"销售",@"销售",@"销售",@"销售",@"销售", nil];
+    _hotTags = [[NSMutableArray alloc]init];
     return _hotTags;
 }
+#pragma mark
+#pragma mark - UISearchBarDelegate
 
-- (NSMutableArray *)hasTags
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
-    if (_hasTags) {
-        return _hasTags;
-    }
-    _hasTags = [[NSMutableArray alloc]initWithObjects:@"销售",@"销售",@"销售",nil];
-    return _hasTags;
+    
+     if (_searchResultBlock) {
+        _searchResultBlock(searchBar.text);
+     }
+    [self.navigationController popViewControllerAnimated:NO];
+    
 }
 
 #pragma mark
-#pragma mark  setframe
-- (void)resetFrame
+#pragma mark - DWTagsViewDelegate
+- (void)tagsView:(DWTagsView *)tagsView didSelectTagAtIndex:(NSUInteger)index
 {
-    int hotRow = 0;
-    if (_hasTags.count%3==0) {
-        hotRow=(int)(_hasTags.count/3);
+    if (index<_hotTags.count) {
+        [_bar becomeFirstResponder];
+         _bar.text = _hotTags[index];
     }
-    else
-    {
-      hotRow=(int)(_hasTags.count/3) + 1;
-    }
-    _hotTagsView.frame = frame(10, CGRectGetMaxY(_hotLb.frame), APPWIDTH -20, (TagHeight+50)*hotRow);
-    _hasLb.frame =frame(10, _hotTagsView.height + _hotTagsView.y +10, APPWIDTH, 40);
-    _addHasLb.frame = frame(APPWIDTH - 38 , _hasLb.y,28, _hasLb.height);
-    _hasTagsView.frame = frame(10,_hasLb.y + _hasLb.height , APPWIDTH-20, APPHEIGHT - (_hasLb.y + _hasLb.height));
-    
+
 }
 #pragma mark
 #pragma mark buttons Aticon
 - (void)buttonAction:(UIButton *)sender
 {
-    PopView(self);
+   [self.navigationController popViewControllerAnimated:NO];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

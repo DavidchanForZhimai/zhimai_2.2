@@ -18,7 +18,9 @@
 @interface CanmeetTabVC ()<UITableViewDelegate,UITableViewDataSource,MeettingTableViewDelegate,UIAlertViewDelegate,EjectViewDelegate,AddConnectionViewDelegate>
 {
     AddConnectionView *alertView;
+
 }
+@property(nonatomic,copy)NSString *keyword;
 @property(nonatomic,assign)NSInteger page;
 @property(nonatomic,strong)NSMutableArray *allMeetArr;
 @end
@@ -54,18 +56,28 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _keyword =@"";
     _page=1;
-    [self navViewTitleAndBackBtn:@"可添加"];
-    //    //搜索按钮
-    //    BaseButton *search = [[BaseButton alloc]initWithFrame:frame(60*ScreenMultiple, StatusBarHeight + 7, APPWIDTH - 120*ScreenMultiple, NavigationBarHeight - 14) setTitle:@"搜索" titleSize:28*SpacedFonts titleColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:[UIColor clearColor] inView:self.view];
-    //    [search setRoundWithfloat:search.height/2.0];
-    //    [search setBorder:LineBg width:0.5];
-    //    __weak typeof(self) weakSelf= self;
-    //    search.didClickBtnBlock = ^{
-    //
-    //        PushView(weakSelf, allocAndInit(SearchAndAddTagsViewController));
-    //
-    //    };
+    [self navViewTitleAndBackBtn:@""];
+        //搜索按钮
+        BaseButton *search = [[BaseButton alloc]initWithFrame:frame(60*ScreenMultiple, StatusBarHeight + 7, APPWIDTH - 120*ScreenMultiple, NavigationBarHeight - 14) setTitle:@"搜索" titleSize:28*SpacedFonts titleColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:[UIColor clearColor] inView:self.view];
+        [search setRoundWithfloat:search.height/2.0];
+        [search setBorder:LineBg width:0.5];
+        __weak typeof(self) weakSelf= self;
+         search.didClickBtnBlock = ^{
+            SearchAndAddTagsViewController * search  =  allocAndInit(SearchAndAddTagsViewController);
+            search.searchResultBlock = ^(NSString *str)
+            {
+                NSLog(@"str    ==%@",str);
+                 weakSelf.keyword = str;
+                 weakSelf.page = 1;
+                [weakSelf netWorkRefresh:NO andIsLoadMoreData:NO isShouldClearData:YES];
+            };
+
+             [self.navigationController pushViewController:search animated:NO];
+    
+        };
+    
     [self addTabView];
     
     [self netWorkRefresh:NO andIsLoadMoreData:NO isShouldClearData:YES];
@@ -115,9 +127,9 @@
         [[ToolManager shareInstance] showWithStatus];
     }
     [param setObject:@(_page) forKey:@"page"];
-    [param setObject:@"" forKey:@"keyword"];
+    [param setObject:_keyword forKey:@"keyword"];
     [param setObject:@"" forKey:@"industrys"];
-//    NSLog(@"param====%@",param);
+    NSLog(@"param====%@",param);
     [XLDataService putWithUrl:canseeURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         
         if (isRefresh) {
