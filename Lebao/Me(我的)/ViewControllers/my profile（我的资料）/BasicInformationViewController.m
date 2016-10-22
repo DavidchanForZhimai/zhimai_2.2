@@ -577,7 +577,7 @@
     if (_personsTagsLb) {
         return  _personsTagsLb;
     }
-    _personsTagsLb =[UILabel createLabelWithFrame:CGRectZero text:@"个人特点" fontSize:14 textColor:AppMainColor textAlignment:NSTextAlignmentLeft inView:self.tagsView];
+    _personsTagsLb =[UILabel createLabelWithFrame:CGRectZero text:@"自我评价" fontSize:14 textColor:AppMainColor textAlignment:NSTextAlignmentLeft inView:self.tagsView];
     
     return  _personsTagsLb;
     
