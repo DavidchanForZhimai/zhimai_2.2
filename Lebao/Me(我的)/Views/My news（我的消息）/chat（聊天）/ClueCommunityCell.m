@@ -17,6 +17,7 @@
     UILabel *userNameLb;
     UILabel *userContent;
     UIImageView *isAuthen;
+    UIImageView *vip;
     UILabel *releaseTime;
     UIView *cell;
     UILabel *line;
@@ -41,12 +42,13 @@
         userContent =[UILabel createLabelWithFrame:frame(frameX(userNameLb), CGRectGetMaxY(userNameLb.frame) + 10, frameWidth(cell) - (20+CGRectGetMaxX(userIcon.frame)) , 24*SpacedFonts) text:@"" fontSize:24*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentLeft inView:cell];
         userContent.numberOfLines = 0;
         
-        isAuthen =allocAndInitWithFrame(UIImageView, frame(CGRectGetMaxX(userNameLb.frame) + 4,frameY(userNameLb), 12, 12));
-        
+        isAuthen =allocAndInitWithFrame(UIImageView, frame(CGRectGetMaxX(userNameLb.frame) + 5,frameY(userNameLb)+2, 12, 12));
+        vip =allocAndInitWithFrame(UIImageView, frame(CGRectGetMaxX(isAuthen.frame) + 5,frameY(userNameLb)+2, 12, 12));
         releaseTime = [UILabel createLabelWithFrame:frame(frameWidth(cell) - 90, frameY(userNameLb), 80, 24*SpacedFonts) text:@"" fontSize:22*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentRight inView:cell];
         
        line = [UILabel CreateLineFrame:frame(5, frameHeight(cell) - 0.5, frameWidth(cell) - 10, 0.5) inView:cell];
         [cell addSubview:isAuthen];
+        [cell addSubview:vip];
         
     }
     
@@ -56,19 +58,25 @@
 - (void)setModal:(ClueCommunityData *)data clueCommunityBlock:(ClueCommunityBlock)clueCommunityBlock
 {
     userNameLb.text = data.realname;
-
+    CGSize size = [data.realname sizeWithFont:userNameLb.font maxSize:CGSizeMake(100, 24*SpacedFonts)];
     if (data.authen ==3) {
         isAuthen.image = [UIImage imageNamed:@"[iconprofilerenzhen]"];
-       
-        
+        isAuthen.frame = frame(frameX(userNameLb) + size.width + 5, frameY(isAuthen), [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
     }
     else
     {
-        isAuthen.image = [UIImage imageNamed:@"[iconprofileweirenzhen]"];
+        isAuthen.image =nil;
+        isAuthen.frame = frame(frameX(userNameLb) + size.width, frameY(isAuthen), 0, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
+
+        
     }
-    CGSize size = [data.realname sizeWithFont:userNameLb.font maxSize:CGSizeMake(100, 24*SpacedFonts)];
-    isAuthen.frame = frame(frameX(userNameLb) + size.width + 5, frameY(isAuthen), [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
+    if (data.vip ==1) {
+        vip.image = [UIImage imageNamed:@"[iconprofilevip]"];
+    }else{
+        vip.image =nil;
+    }
     
+        vip.frame =frame(CGRectGetMaxX(isAuthen.frame) + 5,frameY(userNameLb)+2,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.width, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
     userContent.text = data.content;
     CGSize size2 = [userContent.text sizeWithFont:Size(24) maxSize:CGSizeMake(frameWidth(userContent), 1000)];
     

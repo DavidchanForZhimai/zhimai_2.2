@@ -23,4 +23,5 @@
 @property(nonatomic,copy)NSString *content;
 @property(nonatomic,assign)int createtime;
 @property(nonatomic,assign)int authen;
+@property(nonatomic,assign)int vip;
 @end

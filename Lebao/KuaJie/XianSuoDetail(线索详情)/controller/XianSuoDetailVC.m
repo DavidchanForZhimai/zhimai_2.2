@@ -803,7 +803,6 @@
             imgUrl = [NSString stringWithFormat:@"%@%@",IMG_URL,[_coopArr[indexPath.row]objectForKey:@"imgurl"]];
         }
         
-        cell.renzhImg.image = [[_coopArr[indexPath.row]objectForKey:@"authen"] intValue]==3?[UIImage imageNamed:@"[iconprofilerenzhen]"]:[UIImage imageNamed:@"[iconprofileweirenzhen]"];
         
         [[ToolManager shareInstance] imageView:cell.headImg setImageWithURL:imgUrl placeholderType:PlaceholderTypeUserHead];
         cell.headImg.tag = 200+indexPath.row;
@@ -819,9 +818,22 @@
         txTap.numberOfTapsRequired = 1;
         [cell.headImg addGestureRecognizer:txTap];
         cell.userNameLab.text = [_coopArr[indexPath.row]objectForKey:@"realname"];
-        cell.userNameLab.frame = CGRectMake(cell.userNameLab.x,7, [cell.userNameLab.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(APPWIDTH/2.0, cell.userNameLab.size.height)].width, cell.userNameLab.height);
-        cell.renzhImg.frame =CGRectMake(cell.userNameLab.frame.origin.x+cell.userNameLab.frame.size.width+5,CGRectGetMaxY(cell.userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
+        cell.userNameLab.frame = CGRectMake(cell.userNameLab.x,12, [cell.userNameLab.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(APPWIDTH/2.0, cell.userNameLab.size.height)].width,15);
         
+        if ([[_coopArr[indexPath.row]objectForKey:@"authen"] intValue]==3) {
+            cell.renzhImg.image = [UIImage imageNamed:@"[iconprofilerenzhen]"];
+            cell.renzhImg.frame =CGRectMake(cell.userNameLab.frame.origin.x+cell.userNameLab.frame.size.width+5,CGRectGetMaxY(cell.userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
+        }else{
+            cell.renzhImg.image = nil;
+            cell.renzhImg.frame =CGRectMake(cell.userNameLab.frame.origin.x+cell.userNameLab.frame.size.width,CGRectGetMaxY(cell.userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, 0, 0);
+        }
+        if ([[_coopArr[indexPath.row]objectForKey:@"vip"] intValue]==1) {
+            cell.vipImg.image = [UIImage imageNamed:@"[iconprofilevip]"];
+            cell.vipImg.frame =CGRectMake(cell.renzhImg.frame.origin.x+cell.renzhImg.frame.size.width+5,CGRectGetMaxY(cell.userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
+        }else{
+            cell.vipImg.image = nil;
+            cell.vipImg.frame =CGRectMake(0, 0, 0, 0);
+        }
         
         
         NSString * str1 = @"定金:";
