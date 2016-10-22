@@ -162,10 +162,32 @@
             break;
         case 888888:
         {
+            if (_currentTagsView.tag ==88) {
+                if (_currentTagsArray.count>_modal.server_max_limit) {
+                    [[ToolManager shareInstance] showInfoWithStatus:[NSString stringWithFormat:@"标签个数限制为最多%i个",self.modal.server_max_limit]];
+                    return;
+                }
+                
+            }
+            else if (_currentTagsView.tag ==888) {
+                if (_currentTagsArray.count>_modal.resource_max_limit) {
+                    [[ToolManager shareInstance] showInfoWithStatus:[NSString stringWithFormat:@"标签个数限制为最多%i个",self.modal.resource_max_limit]];
+                    return;
+                }
+                
+            }
+            else if (_currentTagsView.tag ==8888) {
+                if (_currentTagsArray.count>_modal.my_max_limit) {
+                    [[ToolManager shareInstance] showInfoWithStatus:[NSString stringWithFormat:@"标签个数限制为最多%i个",self.modal.my_max_limit]];
+                    return;
+                }
+                
+            }
             if ([_currentTagsArray containsObject:_currentDefalutTagsArray[index]]) {
                 [[ToolManager shareInstance] showInfoWithStatus:@"标签已存在"];
                 return;
             }
+            
             [_currentTagsArray insertObject:_currentDefalutTagsArray[index] atIndex:_currentTagsArray.count-1];
             [_currentTagsView insertTag:_currentDefalutTagsArray[index] AtIndex:_currentTagsArray.count-2];
             [_addHasTagsView addTag:_currentDefalutTagsArray[index]];
@@ -251,15 +273,38 @@
     [self.addTagsView addSubview:self.addSure];
     self.addSure.didClickBtnBlock = ^{
        
+        
         if ([weakSelf.addTextField.text isEqualToString:@""]) {
             weakSelf.addTextField.placeholder = @"标签不能为空";
             return;
         }
-       
+        
         if (weakSelf.addTextField.text.length>6) {
             weakSelf.addTextField.text = @"";
             weakSelf.addTextField.placeholder = @"标签不能超过6个字符";
             return;
+        }
+        
+        if (type.tag ==88) {
+            if (dataSource.count>weakSelf.modal.server_max_limit) {
+                [[ToolManager shareInstance] showInfoWithStatus:[NSString stringWithFormat:@"标签个数限制为最多%i个",weakSelf.modal.server_max_limit]];
+                 return;
+            }
+          
+        }
+        else if (type.tag ==888) {
+            if (dataSource.count>weakSelf.modal.resource_max_limit) {
+                [[ToolManager shareInstance] showInfoWithStatus:[NSString stringWithFormat:@"标签个数限制为最多%i个",weakSelf.modal.resource_max_limit]];
+                return;
+            }
+
+        }
+        else if (type.tag ==8888) {
+            if (dataSource.count>weakSelf.modal.my_max_limit) {
+                [[ToolManager shareInstance] showInfoWithStatus:[NSString stringWithFormat:@"标签个数限制为最多%i个",weakSelf.modal.my_max_limit]];
+                return;
+            }
+
         }
         
         if ([dataSource containsObject:weakSelf.addTextField.text]) {
@@ -682,7 +727,6 @@
     NSMutableDictionary *parame = [Parameter parameterWithSessicon];
     [parame setObject:@"info" forKey:Conduct];
     [XLDataService postWithUrl:MemberURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-//        NSLog(@"dataObj == %@",dataObj);
         if (dataObj) {
             [self netWork]; //请求行业
             _modal = [BasicInfoModal mj_objectWithKeyValues:dataObj];

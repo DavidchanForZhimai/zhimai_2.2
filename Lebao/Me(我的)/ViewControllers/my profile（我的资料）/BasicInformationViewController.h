@@ -13,6 +13,10 @@
 @end
 
 @interface BasicInfoModal : NSObject
+@property(assign,nonatomic) int server_max_limit;
+@property(assign,nonatomic) int resource_max_limit;
+@property(assign,nonatomic) int my_max_limit;
+
 @property(copy,nonatomic)NSString *synopsis;
 @property(copy,nonatomic)NSString *sex;
 @property(copy,nonatomic)NSString *address;
