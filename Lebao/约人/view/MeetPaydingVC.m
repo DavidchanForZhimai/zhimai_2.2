@@ -231,7 +231,7 @@ typedef enum{
                     
                     if (_moneyType==weixinzhifuType) {
                         [[WetChatPayManager shareInstance]wxPay:dataObj[@"datas"] succeedMeg:@"发送成功！" recharge:@"0" wetChatPaySucceed:^(NSString *payMoney) {
-                             [[NSNotificationCenter defaultCenter]postNotificationName:@"KReflashCanMeet" object:@{@"userid":self.param[@"beinvited"],@"relation":@"1"}];
+                             [[NSNotificationCenter defaultCenter]postNotificationName:@"KReflashCanMeet" object:@{@"userid":self.param[@"beinvited"],@"relation":@"1",@"reward":self.param[@"reward"]}];
                             [[ToolManager shareInstance] showAlertMessage:@"添加人脉请求已发出,请耐心等待"];
                             
                             [self.navigationController popViewControllerAnimated:YES];
@@ -239,7 +239,7 @@ typedef enum{
                         return ;
                         
                     }
-                     [[NSNotificationCenter defaultCenter]postNotificationName:@"KReflashCanMeet" object:@{@"userid":self.param[@"beinvited"],@"relation":@"1"}];
+                     [[NSNotificationCenter defaultCenter]postNotificationName:@"KReflashCanMeet" object:@{@"userid":self.param[@"beinvited"],@"relation":@"1",@"reward":self.param[@"reward"]}];
                     [[ToolManager shareInstance] showAlertMessage:@"添加人脉请求已发出,请耐心等待"];
                    
                     [self.navigationController popViewControllerAnimated:YES];

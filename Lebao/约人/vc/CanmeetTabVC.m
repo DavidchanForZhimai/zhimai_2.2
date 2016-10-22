@@ -143,7 +143,7 @@
             [self.allMeetArr removeAllObjects];
         }
         if (dataObj) {
-//            NSLog(@"meetObj====%@",dataObj);
+            NSLog(@"meetObj====%@",dataObj);
             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
             if (_page ==1) {
                 [[ToolManager shareInstance] moreDataStatus:self.tableView];

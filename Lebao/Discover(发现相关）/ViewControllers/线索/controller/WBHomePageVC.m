@@ -15,7 +15,7 @@
 #import "JingJiRenVC.h"
 #import "AppDelegate.h"
 #import "MyXSDetailVC.h"
-#import "MyLQDetailVC.h" 
+#import "MyLQDetailVC.h"
 #import "ToolManager.h"
 #import "CoreArchive.h"
 #import "CALayer+Transition.h"
@@ -31,7 +31,7 @@
 #define jjrTabTag 120
 @interface WBHomePageVC ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,UITextFieldDelegate>
 {
-
+    
     UIButton * xsBtn;
     int xspageNumb;
 }
@@ -50,7 +50,7 @@
 {
     [super viewWillAppear:animated];
     if ([CoreArchive strForKey:@"isread"]) {
-       [self.homePageBtn setImage:[UIImage imageNamed:@"xinxi"] forState:UIControlStateNormal];
+        [self.homePageBtn setImage:[UIImage imageNamed:@"xinxi"] forState:UIControlStateNormal];
     }
     else
     {
@@ -72,7 +72,7 @@
     [fabubTn addTarget:self action:@selector(myClueAction) forControlEvents:UIControlEventTouchUpInside];
     [fabubTn setTitleColor:BlackTitleColor forState:UIControlStateNormal];
     [self navViewTitleAndBackBtn:@"线索" rightBtn:fabubTn];
-
+    
     
     self.homePageBtn.hidden = NO;
     [self.view addSubview:self.homePageBtn];
@@ -81,12 +81,12 @@
     _xsJsonArr = [[NSMutableArray alloc]init];
     self.navigationController.navigationBarHidden = YES;
     self.view.backgroundColor = [UIColor colorWithWhite:0.941 alpha:1.000];
-
+    
     [self getxsJson];
     
     [self addTheTab];
-  
-  
+    
+    
 }
 -(void)myClueAction
 {
@@ -117,7 +117,7 @@
             
         }else
         {
-             [[ToolManager shareInstance]showAlertMessage:info];
+            [[ToolManager shareInstance]showAlertMessage:info];
         }
     }];
 }
@@ -140,10 +140,10 @@
         }
         [_xsTab reloadData];
         [_xsTab.mj_header endRefreshing];
-       
+        
         [self getxsJson];
     }];
-   
+    
     _xsTab.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreXS)];
     _xsTab.footer.automaticallyHidden = NO;
     [self.view addSubview:_xsTab];
@@ -172,9 +172,9 @@
 #pragma mark----tableview代理和资源方法
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-   
+    
     return 288;
-   
+    
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -189,150 +189,150 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-        static NSString * idenfStr = @"xsCell";
-        XSCell * cell = [tableView dequeueReusableCellWithIdentifier:idenfStr];
-        if (!cell) {
-            cell = [[XSCell alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 280)];
-            cell.backgroundColor = [UIColor clearColor];
-            NSString * imgUrl;
-            if ([[_xsJsonArr[indexPath.row]objectForKey:@"imgurl"] rangeOfString:@"http"].location != NSNotFound) {
-                imgUrl = [_xsJsonArr[indexPath.row] objectForKey:@"imgurl"];
-            }else{
+    static NSString * idenfStr = @"xsCell";
+    XSCell * cell = [tableView dequeueReusableCellWithIdentifier:idenfStr];
+    if (!cell) {
+        cell = [[XSCell alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 280)];
+        cell.backgroundColor = [UIColor clearColor];
+        NSString * imgUrl;
+        if ([[_xsJsonArr[indexPath.row]objectForKey:@"imgurl"] rangeOfString:@"http"].location != NSNotFound) {
+            imgUrl = [_xsJsonArr[indexPath.row] objectForKey:@"imgurl"];
+        }else{
             imgUrl = [NSString stringWithFormat:@"%@%@",IMG_URL,[_xsJsonArr[indexPath.row]objectForKey:@"imgurl"]];
-            }
-
-           
-            [[ToolManager shareInstance] imageView:cell.headImg  setImageWithURL:imgUrl placeholderType:PlaceholderTypeUserHead];
-           
-            cell.userNameLab.text = [_xsJsonArr[indexPath.row] objectForKey:@"realname"];
-            cell.userNameLab.frame = CGRectMake(cell.userNameLab.x,7, [cell.userNameLab.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(APPWIDTH/2.0, cell.userNameLab.size.height)].width, cell.userNameLab.height);
-
-            
-            if ([[_xsJsonArr[indexPath.row]objectForKey:@"authen"] intValue]==3) {
-                cell.renzhImg.image = [UIImage imageNamed:@"[iconprofilerenzhen]"];
-                                     cell.renzhImg.frame =CGRectMake(cell.userNameLab.frame.origin.x+cell.userNameLab.frame.size.width+5,CGRectGetMaxY(cell.userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
-            }else{
-                cell.renzhImg.image = nil;
-                 cell.renzhImg.frame =CGRectMake(0, 0, 0, 0);
-            }
-            if ([[_xsJsonArr[indexPath.row]objectForKey:@"vip"] intValue]==1) {
-                cell.vipImg.image = [UIImage imageNamed:@"[iconprofilevip]"];
-                   cell.vipImg.frame =CGRectMake(cell.renzhImg.frame.origin.x+cell.renzhImg.frame.size.width+5,CGRectGetMaxY(cell.userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
-            }else{
-                 cell.vipImg.image = nil;
-                cell.vipImg.frame =CGRectMake(0, 0, 0, 0);
-            }
-            
-            NSString *str=[_xsJsonArr[indexPath.row] objectForKey:@"position"];
-            if (str.length>0) {
-                str=[NSString stringWithFormat:@"%@ %@",str,[_xsJsonArr[indexPath.row] objectForKey:@"workyear"]];
-            }else{
-                str=[_xsJsonArr[indexPath.row] objectForKey:@"workyear"];
-            }
-            cell.positionLab.text =str;
-            if (cell.positionLab.text.length==0) {
-                cell.positionLab.frame=CGRectMake(cell.positionLab.x, cell.positionLab.y, 0, 0);
-            }
-            cell.addressLab.frame=CGRectMake(cell.addressLab.x,CGRectGetMaxY(cell.positionLab.frame)+8,APPWIDTH-cell.userNameLab.frame.origin.x, 12);
-            cell.addressLab.text=[_xsJsonArr[indexPath.row] objectForKey:@"address"];
-            if (cell.addressLab.text.length==0) {
-                cell.addressLab.frame=CGRectMake(cell.positionLab.x, cell.positionLab.y, 0, 0);
-
-            }
-            
-            
-            NSString * timStr = [_xsJsonArr[indexPath.row] objectForKey:@"createtime"];
-            NSTimeInterval time=[timStr doubleValue];
-            NSDate *data = [NSDate dateWithTimeIntervalSince1970:time];
-            cell.timeLab.text = [self getDateStringWithDate:data DateFormat:@"yyyy-MM-dd HH:mm:ss"];
-            NSString * sjcStr = [self intervalSinceNow:cell.timeLab.text];
-            if ([sjcStr integerValue] <=60) {
-                cell.timeLab.text = @"刚刚";
-            }else if ([sjcStr integerValue]<=3600)
-            {
-                cell.timeLab.text = [NSString stringWithFormat:@"%ld分钟前",[sjcStr integerValue]/60];
-            }else if ([sjcStr integerValue]<=60*60*24)
-            {
-                cell.timeLab.text = [NSString stringWithFormat:@"%ld小时前",[sjcStr integerValue]/(60*60)];
-            }else if ([sjcStr integerValue]<=60*60*24*3)
-            {
-                cell.timeLab.text = [NSString stringWithFormat:@"%ld天前",[sjcStr integerValue]/(60*60*24)];
-            }else
-            {
-                cell.timeLab.text = [self getDateStringWithDate:data DateFormat:@"MM-dd HH:mm"];
-            }
-            cell.lookLab.text = [NSString stringWithFormat:@"查看:%@",[_xsJsonArr[indexPath.row] objectForKey:@"readcount"]];
-            cell.commentLab.text = [NSString stringWithFormat:@"评论:%@",[_xsJsonArr[indexPath.row] objectForKey:@"commentnum"]];
-            
-            if ([[_xsJsonArr[indexPath.row]objectForKey:@"industry"] isEqualToString:BAOXIAN]) {
-                [cell.hanyeBtn setTitle:@"保险" forState:UIControlStateNormal];
-            }else if ([[_xsJsonArr[indexPath.row]objectForKey:@"industry"] isEqualToString:JINRONG])
-            {
-                [cell.hanyeBtn setTitle:@"金融" forState:UIControlStateNormal];
-            }else if ([[_xsJsonArr[indexPath.row]objectForKey:@"industry"] isEqualToString:FANGCHANG])
-            {
-                [cell.hanyeBtn setTitle:@"房产" forState:UIControlStateNormal];
-            }else if ([[_xsJsonArr[indexPath.row]objectForKey:@"industry"] isEqualToString:CHEHANG])
-            {
-                [cell.hanyeBtn setTitle:@"车行" forState:UIControlStateNormal];
-            }
-
-
-            
-            cell.titLab.text = [_xsJsonArr[indexPath.row] objectForKey:@"title"];
-            cell.moneyLab.text = [_xsJsonArr[indexPath.row] objectForKey:@"cost"];
-             cell.blueV.tag = 1000+indexPath.row;
-            UITapGestureRecognizer * blueVTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(blueVAction:)];
-            blueVTap.numberOfTapsRequired =1;
-            blueVTap.numberOfTouchesRequired = 1;
-           
-            [cell.blueV addGestureRecognizer:blueVTap];
-            NSString * xqStr;
-            NSString * qdStr = @"需求强度: ";
-            NSString * qdStr2;
-            if ([[_xsJsonArr[indexPath.row] objectForKey:@"confidence_n"] intValue] == 3) {
-                qdStr2 = [NSString stringWithFormat:@"很强"];
-            }else if ([[_xsJsonArr[indexPath.row] objectForKey:@"confidence_n"] intValue] == 2)
-            {
-                qdStr2 = [NSString stringWithFormat:@"强"];
-            }else
-            {
-                qdStr2 = [NSString stringWithFormat:@"一般"];
-            }
-            xqStr = [qdStr stringByAppendingString:qdStr2];
-            NSMutableAttributedString * xqqdAtr = [[NSMutableAttributedString alloc]initWithString:xqStr];
-            [xqqdAtr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:1.000 green:0.518 blue:0.224 alpha:1.000] range:NSMakeRange([qdStr length], [qdStr2 length])];
-            [xqqdAtr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithWhite:0.514 alpha:1.000] range:NSMakeRange(0,[qdStr length])];
-            cell.xqqdLab.attributedText = xqqdAtr;
-            NSString * lq1 = [NSString stringWithFormat:@"%@人领取",[_xsJsonArr[indexPath.row]objectForKey:@"coopnum"] ];
-            NSString * lq2 = [NSString stringWithFormat:@""];
-            if ([[_xsJsonArr[indexPath.row]objectForKey:@"iscoop"]intValue ]==1) {
-                lq2 = [NSString stringWithFormat:@"(已领取)"];
-            }
-           
-            if ([[_xsJsonArr[indexPath.row]objectForKey:@"state"]intValue ]>20) {
-                 lq2 = [NSString stringWithFormat:@"(已合作)"];
-            }
-            
-            NSString * lqStr = [lq1 stringByAppendingString:lq2];
-            NSMutableAttributedString * lqAtr = [[NSMutableAttributedString alloc]initWithString:lqStr];
-            [lqAtr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithWhite:0.514 alpha:1.000] range:NSMakeRange(0, [lq1 length])];
-            if ([[_xsJsonArr[indexPath.row]objectForKey:@"iscoop"]intValue ]==1||[[_xsJsonArr[indexPath.row]objectForKey:@"state"]intValue ]>20) {
-                [lqAtr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:1.000 green:0.518 blue:0.224 alpha:1.000] range:NSMakeRange([lq1 length], [lq2 length])];
-            }else
-            {
-                [lqAtr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithWhite:0.514 alpha:1.000] range:NSMakeRange([lq1 length], [lq2 length])];
-            }
-            cell.lqLab.attributedText = lqAtr;
-            UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(btnVAction:)];
-            tap.numberOfTapsRequired = 1;
-            tap.numberOfTouchesRequired = 1;
-            cell.btnV.tag = 200+indexPath.row;
-            [cell.btnV addGestureRecognizer:tap];
-
         }
-        return cell;
-
+        
+        
+        [[ToolManager shareInstance] imageView:cell.headImg  setImageWithURL:imgUrl placeholderType:PlaceholderTypeUserHead];
+        
+        cell.userNameLab.text = [_xsJsonArr[indexPath.row] objectForKey:@"realname"];
+        cell.userNameLab.frame = CGRectMake(cell.userNameLab.x,12, [cell.userNameLab.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(APPWIDTH/2.0, cell.userNameLab.size.height)].width, cell.userNameLab.height);
+        
+        
+        if ([[_xsJsonArr[indexPath.row]objectForKey:@"authen"] intValue]==3) {
+            cell.renzhImg.image = [UIImage imageNamed:@"[iconprofilerenzhen]"];
+            cell.renzhImg.frame =CGRectMake(cell.userNameLab.frame.origin.x+cell.userNameLab.frame.size.width+5,CGRectGetMaxY(cell.userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
+        }else{
+            cell.renzhImg.image = nil;
+            cell.renzhImg.frame =CGRectMake(cell.userNameLab.frame.origin.x+cell.userNameLab.frame.size.width,CGRectGetMaxY(cell.userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, 0, 0);
+        }
+        if ([[_xsJsonArr[indexPath.row]objectForKey:@"vip"] intValue]==1) {
+            cell.vipImg.image = [UIImage imageNamed:@"[iconprofilevip]"];
+            cell.vipImg.frame =CGRectMake(cell.renzhImg.frame.origin.x+cell.renzhImg.frame.size.width+5,CGRectGetMaxY(cell.userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
+        }else{
+            cell.vipImg.image = nil;
+            cell.vipImg.frame =CGRectMake(0, 0, 0, 0);
+        }
+        
+        NSString *str=[_xsJsonArr[indexPath.row] objectForKey:@"position"];
+        if (str.length>0) {
+            str=[NSString stringWithFormat:@"%@ %@",str,[_xsJsonArr[indexPath.row] objectForKey:@"workyear"]];
+        }else{
+            str=[_xsJsonArr[indexPath.row] objectForKey:@"workyear"];
+        }
+        cell.positionLab.text =str;
+        if (cell.positionLab.text.length==0) {
+            cell.positionLab.frame=CGRectMake(cell.positionLab.x, cell.userNameLab.y, 0, 0);
+        }
+        cell.addressLab.frame=CGRectMake(cell.userNameLab.x,CGRectGetMaxY(cell.positionLab.frame)+8,APPWIDTH-cell.userNameLab.frame.origin.x, 12);
+        cell.addressLab.text=[_xsJsonArr[indexPath.row] objectForKey:@"address"];
+        if (cell.addressLab.text.length==0) {
+            cell.addressLab.frame=CGRectMake(cell.positionLab.x, cell.positionLab.y, 0, 0);
+            
+        }
+        
+        
+        NSString * timStr = [_xsJsonArr[indexPath.row] objectForKey:@"createtime"];
+        NSTimeInterval time=[timStr doubleValue];
+        NSDate *data = [NSDate dateWithTimeIntervalSince1970:time];
+        cell.timeLab.text = [self getDateStringWithDate:data DateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        NSString * sjcStr = [self intervalSinceNow:cell.timeLab.text];
+        if ([sjcStr integerValue] <=60) {
+            cell.timeLab.text = @"刚刚";
+        }else if ([sjcStr integerValue]<=3600)
+        {
+            cell.timeLab.text = [NSString stringWithFormat:@"%ld分钟前",[sjcStr integerValue]/60];
+        }else if ([sjcStr integerValue]<=60*60*24)
+        {
+            cell.timeLab.text = [NSString stringWithFormat:@"%ld小时前",[sjcStr integerValue]/(60*60)];
+        }else if ([sjcStr integerValue]<=60*60*24*3)
+        {
+            cell.timeLab.text = [NSString stringWithFormat:@"%ld天前",[sjcStr integerValue]/(60*60*24)];
+        }else
+        {
+            cell.timeLab.text = [self getDateStringWithDate:data DateFormat:@"MM-dd HH:mm"];
+        }
+        cell.lookLab.text = [NSString stringWithFormat:@"查看:%@",[_xsJsonArr[indexPath.row] objectForKey:@"readcount"]];
+        cell.commentLab.text = [NSString stringWithFormat:@"评论:%@",[_xsJsonArr[indexPath.row] objectForKey:@"commentnum"]];
+        
+        if ([[_xsJsonArr[indexPath.row]objectForKey:@"industry"] isEqualToString:BAOXIAN]) {
+            [cell.hanyeBtn setTitle:@"保险" forState:UIControlStateNormal];
+        }else if ([[_xsJsonArr[indexPath.row]objectForKey:@"industry"] isEqualToString:JINRONG])
+        {
+            [cell.hanyeBtn setTitle:@"金融" forState:UIControlStateNormal];
+        }else if ([[_xsJsonArr[indexPath.row]objectForKey:@"industry"] isEqualToString:FANGCHANG])
+        {
+            [cell.hanyeBtn setTitle:@"房产" forState:UIControlStateNormal];
+        }else if ([[_xsJsonArr[indexPath.row]objectForKey:@"industry"] isEqualToString:CHEHANG])
+        {
+            [cell.hanyeBtn setTitle:@"车行" forState:UIControlStateNormal];
+        }
+        
+        
+        
+        cell.titLab.text = [_xsJsonArr[indexPath.row] objectForKey:@"title"];
+        cell.moneyLab.text = [_xsJsonArr[indexPath.row] objectForKey:@"cost"];
+        cell.blueV.tag = 1000+indexPath.row;
+        UITapGestureRecognizer * blueVTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(blueVAction:)];
+        blueVTap.numberOfTapsRequired =1;
+        blueVTap.numberOfTouchesRequired = 1;
+        
+        [cell.blueV addGestureRecognizer:blueVTap];
+        NSString * xqStr;
+        NSString * qdStr = @"需求强度: ";
+        NSString * qdStr2;
+        if ([[_xsJsonArr[indexPath.row] objectForKey:@"confidence_n"] intValue] == 3) {
+            qdStr2 = [NSString stringWithFormat:@"很强"];
+        }else if ([[_xsJsonArr[indexPath.row] objectForKey:@"confidence_n"] intValue] == 2)
+        {
+            qdStr2 = [NSString stringWithFormat:@"强"];
+        }else
+        {
+            qdStr2 = [NSString stringWithFormat:@"一般"];
+        }
+        xqStr = [qdStr stringByAppendingString:qdStr2];
+        NSMutableAttributedString * xqqdAtr = [[NSMutableAttributedString alloc]initWithString:xqStr];
+        [xqqdAtr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:1.000 green:0.518 blue:0.224 alpha:1.000] range:NSMakeRange([qdStr length], [qdStr2 length])];
+        [xqqdAtr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithWhite:0.514 alpha:1.000] range:NSMakeRange(0,[qdStr length])];
+        cell.xqqdLab.attributedText = xqqdAtr;
+        NSString * lq1 = [NSString stringWithFormat:@"%@人领取",[_xsJsonArr[indexPath.row]objectForKey:@"coopnum"] ];
+        NSString * lq2 = [NSString stringWithFormat:@""];
+        if ([[_xsJsonArr[indexPath.row]objectForKey:@"iscoop"]intValue ]==1) {
+            lq2 = [NSString stringWithFormat:@"(已领取)"];
+        }
+        
+        if ([[_xsJsonArr[indexPath.row]objectForKey:@"state"]intValue ]>20) {
+            lq2 = [NSString stringWithFormat:@"(已合作)"];
+        }
+        
+        NSString * lqStr = [lq1 stringByAppendingString:lq2];
+        NSMutableAttributedString * lqAtr = [[NSMutableAttributedString alloc]initWithString:lqStr];
+        [lqAtr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithWhite:0.514 alpha:1.000] range:NSMakeRange(0, [lq1 length])];
+        if ([[_xsJsonArr[indexPath.row]objectForKey:@"iscoop"]intValue ]==1||[[_xsJsonArr[indexPath.row]objectForKey:@"state"]intValue ]>20) {
+            [lqAtr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:1.000 green:0.518 blue:0.224 alpha:1.000] range:NSMakeRange([lq1 length], [lq2 length])];
+        }else
+        {
+            [lqAtr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithWhite:0.514 alpha:1.000] range:NSMakeRange([lq1 length], [lq2 length])];
+        }
+        cell.lqLab.attributedText = lqAtr;
+        UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(btnVAction:)];
+        tap.numberOfTapsRequired = 1;
+        tap.numberOfTouchesRequired = 1;
+        cell.btnV.tag = 200+indexPath.row;
+        [cell.btnV addGestureRecognizer:tap];
+        
+    }
+    return cell;
+    
 }
 
 #pragma mark----线索那边的头像那块view的点击事件
@@ -349,7 +349,7 @@
         //跳转我的领取线索详情
         MyLQDetailVC* myLqV =  [[MyLQDetailVC alloc]init];
         myLqV.xiansuoID = [_xsJsonArr[sender.view.tag - 1000] objectForKey:@"id"];
-       [self.navigationController pushViewController:myLqV animated:YES];
+        [self.navigationController pushViewController:myLqV animated:YES];
         return;
     }
     if ([[_xsJsonArr[sender.view.tag-1000] objectForKey:@"isself"] intValue] == 1) {
@@ -357,7 +357,7 @@
         MyXSDetailVC* myxiansuoV =  [[MyXSDetailVC alloc]init];
         myxiansuoV.xiansuoID = [_xsJsonArr[sender.view.tag - 1000] objectForKey:@"id"];
         [self.navigationController pushViewController:myxiansuoV animated:YES];
-
+        
         return;
     }
     XianSuoDetailVC * xiansuoV =  [[XianSuoDetailVC alloc]init];
@@ -428,13 +428,13 @@
 
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

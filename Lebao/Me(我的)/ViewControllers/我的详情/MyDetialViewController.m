@@ -174,12 +174,16 @@
     [self navViewTitleAndBackBtn:@"个人详情"];
     [self.view addSubview:self.myDetailTV];
     [self netWork];
+    addConnectionsBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+    addConnectionsBtn.frame=CGRectMake(0,APPHEIGHT-TabBarHeight,APPWIDTH, TabBarHeight);
+    addConnectionsBtn.tag=2222;
+    [self.view addSubview:addConnectionsBtn];
 }
 
 -(void)reflashBtn:(NSNotification *)notification
 {
     if ([notification.object[@"relation"]isEqualToString:@"1"]) {
-        [self addBottomViewWithBtnStr:1];
+        [self addBottomViewWithBtnStr:1 andReward:[notification.object[@"reward"] floatValue]];
     }
 }
 #pragma mark
@@ -652,11 +656,9 @@
     
 }
 #pragma mark --bottomView底部view
--(void)addBottomViewWithBtnStr:(int)btnStr
+-(void)addBottomViewWithBtnStr:(int)btnStr andReward:(float )reward
 {
-    addConnectionsBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    addConnectionsBtn.frame=CGRectMake(0,APPHEIGHT-TabBarHeight,APPWIDTH, TabBarHeight);
-    addConnectionsBtn.backgroundColor=WhiteColor;
+
     NSString *titleStr;
     if (btnStr==0) {
         titleStr=@"添加人脉";
@@ -665,12 +667,20 @@
         [addConnectionsBtn setTitleColor:AppMainColor forState:UIControlStateNormal];
         
     }else if (btnStr==1) {
+        if (reward>0) {
+            titleStr=[NSString stringWithFormat:@"等待对方通过(已打赏%0.2f元)",reward];
+        }else{
         titleStr=@"等待对方通过";
+        }
         addConnectionsBtn.tag=2223;
         addConnectionsBtn.userInteractionEnabled=NO;
         [addConnectionsBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
     }else if (btnStr==2) {
+        if (reward>0) {
+            titleStr=[NSString stringWithFormat:@"等待您的通过(已打赏%0.2f元)",reward];
+        }else{
         titleStr=@"等待您的通过";
+        }
         addConnectionsBtn.tag=2224;
         addConnectionsBtn.userInteractionEnabled=NO;
         [addConnectionsBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
@@ -681,10 +691,10 @@
         [addConnectionsBtn setTitleColor:AppMainColor forState:UIControlStateNormal];
         
     }
-    addConnectionsBtn.backgroundColor=[UIColor colorWithWhite:0.800 alpha:1.000];
+    addConnectionsBtn.backgroundColor=[UIColor colorWithWhite:0.902 alpha:1.000];
     [addConnectionsBtn setTitle:titleStr forState:UIControlStateNormal];
     [addConnectionsBtn addTarget:self action:@selector(addConnectionsBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:addConnectionsBtn];
+   
     
 }
 #pragma mark button aticons
@@ -702,8 +712,7 @@
         alertV.delegate = self;
         alertV.titleStr = @"提示";
         alertV.title2Str=@"打赏让加人脉更顺畅!";
-//        recognizerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapBehind:)];
-//        [alertV.window addGestureRecognizer:recognizerTap];
+
     }else if (sender.tag==2223) {
     }else if (sender.tag==2224) {
     }else if (sender.tag==2225) {
@@ -717,21 +726,6 @@
         
     }
 }
-//#pragma mark - 点击空白处消失
-//- (void)handleTapBehind:(UITapGestureRecognizer *)sender {
-//    NSLog(@"sdfsdfsdfsdfsdjhtrsasgdghfghmdfhdsdgfhgsfdmghdmhfdrs");
-//    if (sender.state == UIGestureRecognizerStateEnded){
-//        CGPoint location = [sender locationInView:nil];
-//        if (![alertV pointInside:[alertV convertPoint:location fromView:alertV.window] withEvent:nil]){
-//            [alertV.window removeGestureRecognizer:sender];
-//            if (alertV!=nil) {
-//                [alertV dissMiss];
-//            }
-//            
-//        }
-//    }
-//}
-
 
 #pragma mark - AddConnectionViewDelegate
 - (void) customAlertView:(AddConnectionView *) customAlertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -746,7 +740,7 @@
                 MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
                 if (model.rtcode==1) {
                     UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"添加人脉请求已发出,请耐心等待" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
-                     [[NSNotificationCenter defaultCenter]postNotificationName:@"KReflashCanMeet" object:@{@"userid":headerModel.Id,@"relation":@"1"}];
+                     [[NSNotificationCenter defaultCenter]postNotificationName:@"KReflashCanMeet" object:@{@"userid":headerModel.Id,@"relation":@"1",@"reward":@"0"}];
                     [successAlertV show];
                     [alertV.window removeGestureRecognizer:recognizerTap];
                 }
@@ -812,7 +806,7 @@
                 
                 [self navViewTitleAndBackBtn:headerModel.realname];
                 if (!headerModel.isme) {
-                    [self addBottomViewWithBtnStr:[dataObj[@"relation"] intValue] ];
+                    [self addBottomViewWithBtnStr:[dataObj[@"relation"] intValue] andReward:[dataObj[@"reward"] floatValue]];
                     _myDetailTV.frame = CGRectMake(0, _myDetailTV.y,_myDetailTV.width, APPHEIGHT - (_myDetailTV.y) -TabBarHeight);
                 }else{
                     

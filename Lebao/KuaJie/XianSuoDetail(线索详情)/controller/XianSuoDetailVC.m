@@ -34,12 +34,12 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:YES];
-      [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(infoAction)name:UITextFieldTextDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(infoAction)name:UITextFieldTextDidChangeNotification object:nil];
 }
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-     [self removeNoti];
+    [self removeNoti];
     [[MP3PlayerManager shareInstance] stopPlayer];
 }
 - (void)viewDidLoad {
@@ -58,7 +58,7 @@
                 [_coopArr addObject:dic];
             }
             _xiansDic = [NSDictionary dictionaryWithDictionary:[jsonDic objectForKey:@"datas"]];
-//            NSLog(@"_xiansDic =%@",_xiansDic,HttpURL);
+            //            NSLog(@"_xiansDic =%@",_xiansDic,HttpURL);
             [self addButtomScro];
             
             
@@ -74,19 +74,19 @@
             }
             if ([[_xiansDic objectForKey:@"state"]intValue] >= 30) {
                 _linqBtn.hidden = YES;
-                 _lqhxV.hidden =YES;
+                _lqhxV.hidden =YES;
             }else
             {
                 _linqBtn.hidden = NO;
                 _lqhxV.hidden = NO;
             }
-
+            
             [self customDjV];
             [self customJbV];
         }else
         {
             [[ToolManager shareInstance]showAlertMessage:info];
-     
+            
         }
     }];
 }
@@ -131,8 +131,8 @@
     _subtraBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _subtraBtn.layer.cornerRadius = 10;
     _subtraBtn.layer.borderWidth = 0.5f;
-        _subtraBtn.userInteractionEnabled = NO;
-       _subtraBtn.layer.borderColor = [[UIColor colorWithWhite:0.902 alpha:1.000] CGColor];
+    _subtraBtn.userInteractionEnabled = NO;
+    _subtraBtn.layer.borderColor = [[UIColor colorWithWhite:0.902 alpha:1.000] CGColor];
     [_subtraBtn setTitle:@"一" forState:UIControlStateNormal];
     [_subtraBtn setTitleColor:[UIColor colorWithWhite:0.584 alpha:1.000] forState:UIControlStateNormal];
     _subtraBtn.backgroundColor = [UIColor colorWithRed:0.976 green:0.965 blue:0.969 alpha:1.000];
@@ -179,7 +179,7 @@
     zfmoneyLab.textColor = [UIColor colorWithWhite:0.639 alpha:1.000];
     zfmoneyLab.text = @"支付定金";
     [djV addSubview:zfmoneyLab];
-
+    
     _howMuchLab = [[UILabel alloc]initWithFrame:CGRectMake(90, 105, 168, 30)];
     _howMuchLab.textColor = [UIColor blackColor];
     _howMuchLab.font = [UIFont systemFontOfSize:18];
@@ -197,7 +197,7 @@
     textLabel.text =text;
     [djV addSubview:textLabel];
     
-  
+    
     UIButton * quxBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     quxBtn.backgroundColor = [UIColor colorWithRed:0.976 green:0.965 blue:0.969 alpha:1.000];
     [quxBtn setTitle:@"取消" forState:UIControlStateNormal];
@@ -222,8 +222,8 @@
     if ([_bfbTex.text isEqualToString:@"0"]||[_bfbTex.text isEqualToString:@""]) {
         
     }else{
-    float bfb = [[_bfbTex.text stringByReplacingOccurrencesOfString:@"%" withString:@""] intValue]/100.0f;
-    _howMuchLab.text = [NSString stringWithFormat:@"%.2f",bfb * [[_xiansDic objectForKey:@"cost"] floatValue]];
+        float bfb = [[_bfbTex.text stringByReplacingOccurrencesOfString:@"%" withString:@""] intValue]/100.0f;
+        _howMuchLab.text = [NSString stringWithFormat:@"%.2f",bfb * [[_xiansDic objectForKey:@"cost"] floatValue]];
         _plusBtn.userInteractionEnabled = YES;
         _subtraBtn.userInteractionEnabled = YES;
         [_subtraBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -231,7 +231,7 @@
         [_plusBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _plusBtn.backgroundColor = [UIColor colorWithRed:0.243 green:0.553 blue:1.000 alpha:1.000];
     }
-    }
+}
 -(void)resposAction
 {
     if ([_bfbTex isFirstResponder]) {
@@ -288,9 +288,9 @@
     float keyboard_hide = (field_maxy - keyboard_y)>0?field_maxy - keyboard_y:0;
     //     NSLog(@"keyboard_hide=%.2f",keyboard_hide);
     if (IPHONE_4_SCREEN) {
-      self.view.transform=CGAffineTransformMakeTranslation(0, -keyboard_hide+72);
+        self.view.transform=CGAffineTransformMakeTranslation(0, -keyboard_hide+72);
     }else{
-    self.view.transform=CGAffineTransformMakeTranslation(0, -keyboard_hide+72);
+        self.view.transform=CGAffineTransformMakeTranslation(0, -keyboard_hide+72);
     }
     
 }
@@ -374,7 +374,7 @@
     if ([_bfbTex isFirstResponder]) {
         [_bfbTex resignFirstResponder];
     }else{
-    _zfdjV.hidden = YES;
+        _zfdjV.hidden = YES;
     }
 }
 -(void)quxiaoAction
@@ -384,7 +384,7 @@
 -(void)quedingAction
 {
     if ([_howMuchLab.text isEqualToString:@"0.00"]) {
-      
+        
         [[ToolManager shareInstance] showAlertMessage:@"请支付一点定金"];
         return;
     }
@@ -443,7 +443,7 @@
     }
     float bfb = [[_bfbTex.text stringByReplacingOccurrencesOfString:@"%" withString:@""] intValue]/100.0f;
     _howMuchLab.text = [NSString stringWithFormat:@"%.2f",bfb * [[_xiansDic objectForKey:@"cost"] floatValue]];
-
+    
 }
 -(void)addButtomScro
 {
@@ -456,9 +456,10 @@
     [self addTheTouXiangV];
     [self addTheXsV];
 }
+#pragma mark ---头部
 -(void)addTheTouXiangV
 {
-    _txV = [[UIView alloc]initWithFrame:CGRectMake(10, 10, SCREEN_WIDTH-20, 61)];
+    _txV = [[UIView alloc]initWithFrame:CGRectMake(10, 10, SCREEN_WIDTH-20, 69)];
     _txV.backgroundColor = [UIColor whiteColor];
     [_bottomScr addSubview:_txV];
     UIImageView * headImg = [[UIImageView alloc]initWithFrame:CGRectMake(10, 10, 41, 41)];
@@ -470,8 +471,8 @@
     }else{
         imgUrl = [NSString stringWithFormat:@"%@%@",IMG_URL,[_xiansDic objectForKey:@"imgurl"]];
     }
-
-
+    
+    
     [[ToolManager shareInstance] imageView:headImg setImageWithURL:imgUrl placeholderType:PlaceholderTypeUserHead];
     [_txV addSubview:headImg];
     UITapGestureRecognizer * txTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(touxiangAction)];
@@ -488,24 +489,49 @@
     
     [_txV addSubview:userNameLab];
     
-    _positionLab = [[UILabel alloc]initWithFrame:CGRectMake(userNameLab.frame.origin.x, 30, 80, 11)];
+    UIImageView * renzhImgV = [[UIImageView alloc]init];
+    if ([[_xiansDic objectForKey:@"authen"] intValue]==3) {
+        renzhImgV.image= [UIImage imageNamed:@"[iconprofilerenzhen]"];
+        renzhImgV.frame=CGRectMake(CGRectGetMaxX(userNameLab.frame)+5,CGRectGetMaxY(userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
+    }else{
+        renzhImgV.image = nil;
+        renzhImgV.frame =CGRectMake(CGRectGetMaxX(userNameLab.frame),CGRectGetMaxY(userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, 0, 0);
+    }
+    [_txV addSubview:renzhImgV];
+    
+    if ([[_xiansDic objectForKey:@"vip"] intValue]==1) {
+        UIImageView * vipImg= [[UIImageView alloc]init];
+        vipImg.image = [UIImage imageNamed:@"[iconprofilevip]"];
+        vipImg.frame =CGRectMake(renzhImgV.frame.origin.x+renzhImgV.frame.size.width+5,CGRectGetMaxY(userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
+        [_txV addSubview:vipImg];
+    }
+    
+    _positionLab = [[UILabel alloc]initWithFrame:CGRectMake(userNameLab.frame.origin.x, CGRectGetMaxY(userNameLab.frame)+8, APPWIDTH-userNameLab.frame.origin.x, 11)];
     _positionLab.font = [UIFont systemFontOfSize:12];
     _positionLab.textColor = [UIColor colorWithWhite:0.514 alpha:1.000];
     _positionLab.textAlignment = NSTextAlignmentLeft;
     NSString *str=[_xiansDic objectForKey:@"position"];
     if (str.length>0) {
-        str=[NSString stringWithFormat:@"%@ %@\n%@",str,[_xiansDic objectForKey:@"years"],[_xiansDic objectForKey:@"address"]];
+        str=[NSString stringWithFormat:@"%@ %@",str,[_xiansDic objectForKey:@"workyear"]];
+    }else{
+        str=[_xiansDic objectForKey:@"workyear"];
     }
     _positionLab.text =str;
+    if (_positionLab.text.length==0) {
+        _positionLab.frame=CGRectMake(_positionLab.x, userNameLab.y, 0, 0);
+    }
     [_txV addSubview:_positionLab];
+    NSString *str1=[_xiansDic objectForKey:@"address"];
+    NSLog(@"[_xiansDic objectForKey:address]===%@",[_xiansDic objectForKey:@"address"]);
+    if (str1.length>0){
+        UILabel *addressLab=[[UILabel alloc]init];
+        addressLab.frame=CGRectMake(userNameLab.x,CGRectGetMaxY(_positionLab.frame)+8,APPWIDTH-userNameLab.frame.origin.x, 12);
+        addressLab.font = [UIFont systemFontOfSize:12];
+        addressLab.textColor = [UIColor colorWithWhite:0.514 alpha:1.000];
+        addressLab.text=[_xiansDic objectForKey:@"address"];
+        [_txV addSubview:addressLab];
+    }
     
-    UIImageView * renzhImgV = [[UIImageView alloc]initWithFrame:CGRectMake(userNameLab.frame.origin.x+userNameLab.frame.size.width, 13, 14, 14)];
-    UIImage *certifyimag = [[_xiansDic objectForKey:@"authen"] intValue]==3?[UIImage imageNamed:@"[iconprofilerenzhen]"]:[UIImage imageNamed:@"[iconprofileweirenzhen]"];
-    renzhImgV.image=certifyimag;
-    renzhImgV.frame=CGRectMake(CGRectGetMaxX(userNameLab.frame)+3, CGRectGetMaxY(userNameLab.frame)-certifyimag.size.height, certifyimag.size.width,certifyimag.size.height);
-
-    [_txV addSubview:renzhImgV];
-
     UILabel * timeLab = [[UILabel alloc]initWithFrame:CGRectMake(_txV.frame.size.width-160, 7, 150, 20)];
     timeLab.backgroundColor = [UIColor clearColor];
     timeLab.font = [UIFont systemFontOfSize:13];
@@ -532,18 +558,18 @@
         timeLab.text = [self getDateStringWithDate:data DateFormat:@"MM-dd HH:mm"];
     }
     
-
-
+    
+    
     [_txV addSubview:timeLab];
-//    [self addTheDuiHuaV:_txV.frame.origin.y+_txV.frame.size.height];
+    //    [self addTheDuiHuaV:_txV.frame.origin.y+_txV.frame.size.height];
 }
 -(void)touxiangAction
 {
-
+    
     MyDetialViewController * myDetialViewController = [[MyDetialViewController alloc]init];
     myDetialViewController.userID = [_xiansDic objectForKey:@"brokerid"];
     [self.navigationController pushViewController:myDetialViewController animated:YES];
-   
+    
 }
 //-(void)addTheDuiHuaV:(CGFloat)orgY
 //{
@@ -576,7 +602,7 @@
     titLab.text = [_xiansDic objectForKey:@"title"];
     [_xsDetailV addSubview:titLab];
     
-
+    
     
     UILabel * detailLab = [[UILabel alloc]initWithFrame:CGRectMake(3, 45, _xsDetailV.frame.size.width-6, 60)];//内容lab
     detailLab.textColor = [UIColor colorWithWhite:0.502 alpha:1.000];
@@ -594,7 +620,7 @@
     
     float soundImgH = CGRectGetMaxY(detailLab.frame);
     if (_xiansDic[@"audios"]&&![_xiansDic[@"audios"] isEqualToString:@""]) {
-       UIImageView *soundImg=[[UIImageView alloc]init];//语音button
+        UIImageView *soundImg=[[UIImageView alloc]init];//语音button
         UIImage *image = [UIImage imageNamed:@"bofangyuyuying3"];
         soundImg.frame=CGRectMake((frameWidth(_xsDetailV) - image.size.width*1.7)/2.0,soundImgH, image.size.width*1.7,  image.size.height*1.7);
         soundImg.image=image;
@@ -613,7 +639,7 @@
         
         soundImgH = CGRectGetMaxY(soundImg.frame);
     }
-
+    
     
     UIView * sxV = [[UIView alloc]initWithFrame:CGRectMake(10,soundImgH , _xsDetailV.frame.size.width-20, 1)];
     sxV.backgroundColor = [UIColor colorWithRed:0.925 green:0.925 blue:0.929 alpha:1.000];
@@ -638,7 +664,7 @@
         UIView * sxVdec = [[UIView alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(detailLabdec.frame), _xsDetailV.frame.size.width-20, 1)];
         sxVdec.backgroundColor = [UIColor colorWithRed:0.925 green:0.925 blue:0.929 alpha:1.000];
         [_xsDetailV addSubview:sxVdec];
-
+        
         height = CGRectGetMaxY(sxVdec.frame);
     }
     
@@ -691,17 +717,17 @@
     if ([[_xiansDic objectForKey:@"isconfirm"]intValue] == 1) {
         str2 = @"(已选)";
     }else{
-    str2 = @"(未选)";
+        str2 = @"(未选)";
     }
     NSString * lqStr = [str1 stringByAppendingString:str2];
     NSMutableAttributedString * lqAtr = [[NSMutableAttributedString alloc]initWithString:lqStr];
     [lqAtr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:13] range:NSMakeRange(0, [lqStr length])];
     [lqAtr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithWhite:0.169 alpha:1.000] range:NSMakeRange(0, [str1 length])];
     if ([[_xiansDic objectForKey:@"isconfirm"]intValue] == 1) {
-    [lqAtr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:0.984 green:0.435 blue:0.176 alpha:1.000] range:NSMakeRange([str1 length], [str2 length])];
-
+        [lqAtr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:0.984 green:0.435 blue:0.176 alpha:1.000] range:NSMakeRange([str1 length], [str2 length])];
+        
     }else{
-    [lqAtr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithWhite:0.608 alpha:1.000] range:NSMakeRange([str1 length], [str2 length])];
+        [lqAtr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithWhite:0.608 alpha:1.000] range:NSMakeRange([str1 length], [str2 length])];
     }
     UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(lqrAction:)];
     tap.numberOfTapsRequired = 1;
@@ -709,7 +735,7 @@
     _lqLab.attributedText = lqAtr;
     [_lqLab addGestureRecognizer:tap];
     [_bottomScr addSubview:_lqLab];
-   
+    
     UILabel * plLab = [[UILabel alloc]initWithFrame:CGRectMake(10+(SCREEN_WIDTH-20)/2, orgY, (SCREEN_WIDTH-20)/2, 25)];
     plLab.backgroundColor = [UIColor clearColor];
     plLab.textAlignment = NSTextAlignmentRight;
@@ -723,14 +749,14 @@
     [plAtr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithWhite:0.169 alpha:1.000] range:NSMakeRange(0, [str3 length])];
     
     [plAtr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:0.984 green:0.435 blue:0.176 alpha:1.000] range:NSMakeRange([str3 length], [str4 length])];
-        
+    
     UITapGestureRecognizer * tap2 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(plAction:)];
     tap2.numberOfTapsRequired = 1;
     tap2.numberOfTouchesRequired = 1;
     [plLab addGestureRecognizer:tap2];
     plLab.attributedText = plAtr;
     [_bottomScr addSubview:plLab];
-
+    
     [self addTheLQTab:orgY+25+1];
 }
 -(void)plAction:(UIGestureRecognizer *)sender
@@ -779,8 +805,8 @@
         }
         
         cell.renzhImg.image = [[_coopArr[indexPath.row]objectForKey:@"authen"] intValue]==3?[UIImage imageNamed:@"[iconprofilerenzhen]"]:[UIImage imageNamed:@"[iconprofileweirenzhen]"];
-
-       [[ToolManager shareInstance] imageView:cell.headImg setImageWithURL:imgUrl placeholderType:PlaceholderTypeUserHead];
+        
+        [[ToolManager shareInstance] imageView:cell.headImg setImageWithURL:imgUrl placeholderType:PlaceholderTypeUserHead];
         cell.headImg.tag = 200+indexPath.row;
         cell.headImg.userInteractionEnabled = YES;
         if ([[_coopArr[indexPath.row] objectForKey:@"selected"] intValue] == 1) {
@@ -788,7 +814,7 @@
             xzImg.image = [UIImage imageNamed:@"xuanzhong"];
             [cell addSubview:xzImg];
         }
-
+        
         UITapGestureRecognizer * txTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(txTapAction:)];
         txTap.numberOfTouchesRequired = 1;
         txTap.numberOfTapsRequired = 1;
@@ -810,7 +836,7 @@
         NSString * timStr = [_coopArr[indexPath.row] objectForKey:@"createtime"];
         NSTimeInterval time=[timStr doubleValue];
         NSDate *data = [NSDate dateWithTimeIntervalSince1970:time];
-       cell.timeLab.text = [self getDateStringWithDate:data DateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        cell.timeLab.text = [self getDateStringWithDate:data DateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSString * sjcStr = [self intervalSinceNow:cell.timeLab.text];
         if ([sjcStr integerValue] <=60) {
             cell.timeLab.text = @"刚刚";
@@ -827,8 +853,8 @@
         {
             cell.timeLab.text = [self getDateStringWithDate:data DateFormat:@"MM-dd HH:mm"];
         }
-
-        }
+        
+    }
     return cell;
 }
 -(void)txTapAction:(UITapGestureRecognizer *)sender
@@ -856,10 +882,10 @@
 -(void)setNav
 {
     self.automaticallyAdjustsScrollViewInsets = NO;
-   
+    
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.navigationController.navigationBar.hidden = YES;
-   
+    
     UIView * navView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 64)];
     navView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:navView];
@@ -868,7 +894,7 @@
     backBtn.frame = CGRectMake(0, 20, 60, 44);
     [backBtn setImageEdgeInsets:UIEdgeInsetsMake(0, -15, 0, 0)];
     backBtn.imageView.contentMode = UIViewContentModeLeft;
-
+    
     [backBtn setImage:[UIImage imageNamed:@"iconfont-fanhui"] forState:UIControlStateNormal];
     [backBtn addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
     [navView addSubview:backBtn];
@@ -912,8 +938,8 @@
 #pragma mark - 语音点击按钮
 -(void)soundBtnClicked:(UIGestureRecognizer *)sender
 {
-
-//    _url = @"http://pic.lmlm.cn/record/201607/22/146915727469518.mp3";
+    
+    //    _url = @"http://pic.lmlm.cn/record/201607/22/146915727469518.mp3";
     
     NSArray *pathArrays = [_url componentsSeparatedByString:@"/"];
     NSString *topath;
@@ -935,17 +961,17 @@
                     }
                     
                 };
-
+                
             }
-          
+            
         }];
         
     }else if (sender.view.tag==1111){
-         sender.view.tag=1110;
+        sender.view.tag=1110;
         [[MP3PlayerManager shareInstance] pausePlayer];
         [(UIImageView *)sender.view stopAnimating];
     }
-   
+    
     
 }
 
@@ -972,7 +998,7 @@
         return;
     }
     _zfdjV.hidden = NO;
- 
+    
 }
 -(void)rightAction
 {
@@ -1024,13 +1050,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

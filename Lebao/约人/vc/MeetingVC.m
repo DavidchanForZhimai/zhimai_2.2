@@ -308,11 +308,13 @@
 -(void)_yrBtnClick:(UIButton *)sender
 {
     
-//    NSDate *date2= [[NSUserDefaults standardUserDefaults]objectForKey:@"dateForYoukong"];
-//        if (date2!=nil&&[[DateHelper calculatorExpireDatetimeWithData:date2] minute]<30) {
-//             [[ToolManager shareInstance] showAlertMessage:[NSString stringWithFormat:@"您已点击有空,%ld分钟%ld秒内有效",29-[[DateHelper calculatorExpireDatetimeWithData:date2] minute],59-[[DateHelper calculatorExpireDatetimeWithData:date2] second]]];
-//            return;
-//    }
+    NSDate *date2= [[NSUserDefaults standardUserDefaults]objectForKey:@"dateForYoukong"];
+        if (date2!=nil&&[[DateHelper calculatorExpireDatetimeWithData:date2] minute]<30) {
+             [[ToolManager shareInstance] showAlertMessage:[NSString stringWithFormat:@"您已点击有空,%ld分钟%ld秒内有效",29-[[DateHelper calculatorExpireDatetimeWithData:date2] minute],59-[[DateHelper calculatorExpireDatetimeWithData:date2] second]]];
+            [_yrBtn setBackgroundImage:[UIImage imageNamed:@"yiyoukong"] forState:UIControlStateNormal];
+
+            return;
+    }
     [self shakeToShow:_yrBtn];
     [sender setEnabled:NO];
     if (sender.tag==1000) {
@@ -335,7 +337,7 @@
 //                        NSLog(@"param====%@",param);
                         [XLDataService putWithUrl:MeetAppendURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
                             if (dataObj) {
-                                NSLog(@"dataobj=%@",dataObj);
+//                                NSLog(@"dataobj=%@",dataObj);
                                 MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
                                 if (model.rtcode ==1) {
                                     _isopen=YES;
@@ -349,10 +351,12 @@
                                 else{
                                     if (model.remainder_at) {
                                         NSDate *date=[NSDate date];
-                                        [[NSUserDefaults standardUserDefaults]setObject:date forKey:@"dateForYoukong"];
-                                    }
-                                    
-                                    [[ToolManager shareInstance] showAlertMessage:model.rtmsg];
+                                        NSDate *date1=[date dateByAddingTimeInterval:-1800+model.remainder_at];
+                                        [[NSUserDefaults standardUserDefaults]setObject:date1 forKey:@"dateForYoukong"];
+                                        [_yrBtn setBackgroundImage:[UIImage imageNamed:@"yiyoukong"] forState:UIControlStateNormal];
+                                         [[ToolManager shareInstance] showAlertMessage:[NSString stringWithFormat:@"您已点击有空,%d分钟%d秒内有效",model.remainder_at/60,model.remainder_at%60]];
+                                    }else{
+                                        [[ToolManager shareInstance] showAlertMessage:model.rtmsg];}
                                 }
                                 [sender setEnabled:YES];
                                 

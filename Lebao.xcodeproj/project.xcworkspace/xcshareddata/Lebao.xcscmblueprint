@@ -1,4 +1,5 @@
 {
+
   "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "5C0373D08D6547EEDF73DF4AD04549DC39AEAA42+++7FA7B15",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
     "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++1AF0C4C" : {
@@ -18,9 +19,24 @@
     },
     "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++99A8FEA" : {
 
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "5C0373D08D6547EEDF73DF4AD04549DC39AEAA42+++9444581",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++57B3B8F" : {
+
+    },
+    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++3F68BC9" : {
+
+    },
+    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++2F18B75" : {
+
+    },
+    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++1693+++4BC7E0B" : {
+
+
     }
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+
     "56CDAB7623D1703C5A1FC8D5575A73DFEB758443+++1F1CE8B" : 0,
     "88D76130E7EEF3F405FC9B903745B51430EA1F17+++AD94762" : 0,
     "5C0373D08D6547EEDF73DF4AD04549DC39AEAA42+++7FA7B15" : 0,
@@ -46,6 +62,33 @@
     "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++1AF0C4C" : "zhimai_2.2\/Lebao\/%E6%88%91%E7%9A%84%E6%B6%88%E6%81%AF\/%E8%81%8A%E5%A4%A9%E6%A1%86%E6%9E%B6\/Dependcy\/GJCFAssetsPicker\/GJCFAssetsPickerResourceBundle.bundle\/",
     "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++B53D022" : "Zhimai_2.2\/Lebao\/My%20news%EF%BC%88%E6%88%91%E7%9A%84%E6%B6%88%E6%81%AF%EF%BC%89\/%E8%81%8A%E5%A4%A9%E6%A1%86%E6%9E%B6\/Dependcy\/GJCFAssetsPicker\/GJCFAssetsPickerResourceBundle.bundle\/",
     "c1b34985-89f7-4ad2-b6ed-32456ccb691a++1693+++49CFF02" : "Zhimai_2.2\/Lebao\/My%20news%EF%BC%88%E6%88%91%E7%9A%84%E6%B6%88%E6%81%AF%EF%BC%89\/%E8%81%8A%E5%A4%A9%E6%A1%86%E6%9E%B6\/Dependcy\/GJCUCapture\/"
+
+    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++1693+++49CFF02" : "Zhimai_2.2\/Lebao\/My%20news%EF%BC%88%E6%88%91%E7%9A%84%E6%B6%88%E6%81%AF%EF%BC%89\/%E8%81%8A%E5%A4%A9%E6%A1%86%E6%9E%B6\/Dependcy\/GJCUCapture\/",
+    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++B53D022" : "Zhimai_2.2\/Lebao\/My%20news%EF%BC%88%E6%88%91%E7%9A%84%E6%B6%88%E6%81%AF%EF%BC%89\/%E8%81%8A%E5%A4%A9%E6%A1%86%E6%9E%B6\/Dependcy\/GJCFAssetsPicker\/GJCFAssetsPickerResourceBundle.bundle\/"
+
+    "985CF1C47124FE3CF3C7CDBFBDE48819E8747045+++2F1CCCE" : 0,
+    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++57B3B8F" : 0,
+    "5C0373D08D6547EEDF73DF4AD04549DC39AEAA42+++9444581" : 0,
+    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++3F68BC9" : 0,
+    "781483BE7427AE9FAE952787F1C41718DCB8825F+++50B4044" : 0,
+    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++2F18B75" : 0,
+    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++1693+++4BC7E0B" : 0,
+    "56CDAB7623D1703C5A1FC8D5575A73DFEB758443+++CB9B63B" : 0,
+    "88D76130E7EEF3F405FC9B903745B51430EA1F17+++B0C9BD3" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "DCD87906-714C-49D8-9D86-CE578318A3A7",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "985CF1C47124FE3CF3C7CDBFBDE48819E8747045+++2F1CCCE" : "",
+    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++57B3B8F" : "Zhimai_2.2\/Lebao\/My%20news%EF%BC%88%E6%88%91%E7%9A%84%E6%B6%88%E6%81%AF%EF%BC%89\/%E8%81%8A%E5%A4%A9%E6%A1%86%E6%9E%B6\/Dependcy\/GJCFAssetsPicker\/GJCFAssetsPickerResourceBundle.bundle\/",
+    "5C0373D08D6547EEDF73DF4AD04549DC39AEAA42+++9444581" : "zhimai_2.2\/",
+    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++3F68BC9" : "Zhimai_2.2\/Lebao\/%E6%88%91%E7%9A%84%E6%B6%88%E6%81%AF\/%E8%81%8A%E5%A4%A9%E6%A1%86%E6%9E%B6\/Dependcy\/GJCFAssetsPicker\/GJCFAssetsPickerResourceBundle.bundle\/",
+    "781483BE7427AE9FAE952787F1C41718DCB8825F+++50B4044" : "Lebao\/",
+    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++2F18B75" : "Zhimai_2.2\/Lebao\/My%20news%EF%BC%88%E6%88%91%E7%9A%84%E6%B6%88%E6%81%AF%EF%BC%89\/%E8%81%8A%E5%A4%A9%E6%A1%86%E6%9E%B6\/Dependcy\/GJCFAssetsPicker\/GJCFAssetsPickerResourceBundle.bundle\/",
+    "c1b34985-89f7-4ad2-b6ed-32456ccb691a++1693+++4BC7E0B" : "Zhimai_2.2\/Lebao\/My%20news%EF%BC%88%E6%88%91%E7%9A%84%E6%B6%88%E6%81%AF%EF%BC%89\/%E8%81%8A%E5%A4%A9%E6%A1%86%E6%9E%B6\/Dependcy\/GJCUCapture\/",
+    "56CDAB7623D1703C5A1FC8D5575A73DFEB758443+++CB9B63B" : "Zhimai_V2.0\/",
+    "88D76130E7EEF3F405FC9B903745B51430EA1F17+++B0C9BD3" : "Zhimai_V2.1\/"
+
+
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "Lebao",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
@@ -54,31 +97,52 @@
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/DavidchanForZhimai\/Zhimai_V2.0.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "56CDAB7623D1703C5A1FC8D5575A73DFEB758443+++1F1CE8B"
+
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "56CDAB7623D1703C5A1FC8D5575A73DFEB758443+++CB9B63B"
+
     },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/DavidchanForZhimai\/zhimai_2.2",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "5C0373D08D6547EEDF73DF4AD04549DC39AEAA42+++7FA7B15"
+
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "5C0373D08D6547EEDF73DF4AD04549DC39AEAA42+++9444581"
+
     },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/git.coding.net\/davidchan\/LeFu.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "781483BE7427AE9FAE952787F1C41718DCB8825F+++0A84564"
+
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "781483BE7427AE9FAE952787F1C41718DCB8825F+++50B4044"
+
     },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/DavidchanForZhimai\/Zhimai_V2.1",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "88D76130E7EEF3F405FC9B903745B51430EA1F17+++AD94762"
+
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "88D76130E7EEF3F405FC9B903745B51430EA1F17+++B0C9BD3"
+
     },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/DavidchanForZhimai\/Zhimai.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "985CF1C47124FE3CF3C7CDBFBDE48819E8747045+++05C1021"
+
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "985CF1C47124FE3CF3C7CDBFBDE48819E8747045+++2F1CCCE"
+
     },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "http:\/\/192.168.64.5:8888\/svn\/Mobile",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
+
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "c1b34985-89f7-4ad2-b6ed-32456ccb691a++1693+++49CFF02"
     },
     {
@@ -90,21 +154,29 @@
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "http:\/\/192.168.64.5:8888\/svn\/Mobile",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++1AF0C4C"
+
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "c1b34985-89f7-4ad2-b6ed-32456ccb691a++1693+++4BC7E0B"
+
     },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "http:\/\/192.168.64.5:8888\/svn\/Mobile",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
+
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++99A8FEA"
+
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++2F18B75"
     },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "http:\/\/192.168.64.5:8888\/svn\/Mobile",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++B3FD42F"
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++3F68BC9"
     },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "http:\/\/192.168.64.5:8888\/svn\/Mobile",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++B53D022"
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "c1b34985-89f7-4ad2-b6ed-32456ccb691a++8605+++57B3B8F"
     }
   ]
 }

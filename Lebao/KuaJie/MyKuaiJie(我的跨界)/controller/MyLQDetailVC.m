@@ -141,30 +141,30 @@
 
     [tapV addSubview:_timeLab];
     
-    //对话背景
-    UIView *duihuaV = allocAndInitWithFrame(UIView, frame(0, 61, frameWidth(jjrV), 40));
-    duihuaV.backgroundColor = [UIColor colorWithRed:0.976 green:0.965 blue:0.969 alpha:1.000];
-    [jjrV addSubview:duihuaV];
-    
-    UIButton * duihuaBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    duihuaBtn.frame = CGRectMake((frameWidth(jjrV) - jjrV.frame.size.width/2-0.5f)/2.0, 61, jjrV.frame.size.width/2-0.5f, 40);
-    duihuaBtn.backgroundColor = [UIColor colorWithRed:0.976 green:0.965 blue:0.969 alpha:1.000];
-    [duihuaBtn.titleLabel setTextAlignment:NSTextAlignmentCenter];
-    [duihuaBtn setImage:[UIImage imageNamed:@"liantianzhuse"] forState:UIControlStateNormal];
-    [duihuaBtn setTitle:@"跟Ta对话" forState:UIControlStateNormal];
-    [duihuaBtn setTitleColor:[UIColor colorWithRed:0.290 green:0.569 blue:0.973 alpha:1.000]forState:UIControlStateNormal];
-    [duihuaBtn setImageEdgeInsets:UIEdgeInsetsMake(0, -30, 0, 0)];
-    [duihuaBtn.titleLabel setFont:[UIFont systemFontOfSize:13]];
-    [duihuaBtn addTarget: self action:@selector(duihuaAction) forControlEvents:UIControlEventTouchUpInside];
-    [jjrV addSubview:duihuaBtn];
+//    //对话背景
+//    UIView *duihuaV = allocAndInitWithFrame(UIView, frame(0, 61, frameWidth(jjrV), 40));
+//    duihuaV.backgroundColor = [UIColor colorWithRed:0.976 green:0.965 blue:0.969 alpha:1.000];
+//    [jjrV addSubview:duihuaV];
+//    
+//    UIButton * duihuaBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    duihuaBtn.frame = CGRectMake((frameWidth(jjrV) - jjrV.frame.size.width/2-0.5f)/2.0, 61, jjrV.frame.size.width/2-0.5f, 40);
+//    duihuaBtn.backgroundColor = [UIColor colorWithRed:0.976 green:0.965 blue:0.969 alpha:1.000];
+//    [duihuaBtn.titleLabel setTextAlignment:NSTextAlignmentCenter];
+//    [duihuaBtn setImage:[UIImage imageNamed:@"liantianzhuse"] forState:UIControlStateNormal];
+//    [duihuaBtn setTitle:@"跟Ta对话" forState:UIControlStateNormal];
+//    [duihuaBtn setTitleColor:[UIColor colorWithRed:0.290 green:0.569 blue:0.973 alpha:1.000]forState:UIControlStateNormal];
+//    [duihuaBtn setImageEdgeInsets:UIEdgeInsetsMake(0, -30, 0, 0)];
+//    [duihuaBtn.titleLabel setFont:[UIFont systemFontOfSize:13]];
+//    [duihuaBtn addTarget: self action:@selector(duihuaAction) forControlEvents:UIControlEventTouchUpInside];
+//    [jjrV addSubview:duihuaBtn];
     
     //修改状态为99或者20不显示电话联系
     if ([[_xiansuoDic objectForKey:@"state"] intValue]!= 99&&[[_xiansuoDic objectForKey:@"state"] intValue]!= 20)
     {
-        duihuaBtn.frame = CGRectMake(0, 61, jjrV.frame.size.width/2-0.5f, 40);
+//        duihuaBtn.frame = CGRectMake(0, 61, jjrV.frame.size.width/2-0.5f, 40);
         
         UIButton * lianxiBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        lianxiBtn.frame = CGRectMake((jjrV.frame.size.width/2)+0.5,61, (jjrV.frame.size.width/2)-0.5f, 40);
+        lianxiBtn.frame = CGRectMake(0,61,jjrV.frame.size.width, 40);
         lianxiBtn.backgroundColor = [UIColor colorWithRed:0.976 green:0.965 blue:0.969 alpha:1.000];
         [lianxiBtn setTitle:@"电话联系" forState:UIControlStateNormal];
         [lianxiBtn setImageEdgeInsets:UIEdgeInsetsMake(0, -30, 0, 0)];
