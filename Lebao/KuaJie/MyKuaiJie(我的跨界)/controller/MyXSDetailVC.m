@@ -306,11 +306,12 @@
     [lqrV addSubview:xzImg];
     
     
-    _userNameLab = [[UILabel alloc]initWithFrame:CGRectMake(_headImg.frame.origin.x+_headImg.frame.size.width+10, 12, 55, 25)];
+    _userNameLab = [[UILabel alloc]initWithFrame:CGRectMake(_headImg.frame.origin.x+_headImg.frame.size.width+10, 12, 55, 15)];
     _userNameLab.font = [UIFont systemFontOfSize:15];
     _userNameLab.textColor = [UIColor blackColor];
     _userNameLab.textAlignment = NSTextAlignmentLeft;
     _userNameLab.text = [_coopArr[0] objectForKey:@"realname"];
+    _userNameLab.frame = CGRectMake(_userNameLab.x,12, [_userNameLab.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(APPWIDTH/2.0, _userNameLab.size.height)].width, _userNameLab.height);
     [lqrV addSubview:_userNameLab];
     
     _positionLab = [[UILabel alloc]initWithFrame:CGRectMake(_userNameLab.frame.origin.x, 42, 80, 11)];
@@ -326,9 +327,23 @@
     [lqrV addSubview:_positionLab];
     _positionLab.attributedText = diingjAtr;
     [lqrV addSubview:_positionLab];
-    UIImageView * renzhImg = [[UIImageView alloc]initWithFrame:CGRectMake(_userNameLab.frame.origin.x+_userNameLab.frame.size.width, 18, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.height)];
-    renzhImg.image = [[_coopArr[0] objectForKey:@"authen"]intValue]==3?[UIImage imageNamed:@"[iconprofilerenzhen]"]:[UIImage imageNamed:@"[iconprofileweirenzhen]"];
-    [lqrV addSubview:renzhImg];
+    UIImageView * renzhImgV = [[UIImageView alloc]init];
+    if ([[_coopArr[0] objectForKey:@"authen"] intValue]==3) {
+        renzhImgV.image= [UIImage imageNamed:@"[iconprofilerenzhen]"];
+        renzhImgV.frame=CGRectMake(CGRectGetMaxX(_userNameLab.frame)+5,CGRectGetMaxY(_userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
+    }else{
+        renzhImgV.image = nil;
+        renzhImgV.frame =CGRectMake(CGRectGetMaxX(_userNameLab.frame),CGRectGetMaxY(_userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, 0, 0);
+    }
+    [lqrV addSubview:renzhImgV];
+    
+    if ([[_coopArr[0] objectForKey:@"vip"] intValue]==1) {
+        UIImageView * vipImg= [[UIImageView alloc]init];
+        vipImg.image = [UIImage imageNamed:@"[iconprofilevip]"];
+        vipImg.frame =CGRectMake(renzhImgV.frame.origin.x+renzhImgV.frame.size.width+5,CGRectGetMaxY(_userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
+        [lqrV addSubview:vipImg];
+    }
+
     
     _timeLab = [[UILabel alloc]initWithFrame:CGRectMake(lqrV.frame.size.width-160, 15, 150, 20)];
     _timeLab.backgroundColor = [UIColor clearColor];
@@ -357,18 +372,18 @@
     }
 
     [lqrV addSubview:_timeLab];
-    UIButton * duihuaBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    duihuaBtn.frame = CGRectMake(10, lqrV.frame.size.height + lqrV.frame.origin.y+1, (SCREEN_WIDTH-20)/2, 40);
-    duihuaBtn.backgroundColor = [UIColor whiteColor];
-    [duihuaBtn setTitle:@"跟Ta对话" forState:UIControlStateNormal];
-     [duihuaBtn setImageEdgeInsets:UIEdgeInsetsMake(0, -30, 0, 0)];
-    [duihuaBtn.titleLabel setFont:[UIFont systemFontOfSize:13]];
-    [duihuaBtn setTitleColor:[UIColor colorWithRed:0.290 green:0.569 blue:0.973 alpha:1.000] forState:UIControlStateNormal];
-    [duihuaBtn addTarget:self action:@selector(gentaduihuaAction) forControlEvents:UIControlEventTouchUpInside];
-    [duihuaBtn setImage:[UIImage imageNamed:@"liantianzhuse"] forState:UIControlStateNormal];
-    [_bottmScr addSubview:duihuaBtn];
+//    UIButton * duihuaBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    duihuaBtn.frame = CGRectMake(10, lqrV.frame.size.height + lqrV.frame.origin.y+1, (SCREEN_WIDTH-20)/2, 40);
+//    duihuaBtn.backgroundColor = [UIColor whiteColor];
+//    [duihuaBtn setTitle:@"跟Ta对话" forState:UIControlStateNormal];
+//     [duihuaBtn setImageEdgeInsets:UIEdgeInsetsMake(0, -30, 0, 0)];
+//    [duihuaBtn.titleLabel setFont:[UIFont systemFontOfSize:13]];
+//    [duihuaBtn setTitleColor:[UIColor colorWithRed:0.290 green:0.569 blue:0.973 alpha:1.000] forState:UIControlStateNormal];
+//    [duihuaBtn addTarget:self action:@selector(gentaduihuaAction) forControlEvents:UIControlEventTouchUpInside];
+//    [duihuaBtn setImage:[UIImage imageNamed:@"liantianzhuse"] forState:UIControlStateNormal];
+//    [_bottmScr addSubview:duihuaBtn];
     UIButton * lianxiBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    lianxiBtn.frame = CGRectMake((SCREEN_WIDTH-20)/2+10.5f, lqrV.frame.size.height + lqrV.frame.origin.y+1, (SCREEN_WIDTH-20)/2-0.5f, 40);
+    lianxiBtn.frame = CGRectMake(10, lqrV.frame.size.height + lqrV.frame.origin.y+1, SCREEN_WIDTH-20, 40);
     lianxiBtn.backgroundColor = [UIColor whiteColor];
     [lianxiBtn setTitle:@"电话联系" forState:UIControlStateNormal];
     [lianxiBtn setImageEdgeInsets:UIEdgeInsetsMake(0, -30, 0, 0)];
@@ -378,7 +393,7 @@
     [lianxiBtn setImage:[UIImage imageNamed:@"shouji"] forState:UIControlStateNormal];
     [_bottmScr addSubview:lianxiBtn];
 
-    [_bottmScr setContentSize:CGSizeMake(SCREEN_WIDTH, duihuaBtn.frame.size.height+duihuaBtn.frame.origin.y)];
+    [_bottmScr setContentSize:CGSizeMake(SCREEN_WIDTH, lianxiBtn.frame.size.height+lianxiBtn.frame.origin.y)];
     if ([[_allDic objectForKey:@"isevaluate"]intValue ]==0) {
         _viewType = weiCaoZuo_Type;
     }else
@@ -398,13 +413,13 @@
     
     switch (_viewType) {
         case manYi_Type:
-            [self customManyiView:duihuaBtn.frame.size.height+duihuaBtn.frame.origin.y];
+            [self customManyiView:lianxiBtn.frame.size.height+lianxiBtn.frame.origin.y];
             break;
         case BMYWSS_Type:
-            [self customBMYWSSV:duihuaBtn.frame.size.height+duihuaBtn.frame.origin.y];
+            [self customBMYWSSV:lianxiBtn.frame.size.height+lianxiBtn.frame.origin.y];
             break;
         case BMYYSS_Type:
-            [self customBMMYSSV:duihuaBtn.frame.size.height+duihuaBtn.frame.origin.y];
+            [self customBMMYSSV:lianxiBtn.frame.size.height+lianxiBtn.frame.origin.y];
             break;
         default:
             break;
@@ -943,10 +958,10 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (tableView.tag == WHZTABTAG) {
-        return 98;
+        return 119;
     }else
     {
-        return 119;
+        return 89;
     }
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -964,11 +979,24 @@
                 imgUrl = [NSString stringWithFormat:@"%@%@",IMG_URL,[_coopArr[indexPath.row]objectForKey:@"imgurl"]];
             }
 
-            cell.renzhImg.image = [[_coopArr[indexPath.row]objectForKey:@"authen"]intValue] == 3?[UIImage imageNamed:@"[iconprofilerenzhen]"]:[UIImage imageNamed:@"[iconprofileweirenzhen]"];
             [[ToolManager shareInstance]imageView:cell.headImg setImageWithURL:imgUrl placeholderType:PlaceholderTypeUserHead];
             cell.userNameLab.text = [_coopArr[indexPath.row]objectForKey:@"realname"];
-            cell.userNameLab.frame = CGRectMake(cell.userNameLab.x,7, [cell.userNameLab.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(APPWIDTH/2.0, cell.userNameLab.size.height)].width, cell.userNameLab.height);
-             cell.renzhImg.frame =CGRectMake(cell.userNameLab.frame.origin.x+cell.userNameLab.frame.size.width+5, 7, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
+            cell.userNameLab.frame = CGRectMake(cell.userNameLab.x,12, [cell.userNameLab.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(APPWIDTH/2.0, cell.userNameLab.size.height)].width, cell.userNameLab.height);
+            if ([[_coopArr[indexPath.row]objectForKey:@"authen"] intValue]==3) {
+                cell.renzhImg.image = [UIImage imageNamed:@"[iconprofilerenzhen]"];
+                cell.renzhImg.frame =CGRectMake(cell.userNameLab.frame.origin.x+cell.userNameLab.frame.size.width+5,CGRectGetMaxY(cell.userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
+            }else{
+                cell.renzhImg.image = nil;
+                cell.renzhImg.frame =CGRectMake(cell.userNameLab.frame.origin.x+cell.userNameLab.frame.size.width,CGRectGetMaxY(cell.userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, 0, 0);
+            }
+            if ([[_coopArr[indexPath.row]objectForKey:@"vip"] intValue]==1) {
+                cell.vipImg.image = [UIImage imageNamed:@"[iconprofilevip]"];
+                cell.vipImg.frame =CGRectMake(cell.renzhImg.frame.origin.x+cell.renzhImg.frame.size.width+5,CGRectGetMaxY(cell.userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
+            }else{
+                cell.vipImg.image = nil;
+                cell.vipImg.frame =CGRectMake(0, 0, 0, 0);
+            }
+
             cell.positionLab.text = [_coopArr[indexPath.row]objectForKey:@"area"];
             NSString * timStr = [_coopArr[indexPath.row] objectForKey:@"createtime"];
             NSTimeInterval time=[timStr doubleValue];
@@ -1014,8 +1042,6 @@
             cell = [[JJRCell alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 98)];
             
             cell.backgroundColor = [UIColor clearColor];
-            cell.renzhImg.image = [[_recomArr[indexPath.row]objectForKey:@"authen"] intValue]==3?[UIImage imageNamed:@"[iconprofilerenzhen]"]:[UIImage imageNamed:@"[iconprofileweirenzhen]"];
-
             NSString * imgUrl;
             if ([[_recomArr[indexPath.row]objectForKey:@"imgurl"] rangeOfString:@"http"].location != NSNotFound) {
                 imgUrl = [_recomArr[indexPath.row] objectForKey:@"imgurl"];
@@ -1025,8 +1051,22 @@
  
              [[ToolManager shareInstance]imageView:cell.headImg setImageWithURL:imgUrl placeholderType:PlaceholderTypeUserHead];
             cell.userNameLab.text = [_recomArr[indexPath.row]objectForKey:@"realname"];
-            cell.userNameLab.frame = CGRectMake(cell.userNameLab.x,7, [cell.userNameLab.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(APPWIDTH/2.0, cell.userNameLab.size.height)].width, cell.userNameLab.height);
-             cell.renzhImg.frame =CGRectMake(cell.userNameLab.frame.origin.x+cell.userNameLab.frame.size.width+5, 7, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
+            cell.userNameLab.frame = CGRectMake(cell.userNameLab.x,12, [cell.userNameLab.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(APPWIDTH/2.0, cell.userNameLab.size.height)].width, cell.userNameLab.height);
+            if ([[_recomArr[indexPath.row]objectForKey:@"authen"] intValue]==3) {
+                cell.renzhImg.image = [UIImage imageNamed:@"[iconprofilerenzhen]"];
+                cell.renzhImg.frame =CGRectMake(cell.userNameLab.frame.origin.x+cell.userNameLab.frame.size.width+5,CGRectGetMaxY(cell.userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
+            }else{
+                cell.renzhImg.image = nil;
+                cell.renzhImg.frame =CGRectMake(cell.userNameLab.frame.origin.x+cell.userNameLab.frame.size.width,CGRectGetMaxY(cell.userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, 0, 0);
+            }
+            if ([[_recomArr[indexPath.row]objectForKey:@"vip"] intValue]==1) {
+                cell.vipImg.image = [UIImage imageNamed:@"[iconprofilevip]"];
+                cell.vipImg.frame =CGRectMake(cell.renzhImg.frame.origin.x+cell.renzhImg.frame.size.width+5,CGRectGetMaxY(cell.userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
+            }else{
+                cell.vipImg.image = nil;
+                cell.vipImg.frame =CGRectMake(0, 0, 0, 0);
+            }
+
             cell.positionLab.text = [_recomArr[indexPath.row]objectForKey:@"area"];
             if ([[_recomArr[indexPath.row]objectForKey:@"industry"] isEqualToString:BAOXIAN]) {
                 cell.hanyeLab.text = @"保险" ;
@@ -1042,7 +1082,7 @@
             }
             cell.fuwuLab.text = [NSString stringWithFormat:@"服务:%@", [_recomArr[indexPath.row]objectForKey:@"receivenum"]];
             cell.fansLab.text = [NSString stringWithFormat:@"粉丝:%@", [_recomArr[indexPath.row]objectForKey:@"fansnum"]];
-            [cell.guanzhuBtn setTitle:@"  通知Ta" forState:UIControlStateNormal];
+            [cell.guanzhuBtn setTitle:@"通知Ta" forState:UIControlStateNormal];
             [cell.guanzhuBtn setImage:[UIImage imageNamed:@"tongzhi"] forState:UIControlStateNormal];
             cell.guanzhuBtn.tag = 1000+indexPath.row;
             [cell.guanzhuBtn addTarget:self action:@selector(tongzhiAction:) forControlEvents:UIControlEventTouchUpInside];

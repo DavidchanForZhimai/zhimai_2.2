@@ -14,4 +14,5 @@
 @property (strong,nonatomic) UILabel     * dingjLab;
 @property (strong,nonatomic) UILabel     * timeLab;
 @property (strong,nonatomic) UIImageView * renzhImg;
+@property (strong,nonatomic) UIImageView * vipImg;
 @end

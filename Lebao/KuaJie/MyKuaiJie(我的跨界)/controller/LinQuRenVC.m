@@ -123,6 +123,7 @@
 {
     static NSString *cellStr = @"linquCell";
     LinQuCell * cell = [tableView dequeueReusableCellWithIdentifier:cellStr];
+    NSLog(@"_jsonArr[indexPath.row]===%@",_jsonArr[indexPath.row]);
     if (!cell) {
         cell = [[LinQuCell alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH-20, 61)];
         NSString * imgUrl;
@@ -131,7 +132,23 @@
         }else{
             imgUrl = [NSString stringWithFormat:@"%@%@",IMG_URL,[_jsonArr[indexPath.row]objectForKey:@"imgurl"]];
         }
-        cell.renzhImg.image = [[_jsonArr[indexPath.row]objectForKey:@"authen"] intValue]==3?[UIImage imageNamed:@"renzhen"]:[UIImage imageNamed:@"weirenzhen"];
+        cell.userNameLab.text = [_jsonArr[indexPath.row] objectForKey:@"realname"];
+        cell.userNameLab.frame = CGRectMake(cell.userNameLab.x,12, [cell.userNameLab.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(APPWIDTH/2.0, cell.userNameLab.size.height)].width, cell.userNameLab.height);
+        if ([[_jsonArr[indexPath.row]objectForKey:@"authen"] intValue]==3) {
+            cell.renzhImg.image = [UIImage imageNamed:@"[iconprofilerenzhen]"];
+            cell.renzhImg.frame =CGRectMake(cell.userNameLab.frame.origin.x+cell.userNameLab.frame.size.width+5,CGRectGetMaxY(cell.userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
+        }else{
+            cell.renzhImg.image = nil;
+            cell.renzhImg.frame =CGRectMake(cell.userNameLab.frame.origin.x+cell.userNameLab.frame.size.width,CGRectGetMaxY(cell.userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, 0, 0);
+        }
+        if ([[_jsonArr[indexPath.row]objectForKey:@"vip"] intValue]==1) {
+            cell.vipImg.image = [UIImage imageNamed:@"[iconprofilevip]"];
+            cell.vipImg.frame =CGRectMake(CGRectGetMaxX(cell.renzhImg.frame)+5,CGRectGetMaxY(cell.userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
+        }else{
+            cell.vipImg.image = nil;
+            cell.vipImg.frame =CGRectMake(0, 0, 0, 0);
+        }
+   
         [[ToolManager shareInstance] imageView:cell.headImg  setImageWithURL:imgUrl placeholderType:PlaceholderTypeUserHead];
 
         if ([[_jsonArr[indexPath.row] objectForKey:@"selected"] intValue] == 1) {
@@ -139,9 +156,7 @@
             xzImg.image = [UIImage imageNamed:@"xuanzhong"];
             [cell addSubview:xzImg];
         }
-        cell.userNameLab.text = [_jsonArr[indexPath.row] objectForKey:@"realname"];
-         cell.userNameLab.frame = CGRectMake(cell.userNameLab.x,7, [cell.userNameLab.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(APPWIDTH/2.0, cell.userNameLab.size.height)].width, cell.userNameLab.height);
-                cell.renzhImg.frame =CGRectMake(cell.userNameLab.frame.origin.x+cell.userNameLab.frame.size.width+5, 7, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
+        
         NSString * str1 = @"定金:";
         NSString * str2 = [NSString stringWithFormat:@"%@元",[_jsonArr[indexPath.row] objectForKey:@"deposit"]];
         NSString * djStr = [str1 stringByAppendingString:str2];

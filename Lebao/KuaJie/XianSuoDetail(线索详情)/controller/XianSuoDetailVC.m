@@ -522,7 +522,6 @@
     }
     [_txV addSubview:_positionLab];
     NSString *str1=[_xiansDic objectForKey:@"address"];
-    NSLog(@"[_xiansDic objectForKey:address]===%@",[_xiansDic objectForKey:@"address"]);
     if (str1.length>0){
         UILabel *addressLab=[[UILabel alloc]init];
         addressLab.frame=CGRectMake(userNameLab.x,CGRectGetMaxY(_positionLab.frame)+8,APPWIDTH-userNameLab.frame.origin.x, 12);

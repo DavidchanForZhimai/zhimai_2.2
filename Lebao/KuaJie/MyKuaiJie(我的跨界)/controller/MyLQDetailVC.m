@@ -17,6 +17,7 @@
 #import "ClueCommunityViewController.h"
 #import "GJGCChatFriendViewController.h"
 #import "MP3PlayerManager.h"
+#import "NSString+Extend.h"
 @interface MyLQDetailVC ()
 {
     UIView* xsDetailV;
@@ -26,7 +27,6 @@
 @property (strong,nonatomic)UIScrollView * btmScr;
 @property (strong,nonatomic) UIView      * jibaoV;
 @property (strong,nonatomic) UIView * dangzhuV;;
-@property (strong,nonatomic) UILabel     * userNameLab;
 @property (strong,nonatomic) UILabel     * positionLab;
 @property (strong,nonatomic) UILabel     * timeLab;
 @property (strong,nonatomic) UIImageView * headImg;
@@ -64,9 +64,10 @@
 
     }];
 }
+#pragma mark----topView
 -(void)customV
 {
-    UIView * jjrV = [[UIView alloc]initWithFrame:CGRectMake(10, 10, SCREEN_WIDTH-20, 101)];
+    UIView * jjrV = [[UIView alloc]initWithFrame:CGRectMake(10, 10, SCREEN_WIDTH-20, 101-32)];
     jjrV.backgroundColor = [UIColor whiteColor];
     [_btmScr addSubview:jjrV];
     UIView * tapV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, jjrV.frame.size.width, 61)];
@@ -91,27 +92,57 @@
 
     [tapV addSubview:_headImg];
     
-    _userNameLab = [[UILabel alloc]initWithFrame:CGRectMake(_headImg.frame.origin.x+_headImg.frame.size.width+10, 7, 55, 25)];
-    _userNameLab.font = [UIFont systemFontOfSize:15];
-    _userNameLab.textColor = [UIColor blackColor];
-    _userNameLab.textAlignment = NSTextAlignmentLeft;
-    _userNameLab.text = [_xiansuoDic objectForKey:@"realname"];
-    [tapV addSubview:_userNameLab];
+    UILabel * userNameLab = [[UILabel alloc]initWithFrame:CGRectMake(_headImg.frame.origin.x+_headImg.frame.size.width+10, 7, 55, 15)];
+    userNameLab.font = [UIFont systemFontOfSize:15];
+    userNameLab.textColor = [UIColor blackColor];
+    userNameLab.text =[_xiansuoDic objectForKey:@"realname"];
+    userNameLab.frame = CGRectMake(CGRectGetMaxX(_headImg.frame)+10,7, [userNameLab.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(APPWIDTH/2.0, userNameLab.size.height)].width, userNameLab.height);
+    userNameLab.textAlignment = NSTextAlignmentLeft;
     
-    UIImageView * posImg = [[UIImageView alloc]initWithFrame:CGRectMake(_userNameLab.frame.origin.x, 37, 11, 11)];
-    posImg.image = [UIImage imageNamed:@"dizhi"];
-    [tapV addSubview:posImg];
+    [tapV addSubview:userNameLab];
     
-    _positionLab = [[UILabel alloc]initWithFrame:CGRectMake(_userNameLab.frame.origin.x+16, 37, 100, 11)];
+    UIImageView * renzhImgV = [[UIImageView alloc]init];
+    if ([[_xiansuoDic objectForKey:@"authen"] intValue]==3) {
+        renzhImgV.image= [UIImage imageNamed:@"[iconprofilerenzhen]"];
+        renzhImgV.frame=CGRectMake(CGRectGetMaxX(userNameLab.frame)+5,CGRectGetMaxY(userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
+    }else{
+        renzhImgV.image = nil;
+        renzhImgV.frame =CGRectMake(CGRectGetMaxX(userNameLab.frame),CGRectGetMaxY(userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, 0, 0);
+    }
+    [tapV addSubview:renzhImgV];
+    
+    if ([[_xiansuoDic objectForKey:@"vip"] intValue]==1) {
+        UIImageView * vipImg= [[UIImageView alloc]init];
+        vipImg.image = [UIImage imageNamed:@"[iconprofilevip]"];
+        vipImg.frame =CGRectMake(renzhImgV.frame.origin.x+renzhImgV.frame.size.width+5,CGRectGetMaxY(userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
+        [tapV addSubview:vipImg];
+    }
+    
+    _positionLab = [[UILabel alloc]initWithFrame:CGRectMake(userNameLab.frame.origin.x, CGRectGetMaxY(userNameLab.frame)+8, APPWIDTH-userNameLab.frame.origin.x, 11)];
     _positionLab.font = [UIFont systemFontOfSize:12];
     _positionLab.textColor = [UIColor colorWithWhite:0.514 alpha:1.000];
     _positionLab.textAlignment = NSTextAlignmentLeft;
-    _positionLab.text = [_xiansuoDic objectForKey:@"area"];
+    NSString *str=[_xiansuoDic objectForKey:@"position"];
+    if (str.length>0) {
+        str=[NSString stringWithFormat:@"%@ %@",str,[_xiansuoDic objectForKey:@"workyear"]];
+    }else{
+        str=[_xiansuoDic objectForKey:@"workyear"];
+    }
+    _positionLab.text =str;
+    if (_positionLab.text.length==0) {
+        _positionLab.frame=CGRectMake(_positionLab.x, userNameLab.y, 0, 0);
+    }
     [tapV addSubview:_positionLab];
-    
-    UIImageView * renzhImg = [[UIImageView alloc]initWithFrame:CGRectMake(_userNameLab.frame.origin.x+_userNameLab.frame.size.width, 13, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.height)];
-    renzhImg.image = [[_xiansuoDic objectForKey:@"authen"]intValue]==3?[UIImage imageNamed:@"[iconprofilerenzhen]"]:[UIImage imageNamed:@"[iconprofilerenzhen]"];
-    [tapV addSubview:renzhImg];
+    NSString *str1=[_xiansuoDic objectForKey:@"address"];
+    if (str1.length>0){
+        UILabel *addressLab=[[UILabel alloc]init];
+        addressLab.frame=CGRectMake(userNameLab.x,CGRectGetMaxY(_positionLab.frame)+8,APPWIDTH-userNameLab.frame.origin.x, 12);
+        addressLab.font = [UIFont systemFontOfSize:12];
+        addressLab.textColor = [UIColor colorWithWhite:0.514 alpha:1.000];
+        addressLab.text=[_xiansuoDic objectForKey:@"address"];
+        [tapV addSubview:addressLab];
+    }
+
     
     _timeLab = [[UILabel alloc]initWithFrame:CGRectMake(jjrV.frame.size.width-160, 7, 150, 20)];
     _timeLab.backgroundColor = [UIColor clearColor];
@@ -164,7 +195,7 @@
 //        duihuaBtn.frame = CGRectMake(0, 61, jjrV.frame.size.width/2-0.5f, 40);
         
         UIButton * lianxiBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        lianxiBtn.frame = CGRectMake(0,61,jjrV.frame.size.width, 40);
+        lianxiBtn.frame = CGRectMake(0,69,jjrV.frame.size.width, 32);
         lianxiBtn.backgroundColor = [UIColor colorWithRed:0.976 green:0.965 blue:0.969 alpha:1.000];
         [lianxiBtn setTitle:@"电话联系" forState:UIControlStateNormal];
         [lianxiBtn setImageEdgeInsets:UIEdgeInsetsMake(0, -30, 0, 0)];
@@ -173,10 +204,8 @@
         [lianxiBtn addTarget:self action:@selector(lianxiAction) forControlEvents:UIControlEventTouchUpInside];
         [lianxiBtn setImage:[UIImage imageNamed:@"shouji"] forState:UIControlStateNormal];
         [jjrV addSubview:lianxiBtn];
-        UIView * btnSxV = [[UIView alloc]initWithFrame:CGRectMake(jjrV.frame.size.width/2-0.5f, 61, 1, 40)];
-        btnSxV.backgroundColor = BACKCOLOR;
-        [jjrV addSubview:btnSxV];
-    }
+        jjrV.frame = CGRectMake(10, 10, SCREEN_WIDTH-20, 101);
+          }
     
     [self addTheXSV:jjrV.frame.size.height+jjrV.frame.origin.y+10];
     

@@ -16,4 +16,5 @@
 @property (strong,nonatomic) UIButton    * xthzBtn;
 @property (strong,nonatomic) UIView * nextV;
 @property (strong,nonatomic) UIImageView * renzhImg;
+@property (strong,nonatomic) UIImageView * vipImg;
 @end

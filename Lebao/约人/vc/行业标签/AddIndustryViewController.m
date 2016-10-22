@@ -18,7 +18,9 @@
 #define TagHeight 30
 #define ViewStartX StatusBarHeight + NavigationBarHeight
 @interface AddIndustryViewController ()<DWTagsViewDelegate>
-
+{
+    UIScrollView *scrView;
+}
 @property(nonatomic,strong)DWTagsView *hasTagsView;//已关注标签
 @property(nonatomic,strong)NSMutableArray *hasTags;//已关注标签
 @property(nonatomic,strong)DWTagsView *newsClassTagsView;//新热门标签 类型
@@ -145,12 +147,16 @@
         
         self.hasTagsView.tagsArray = self.hasTags;
         self.newsClassTagsView.tagsArray = self.classNewsTags;
-        [self.view addSubview:self.finishBtn];
-        [self.view addSubview:self.hasTagsView];
-        [self.view addSubview:self.newsLb];
-        [self.view addSubview:self.newsClassTagsView];
-        [self.view addSubview:self.newsTagsView];
-        
+    
+        scrView=[[UIScrollView alloc]init];
+        scrView.frame=CGRectMake(0,NavigationBarHeight+StatusBarHeight, APPWIDTH, APPHEIGHT-(NavigationBarHeight+StatusBarHeight));
+        scrView.contentSize=CGSizeMake(0, CGRectGetMaxY(self.newsTagsView.frame));
+        [scrView addSubview:self.finishBtn];
+        [scrView addSubview:self.hasTagsView];
+        [scrView addSubview:self.newsLb];
+        [scrView addSubview:self.newsClassTagsView];
+        [scrView addSubview:self.newsTagsView];
+        [self.view addSubview:scrView];
         [self resetFrame];
         
     
@@ -362,7 +368,7 @@
     
     _newsTagsView.frame = frame(10, CGRectGetMaxY(_newsClassTagsView.frame) +20 , APPWIDTH -20, [_newsTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
     
-    
+    scrView.contentSize=CGSizeMake(0, CGRectGetMaxY(self.newsTagsView.frame));
 }
 
 - (void)didReceiveMemoryWarning {

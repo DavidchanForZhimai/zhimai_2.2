@@ -102,7 +102,7 @@
         }
         
         
-        if (model.audio&&model.audio!=nil) {//语音按钮
+        if (model.audio&&model.audio!=nil&&![model.audio isEqualToString:@""]) {//语音按钮
             _audioBtnRect=CGRectMake(5, _line1Rect.origin.y, nameTextStorage.left-10, nameTextStorage.left-10);
         }
         

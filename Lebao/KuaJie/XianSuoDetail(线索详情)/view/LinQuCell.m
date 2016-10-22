@@ -46,6 +46,10 @@
     _renzhImg=[[UIImageView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(_userNameLab.frame)+5, CGRectGetMaxY(_userNameLab.frame)-certifyimag.size.height, certifyimag.size.width,certifyimag.size.height)];
     _renzhImg.image=certifyimag;
     [self addSubview:_renzhImg];
+    _vipImg = [[UIImageView alloc]initWithFrame:CGRectMake(_userNameLab.frame.origin.x+_userNameLab.frame.size.width, 13, 14, 14)];
+    _vipImg=[[UIImageView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(_userNameLab.frame)+5, CGRectGetMaxY(_userNameLab.frame)-certifyimag.size.height, certifyimag.size.width,certifyimag.size.height)];
+    _vipImg.image=certifyimag;
+    [self addSubview:_vipImg];
     
     _timeLab = [[UILabel alloc]initWithFrame:CGRectMake(frame.size.width-160, 7, 150, 25)];
     _timeLab.font = [UIFont systemFontOfSize:12];

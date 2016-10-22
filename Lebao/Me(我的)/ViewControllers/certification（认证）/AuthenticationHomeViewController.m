@@ -116,6 +116,7 @@
     UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake((APPWIDTH - image.size.width)/2.0, 100, image.size.width, image.size.height)];
     imageView.image = image;
     [_authenticationHomeView addSubview:imageView];
+    _authenticationHomeView.contentSize=CGSizeMake(0, CGRectGetMaxY(imageView.frame)+10);
     return  _authenticationHomeView;
 }
 - (UIView *)authenView

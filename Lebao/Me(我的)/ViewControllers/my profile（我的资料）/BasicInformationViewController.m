@@ -934,7 +934,7 @@
                 if ([_modal.sex isEqualToString:@"1"]) {
                     [cell  showTitle:@"性别" icon:nil bg:nil detail:@"男" canEdit:YES];
                 }
-                else
+                else if ([_modal.sex isEqualToString:@"2"])
                 {
                     [cell  showTitle:@"性别" icon:nil bg:nil detail:@"女" canEdit:YES];
                 }

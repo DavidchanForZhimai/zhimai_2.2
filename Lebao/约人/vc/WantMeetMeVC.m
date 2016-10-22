@@ -487,11 +487,11 @@ if (layout.model.tel&&layout.model.tel!=nil) {
 -(void)tableViewCellDidSeleteAudioBtn:(UIButton *)btn layout:(WantMeetLayout *)layout andIndexPath:(NSIndexPath *)indexPath
 {
     //    _url = @"http://pic.lmlm.cn/record/201607/22/146915727469518.mp3";
-    for (int i =0; i<self.oprationArr.count; i++) {
-        if ([layout isEqual:(WantMeetLayout*)self.oprationArr[i]]) {
-            clickRow = [NSIndexPath indexPathForRow:i inSection:0];
-        }
-    }
+//    for (int i =0; i<self.oprationArr.count; i++) {
+//        if ([layout isEqual:(WantMeetLayout*)self.oprationArr[i]]) {
+//            clickRow = [NSIndexPath indexPathForRow:i inSection:0];
+//        }
+//    }
    NSString *_url=[NSString stringWithFormat:@"%@%@",ImageURLS,layout.model.audio];
 
     NSArray *pathArrays = [_url componentsSeparatedByString:@"/"];
@@ -500,6 +500,7 @@ if (layout.model.tel&&layout.model.tel!=nil) {
         topath = pathArrays[pathArrays.count-1];
     }
     if (btn.tag==1110) {
+        [[MP3PlayerManager shareInstance] stopPlayer];
         [[MP3PlayerManager shareInstance] downLoadAudioWithUrl:_url  finishDownLoadBloak:^(BOOL succeed) {
             if (succeed) {
 

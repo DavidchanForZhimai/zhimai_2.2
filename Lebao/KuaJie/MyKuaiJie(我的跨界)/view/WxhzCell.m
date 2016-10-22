@@ -40,7 +40,7 @@
     _headImg = [[UIImageView alloc]initWithFrame:CGRectMake(10, 15, 41, 41)];
     [_nextV addSubview:_headImg];
     
-    _userNameLab = [[UILabel alloc]initWithFrame:CGRectMake(_headImg.frame.origin.x+_headImg.frame.size.width+10, 12, 55, 25)];
+    _userNameLab = [[UILabel alloc]initWithFrame:CGRectMake(_headImg.frame.origin.x+_headImg.frame.size.width+10, 12, 55, 15)];
     _userNameLab.font = [UIFont systemFontOfSize:15];
     _userNameLab.textColor = [UIColor blackColor];
     _userNameLab.textAlignment = NSTextAlignmentLeft;
@@ -56,9 +56,14 @@
     _positionLab.textAlignment = NSTextAlignmentLeft;
     [_nextV addSubview:_positionLab];
     
-    _renzhImg = [[UIImageView alloc]initWithFrame:CGRectMake(_userNameLab.frame.origin.x+_userNameLab.frame.size.width, 18,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.width, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.height)];
+    _renzhImg = [[UIImageView alloc]initWithFrame:CGRectMake(_userNameLab.frame.origin.x+_userNameLab.frame.size.width,CGRectGetMaxY(_userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.width, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.height)];
     _renzhImg.image = [UIImage imageNamed:@"[iconprofileweirenzhen]"];
     [_nextV addSubview:_renzhImg];
+    
+    UIImage *certifyimag = [UIImage imageNamed:@"[iconprofilerenzhen]"];
+    _vipImg=[[UIImageView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(_userNameLab.frame)+5, CGRectGetMaxY(_userNameLab.frame)-certifyimag.size.height, certifyimag.size.width,certifyimag.size.height)];
+    _vipImg.image=certifyimag;
+    [_nextV addSubview:_vipImg];
     
     _timeLab = [[UILabel alloc]initWithFrame:CGRectMake(customV.frame.size.width-160, 15, 150, 20)];
     _timeLab.backgroundColor = [UIColor clearColor];

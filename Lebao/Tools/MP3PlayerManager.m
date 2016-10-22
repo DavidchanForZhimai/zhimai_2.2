@@ -67,6 +67,10 @@ static MP3PlayerManager* mP3PlayerManager;
 {
     
     [self.audioPlayer stop];
+    _audioPlayer=nil;
+    if (_playFinishBlock) {
+        _playFinishBlock(YES);
+    }
     
 }
 -(void)pausePlayer
@@ -192,6 +196,7 @@ static MP3PlayerManager* mP3PlayerManager;
 #pragma mark - 播放器代理方法
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
 {
+//        NSLog(@"录音完成!");
     _audioPlayer=nil;
     if (_playFinishBlock) {
         _playFinishBlock(YES);

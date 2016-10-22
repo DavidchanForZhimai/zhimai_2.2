@@ -560,6 +560,7 @@
         topath = pathArrays[pathArrays.count-1];
     }
     if (btn.tag==1110) {
+        [[MP3PlayerManager shareInstance] stopPlayer];
         [[MP3PlayerManager shareInstance] downLoadAudioWithUrl:_url  finishDownLoadBloak:^(BOOL succeed) {
             if (succeed) {
                 

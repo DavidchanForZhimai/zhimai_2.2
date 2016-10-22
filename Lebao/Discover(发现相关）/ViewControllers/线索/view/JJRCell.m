@@ -61,6 +61,12 @@
     _renzhImg.image = [UIImage imageNamed:@"renzhen"];
     [_nextV addSubview:_renzhImg];
     
+    _vipImg = [[UIImageView alloc]initWithFrame:CGRectMake(_userNameLab.frame.origin.x+_userNameLab.frame.size.width, 13, 14, 14)];
+     UIImage *certifyimag = [UIImage imageNamed:@"[iconprofilerenzhen]"];
+    _vipImg=[[UIImageView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(_userNameLab.frame)+5, CGRectGetMaxY(_userNameLab.frame)-certifyimag.size.height, certifyimag.size.width,certifyimag.size.height)];
+    _vipImg.image=certifyimag;
+    [_nextV addSubview:_vipImg];
+    
     _hanyeLab = [[UILabel alloc]initWithFrame:CGRectMake(_positionLab.size.width+_positionLab.origin.x+10, 42, 60, 11)];
     _hanyeLab.backgroundColor = [UIColor clearColor];
     _hanyeLab.font = [UIFont systemFontOfSize:12];
