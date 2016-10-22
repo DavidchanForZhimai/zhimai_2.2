@@ -51,19 +51,23 @@
     _userNameLab.textAlignment = NSTextAlignmentLeft;
     [_btnV addSubview:_userNameLab];
     
-    UIImageView * posImg = [[UIImageView alloc]initWithFrame:CGRectMake(_userNameLab.frame.origin.x, 42, 11, 11)];
-    posImg.image = [UIImage imageNamed:@"dizhi"];
-    [_btnV addSubview:posImg];
-    
-    _positionLab = [[UILabel alloc]initWithFrame:CGRectMake(_userNameLab.frame.origin.x+16, 42, 49, 11)];
+    _positionLab = [[UILabel alloc]initWithFrame:CGRectMake(_userNameLab.frame.origin.x,CGRectGetMaxY(_userNameLab.frame)+8,APPWIDTH-_userNameLab.frame.origin.x, 12)];
     _positionLab.font = [UIFont systemFontOfSize:12];
     _positionLab.textColor = [UIColor colorWithWhite:0.514 alpha:1.000];
     _positionLab.textAlignment = NSTextAlignmentLeft;
     [_btnV addSubview:_positionLab];
     
+    _addressLab = [[UILabel alloc]initWithFrame:CGRectMake(_userNameLab.frame.origin.x,CGRectGetMaxY(_positionLab.frame)+8,APPWIDTH-_userNameLab.frame.origin.x, 12)];
+    _addressLab.font = [UIFont systemFontOfSize:12];
+    _addressLab.textColor = [UIColor colorWithWhite:0.514 alpha:1.000];
+    _addressLab.textAlignment = NSTextAlignmentLeft;
+    [_btnV addSubview:_addressLab];
+    
     _renzhImg = [[UIImageView alloc]initWithFrame:CGRectMake(_userNameLab.frame.origin.x+_userNameLab.frame.size.width, 18, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height)];
-    _renzhImg.image = [UIImage imageNamed:@"[iconprofileweirenzhen]"];
     [_btnV addSubview:_renzhImg];
+    
+    _vipImg = [[UIImageView alloc]initWithFrame:CGRectMake(_renzhImg.frame.origin.x+_renzhImg.frame.size.width, 18, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height)];
+    [_btnV addSubview:_vipImg];
 }
 -(void)addTheRighgtV
 {
@@ -90,7 +94,7 @@
 }
 -(void)addTheBlueV
 {
-    _blueV = [[UIView alloc]initWithFrame:CGRectMake(0, 66, customV.frame.size.width, 168)];
+    _blueV = [[UIView alloc]initWithFrame:CGRectMake(0, 74, customV.frame.size.width, 168)];
     _blueV.backgroundColor = [UIColor colorWithRed:0.455 green:0.675 blue:0.878 alpha:1.000];
     _blueV.userInteractionEnabled = YES;
     [customV addSubview:_blueV];
@@ -134,13 +138,13 @@
 }
 -(void)addTheButtomV
 {
-    _xqqdLab = [[UILabel alloc]initWithFrame:CGRectMake(15, 229, 130, 41)];
+    _xqqdLab = [[UILabel alloc]initWithFrame:CGRectMake(15, 237, 130, 41)];
     _xqqdLab.backgroundColor = [UIColor clearColor];
     _xqqdLab.textAlignment = NSTextAlignmentLeft;
     _xqqdLab.font = [UIFont systemFontOfSize:13];
     [customV addSubview:_xqqdLab];
     
-    _lqLab = [[UILabel alloc]initWithFrame:CGRectMake(135, 229, customV.frame.size.width-135-15, 41)];
+    _lqLab = [[UILabel alloc]initWithFrame:CGRectMake(135, 237, customV.frame.size.width-135-15, 41)];
     _lqLab.backgroundColor = [UIColor clearColor];
     _lqLab.textAlignment = NSTextAlignmentRight;
     _lqLab.font = [UIFont systemFontOfSize:13];

@@ -73,8 +73,6 @@ static UIAlertView *letout;
             
             if (model.rtcode ==1) {
                 
-                [[ToolManager shareInstance] dismiss];
-                
                 dataObj = [self modelTransformationWithResponseObj:responseObj modelClass:modelClass];
                 responseDataBlock(dataObj, nil);
             }

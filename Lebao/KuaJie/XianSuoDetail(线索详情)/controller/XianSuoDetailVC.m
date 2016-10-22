@@ -488,15 +488,15 @@
     
     [_txV addSubview:userNameLab];
     
-    UIImageView * posImg = [[UIImageView alloc]initWithFrame:CGRectMake(userNameLab.frame.origin.x, 37, 11, 11)];
-    posImg.image = [UIImage imageNamed:@"dizhi"];
-    [_txV addSubview:posImg];
-    
-    _positionLab = [[UILabel alloc]initWithFrame:CGRectMake(userNameLab.frame.origin.x+16, 37, 80, 11)];
+    _positionLab = [[UILabel alloc]initWithFrame:CGRectMake(userNameLab.frame.origin.x, 30, 80, 11)];
     _positionLab.font = [UIFont systemFontOfSize:12];
     _positionLab.textColor = [UIColor colorWithWhite:0.514 alpha:1.000];
     _positionLab.textAlignment = NSTextAlignmentLeft;
-    _positionLab.text = [_xiansDic objectForKey:@"area"];
+    NSString *str=[_xiansDic objectForKey:@"position"];
+    if (str.length>0) {
+        str=[NSString stringWithFormat:@"%@ %@\n%@",str,[_xiansDic objectForKey:@"years"],[_xiansDic objectForKey:@"address"]];
+    }
+    _positionLab.text =str;
     [_txV addSubview:_positionLab];
     
     UIImageView * renzhImgV = [[UIImageView alloc]initWithFrame:CGRectMake(userNameLab.frame.origin.x+userNameLab.frame.size.width, 13, 14, 14)];
@@ -796,6 +796,9 @@
         cell.userNameLab.text = [_coopArr[indexPath.row]objectForKey:@"realname"];
         cell.userNameLab.frame = CGRectMake(cell.userNameLab.x,7, [cell.userNameLab.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(APPWIDTH/2.0, cell.userNameLab.size.height)].width, cell.userNameLab.height);
         cell.renzhImg.frame =CGRectMake(cell.userNameLab.frame.origin.x+cell.userNameLab.frame.size.width+5,CGRectGetMaxY(cell.userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
+        
+        
+        
         NSString * str1 = @"定金:";
         NSString * str2 = [_coopArr[indexPath.row]objectForKey:@"deposit"];
         NSString * djStr = [str1 stringByAppendingString:str2];

@@ -681,30 +681,10 @@
         [addConnectionsBtn setTitleColor:AppMainColor forState:UIControlStateNormal];
         
     }
-    addConnectionsBtn.backgroundColor=AppViewBGColor;
+    addConnectionsBtn.backgroundColor=[UIColor colorWithWhite:0.800 alpha:1.000];
     [addConnectionsBtn setTitle:titleStr forState:UIControlStateNormal];
     [addConnectionsBtn addTarget:self action:@selector(addConnectionsBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:addConnectionsBtn];
-    
-    
-    
-    //    BaseButton *addConnectionsBtn=[[BaseButton alloc]initWithFrame:CGRectMake(0, 0,addConnectionsBtnW, 44) setTitle:@"加人脉" titleSize:12 titleColor:[UIColor grayColor] backgroundImage:nil iconImage:[UIImage imageNamed:@"addConnections"] highlightImage:nil setTitleOrgin:CGPointMake(bottomView.height - 17,(addConnectionsBtnW - 36)/2.0-image.size.width) setImageOrgin:CGPointMake(5,(addConnectionsBtnW -image.size.width)/2.0) inView:bottomView];
-    //
-    //    addConnectionsBtn.didClickBtnBlock = ^
-    //    {
-    //        CGFloat dilX = 25;
-    //        CGFloat dilH = 250;
-    //        AddConnectionView *alertV = [[AddConnectionView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.navigationController.view];
-    //        alertV.center = CGPointMake(APPWIDTH/2, APPHEIGHT/2-30);
-    //        alertV.delegate = self;
-    //        alertV.titleStr = @"提示";
-    //        alertV.title2Str=@"打赏让加人脉更顺畅!";
-    //    };
-    //
-    
-    //    [self.view addSubview:bottomView];
-    
-    
     
 }
 #pragma mark button aticons

@@ -37,6 +37,7 @@
 {
     
     [XLDataService postWithUrl:MeetHotsURL param:[Parameter parameterWithSessicon] modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+        [[ToolManager shareInstance] dismiss];
         _hotTags= dataObj[@"hots"];
         for (NSString *str  in _hotTags) {
             [_hotTagsView addTag:str];

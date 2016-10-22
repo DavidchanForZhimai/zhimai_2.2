@@ -122,7 +122,7 @@
                 if (modal.vip!=1) {
                     [vipBtn setTitle:@"快去升级为特权会员" forState:UIControlStateNormal];
                 }else{
-                    [vipBtn setTitle:@"继续购买特权会员天数" forState:UIControlStateNormal];
+                    [vipBtn setTitle:@"再来一年" forState:UIControlStateNormal];
                 }
                 vipTab.tableHeaderView = [self tabHeaderView];
                 

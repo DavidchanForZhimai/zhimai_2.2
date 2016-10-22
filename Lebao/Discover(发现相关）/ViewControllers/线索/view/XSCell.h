@@ -12,6 +12,7 @@
 @property (strong,nonatomic) UIImageView * headImg;
 @property (strong,nonatomic) UILabel     * userNameLab;
 @property (strong,nonatomic) UILabel     * positionLab;
+@property (strong,nonatomic) UILabel     * addressLab;
 @property (strong,nonatomic) UIView      * btnV;
 @property (strong,nonatomic) UILabel     * timeLab;
 @property (strong,nonatomic) UILabel     * lookLab;
@@ -23,4 +24,5 @@
 @property (strong,nonatomic) UILabel     * lqLab;
 @property (strong,nonatomic) UIView * blueV ;
 @property (strong,nonatomic) UIImageView * renzhImg;
+@property (strong,nonatomic) UIImageView * vipImg;
 @end

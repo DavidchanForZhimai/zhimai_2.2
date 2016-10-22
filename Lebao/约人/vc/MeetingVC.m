@@ -21,6 +21,7 @@
 #import "NSString+Extend.h"
 #import "GzHyViewController.h"//关注行业
 #import "BasicInformationViewController.h"
+#import "DateHelper.h"
 @interface MeetingVC ()<UITableViewDelegate,UITableViewDataSource,MeetHeadVDelegate,EjectViewDelegate,MeettingTableViewDelegate,UIAlertViewDelegate>
 {
     float OffsetY;
@@ -194,7 +195,7 @@
 
         }
         if (dataObj) {
-         NSLog(@"meetObj====%@",dataObj);
+//         NSLog(@"meetObj====%@",dataObj);
         
            
             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
@@ -250,7 +251,11 @@
     _yrBtn.tag=1000;
     [_yrBtn addTarget:self action:@selector(_yrBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_yrBtn];
-   
+
+    NSDate *date2= [[NSUserDefaults standardUserDefaults]objectForKey:@"dateForYoukong"];
+    if (date2!=nil&&[[DateHelper calculatorExpireDatetimeWithData:date2] minute]<30) {
+        [_yrBtn setBackgroundImage:[UIImage imageNamed:@"yiyoukong"] forState:UIControlStateNormal];
+    }
 }
 -(void)addTabView
 {
@@ -303,16 +308,22 @@
 -(void)_yrBtnClick:(UIButton *)sender
 {
     
+//    NSDate *date2= [[NSUserDefaults standardUserDefaults]objectForKey:@"dateForYoukong"];
+//        if (date2!=nil&&[[DateHelper calculatorExpireDatetimeWithData:date2] minute]<30) {
+//             [[ToolManager shareInstance] showAlertMessage:[NSString stringWithFormat:@"您已点击有空,%ld分钟%ld秒内有效",29-[[DateHelper calculatorExpireDatetimeWithData:date2] minute],59-[[DateHelper calculatorExpireDatetimeWithData:date2] second]]];
+//            return;
+//    }
     [self shakeToShow:_yrBtn];
     [sender setEnabled:NO];
     if (sender.tag==1000) {
+
         [[ToolManager shareInstance] showWithStatus];
         NSMutableDictionary *param = [Parameter parameterWithSessicon];
         [param setObject:@"append" forKey:@"type"];
         [XLDataService putWithUrl:meetCheckedURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
 //            NSLog(@"param====%@",param);
             if (dataObj) {
-                NSLog(@"meetObj====%@",dataObj);
+//                NSLog(@"meetObj====%@",dataObj);
                 MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
                 if (modal.rtcode ==1) {
                     [[LoCationManager shareInstance] creatLocationManager];
@@ -321,25 +332,26 @@
                         NSMutableDictionary *param = [Parameter parameterWithSessicon];
                         [param setObject:[NSString stringWithFormat:@"%.6f",location.latitude] forKey:@"latitude"];
                         [param setObject:[NSString stringWithFormat:@"%.6f",location.longitude] forKey:@"longitude"];
+//                        NSLog(@"param====%@",param);
                         [XLDataService putWithUrl:MeetAppendURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
                             if (dataObj) {
-//                                NSLog(@"dataobj=%@",dataObj);
+                                NSLog(@"dataobj=%@",dataObj);
                                 MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
                                 if (model.rtcode ==1) {
                                     _isopen=YES;
                                     _yrBtn.tag=1001;
                                     [_yrBtn setBackgroundImage:[UIImage imageNamed:@"yiyoukong"] forState:UIControlStateNormal];
-                                    [[ToolManager shareInstance]dismiss];
                                     
-//                                    [self netWorkRefresh:YES andIsLoadMoreData:NO isShouldClearData:YES];                                   
+                                    NSDate *date=[NSDate date];
+                                    [[NSUserDefaults standardUserDefaults]setObject:date forKey:@"dateForYoukong"];
+                                    [[ToolManager shareInstance] showAlertMessage:model.rtmsg];
                                 }
-//                                else if (model.rtcode ==4001) {
-//                                    [[ToolManager shareInstance]dismiss];
-//                                    UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"去完善资料吗?" message:@"完善资料后才能约见他人哦" delegate:self cancelButtonTitle:@"不去" otherButtonTitles:@"走起", nil];
-//                                    alertView.delegate=self;
-//                                    [alertView show];
-//                                }
                                 else{
+                                    if (model.remainder_at) {
+                                        NSDate *date=[NSDate date];
+                                        [[NSUserDefaults standardUserDefaults]setObject:date forKey:@"dateForYoukong"];
+                                    }
+                                    
                                     [[ToolManager shareInstance] showAlertMessage:model.rtmsg];
                                 }
                                 [sender setEnabled:YES];
@@ -554,7 +566,8 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
 
-    if (scrollView.contentOffset.y>0&&scrollView.contentOffset.y-OffsetY>20)   {
+
+    if (scrollView.contentOffset.y>0&&scrollView.contentOffset.y-OffsetY>20&&(scrollView.contentSize.height-scrollView.height)>0)   {
         if (self.bottomView.y==(APPHEIGHT-self.bottomView.height)) {
             _yrTab.frame=CGRectMake(0,StatusBarHeight, APPWIDTH, APPHEIGHT-StatusBarHeight);
             [UIView animateWithDuration:0.5

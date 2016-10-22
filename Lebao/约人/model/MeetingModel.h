@@ -10,6 +10,7 @@
 #import "BaseModal.h"
 @interface MeetingModel : BaseModal
 @property(nonatomic,strong)NSString *userid;
+@property(nonatomic,assign)int remainder_at;//剩余时间
 @end
 
 @interface MeetingData : NSObject
@@ -40,4 +41,5 @@
 @property(nonatomic,strong)NSString* tel;//是否邀请了
 @property(nonatomic,strong)NSString* evaluate;//是否评价了
 @property(nonatomic,assign)int relation;//是否添加好友
+
 @end

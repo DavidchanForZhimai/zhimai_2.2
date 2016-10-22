@@ -850,7 +850,7 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
   
-    if (scrollView.contentOffset.y>0&&scrollView.contentOffset.y-OffsetY>20)   {
+    if (scrollView.contentOffset.y>0&&scrollView.contentOffset.y-OffsetY>20&&(scrollView.contentSize.height-scrollView.height)>0)   {
         if (self.bottomView.y==(APPHEIGHT-self.bottomView.height)) {
             self.dtTab.frame=CGRectMake(0,StatusBarHeight, APPWIDTH, APPHEIGHT-StatusBarHeight);
             [UIView animateWithDuration:0.5

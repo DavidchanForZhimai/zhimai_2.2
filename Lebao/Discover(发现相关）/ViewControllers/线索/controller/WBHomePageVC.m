@@ -103,7 +103,7 @@
     NSString *cityID =[CoreArchive strForKey:AddressID];
     [[HomeInfo shareInstance]getHomePageXianSuo:xspageNumb andCityID:cityID.intValue  andhangye:@"" andCallBack:^(BOOL issucced, NSString *info, NSArray *jsonArr) {
         if (issucced == YES) {
-//            NSLog(@"jsonArr=......===%@",jsonArr);
+            NSLog(@"jsonArr=......===%@",jsonArr);
             if (jsonArr.count > 0) {
                 [[ToolManager shareInstance]dismiss];
                 for (NSDictionary * dic in jsonArr) {
@@ -173,7 +173,7 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
    
-    return 280;
+    return 288;
    
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -200,13 +200,47 @@
             }else{
             imgUrl = [NSString stringWithFormat:@"%@%@",IMG_URL,[_xsJsonArr[indexPath.row]objectForKey:@"imgurl"]];
             }
-            cell.renzhImg.image = [[_xsJsonArr[indexPath.row]objectForKey:@"authen"] intValue]==3?[UIImage imageNamed:@"[iconprofilerenzhen]"]:[UIImage imageNamed:@"[iconprofileweirenzhen]"];
+
+           
             [[ToolManager shareInstance] imageView:cell.headImg  setImageWithURL:imgUrl placeholderType:PlaceholderTypeUserHead];
            
             cell.userNameLab.text = [_xsJsonArr[indexPath.row] objectForKey:@"realname"];
             cell.userNameLab.frame = CGRectMake(cell.userNameLab.x,7, [cell.userNameLab.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(APPWIDTH/2.0, cell.userNameLab.size.height)].width, cell.userNameLab.height);
-                     cell.renzhImg.frame =CGRectMake(cell.userNameLab.frame.origin.x+cell.userNameLab.frame.size.width+5,CGRectGetMaxY(cell.userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
-            cell.positionLab.text = [_xsJsonArr[indexPath.row] objectForKey:@"area"];
+
+            
+            if ([[_xsJsonArr[indexPath.row]objectForKey:@"authen"] intValue]==3) {
+                cell.renzhImg.image = [UIImage imageNamed:@"[iconprofilerenzhen]"];
+                                     cell.renzhImg.frame =CGRectMake(cell.userNameLab.frame.origin.x+cell.userNameLab.frame.size.width+5,CGRectGetMaxY(cell.userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
+            }else{
+                cell.renzhImg.image = nil;
+                 cell.renzhImg.frame =CGRectMake(0, 0, 0, 0);
+            }
+            if ([[_xsJsonArr[indexPath.row]objectForKey:@"vip"] intValue]==1) {
+                cell.vipImg.image = [UIImage imageNamed:@"[iconprofilevip]"];
+                   cell.vipImg.frame =CGRectMake(cell.renzhImg.frame.origin.x+cell.renzhImg.frame.size.width+5,CGRectGetMaxY(cell.userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);
+            }else{
+                 cell.vipImg.image = nil;
+                cell.vipImg.frame =CGRectMake(0, 0, 0, 0);
+            }
+            
+            NSString *str=[_xsJsonArr[indexPath.row] objectForKey:@"position"];
+            if (str.length>0) {
+                str=[NSString stringWithFormat:@"%@ %@",str,[_xsJsonArr[indexPath.row] objectForKey:@"workyear"]];
+            }else{
+                str=[_xsJsonArr[indexPath.row] objectForKey:@"workyear"];
+            }
+            cell.positionLab.text =str;
+            if (cell.positionLab.text.length==0) {
+                cell.positionLab.frame=CGRectMake(cell.positionLab.x, cell.positionLab.y, 0, 0);
+            }
+            cell.addressLab.frame=CGRectMake(cell.addressLab.x,CGRectGetMaxY(cell.positionLab.frame)+8,APPWIDTH-cell.userNameLab.frame.origin.x, 12);
+            cell.addressLab.text=[_xsJsonArr[indexPath.row] objectForKey:@"address"];
+            if (cell.addressLab.text.length==0) {
+                cell.addressLab.frame=CGRectMake(cell.positionLab.x, cell.positionLab.y, 0, 0);
+
+            }
+            
+            
             NSString * timStr = [_xsJsonArr[indexPath.row] objectForKey:@"createtime"];
             NSTimeInterval time=[timStr doubleValue];
             NSDate *data = [NSDate dateWithTimeIntervalSince1970:time];
