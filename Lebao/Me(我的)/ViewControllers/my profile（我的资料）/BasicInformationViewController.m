@@ -727,6 +727,7 @@
     NSMutableDictionary *parame = [Parameter parameterWithSessicon];
     [parame setObject:@"info" forKey:Conduct];
     [XLDataService postWithUrl:MemberURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+//        NSLog(@"dataObj =%@",dataObj);
         if (dataObj) {
             [self netWork]; //请求行业
             _modal = [BasicInfoModal mj_objectWithKeyValues:dataObj];
