@@ -255,17 +255,19 @@
     [self.view addSubview:_yrBtn];
 
     NSDate *date2= [[NSUserDefaults standardUserDefaults]objectForKey:@"dateForYoukong"];
-    if (date2!=nil&&[[DateHelper calculatorExpireDatetimeWithData:date2] minute]<30) {
+    NSDateComponents *d=[DateHelper calculatorExpireDatetimeWithData:date2];
+    if (date2!=nil&&[d minute]<30&&[d hour]<1&&[d month]<1&&[d year]<1) {
         [_yrBtn setBackgroundImage:[UIImage imageNamed:@"yiyoukong"] forState:UIControlStateNormal];
         if (timer_yk==nil) {
-            timer_yk=[NSTimer scheduledTimerWithTimeInterval:([[DateHelper calculatorExpireDatetimeWithData:date2] minute]*60+[[DateHelper calculatorExpireDatetimeWithData:date2] second]) target:self selector:@selector(TimeOfYkBtn) userInfo:nil repeats:NO];
+            timer_yk=[NSTimer scheduledTimerWithTimeInterval:([d minute]*60+[d second]) target:self selector:@selector(TimeOfYkBtn) userInfo:nil repeats:NO];
         }
     }
 }
 -(void)TimeOfYkBtn
 {
     NSDate *date2= [[NSUserDefaults standardUserDefaults]objectForKey:@"dateForYoukong"];
-    if (date2!=nil&&[[DateHelper calculatorExpireDatetimeWithData:date2] minute]>=30) {
+    NSDateComponents *d=[DateHelper calculatorExpireDatetimeWithData:date2];
+    if (date2!=nil&&[d minute]<30&&[d hour]<1&&[d month]<1&&[d year]<1) {
         [_yrBtn setBackgroundImage:[UIImage imageNamed:@"youkong"] forState:UIControlStateNormal];
         if (timer_yk!=nil) {
             [timer_yk  invalidate];
@@ -326,11 +328,12 @@
 {
     
     NSDate *date2= [[NSUserDefaults standardUserDefaults]objectForKey:@"dateForYoukong"];
-        if (date2!=nil&&[[DateHelper calculatorExpireDatetimeWithData:date2] minute]<30) {
-             [[ToolManager shareInstance] showAlertMessage:[NSString stringWithFormat:@"您已点击有空,%ld分钟%ld秒内有效",29-[[DateHelper calculatorExpireDatetimeWithData:date2] minute],59-[[DateHelper calculatorExpireDatetimeWithData:date2] second]]];
+    NSDateComponents *d=[DateHelper calculatorExpireDatetimeWithData:date2];
+        if (date2!=nil&&[d minute]<30&&[d hour]<1&&[d month]<1&&[d year]<1) {
+             [[ToolManager shareInstance] showAlertMessage:[NSString stringWithFormat:@"您已点击有空,%ld分钟%ld秒内有效",29-[d minute],59-[d second]]];
             [_yrBtn setBackgroundImage:[UIImage imageNamed:@"yiyoukong"] forState:UIControlStateNormal];
             if (timer_yk==nil) {
-                timer_yk=[NSTimer scheduledTimerWithTimeInterval:([[DateHelper calculatorExpireDatetimeWithData:date2] minute]*60+[[DateHelper calculatorExpireDatetimeWithData:date2] second]) target:self selector:@selector(TimeOfYkBtn) userInfo:nil repeats:NO];
+                timer_yk=[NSTimer scheduledTimerWithTimeInterval:([d minute]*60+[d second]) target:self selector:@selector(TimeOfYkBtn) userInfo:nil repeats:NO];
             }
             return;
     }
