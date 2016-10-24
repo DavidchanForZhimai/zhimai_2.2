@@ -23,4 +23,5 @@
 
 
 - (NSString *)updateTime;
+
 @end

@@ -42,6 +42,7 @@ typedef enum {
     // Do any additional setup after loading the view.
     [self navViewTitleAndBackBtn:@"登录"];
     [self mainView];
+    [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"dateForYoukong"];
 }
 #pragma mark - mainView
 -(void)mainView{

@@ -186,8 +186,7 @@
     newsData *data =  _headLineArr[section];
     UILabel *timelab=[[UILabel alloc]initWithFrame:CGRectMake((APPWIDTH-80)/2.0, (50-25)/2, 80, 25)];
     NSString *times=data.time;
-    
-    timelab.text= [times updateTime];
+    timelab.text= [times timeformatString:@"MM-dd hh:mm"];
     timelab.font=[UIFont systemFontOfSize:12];
     ;
     timelab.frame=CGRectMake((APPWIDTH-timelab.text.length*6-10)/2.0, (50-25)/2,[timelab.text sizeWithFont:[UIFont systemFontOfSize:12] maxSize:CGSizeMake(APPWIDTH,12)].width+10, 25);

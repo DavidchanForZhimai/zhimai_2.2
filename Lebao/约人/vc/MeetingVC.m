@@ -21,6 +21,7 @@
 #import "NSString+Extend.h"
 #import "GzHyViewController.h"//关注行业
 #import "BasicInformationViewController.h"
+#import "AuthenticationHomeViewController.h"//身份认证
 #import "DateHelper.h"
 @interface MeetingVC ()<UITableViewDelegate,UITableViewDataSource,MeetHeadVDelegate,EjectViewDelegate,MeettingTableViewDelegate,UIAlertViewDelegate>
 {
@@ -369,10 +370,19 @@
                         }];
                     };
                     
+                }else if (modal.rtcode ==4002){
+                    [[ToolManager shareInstance]dismiss];
+                    UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"去身份认证吗?" message:@"身份认证后才能约见他人哦" delegate:self cancelButtonTitle:@"不去" otherButtonTitles:@"走起", nil];
+                    alertView.tag=22221;
+                    alertView.delegate=self;
+                    [alertView show];
+                    
                 }
                 else if (modal.rtcode ==4001){
                     [[ToolManager shareInstance]dismiss];
-                    UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"去完善资料吗?" message:@"完善资料后才能约见他人哦" delegate:self cancelButtonTitle:@"不去" otherButtonTitles:@"走起", nil];
+                    
+                    UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"去完善资料吗?" message:[NSString stringWithFormat:@"完善资料后才能约见他人哦\n(%@)",modal.rtmsg] delegate:self cancelButtonTitle:@"不去" otherButtonTitles:@"走起", nil];
+                    alertView.tag=22222;
                     alertView.delegate=self;
                     [alertView show];
 
@@ -488,9 +498,19 @@
                     alertV.titleStr = @"温馨提示";
                     alertV.title2Str=@"意思一下,打赏让“约”来的正式一点";
                     alertV.indexth=indexPath;
-                }else if (modal.rtcode ==4001){
+                }else if (modal.rtcode ==4002){
                     [[ToolManager shareInstance]dismiss];
-                    UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"去完善资料吗?" message:@"完善资料后才能约见他人哦" delegate:self cancelButtonTitle:@"不去" otherButtonTitles:@"走起", nil];
+                    UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"去身份认证吗?" message:@"身份认证后才能约见他人哦" delegate:self cancelButtonTitle:@"不去" otherButtonTitles:@"走起", nil];
+                    alertView.tag=22221;
+                    alertView.delegate=self;
+                    [alertView show];
+                    
+                }
+                else if (modal.rtcode ==4001){
+                    [[ToolManager shareInstance]dismiss];
+                    
+                    UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"去完善资料吗?" message:[NSString stringWithFormat:@"完善资料后才能约见他人哦\n(%@)",modal.rtmsg] delegate:self cancelButtonTitle:@"不去" otherButtonTitles:@"走起", nil];
+                    alertView.tag=22222;
                     alertView.delegate=self;
                     [alertView show];
                 }
@@ -558,10 +578,18 @@
 }
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (alertView.tag==22221) {
+        if (buttonIndex==0) {
+            
+        }else if(buttonIndex==1){
+            PushView(self, allocAndInit(AuthenticationHomeViewController));
+        }
+    }else if (alertView.tag==22222) {
     if (buttonIndex==0) {
         
     }else if(buttonIndex==1){
         PushView(self, allocAndInit(BasicInformationViewController));
+    }
     }
 }
 

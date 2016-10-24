@@ -101,4 +101,7 @@
 //    //秒转年
 //    NSInteger years = time/3600/24/30/12;
 //    return [NSString stringWithFormat:@"%ld年前",years];
-}@end
+}
+/** , 返回更新时间 */
+
+@end

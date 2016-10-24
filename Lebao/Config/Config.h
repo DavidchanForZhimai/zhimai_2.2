@@ -57,7 +57,7 @@
 #define vipOpenURL [NSString stringWithFormat:@"%@vip/open",HttpURL]
 //vip/view
 #define vipviewURL [NSString stringWithFormat:@"%@vip/view",HttpURL]
-//vip/view
+//是否完善资料
 #define meetCheckedURL [NSString stringWithFormat:@"%@meet/checked",HttpURL]
 //请求参数
 #define DeviceToken @"deviceToken"
