@@ -56,6 +56,7 @@
 @interface TableViewCell : UITableViewCell
 
 @property (nonatomic,weak) id <TableViewCellDelegate> delegate;
+@property(nonatomic,strong)  UIImageView* webSiteimg;//文章分享的
 @property (nonatomic,strong) CellLayout* cellLayout;
 @property (nonatomic,strong) NSIndexPath* indexPath;
 

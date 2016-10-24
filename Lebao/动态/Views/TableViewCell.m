@@ -27,7 +27,6 @@
 @property (nonatomic,strong) UIView* line;
 @property (nonatomic,strong) UIView* cellline;
 @property(nonatomic,strong)  BaseButton* webSiteBtn;
-@property(nonatomic,strong)  UIImageView* webSiteimg;
 //线索
 @property(nonatomic,strong)  BaseButton* clueTitle;
 @property(nonatomic,strong)  UILabel* clueCount;

@@ -779,7 +779,7 @@
 {
     CellLayout *layout =_jjrJsonArr[indexPath.row];
     MyProductDetailViewController *detail = allocAndInit(MyProductDetailViewController);
-    detail.shareImage =cell.cellLayout.wetbImageStorage.imageStorage;
+    detail.shareImage =cell.webSiteimg.image;
     detail.ID = articleID;
     detail.uid =[NSString stringWithFormat:@"%ld",layout.statusModel.ID];
     detail.isNoEdit = YES;
