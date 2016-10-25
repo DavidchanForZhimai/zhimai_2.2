@@ -44,6 +44,7 @@
     // Do any additional setup after loading the view.
     self.view.backgroundColor = WhiteColor;
     [self navViewTitleAndBackBtn:@"选择关注行业"];
+    [self.view addSubview:self.finishBtn];
     if (_isShouldLoadData) {
          [self netWorkIsSave:NO];
     }
@@ -151,7 +152,7 @@
         scrView=[[UIScrollView alloc]init];
         scrView.frame=CGRectMake(0,NavigationBarHeight+StatusBarHeight, APPWIDTH, APPHEIGHT-(NavigationBarHeight+StatusBarHeight));
         scrView.contentSize=CGSizeMake(0, CGRectGetMaxY(self.newsTagsView.frame));
-        [scrView addSubview:self.finishBtn];
+    
         [scrView addSubview:self.hasTagsView];
         [scrView addSubview:self.newsLb];
         [scrView addSubview:self.newsClassTagsView];
@@ -183,7 +184,7 @@
     if (_hasTagsView) {
         return _hasTagsView;
     }
-    _hasTagsView = allocAndInitWithFrame(DWTagsView, frame(10, 10+ViewStartX , APPWIDTH -20, 70));
+    _hasTagsView = allocAndInitWithFrame(DWTagsView, frame(10, 10 , APPWIDTH -20, 70));
     _hasTagsView.contentInsets = UIEdgeInsetsZero;
     _hasTagsView.tagInsets = UIEdgeInsetsMake(5, 15, 5, 15);
     _hasTagsView.tagBorderWidth = 0.5;
@@ -361,7 +362,7 @@
 #pragma mark  setframe
 - (void)resetFrame
 {
-    _hasTagsView.frame =frame(10, 10+ViewStartX , APPWIDTH -20, [_hasTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
+    _hasTagsView.frame =frame(10, 10 , APPWIDTH -20, [_hasTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
     _newsLb.frame =frame(0, _hasTagsView.height + _hasTagsView.y +10, APPWIDTH, 40);
     
      _newsClassTagsView.frame = frame(10, CGRectGetMaxY(_newsLb.frame) , APPWIDTH -20, [_newsClassTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
