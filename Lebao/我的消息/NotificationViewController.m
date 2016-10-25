@@ -20,6 +20,8 @@
 #import "HeadLineVC.h"
 #define cellH  40
 #define MessageURL [NSString stringWithFormat:@"%@message/index",HttpURL]
+#define CloseMessageURL [NSString stringWithFormat:@"%@message/close-dialog",HttpURL]
+
 @interface NotificationViewController ()<UITableViewDelegate, UITableViewDataSource>
 {
     NSString * num;
@@ -294,6 +296,7 @@
     return cell;
     
 }
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -330,6 +333,46 @@
 
         MessageCell *cell  = [tableView cellForRowAtIndexPath:indexPath];
         cell.message.hidden = YES;
+    }
+    
+    
+}
+#pragma mark ---deit delete---
+// 指定哪一行可以编辑 哪行不能编辑
+- (BOOL) tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section ==1) {
+         return YES;
+    }
+    return NO;
+   
+}
+
+// 设置 哪一行的编辑按钮 状态 指定编辑样式
+- (UITableViewCellEditingStyle) tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewCellEditingStyleDelete;
+}
+
+// 判断点击按钮的样式 来去做添加 或删除
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // 删除的操作
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+      NSMutableArray * _sectionArray = _notificationArray[indexPath.section];
+      NotificationData *data=   _sectionArray[indexPath.row];
+      NSMutableDictionary *parme =   [Parameter parameterWithSessicon];
+      [parme setValue:data.ID forKey:@"id"];
+      [XLDataService postWithUrl:CloseMessageURL param:parme modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+            
+          [_sectionArray removeObjectAtIndex:indexPath.row];
+          //         删除 索引的方法 后面是动画样式
+          [_notificationView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:(UITableViewRowAnimationLeft)];
+        }];
+        
+      
+   
+        
     }
     
     

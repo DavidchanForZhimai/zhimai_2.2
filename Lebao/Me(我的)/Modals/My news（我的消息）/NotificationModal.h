@@ -25,5 +25,5 @@
 @property(nonatomic,copy) NSString *realname;
 @property(nonatomic,copy) NSString *content;
 @property(nonatomic,copy) NSString *senderid;
-
+@property(nonatomic,copy) NSString *ID;
 @end

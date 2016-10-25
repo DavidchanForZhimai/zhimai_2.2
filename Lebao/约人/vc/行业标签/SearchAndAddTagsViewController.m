@@ -58,7 +58,7 @@
         [_bar setBorder:LineBg width:0.5];
         [_bar setRadius:_bar.height/2.0];
         _bar.delegate = self;
-        _bar.placeholder=@"搜索";
+        _bar.placeholder=@"搜索关键字找到感兴趣的人";
         float version = [[[UIDevice currentDevice] systemVersion] floatValue];
         if ([_bar respondsToSelector:@selector(barTintColor)]) {
             

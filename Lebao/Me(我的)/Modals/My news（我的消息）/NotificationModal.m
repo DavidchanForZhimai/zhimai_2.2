@@ -20,5 +20,9 @@
 @end
 
 @implementation NotificationData
-
++ (NSDictionary *)mj_replacedKeyFromPropertyName
+{
+    return @{@"ID" : @"id",
+             };
+}
 @end

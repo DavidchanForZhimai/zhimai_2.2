@@ -15,14 +15,19 @@
 #import "MeetPaydingVC.h"
 #import "MyDetialViewController.h"
 #import "AddConnectionView.h"
+#import "CoreArchive.h"
+#import "ViewController.h"
 @interface CanmeetTabVC ()<UITableViewDelegate,UITableViewDataSource,MeettingTableViewDelegate,UIAlertViewDelegate,EjectViewDelegate,AddConnectionViewDelegate>
 {
     AddConnectionView *alertView;
-
+    
 }
 @property(nonatomic,copy)NSString *keyword;
+@property(nonatomic,copy)NSString *city;
 @property(nonatomic,assign)NSInteger page;
 @property(nonatomic,strong)NSMutableArray *allMeetArr;
+
+@property(nonatomic, strong)BaseButton *selectedAddress;
 @end
 
 @implementation CanmeetTabVC
@@ -57,10 +62,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     _keyword =@"";
+    _city = @"";
     _page=1;
     [self navViewTitleAndBackBtn:@""];
         //搜索按钮
-        BaseButton *search = [[BaseButton alloc]initWithFrame:frame(60*ScreenMultiple, StatusBarHeight + 7, APPWIDTH - 120*ScreenMultiple, NavigationBarHeight - 14) setTitle:@"搜索" titleSize:28*SpacedFonts titleColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:[UIColor clearColor] inView:self.view];
+     BaseButton *search = [[BaseButton alloc]initWithFrame:frame(40*ScreenMultiple, StatusBarHeight + 7, 200*ScreenMultiple, NavigationBarHeight - 14) setTitle:@"搜索" titleSize:28*SpacedFonts titleColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:[UIColor clearColor] inView:self.view];
         [search setRoundWithfloat:search.height/2.0];
         [search setBorder:LineBg width:0.5];
         __weak typeof(self) weakSelf= self;
@@ -68,7 +74,8 @@
             SearchAndAddTagsViewController * search  =  allocAndInit(SearchAndAddTagsViewController);
             search.searchResultBlock = ^(NSString *str)
             {
-                NSLog(@"str    ==%@",str);
+                [weakSelf.allMeetArr removeAllObjects];
+                [weakSelf.tableView reloadData];
                  weakSelf.keyword = str;
                  weakSelf.page = 1;
                 [weakSelf netWorkRefresh:NO andIsLoadMoreData:NO isShouldClearData:YES];
@@ -78,11 +85,58 @@
     
         };
     
+    UIImage *upImage =[UIImage imageNamed:@"exhibition_up"];
+    UILabel *lbUp = allocAndInit(UILabel);
+    CGSize sizeUp = [lbUp sizeWithContent:@"全国" font:[UIFont systemFontOfSize:28*SpacedFonts]];
+    float sizeW = sizeUp.width;
+    if (sizeUp.width>=140*SpacedFonts) {
+        sizeW = 160*SpacedFonts;
+    }
+   
+    self.selectedAddress  =[[BaseButton alloc]initWithFrame:frame(CGRectGetMaxX(search.frame) +  10, StatusBarHeight, sizeW + 5 + upImage.size.width , NavigationBarHeight) setTitle:@"全国" titleSize:28*SpacedFonts titleColor:BlackTitleColor backgroundImage:nil iconImage:upImage highlightImage:nil setTitleOrgin:CGPointMake( (NavigationBarHeight -28*SpacedFonts)/2.0 ,- upImage.size.width) setImageOrgin:CGPointMake((NavigationBarHeight - upImage.size.height)/2.0,sizeW + 5) inView:self.view];
+    
+    _selectedAddress.didClickBtnBlock =^
+    {
+        ViewController *vc=[[ViewController alloc]init];
+        
+        [vc returnText:^(NSString *cityname,NSString *cityID) {
+            NSLog(@"cityID =%@",cityID);
+             weakSelf.city = cityID;
+            
+            [weakSelf.selectedAddress setTitle:cityname forState:UIControlStateNormal];
+            [weakSelf resetSeletedAddressFrameWithTitle:cityname];
+            [weakSelf.allMeetArr removeAllObjects];
+             [weakSelf.tableView reloadData];
+             weakSelf.page = 1;
+            [weakSelf netWorkRefresh:NO andIsLoadMoreData:NO isShouldClearData:YES];
+        }];
+        
+        [weakSelf.navigationController pushViewController:vc animated:NO];
+    };
+    
+    
+    [self.view addSubview:_selectedAddress];
+    
     [self addTabView];
     
     [self netWorkRefresh:NO andIsLoadMoreData:NO isShouldClearData:YES];
 }
+//选择地址重新设置frame
+- (void)resetSeletedAddressFrameWithTitle:(NSString *)title
+{
 
+    UILabel *lbUp =allocAndInit(UILabel);
+    UIImage *upImage =[UIImage imageNamed:@"exhibition_up"];
+    CGSize sizeUp = [lbUp sizeWithContent:[self.selectedAddress titleForState:UIControlStateNormal] font:Size(28)];
+    float sizeW = sizeUp.width;
+    if (sizeW>((APPWIDTH - self.selectedAddress.x - 10)- 5 - upImage.size.width)) {
+        sizeW =((APPWIDTH - self.selectedAddress.x - 10)- 5 - upImage.size.width);
+    }
+    self.selectedAddress.frame = frame(self.selectedAddress.x, self.selectedAddress.y, sizeW +  5+ upImage.size.width , self.selectedAddress.height);
+
+    self.selectedAddress.titlePoint = CGPointMake( (NavigationBarHeight -28*SpacedFonts)/2.0 ,- upImage.size.width);
+    self.selectedAddress.imagePoint = CGPointMake((NavigationBarHeight - upImage.size.height)/2.0,sizeW + 5);
+}
 - (void)buttonAction:(UIButton *)sender
 {
     PopView(self);
@@ -128,8 +182,9 @@
     }
     [param setObject:@(_page) forKey:@"page"];
     [param setObject:_keyword forKey:@"keyword"];
+     [param setObject:_city forKey:@"city"];
     [param setObject:@"" forKey:@"industrys"];
-    NSLog(@"param====%@",param);
+//    NSLog(@"param====%@",param);
     [XLDataService putWithUrl:canseeURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         
         if (isRefresh) {
