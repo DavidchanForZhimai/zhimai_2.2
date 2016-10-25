@@ -28,6 +28,7 @@
 @property(nonatomic,strong)NSMutableArray *allMeetArr;
 
 @property(nonatomic, strong)BaseButton *selectedAddress;
+@property(nonatomic, strong)BaseButton  *search;
 @end
 
 @implementation CanmeetTabVC
@@ -66,14 +67,17 @@
     _page=1;
     [self navViewTitleAndBackBtn:@""];
         //搜索按钮
-     BaseButton *search = [[BaseButton alloc]initWithFrame:frame(40*ScreenMultiple, StatusBarHeight + 7, 200*ScreenMultiple, NavigationBarHeight - 14) setTitle:@"搜索" titleSize:28*SpacedFonts titleColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:[UIColor clearColor] inView:self.view];
-        [search setRoundWithfloat:search.height/2.0];
-        [search setBorder:LineBg width:0.5];
+    
+        _search = [[BaseButton alloc]initWithFrame:frame(40*ScreenMultiple, StatusBarHeight + 7, 200*ScreenMultiple, NavigationBarHeight - 14) setTitle:@"搜索" titleSize:28*SpacedFonts titleColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:[UIColor clearColor] inView:self.view];
+        [_search setRoundWithfloat:_search.height/2.0];
+        [_search setBorder:LineBg width:0.5];
+   
         __weak typeof(self) weakSelf= self;
-         search.didClickBtnBlock = ^{
+         _search.didClickBtnBlock = ^{
             SearchAndAddTagsViewController * search  =  allocAndInit(SearchAndAddTagsViewController);
             search.searchResultBlock = ^(NSString *str)
             {
+                [weakSelf.search setTitle:str forState:UIControlStateNormal];
                 [weakSelf.allMeetArr removeAllObjects];
                 [weakSelf.tableView reloadData];
                  weakSelf.keyword = str;
@@ -81,7 +85,7 @@
                 [weakSelf netWorkRefresh:NO andIsLoadMoreData:NO isShouldClearData:YES];
             };
 
-             [self.navigationController pushViewController:search animated:NO];
+             [weakSelf.navigationController pushViewController:search animated:NO];
     
         };
     
@@ -93,7 +97,7 @@
         sizeW = 160*SpacedFonts;
     }
    
-    self.selectedAddress  =[[BaseButton alloc]initWithFrame:frame(CGRectGetMaxX(search.frame) +  10, StatusBarHeight, sizeW + 5 + upImage.size.width , NavigationBarHeight) setTitle:@"全国" titleSize:28*SpacedFonts titleColor:BlackTitleColor backgroundImage:nil iconImage:upImage highlightImage:nil setTitleOrgin:CGPointMake( (NavigationBarHeight -28*SpacedFonts)/2.0 ,- upImage.size.width) setImageOrgin:CGPointMake((NavigationBarHeight - upImage.size.height)/2.0,sizeW + 5) inView:self.view];
+    self.selectedAddress  =[[BaseButton alloc]initWithFrame:frame(CGRectGetMaxX(_search.frame) +  10, StatusBarHeight, sizeW + 5 + upImage.size.width , NavigationBarHeight) setTitle:@"全国" titleSize:28*SpacedFonts titleColor:BlackTitleColor backgroundImage:nil iconImage:upImage highlightImage:nil setTitleOrgin:CGPointMake( (NavigationBarHeight -28*SpacedFonts)/2.0 ,- upImage.size.width) setImageOrgin:CGPointMake((NavigationBarHeight - upImage.size.height)/2.0,sizeW + 5) inView:self.view];
     
     _selectedAddress.didClickBtnBlock =^
     {
@@ -198,7 +202,7 @@
             [self.allMeetArr removeAllObjects];
         }
         if (dataObj) {
-            NSLog(@"meetObj====%@",dataObj);
+//            NSLog(@"meetObj====%@",dataObj);
             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
             if (_page ==1) {
                 [[ToolManager shareInstance] moreDataStatus:self.tableView];
