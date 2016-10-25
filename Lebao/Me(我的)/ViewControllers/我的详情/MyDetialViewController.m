@@ -734,7 +734,7 @@
     if (buttonIndex==0) {
         NSMutableDictionary *param=[Parameter parameterWithSessicon];
         [param setObject:_userID forKey:@"beinvited"];
-        [param setObject:customAlertView.money forKey:@"reward"];
+        [[ToolManager shareInstance] showWithStatus];
         [XLDataService putWithUrl:addConnectionsURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
             if(dataObj){
                 MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];

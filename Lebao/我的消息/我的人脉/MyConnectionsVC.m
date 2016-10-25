@@ -276,25 +276,21 @@
         MeetingCellLayout *layout1=self.nearByManArr[indexPath.row];
         MeetingData *data=layout1.model;
         [param setObject:data.meetId forKey:@"id"];
-        NSLog(@"param====%@",param);
-        
+        [[ToolManager shareInstance] showWithStatus];
         [XLDataService putWithUrl:conductConnectionsURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-            NSLog(@"conductObj=%@",dataObj);
             if (dataObj) {
                 MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
                 
                 if (model.rtcode==1) {
-
+                    [[ToolManager shareInstance] showAlertMessage:@"删除人脉成功"];
                     [self.nearByManArr removeObjectAtIndex:indexPath.row];
                     // Delete the row from the data source.
                     [_yrTab deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
                 }
-                
                 else
                 {
                     [[ToolManager shareInstance] showAlertMessage:model.rtmsg];
                 }
-                NSLog(@"model.rtmsg=========dataobj=%@",model.rtmsg);
             }else
             {
                 [[ToolManager shareInstance] showInfoWithStatus];

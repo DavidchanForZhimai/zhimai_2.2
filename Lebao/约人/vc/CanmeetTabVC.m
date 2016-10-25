@@ -313,9 +313,9 @@
     MeetingCellLayout *layout=self.allMeetArr[customAlertView.indexth.row];
     MeetingData *model=layout.model;
     if (buttonIndex==0) {
+        [[ToolManager shareInstance] showWithStatus];
         NSMutableDictionary *param=[Parameter parameterWithSessicon];
         [param setObject:model.userid forKey:@"beinvited"];
-        [param setObject:customAlertView.money forKey:@"reward"];
         [XLDataService putWithUrl:addConnectionsURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
             if(dataObj){
 //                NSLog(@"dataobj===%@",dataObj);

@@ -231,7 +231,7 @@
         }
         cell.positionLab.text =str;
         if (cell.positionLab.text.length==0) {
-            cell.positionLab.frame=CGRectMake(cell.positionLab.x, cell.userNameLab.y, 0, 0);
+            cell.positionLab.frame=CGRectMake(cell.positionLab.x, cell.positionLab.y, 0, 0);
         }
         cell.addressLab.frame=CGRectMake(cell.userNameLab.x,CGRectGetMaxY(cell.positionLab.frame)+8,APPWIDTH-cell.userNameLab.frame.origin.x, 12);
         cell.addressLab.text=[_xsJsonArr[indexPath.row] objectForKey:@"address"];

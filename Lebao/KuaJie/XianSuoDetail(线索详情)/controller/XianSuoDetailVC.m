@@ -518,7 +518,7 @@
     }
     _positionLab.text =str;
     if (_positionLab.text.length==0) {
-        _positionLab.frame=CGRectMake(_positionLab.x, userNameLab.y, 0, 0);
+        _positionLab.frame=CGRectMake(_positionLab.x, _positionLab.y, 0, 0);
     }
     [_txV addSubview:_positionLab];
     NSString *str1=[_xiansDic objectForKey:@"address"];
@@ -819,7 +819,7 @@
         [cell.headImg addGestureRecognizer:txTap];
         cell.userNameLab.text = [_coopArr[indexPath.row]objectForKey:@"realname"];
         cell.userNameLab.frame = CGRectMake(cell.userNameLab.x,12, [cell.userNameLab.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(APPWIDTH/2.0, cell.userNameLab.size.height)].width,15);
-        
+        NSLog(@"_coopArr[indexPath.row]%@",_coopArr[indexPath.row]);
         if ([[_coopArr[indexPath.row]objectForKey:@"authen"] intValue]==3) {
             cell.renzhImg.image = [UIImage imageNamed:@"[iconprofilerenzhen]"];
             cell.renzhImg.frame =CGRectMake(cell.userNameLab.frame.origin.x+cell.userNameLab.frame.size.width+5,CGRectGetMaxY(cell.userNameLab.frame)-[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height, [UIImage imageNamed:@"[iconprofilerenzhen]"].size.width,[UIImage imageNamed:@"[iconprofilerenzhen]"].size.height);

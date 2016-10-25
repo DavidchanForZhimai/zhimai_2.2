@@ -130,7 +130,7 @@
     }
     _positionLab.text =str;
     if (_positionLab.text.length==0) {
-        _positionLab.frame=CGRectMake(_positionLab.x, userNameLab.y, 0, 0);
+        _positionLab.frame=CGRectMake(_positionLab.x, _positionLab.y, 0, 0);
     }
     [tapV addSubview:_positionLab];
     NSString *str1=[_xiansuoDic objectForKey:@"address"];

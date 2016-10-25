@@ -263,16 +263,10 @@
 }
 -(void)TimeOfYkBtn
 {
-    NSDate *date2= [[NSUserDefaults standardUserDefaults]objectForKey:@"dateForYoukong"];
-    NSDateComponents *d=[DateHelper calculatorExpireDatetimeWithData:date2];
-    if ([d minute]>=30||[d hour]>=1||[d day]>=1||[d month]>=1||[d year]>=1) {
+        _yrBtn.tag=1000;
         [_yrBtn setBackgroundImage:[UIImage imageNamed:@"youkong"] forState:UIControlStateNormal];
-        if (timer_yk!=nil) {
             [timer_yk  invalidate];
             timer_yk=nil;
-        }
-    }
-
 }
 -(void)addTabView
 {
@@ -334,7 +328,7 @@
             return;
     }
     [self shakeToShow:_yrBtn];
-    [sender setEnabled:NO];
+
     if (sender.tag==1000) {
 
         [[ToolManager shareInstance] showWithStatus];
@@ -377,12 +371,10 @@
                                     }else{
                                         [[ToolManager shareInstance] showAlertMessage:model.rtmsg];}
                                 }
-                                [sender setEnabled:YES];
                                 
                             }else
                             {
                                 [[ToolManager shareInstance] showInfoWithStatus];
-                                [sender setEnabled:YES];
                                 [_yrBtn setBackgroundImage:[UIImage imageNamed:@"youkong"] forState:UIControlStateNormal];
                             }
                         }];
@@ -409,21 +401,20 @@
                         [[ToolManager shareInstance] showAlertMessage:modal.rtmsg];
                     }
                 [[ToolManager shareInstance]dismiss];
-                [sender setEnabled:YES];
             }
             else
             {
-                [sender setEnabled:YES];
                 [[ToolManager shareInstance] showInfoWithStatus];
             }
             
         }];
 
-            }else{
-        sender.tag=1000;
-        [_yrBtn setBackgroundImage:[UIImage imageNamed:@"youkong"] forState:UIControlStateNormal];
-        [sender setEnabled:YES];
-    }
+            }
+//    else{
+//        sender.tag=1000;
+//        [_yrBtn setBackgroundImage:[UIImage imageNamed:@"youkong"] forState:UIControlStateNormal];
+//        [sender setEnabled:YES];
+//    }
 }
 
 #pragma mark----tableview代理

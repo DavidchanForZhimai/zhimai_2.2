@@ -242,13 +242,14 @@
     telMessData=layout1.model;
     [param setObject:telMessData.meetId forKey:@"id"];
     NSLog(@"param====%@",param);
-
+    [[ToolManager shareInstance] showWithStatus];
     [XLDataService putWithUrl:conductConnectionsURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         NSLog(@"conductObj=%@",dataObj);
         if (dataObj) {
             MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
             
             if (model.rtcode==1) {
+                [[ToolManager shareInstance] dismiss];
                 if(btn.tag==2222){
                     UIAlertView *success=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"您已拒绝%@的人脉添加请求",telMessData.realname] delegate:nil cancelButtonTitle:@"继续操作" otherButtonTitles: nil];
                     [self.nearByManArr removeObjectAtIndex:clickRow.row];
@@ -269,7 +270,6 @@
             {
                 [[ToolManager shareInstance] showAlertMessage:model.rtmsg];
             }
-            NSLog(@"model.rtmsg=========dataobj=%@",model.rtmsg);
         }else
         {
             [[ToolManager shareInstance] showInfoWithStatus];
