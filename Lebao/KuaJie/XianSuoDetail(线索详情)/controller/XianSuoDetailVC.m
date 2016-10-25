@@ -515,8 +515,6 @@
         str=[NSString stringWithFormat:@"%@ 从业%@年",str,[_xiansDic objectForKey:@"workyear"]];
     }else if (str.length==0&&[[_xiansDic objectForKey:@"workyear"] intValue]!=0) {
         str=[NSString stringWithFormat:@"从业%@年",[_xiansDic objectForKey:@"workyear"]];
-    }else {
-        str=@"";
     }
     _positionLab.text =str;
     if (_positionLab.text.length==0) {

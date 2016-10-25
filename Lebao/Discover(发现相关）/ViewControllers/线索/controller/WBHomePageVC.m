@@ -228,8 +228,6 @@
             str=[NSString stringWithFormat:@"%@ 从业%@年",str,[_xsJsonArr[indexPath.row] objectForKey:@"workyear"]];
         }else if (str.length==0&&[[_xsJsonArr[indexPath.row] objectForKey:@"workyear"] intValue]!=0) {
             str=[NSString stringWithFormat:@"从业%@年",[_xsJsonArr[indexPath.row] objectForKey:@"workyear"]];
-        }else {
-            str=@"";
         }
         
         cell.positionLab.text =str;
