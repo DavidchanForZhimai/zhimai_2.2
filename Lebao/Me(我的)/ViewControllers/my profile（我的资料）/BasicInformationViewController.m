@@ -28,7 +28,7 @@
 //我的URL ：appinterface/personal
 #define MemberURL [NSString stringWithFormat:@"%@user/member",HttpURL]
 #define SaveMemberURL [NSString stringWithFormat:@"%@user/save-member",HttpURL]
-@interface BasicInformationViewController ()<UITableViewDataSource,UITableViewDelegate,GWLCustomPikerViewDataSource, GWLCustomPikerViewDelegate,DWTagsViewDelegate>
+@interface BasicInformationViewController ()<UITableViewDataSource,UITableViewDelegate,GWLCustomPikerViewDataSource, GWLCustomPikerViewDelegate,DWTagsViewDelegate,UITextFieldDelegate>
 @property(nonatomic,strong)BaseButton *saveBtn;
 @property(nonatomic,strong)BasicInfoModal *modal;
 @property(nonatomic,strong)UITableView    *basicInfoTableView;
@@ -51,7 +51,7 @@
 @property(nonatomic,strong)UIView *line1;//间隔
 
 @property(nonatomic,strong)BaseButton *addTagsBgView;//背景
-@property(nonatomic,strong)UIScrollView * addTagsView;//所有add标签的父视图
+@property(nonatomic,strong)UIView * addTagsView;//所有add标签的父视图
 @property(nonatomic,strong)DWTagsView *addHasTagsView;//添加标签
 @property(nonatomic,strong)DWTagsView *addDefalutTagsView;//默认选择标签
 @property(nonatomic,strong)UILabel *addTagsLb;//点击添加新的关注行业
@@ -64,7 +64,8 @@
 
 @property(nonatomic,strong)UITextField *addTextField;//添加标签输入框
 @property(nonatomic,strong)BaseButton *addSure;//确定按钮
-
+@property(nonatomic,strong)BaseButton *zidingyi;//自定义
+@property(nonatomic,strong)BaseButton *addBottomSure;//确定按钮
 @property(nonatomic,strong)DWTagsView *currentTagsView;//当前的标签
 @property(nonatomic,copy)NSMutableArray *currentTagsArray;//当前的标签数组
 @property(nonatomic,copy)NSMutableArray *currentDefalutTagsArray;//当前的选择标签数组
@@ -114,6 +115,14 @@
 
 - (BOOL)tagsView:(DWTagsView *)tagsView shouldSelectTagAtIndex:(NSUInteger)index
 {
+    if (tagsView.tag ==888888) {
+        
+        if (_currentTagsArray.count>_modal.resource_max_limit) {
+            [[ToolManager shareInstance] showInfoWithStatus:[NSString stringWithFormat:@"标签个数限制为最多%i个",self.modal.resource_max_limit]];
+            return NO;
+        }
+
+    }
     return YES;
 }
 - (void)tagsView:(DWTagsView *)tagsView didSelectTagAtIndex:(NSUInteger)index
@@ -219,7 +228,7 @@
 {
 
     if (tagsView.tag ==888888) {
-
+        
         [_currentTagsView removeTagWithName:_currentDefalutTagsArray[index]];
         [_addHasTagsView removeTagWithName:_currentDefalutTagsArray[index]];
         [_currentTagsArray removeObject:_currentDefalutTagsArray[index]];
@@ -259,6 +268,10 @@
         weakSelf.addDefalutTagsView = nil;
         [weakSelf.addTagsView removeFromSuperview];
         weakSelf.addTagsView = nil;
+        [weakSelf.addBottomSure removeFromSuperview];
+        weakSelf.addBottomSure = nil;
+        [weakSelf.zidingyi removeFromSuperview];
+        weakSelf.zidingyi = nil;
             
         }];
      
@@ -269,10 +282,14 @@
     _addHasTagsView.tagsArray = dataSource;
     [dataSource addObject:@"+"];
     [self.addTagsView addSubview:self.addTagsLb];
+    [self.addTagsView addSubview:self.zidingyi];
+    
+    [self.addTagsView addSubview:self.addBottomSure];
     [self.addTagsView addSubview:self.addTextField];
     [self.addTagsView addSubview:self.addSure];
+    self.addTextField.hidden= YES;
+    self.addSure.hidden= YES;
     self.addSure.didClickBtnBlock = ^{
-       
         
         if ([weakSelf.addTextField.text isEqualToString:@""]) {
             weakSelf.addTextField.placeholder = @"标签不能为空";
@@ -319,7 +336,11 @@
         [weakSelf.addHasTagsView addTag:weakSelf.addTextField.text];
          weakSelf.addTextField.text=@"";
         weakSelf.addTextField.placeholder = @"请输入自定义标签";
+        
         [weakSelf.addTextField resignFirstResponder];
+        weakSelf.zidingyi.hidden = NO;
+        weakSelf.addSure.hidden = YES;
+        weakSelf.addTextField.hidden = YES;
         
         //高度重新布局
         [weakSelf addTagsViewReSetFrame];
@@ -333,6 +354,20 @@
     _currentTagsView = type;
     _currentTagsArray = dataSource;
     _currentDefalutTagsArray = defalutDataSource;
+    
+    NSString *str;
+    if (type.tag==88) {
+        str = @"-----点击添加新产品标签-----";
+    }
+    if (type.tag==888) {
+        str = @"-----点击添加新资源标签-----";
+    }
+
+    if (type.tag==8888) {
+        str = @"-----点击添加新自我评价标签-----";
+    }
+
+    weakSelf.addTagsLb.text =str;
 }
 #pragma mark
 #pragma mark getter addtagsView
@@ -346,15 +381,12 @@
     _addTagsBgView.userInteractionEnabled = YES;
     return _addTagsBgView;
 }
-- (UIScrollView *)addTagsView
+- (UIView *)addTagsView
 {
     if (_addTagsView) {
         return _addTagsView;
     }
-    _addTagsView = [[UIScrollView alloc]initWithFrame:frame(0, APPHEIGHT, APPWIDTH, 0)];
-    _addTagsView.userInteractionEnabled = YES;
-    _addTagsView.scrollEnabled = YES;
-    _addTagsView.showsVerticalScrollIndicator = YES;
+    _addTagsView = [[UIView alloc]initWithFrame:frame(0, APPHEIGHT, APPWIDTH, 0)];
     _addTagsView.backgroundColor = WhiteColor;
     return _addTagsView;
     
@@ -406,10 +438,41 @@
     _addTextField.placeholder = @"请输入自定义标签";
     _addTextField.font = [UIFont systemFontOfSize:14.0];
     [_addTextField setBorder:LineBg width:0.5];
+    _addTextField.delegate = self;
     [_addTextField setRadius:2.0];
     
     return _addTextField;
 }
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    self.addSure.hidden = YES;
+    self.addTextField.hidden = YES;
+    self.zidingyi.hidden = NO;
+    [self addTagsViewReSetFrame];
+}
+- (BaseButton *)zidingyi
+{
+    if (_zidingyi) {
+        return _zidingyi;
+    }
+    _zidingyi = [[BaseButton alloc]initWithFrame:CGRectZero setTitle:@"自定义" titleSize:14 titleColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:WhiteColor inView:nil];
+    __weak typeof(self) weakSelf =self;
+    _zidingyi.didClickBtnBlock =^
+    {
+    
+        weakSelf.addSure.hidden = NO;
+        weakSelf.addTextField.hidden = NO;
+        [weakSelf addTagsViewReSetFrame];
+        [weakSelf.addTextField becomeFirstResponder];
+        weakSelf.zidingyi.hidden = YES;
+        
+    };
+    [_zidingyi setBorder:LineBg width:0.5];
+
+    
+    return  _zidingyi;
+}
+
 - (BaseButton *)addSure
 {
     if (_addSure) {
@@ -420,6 +483,49 @@
     
     return  _addSure;
 }
+- (BaseButton *)addBottomSure
+{
+    if (_addBottomSure) {
+        return _addBottomSure;
+    }
+    _addBottomSure = [[BaseButton alloc]initWithFrame:CGRectZero setTitle:@"确定" titleSize:16 titleColor:AppMainColor textAlignment:NSTextAlignmentCenter backgroundColor:WhiteColor inView:nil];
+    [_addBottomSure setBorder:LineBg width:0.5];
+    __weak typeof(self) weakSelf = self;
+    _addBottomSure.didClickBtnBlock = ^
+    {
+        [weakSelf.addTextField resignFirstResponder];
+        [weakSelf.addTagsBgView removeFromSuperview];
+        weakSelf.addTagsBgView = nil;
+        
+        [UIView animateWithDuration:0.3 animations:^{
+            weakSelf.addTagsView.frame = frame(0, APPHEIGHT, APPWIDTH, weakSelf.addTagsView.height);
+        } completion:^(BOOL finished) {
+            
+            [weakSelf.addHasTagsView removeFromSuperview];
+            weakSelf.addHasTagsView = nil;
+            [weakSelf.addTagsLb removeFromSuperview];
+            weakSelf.addTagsLb = nil;
+            [weakSelf.addTextField removeFromSuperview];
+            weakSelf.addTextField = nil;
+            [weakSelf.addSure removeFromSuperview];
+            weakSelf.addSure = nil;
+            [weakSelf.addDefalutTagsView removeFromSuperview];
+            weakSelf.addDefalutTagsView = nil;
+            [weakSelf.addTagsView removeFromSuperview];
+            weakSelf.addTagsView = nil;
+            [weakSelf.addBottomSure removeFromSuperview];
+            weakSelf.addBottomSure = nil;
+            [weakSelf.zidingyi removeFromSuperview];
+            weakSelf.zidingyi = nil;
+            
+        }];
+        
+
+    };
+
+    return  _addBottomSure;
+}
+
 - (DWTagsView *)addDefalutTagsView
 {
     if (_addDefalutTagsView) {
@@ -433,13 +539,16 @@
     _addDefalutTagsView.maximumTagWidth = MaxinumTagWidth;
     _addDefalutTagsView.tagHeight  = TagHeight;
     _addDefalutTagsView.tag = 888888;
-    _addDefalutTagsView.tagBackgroundColor =[UIColor colorWithRed:0.902 green:0.9059 blue:0.9137 alpha:1.0] ;
+    _addDefalutTagsView.tagBackgroundColor =WhiteColor ;
     _addDefalutTagsView.lineSpacing = 10;
     _addDefalutTagsView.interitemSpacing = 20;
+    _addDefalutTagsView.tagBorderWidth= 0.5;
+    _addDefalutTagsView.tagBorderColor = LineBg;
+    _addDefalutTagsView.tagSelectedBorderColor = AppMainColor;
     _addDefalutTagsView.tagFont = [UIFont systemFontOfSize:14];
-    _addDefalutTagsView.tagTextColor = WhiteColor;
+    _addDefalutTagsView.tagTextColor = LightBlackTitleColor;
     _addDefalutTagsView.tagSelectedBackgroundColor = AppMainColor;
-    _addDefalutTagsView.tagSelectedTextColor = _addDefalutTagsView.tagTextColor;
+    _addDefalutTagsView.tagSelectedTextColor = WhiteColor;
     
     _addDefalutTagsView.delegate = self;
     _addDefalutTagsView.allowsMultipleSelection = YES;
@@ -475,23 +584,41 @@
 - (void)addTagsViewReSetFrame
 {
     
-    _addHasTagsView.frame = CGRectMake(20, 10, APPWIDTH - 40,[_addHasTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
+    float _addHasTagsViewH = [_addHasTagsView.collectionView.collectionViewLayout collectionViewContentSize].height;
+    if (_addHasTagsViewH>150*ScreenMultiple) {
+        _addHasTagsViewH =150*ScreenMultiple;
+    }
+    _addHasTagsView.frame = CGRectMake(20, 10, APPWIDTH - 40,_addHasTagsViewH);
     
-    _addTagsLb.frame = CGRectMake(0, CGRectGetMaxY(_addHasTagsView.frame), APPWIDTH, 40);
-    _addTextField.frame = CGRectMake(20, CGRectGetMaxY(_addTagsLb.frame), 220*ScreenMultiple, 30);
-    _addSure.frame = CGRectMake(CGRectGetMaxX(_addTextField.frame) + 15,  CGRectGetMaxY(_addTagsLb.frame) + 2, 52*ScreenMultiple, _addTextField.height - 4);
     
-    _addDefalutTagsView.frame = CGRectMake(20, CGRectGetMaxY(_addTextField.frame) + 20, APPWIDTH -40, [_addDefalutTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
+    float _addHasTagsViewHY= CGRectGetMaxY(_addHasTagsView.frame)+ 20;
+    
+    _zidingyi.frame =  CGRectMake(20, _addHasTagsViewHY - 10, 60 ,TagHeight);
+    
+    if (!_addTextField.hidden) {
+        _addTextField.frame = CGRectMake(20, _addHasTagsViewHY, 220*ScreenMultiple, 30);
+        _addSure.frame = CGRectMake(CGRectGetMaxX(_addTextField.frame) + 15,  _addTextField.y + 2, 52*ScreenMultiple, _addTextField.height - 4);
+        _addHasTagsViewHY = CGRectGetMaxY(_addTextField.frame);
+    }
+    else
+    {
+        _addHasTagsViewHY =CGRectGetMaxY(_zidingyi.frame);
+    }
+   
+    _addTagsLb.frame = CGRectMake(0, _addHasTagsViewHY , APPWIDTH, 40);
+    
+    float _addDefalutTagsViewH = [_addDefalutTagsView.collectionView.collectionViewLayout collectionViewContentSize].height;
+    if (_addDefalutTagsViewH>250*ScreenMultiple) {
+        _addDefalutTagsViewH = 250*ScreenMultiple;
+    }
+    _addDefalutTagsView.frame = CGRectMake(20, CGRectGetMaxY(_addTagsLb.frame) , APPWIDTH -40, _addDefalutTagsViewH);
+   
+    _addBottomSure.frame = CGRectMake(0, CGRectGetMaxY(_addDefalutTagsView.frame)+20 , APPWIDTH, 40);
     
     [UIView animateWithDuration:0.3 animations:^{
-        
-        _addTagsView.frame =CGRectMake(0,APPHEIGHT -  CGRectGetMaxY(_addDefalutTagsView.frame) -20, APPWIDTH , CGRectGetMaxY(_addDefalutTagsView.frame) + 20);
-        
-        if ( CGRectGetMaxY(_addDefalutTagsView.frame) + 20>APPHEIGHT - (StatusBarHeight + NavigationBarHeight)) {
-            _addTagsView.frame =CGRectMake(0,StatusBarHeight + NavigationBarHeight, APPWIDTH , APPHEIGHT - (StatusBarHeight + NavigationBarHeight));
-            _addTagsView.contentSize = CGSizeMake(APPWIDTH, CGRectGetMaxY(_addDefalutTagsView.frame) + 20);
-        }
-        
+
+    _addTagsView.frame =CGRectMake(0,APPHEIGHT -  CGRectGetMaxY(_addBottomSure.frame), APPWIDTH , CGRectGetMaxY(_addBottomSure.frame));
+
     }];
    
     
@@ -985,7 +1112,7 @@
         break;
     case 1:
         
-        [cell  showTitle:@"职业" icon:nil bg:nil detail:_modal.position canEdit:YES];
+        [cell  showTitle:@"职位" icon:nil bg:nil detail:_modal.position canEdit:YES];
         break;
             
     case 2:

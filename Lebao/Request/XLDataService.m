@@ -78,13 +78,14 @@ static UIAlertView *letout;
             }
             else
             {
+                 responseDataBlock(nil, nil);
                 [[ToolManager shareInstance] showInfoWithStatus:model.rtmsg];
             }
             
         }
     } failure:^(NSError *error) {
         
-        
+        responseDataBlock(nil, nil);
         [[ToolManager shareInstance] showInfoWithStatus];
     }];
 }
