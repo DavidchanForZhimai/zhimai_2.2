@@ -78,17 +78,23 @@
             //行业
             LWTextStorage* industryTextStorage = [[LWTextStorage alloc] init];
             NSString *com =@"";
-            if (statusModel.address) {
+            NSString *workyear =@"";
+            NSString *position = @"";
+            NSString *huanhang = @"\n";
+            
+            if (statusModel.position.length>0) {
+                position = [NSString stringWithFormat:@"%@  ",statusModel.position];
+            }
+            if (statusModel.workyear>0) {
+                workyear = [NSString stringWithFormat:@"从业%d年",statusModel.workyear];
+            }
+            if (statusModel.address.length>0) {
                 com = statusModel.address;
             }
-            if (statusModel.position.length>0) {
-                industryTextStorage.text = [NSString stringWithFormat:@"%@  %@\n%@",statusModel.position,statusModel.workyear,com];
+            if ([workyear isEqualToString:@""]&&[position isEqualToString:@""]) {
+                huanhang= @"";
             }
-            else
-            {
-                industryTextStorage.text = [NSString stringWithFormat:@"%@\n%@",statusModel.workyear,com];
-            }
-            
+            industryTextStorage.text = [NSString stringWithFormat:@"%@%@%@%@",position,workyear,huanhang,com];
             industryTextStorage.textColor = [UIColor colorWithRed:0.549 green:0.5569 blue:0.5608 alpha:1.0];
             industryTextStorage.font = Size(24.0);
             industryTextStorage.frame = CGRectMake(nameTextStorage.left, nameTextStorage.bottom + 8, nameTextStorage.width, CGFLOAT_MAX);
@@ -99,10 +105,12 @@
             contentTextStorage.font = Size(26.0);
             contentTextStorage.textColor = [UIColor colorWithRed:0.1294 green:0.1333 blue:0.1333 alpha:1.0];
             
-            contentTextStorage.frame = CGRectMake(_avatarStorage.left, industryTextStorage.bottom + 10.0f, SCREEN_WIDTH - 2*_avatarStorage.left, CGFLOAT_MAX);
-            if ([statusModel.address isEqualToString:@""]&&[statusModel.workyear isEqualToString:@""]) {
-                contentTextStorage.frame = CGRectMake(nameTextStorage.left, nameTextStorage.bottom + 10.0f, SCREEN_WIDTH - 80.0f, CGFLOAT_MAX);
+            float contentTextStorageY = industryTextStorage.bottom + 10.0f;
+            if (industryTextStorage.bottom<CGRectGetMaxY(_avatarPosition) + 10) {
+                contentTextStorageY = CGRectGetMaxY(_avatarPosition) + 10;
             }
+            contentTextStorage.frame = CGRectMake(_avatarStorage.left, contentTextStorageY, SCREEN_WIDTH - 2*_avatarStorage.left, CGFLOAT_MAX);
+         
             
             CGFloat contentBottom = contentTextStorage.bottom;
             //折叠的条件,文字高度超过MAX_TEXT_HEIGHT则折叠
@@ -529,13 +537,25 @@
             
             //行业
             LWTextStorage* industryTextStorage = [[LWTextStorage alloc] init];
+            NSString *com =@"";
+            NSString *workyear =@"";
+            NSString *position = @"";
+            NSString *huanhang = @"\n";
+            
+            if (statusModel.position.length>0) {
+                position = [NSString stringWithFormat:@"%@  ",statusModel.position];
+            }
+            if (statusModel.workyear>0) {
+                workyear = [NSString stringWithFormat:@"从业%d年",statusModel.workyear];
+            }
             if (statusModel.address.length>0) {
-                industryTextStorage.text = [NSString stringWithFormat:@"%@  %@",statusModel.address,statusModel.workyear];
+                com = statusModel.address;
             }
-            else
-            {
-                industryTextStorage.text = [NSString stringWithFormat:@"%@",statusModel.workyear];
+            if ([workyear isEqualToString:@""]&&[position isEqualToString:@""]) {
+                huanhang= @"";
             }
+            industryTextStorage.text = [NSString stringWithFormat:@"%@%@%@%@",position,workyear,huanhang,com];
+            
             
             industryTextStorage.textColor = [UIColor colorWithRed:0.549 green:0.5569 blue:0.5608 alpha:1.0];
             industryTextStorage.font = Size(24.0);
@@ -547,10 +567,12 @@
             contentTextStorage.font = Size(26.0);
             contentTextStorage.textColor = [UIColor colorWithRed:0.1294 green:0.1333 blue:0.1333 alpha:1.0];
             
-            contentTextStorage.frame = CGRectMake(_avatarStorage.left, industryTextStorage.bottom + 10.0f, SCREEN_WIDTH - 2*_avatarStorage.left, CGFLOAT_MAX);
-            if ([statusModel.address isEqualToString:@""]&&[statusModel.workyear isEqualToString:@""]) {
-                contentTextStorage.frame = CGRectMake(nameTextStorage.left, nameTextStorage.bottom + 10.0f, SCREEN_WIDTH - 80.0f, CGFLOAT_MAX);
+            float contentTextStorageY = industryTextStorage.bottom + 10.0f;
+            if (industryTextStorage.bottom<CGRectGetMaxY(_avatarPosition) + 10) {
+                contentTextStorageY = CGRectGetMaxY(_avatarPosition) + 10;
             }
+            
+            contentTextStorage.frame = CGRectMake(_avatarStorage.left, contentTextStorageY , SCREEN_WIDTH - 2*_avatarStorage.left, CGFLOAT_MAX);
             
             //折叠文字
             LWTextStorage* closeStorage = [[LWTextStorage alloc] init];

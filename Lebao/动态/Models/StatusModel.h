@@ -62,7 +62,7 @@ typedef NS_ENUM(NSUInteger,DTDataType) {
 
 @property (nonatomic, assign) NSInteger ID;
 
-@property (nonatomic, copy) NSString *workyear;
+@property (nonatomic, assign) int workyear;
 
 @property (nonatomic, strong) NSMutableArray<StatusPic *> *pic;
 

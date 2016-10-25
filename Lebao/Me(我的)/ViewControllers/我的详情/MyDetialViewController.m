@@ -42,7 +42,7 @@
 @property(nonatomic,strong)NSString *synopsis;
 @property(nonatomic,strong)NSString *vip;
 @property(nonatomic,strong)NSString *want_count;
-@property(nonatomic,strong)NSString *workyears;
+@property(nonatomic,assign)int  workyears;
 
 @property(assign)BOOL isme;
 @end
@@ -98,8 +98,12 @@
         if (model.position.length>0) {
             industryTextStorage.text =[NSString stringWithFormat:@"%@%@  ",industryTextStorage.text,model.position];
         }
-        if (model.workyears.length>0) {
-            industryTextStorage.text=[NSString stringWithFormat:@"%@从业%@年\n",industryTextStorage.text,model.workyears];
+        NSString *years =@"";
+        if (model.workyears>0) {
+            years =[NSString stringWithFormat:@"从业%i年",model.workyears];
+        }
+        if (model.workyears>0) {
+            industryTextStorage.text=[NSString stringWithFormat:@"%@%@\n",industryTextStorage.text,years];
         }
         NSString *authen=@"";
         if ([model.authen isEqualToString:@"3"]) {
