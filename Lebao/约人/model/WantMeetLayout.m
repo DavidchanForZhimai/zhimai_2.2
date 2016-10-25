@@ -82,11 +82,13 @@
         industryTextStorage.frame = CGRectMake(nameTextStorage.left, nameTextStorage.bottom + 8, nameTextStorage.width, CGFLOAT_MAX);
         //公司
         LWTextStorage* addressStorage = [[LWTextStorage alloc] init];
-        addressStorage.text =[NSString stringWithFormat:@"%@  ",model.address];
+        if (model.address.length>0) {
+            addressStorage.text =[NSString stringWithFormat:@"%@",model.address];
+        }
         addressStorage.textColor = [UIColor colorWithRed:0.549 green:0.5569 blue:0.5608 alpha:1.0];
         addressStorage.font = Size(24.0);
         addressStorage.frame = CGRectMake(industryTextStorage.left, industryTextStorage.bottom + 8, industryTextStorage.width, CGFLOAT_MAX);
-        if (![model.address isEqualToString:@""]) {
+        if (addressStorage.text.length>0) {
             _line1Rect  = CGRectMake(0, addressStorage.bottom + 10, APPWIDTH, 0.5);
         }else{
             _line1Rect  = CGRectMake(0, _avatarStorage.bottom + 10, APPWIDTH, 0.5);

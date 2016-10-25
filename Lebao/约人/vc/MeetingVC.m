@@ -256,18 +256,16 @@
 
     NSDate *date2= [[NSUserDefaults standardUserDefaults]objectForKey:@"dateForYoukong"];
     NSDateComponents *d=[DateHelper calculatorExpireDatetimeWithData:date2];
-    if (date2!=nil&&[d minute]<30&&[d hour]<1&&[d month]<1&&[d year]<1) {
+    if (date2!=nil&&[d minute]<30&&[d hour]<1&&[d day]<1&&[d month]<1&&[d year]<1) {
         [_yrBtn setBackgroundImage:[UIImage imageNamed:@"yiyoukong"] forState:UIControlStateNormal];
-        if (timer_yk==nil) {
             timer_yk=[NSTimer scheduledTimerWithTimeInterval:([d minute]*60+[d second]) target:self selector:@selector(TimeOfYkBtn) userInfo:nil repeats:NO];
-        }
     }
 }
 -(void)TimeOfYkBtn
 {
     NSDate *date2= [[NSUserDefaults standardUserDefaults]objectForKey:@"dateForYoukong"];
     NSDateComponents *d=[DateHelper calculatorExpireDatetimeWithData:date2];
-    if (date2!=nil&&[d minute]<30&&[d hour]<1&&[d month]<1&&[d year]<1) {
+    if ([d minute]>=30||[d hour]>=1||[d day]>=1||[d month]>=1||[d year]>=1) {
         [_yrBtn setBackgroundImage:[UIImage imageNamed:@"youkong"] forState:UIControlStateNormal];
         if (timer_yk!=nil) {
             [timer_yk  invalidate];
@@ -329,12 +327,10 @@
     
     NSDate *date2= [[NSUserDefaults standardUserDefaults]objectForKey:@"dateForYoukong"];
     NSDateComponents *d=[DateHelper calculatorExpireDatetimeWithData:date2];
-        if (date2!=nil&&[d minute]<30&&[d hour]<1&&[d month]<1&&[d year]<1) {
+        if (date2!=nil&&[d minute]<30&&[d hour]<1&&[d day]<1&&[d month]<1&&[d year]<1) {
              [[ToolManager shareInstance] showAlertMessage:[NSString stringWithFormat:@"您已点击有空,%ld分钟%ld秒内有效",29-[d minute],59-[d second]]];
             [_yrBtn setBackgroundImage:[UIImage imageNamed:@"yiyoukong"] forState:UIControlStateNormal];
-            if (timer_yk==nil) {
                 timer_yk=[NSTimer scheduledTimerWithTimeInterval:([d minute]*60+[d second]) target:self selector:@selector(TimeOfYkBtn) userInfo:nil repeats:NO];
-            }
             return;
     }
     [self shakeToShow:_yrBtn];
@@ -372,15 +368,12 @@
                                 }
                                 else{
                                     if (model.remainder_at) {
+                                         [[ToolManager shareInstance] showAlertMessage:[NSString stringWithFormat:@"您已点击有空,%d分钟%d秒内有效",model.remainder_at/60,model.remainder_at%60]];
+                                        [_yrBtn setBackgroundImage:[UIImage imageNamed:@"yiyoukong"] forState:UIControlStateNormal];
                                         NSDate *date=[NSDate date];
                                         NSDate *date1=[date dateByAddingTimeInterval:-1800+model.remainder_at];
                                         [[NSUserDefaults standardUserDefaults]setObject:date1 forKey:@"dateForYoukong"];
-                                        [_yrBtn setBackgroundImage:[UIImage imageNamed:@"yiyoukong"] forState:UIControlStateNormal];
-                                        if (timer_yk==nil) {
                                             timer_yk=[NSTimer scheduledTimerWithTimeInterval:(-1800+model.remainder_at) target:self selector:@selector(TimeOfYkBtn) userInfo:nil repeats:NO];
-                                        }
-
-                                         [[ToolManager shareInstance] showAlertMessage:[NSString stringWithFormat:@"您已点击有空,%d分钟%d秒内有效",model.remainder_at/60,model.remainder_at%60]];
                                     }else{
                                         [[ToolManager shareInstance] showAlertMessage:model.rtmsg];}
                                 }
