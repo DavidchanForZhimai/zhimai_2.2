@@ -269,7 +269,7 @@
 #pragma mark private 方法
 -(void)audioBtnClick:(UIButton *)sender
 {
-    NSLog(@"sender.tag=%ld",(long)sender.tag);
+
     if (sender.tag==10) {
         sender.tag=11;
         [sender setImage:[UIImage imageNamed:@"yuejian_jianpan"] forState:UIControlStateNormal];
@@ -297,9 +297,11 @@
 }
 #pragma mark
 #pragma mark textField 方法
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+-  (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    
     NSCharacterSet *cs;
-    NSUInteger nDotLoc = [_logField.text rangeOfString:@"."].location;
+    NSUInteger nDotLoc = [otherMoneyField.text rangeOfString:@"."].location;
     if (NSNotFound == nDotLoc && 0 != range.location) {
         cs = [[NSCharacterSet characterSetWithCharactersInString:myDotNumbers] invertedSet];
     }
