@@ -73,7 +73,7 @@
         else{
             industryTextStorage.text=@"";
         }
-        if (model.workyears>0) {
+        if (model.workyears.length>0&&![model.workyears isEqualToString:@"0"]) {
             industryTextStorage.text=[NSString stringWithFormat:@"%@从业%@年",industryTextStorage.text,model.workyears];
         }
         

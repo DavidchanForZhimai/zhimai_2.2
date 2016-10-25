@@ -741,6 +741,7 @@
         [[ToolManager shareInstance] showWithStatus];
         [XLDataService putWithUrl:addConnectionsURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
             if(dataObj){
+                [[ToolManager shareInstance] dismiss];
                 MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
                 if (model.rtcode==1) {
                     UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"添加人脉请求已发出,请耐心等待" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
@@ -762,16 +763,20 @@
 
     }else
     {
+        if ([customAlertView.money floatValue]>0) {
         MeetPaydingVC * payVC = [[MeetPaydingVC alloc]init];
         NSMutableDictionary *param=[Parameter parameterWithSessicon];
         [param setObject:_userID forKey:@"beinvited"];
         [param setObject:customAlertView.money forKey:@"reward"];
         payVC.param=param;
-        payVC.jineStr = customAlertView.money;
+        payVC.jineStr =[NSString stringWithFormat:@"%.2f",[customAlertView.money floatValue]];
         payVC.whatZfType=1;
         [self.navigationController pushViewController:payVC animated:YES];
         [customAlertView dissMiss];
         [alertV.window removeGestureRecognizer:recognizerTap];
+        }else{
+            [[ToolManager shareInstance] showAlertMessage:@"金额格式不正确"];
+        }
     }
 }
 #pragma mark 网络请求

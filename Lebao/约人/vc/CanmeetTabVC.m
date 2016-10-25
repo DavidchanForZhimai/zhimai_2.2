@@ -202,7 +202,7 @@
             [self.allMeetArr removeAllObjects];
         }
         if (dataObj) {
-            NSLog(@"meetObj====%@",dataObj);
+//            NSLog(@"meetObj====%@",dataObj);
             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
             if (_page ==1) {
                 [[ToolManager shareInstance] moreDataStatus:self.tableView];
@@ -341,20 +341,23 @@
         }];
         [customAlertView dissMiss];
         customAlertView = nil;
-        
-        
     }else
     {
-        MeetPaydingVC * payVC = [[MeetPaydingVC alloc]init];
-        NSMutableDictionary *param=[Parameter parameterWithSessicon];
-        [param setObject:model.userid forKey:@"beinvited"];
-        [param setObject:customAlertView.money forKey:@"reward"];
-        payVC.param=param;
-        payVC.jineStr = customAlertView.money;
-        payVC.whatZfType=1;
-        [self.navigationController pushViewController:payVC animated:YES];
-        [customAlertView dissMiss];
-        customAlertView = nil;
+        if ([customAlertView.money floatValue]>0) {
+            MeetPaydingVC * payVC = [[MeetPaydingVC alloc]init];
+            NSMutableDictionary *param=[Parameter parameterWithSessicon];
+            [param setObject:model.userid forKey:@"beinvited"];
+            [param setObject:customAlertView.money forKey:@"reward"];
+            payVC.param=param;
+            payVC.jineStr =[NSString stringWithFormat:@"%.2f",[customAlertView.money floatValue]];
+            payVC.whatZfType=1;
+            [self.navigationController pushViewController:payVC animated:YES];
+            [customAlertView dissMiss];
+            customAlertView = nil;
+        }else{
+            [[ToolManager shareInstance] showAlertMessage:@"金额格式不正确"];
+        }
+       
         
     }
 }

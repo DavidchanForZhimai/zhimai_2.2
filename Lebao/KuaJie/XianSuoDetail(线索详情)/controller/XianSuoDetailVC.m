@@ -511,10 +511,12 @@
     _positionLab.textColor = [UIColor colorWithWhite:0.514 alpha:1.000];
     _positionLab.textAlignment = NSTextAlignmentLeft;
     NSString *str=[_xiansDic objectForKey:@"position"];
-    if (str.length>0) {
-        str=[NSString stringWithFormat:@"%@ %@",str,[_xiansDic objectForKey:@"workyear"]];
-    }else{
-        str=[_xiansDic objectForKey:@"workyear"];
+    if (str.length>0&&[[_xiansDic objectForKey:@"workyear"] intValue]!=0) {
+        str=[NSString stringWithFormat:@"%@ 从业%@年",str,[_xiansDic objectForKey:@"workyear"]];
+    }else if (str.length==0&&[[_xiansDic objectForKey:@"workyear"] intValue]!=0) {
+        str=[NSString stringWithFormat:@"从业%@年",[_xiansDic objectForKey:@"workyear"]];
+    }else {
+        str=@"";
     }
     _positionLab.text =str;
     if (_positionLab.text.length==0) {

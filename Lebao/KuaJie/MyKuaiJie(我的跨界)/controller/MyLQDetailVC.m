@@ -54,6 +54,7 @@
     [[MyKuaJieInfo shareInstance]getLinQuDetailXianSuoWithID:_xiansuoID andCallBack:^(BOOL issucced, NSString *info, NSDictionary *jsonDic) {
         if (issucced == YES) {
             _xiansuoDic = [NSDictionary dictionaryWithDictionary:jsonDic];
+            NSLog(@"_xiansuoDic===%@",_xiansuoDic);
              [self customV];
              [self customJbV];
     }else
@@ -123,10 +124,12 @@
     _positionLab.textColor = [UIColor colorWithWhite:0.514 alpha:1.000];
     _positionLab.textAlignment = NSTextAlignmentLeft;
     NSString *str=[_xiansuoDic objectForKey:@"position"];
-    if (str.length>0) {
-        str=[NSString stringWithFormat:@"%@ %@",str,[_xiansuoDic objectForKey:@"workyear"]];
-    }else{
-        str=[_xiansuoDic objectForKey:@"workyear"];
+    if (str.length>0&&[[_xiansuoDic objectForKey:@"workyear"] intValue]!=0) {
+        str=[NSString stringWithFormat:@"%@ 从业%@年",str,[_xiansuoDic objectForKey:@"workyear"]];
+    }else if (str.length==0&&[[_xiansuoDic objectForKey:@"workyear"] intValue]!=0) {
+        str=[NSString stringWithFormat:@"从业%@年",[_xiansuoDic objectForKey:@"workyear"]];
+    }else {
+        str=@"";
     }
     _positionLab.text =str;
     if (_positionLab.text.length==0) {

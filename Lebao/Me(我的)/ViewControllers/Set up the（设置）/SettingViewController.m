@@ -133,7 +133,6 @@
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.35 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [CoreArchive removeStrForKey:KuserName];
                 [CoreArchive removeStrForKey:passWord];
-                [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"dateForYoukong"];
                 [[ToolManager shareInstance] enterLoginView];
                 
                 //解绑推送通知

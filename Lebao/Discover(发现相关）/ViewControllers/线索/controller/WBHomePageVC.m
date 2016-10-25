@@ -224,11 +224,14 @@
         }
         
         NSString *str=[_xsJsonArr[indexPath.row] objectForKey:@"position"];
-        if (str.length>0) {
-            str=[NSString stringWithFormat:@"%@ %@",str,[_xsJsonArr[indexPath.row] objectForKey:@"workyear"]];
-        }else{
-            str=[_xsJsonArr[indexPath.row] objectForKey:@"workyear"];
+        if (str.length>0&&[[_xsJsonArr[indexPath.row] objectForKey:@"workyear"] intValue]!=0) {
+            str=[NSString stringWithFormat:@"%@ 从业%@年",str,[_xsJsonArr[indexPath.row] objectForKey:@"workyear"]];
+        }else if (str.length==0&&[[_xsJsonArr[indexPath.row] objectForKey:@"workyear"] intValue]!=0) {
+            str=[NSString stringWithFormat:@"从业%@年",[_xsJsonArr[indexPath.row] objectForKey:@"workyear"]];
+        }else {
+            str=@"";
         }
+        
         cell.positionLab.text =str;
         if (cell.positionLab.text.length==0) {
             cell.positionLab.frame=CGRectMake(cell.positionLab.x, cell.positionLab.y, 0, 0);

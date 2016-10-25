@@ -70,7 +70,7 @@
         else{
             industryTextStorage.text=@"";
         }
-        if (model.workyears.length>0) {
+        if (model.workyears.length>0&&![model.workyears isEqualToString:@"0"]) {
             industryTextStorage.text=[NSString stringWithFormat:@"%@从业%@年",industryTextStorage.text,model.workyears];
         }
         
@@ -106,18 +106,28 @@
             
         }
         
+        [self addStorage:_avatarStorage];
+        [self addStorage:nameTextStorage];
+        [self addStorage:industryTextStorage];
+        [self addStorage:addressStorage];
+
+        
         if (oprationBtn) {
             _refuseBtnRect=CGRectMake(APPWIDTH-120, 20, 50, 30);
             _agreeBtnRect=CGRectMake(APPWIDTH-60, 20, 50, 30);
         }
+
         LWTextStorage *productTextStorage=[[LWTextStorage alloc]init];
+        float productLbStorageheight;
+        if (![model.service isEqualToString:@""]&&model.service) {
         productTextStorage.text=@"产品服务";
         productTextStorage.font=Size(26.0);
         productTextStorage.frame=CGRectMake(_avatarStorage.left, _line1Rect.origin.y+10, 52, CGFLOAT_MAX);
+        productLbStorageheight = productTextStorage.bottom;
         productTextStorage.textColor = [UIColor colorWithRed:0.522 green:0.525 blue:0.529 alpha:1.000];
         
-        float productLbStorageheight = productTextStorage.bottom;
-        if (![model.service isEqualToString:@""]&&model.service) {
+        
+        
             NSArray *productArr=[model.service componentsSeparatedByString:@"/"];
             NSMutableString *productStr = allocAndInit(NSMutableString);
              CGFloat height1=0;
@@ -153,7 +163,11 @@
                 }
                  [productStr appendFormat:@"[biaoqian]  %@   ",productArr[i]];
             }
-                   }
+            [self addStorage:productTextStorage];
+        }else{
+            productTextStorage.frame=CGRectMake(_avatarStorage.left, _line1Rect.origin.y, 52, 0);
+            productLbStorageheight = productTextStorage.bottom;
+        }
        
         
         
@@ -161,14 +175,15 @@
         
         
         LWTextStorage *resourceTextStorage=[[LWTextStorage alloc]init];
+        float resourceTextStorageheight = resourceTextStorage.bottom;
+        if (![model.resource isEqualToString:@""]&&model.resource) {
         resourceTextStorage.text=@"资源特点";
         resourceTextStorage.font=Size(26.0);
         resourceTextStorage.frame=CGRectMake(_avatarStorage.left, productLbStorageheight + 10, 52, CGFLOAT_MAX);
         resourceTextStorage.textColor = [UIColor colorWithRed:0.522 green:0.525 blue:0.529 alpha:1.000];
         
         
-        float resourceTextStorageheight = resourceTextStorage.bottom;
-        if (![model.resource isEqualToString:@""]&&model.resource) {
+        
             NSArray *resourceArr=[model.resource componentsSeparatedByString:@"/"];
             NSMutableString *resourceStr = allocAndInit(NSMutableString);
             CGFloat height1=0;
@@ -204,15 +219,17 @@
                 }
                 [resourceStr appendFormat:@"[biaoqian]  %@   ",resourceArr[i]];
             }
+            [self addStorage:resourceTextStorage];
+
+        }else
+        {
+            resourceTextStorage.frame=CGRectMake(_avatarStorage.left, productLbStorageheight, 52, 0);
+            resourceTextStorageheight = resourceTextStorage.bottom;
         }
-        _line2Rect  = CGRectMake(0, resourceTextStorageheight + 10, APPWIDTH, 0.5);
-               [self addStorage:_avatarStorage];
-        [self addStorage:nameTextStorage];
-        [self addStorage:industryTextStorage];
-        [self addStorage:addressStorage];
-        [self addStorage:productTextStorage];
-        [self addStorage:resourceTextStorage];
-        if (isTime) {
+        
+        
+                if (isTime) {
+            _line2Rect  = CGRectMake(0, resourceTextStorageheight + 10, APPWIDTH, 0.5);
         float distance=[model.distance floatValue]/1000.00;
         LWTextStorage* distanceLab=[[LWTextStorage alloc]initWithFrame:CGRectMake(_avatarStorage.left,_line2Rect.origin.y+8, nameTextStorage.width, nameTextStorage.height)];
         distanceLab.text=[NSString stringWithFormat:@"%.2lfkm",distance];
