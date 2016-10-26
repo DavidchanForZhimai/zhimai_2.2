@@ -161,7 +161,15 @@
             UIImage *image = [UIImage imageNamed:@"wx-logo.jpg"];
             if (_cellLayout.imageStorageArray.count>0) {
                 LWImageStorage* lastImageStorage = (LWImageStorage *)[_cellLayout.imageStorageArray firstObject];
-                image= lastImageStorage.imageStorage;
+                if (lastImageStorage.imageStorage) {
+                    image= lastImageStorage.imageStorage;
+                }
+                else
+                {
+                    if (![_cellLayout.statusModel.imgurl isEqualToString:ImageURLS]) {
+                        image = _avatarImage.imageView.image;
+                    }
+                }
             }
             else
             {
@@ -185,7 +193,17 @@
             UIImage *image = [UIImage imageNamed:@"wx-logo.jpg"];
             if (_cellLayout.imageStorageArray.count>0) {
                 LWImageStorage* lastImageStorage = (LWImageStorage *)[_cellLayout.imageStorageArray firstObject];
-                image= lastImageStorage.imageStorage;
+                if (lastImageStorage.imageStorage) {
+                    image= lastImageStorage.imageStorage;
+                }
+                else
+                {
+                    if (![_cellLayout.statusModel.imgurl isEqualToString:ImageURLS]) {
+                    image = _avatarImage.imageView.image;
+                }
+
+                    
+                }
             }
             else
             {
