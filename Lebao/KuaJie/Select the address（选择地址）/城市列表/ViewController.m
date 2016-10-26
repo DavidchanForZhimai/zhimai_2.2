@@ -128,7 +128,6 @@
         _locationCity=[NSMutableArray arrayWithObject:_locationDic];
         [_dataArray replaceObjectAtIndex:0 withObject:_locationCity];
         
-    };
     //最近访问
     NSMutableDictionary *all =allocAndInit(NSMutableDictionary);
     [all setValue:@"全国" forKey:@"area"];
@@ -170,6 +169,7 @@
      [_keys addObject:@"♡"];
      [_keys addObject:@"Θ"];
      [self loadCityData];
+        };
 }
 - (void)loadCityData
 {
