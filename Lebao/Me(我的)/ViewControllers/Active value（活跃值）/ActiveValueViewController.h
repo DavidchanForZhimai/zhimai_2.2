@@ -33,6 +33,8 @@
 
 @property (nonatomic, strong) NSString *num;
 
+@property (nonatomic, strong) NSString *residue;
+
 @end
 
 
@@ -65,10 +67,6 @@
 @interface ActiveValueCell : UITableViewCell
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier cellHeight:(float)cellHeight cellWidth:(float)cellWidth;
 - (void)dataModal:(ActiveValueDatas *)modal;
-@end
-
-@interface CurveView : UIView
-
 @end
 
 
