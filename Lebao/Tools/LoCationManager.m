@@ -8,6 +8,7 @@
 
 #import "LoCationManager.h"
 #import "XLDataService.h"
+
 static  CLLocationCoordinate2D coordinate2D;
 static LoCationManager *locationManager;
 @implementation LoCationManager
@@ -95,6 +96,36 @@ static LoCationManager *locationManager;
     [_locationMNG stopUpdatingLocation];
     
     _locationMNG=nil;
+    
+    
+    CLGeocoder *geocoder = [[CLGeocoder alloc]init];
+    
+    [geocoder reverseGeocodeLocation:cllocation completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
+        
+        
+        
+        for (CLPlacemark *place in placemarks) {
+            
+//            NSLog(@"name,%@",place.name);                       // 位置名
+//            
+//            NSLog(@"thoroughfare,%@",place.thoroughfare);       // 街道
+//            
+//            NSLog(@"subThoroughfare,%@",place.subThoroughfare); // 子街道
+//            
+//            NSLog(@"locality,%@",place.locality);               // 市
+//            
+//            NSLog(@"subLocality,%@",place.subLocality);         // 区
+//            
+//            NSLog(@"country,%@",place.country);                 // 国家
+            
+            
+            if (_callBackLocationCityName) {
+                _callBackLocationCityName(place.locality);
+            }
+            
+        }
+        
+    }];
     
 }
 

@@ -19,7 +19,6 @@
 #import "XLDataService.h"
 #import "NSArray+Extend.h"
 #import "LoCationManager.h"
-
 #define commonSelectan [NSString stringWithFormat:@"%@common/select-an",HttpURL]
 #define HotCity @"HotCity"
 @interface ViewController ()<UISearchControllerDelegate,UISearchResultsUpdating,UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate,NBSearchResultControllerDelegate,CityViewCellDelegate>
@@ -104,7 +103,6 @@
 - (void)buttonAction:(UIButton *)sender
 {
     if (sender.tag ==NavViewButtonActionNavLeftBtnTag ) {
-        self.returnBlock([CoreArchive strForKey:LocationAddress],[CoreArchive strForKey:AddressID]);
         PopView(self);
     }
     
@@ -115,11 +113,22 @@
     _dataArray=[NSMutableArray array];
     //定位城市
     NSMutableDictionary *_locationDic =allocAndInit(NSMutableDictionary);
-    [_locationDic setValue:[CoreArchive strForKey:KLocationName] forKey:@"area"];
-    [_locationDic setValue:[CoreArchive strForKey:KLocationId] forKey:@"id"];
+    [_locationDic setValue:@"全国" forKey:@"area"];
+    [_locationDic setValue:@"0" forKey:@"id"];
     _locationCity=[NSMutableArray arrayWithObject:_locationDic];
     [_dataArray addObject:_locationCity];
+
+    [[LoCationManager shareInstance] creatLocationManager];
     
+    [LoCationManager shareInstance].callBackLocationCityName = ^(NSString * cityName)
+    {
+       NSMutableDictionary *_locationDic =allocAndInit(NSMutableDictionary);
+        [_locationDic setValue:cityName forKey:@"area"];
+        [_locationDic setValue:@"id" forKey:@"id"];
+        _locationCity=[NSMutableArray arrayWithObject:_locationDic];
+        [_dataArray replaceObjectAtIndex:0 withObject:_locationCity];
+        
+    };
     //最近访问
     NSMutableDictionary *all =allocAndInit(NSMutableDictionary);
     [all setValue:@"全国" forKey:@"area"];
@@ -353,6 +362,7 @@
     if (section==0) {
         
         _CellHeadView.TitleLable.text=@"当前城市";
+        
     }else if (section==1){
       
         _CellHeadView.TitleLable.text=@"最近访问";
@@ -437,8 +447,29 @@
 }
 - (void)popRootViewControllerWithName:(NSString *)cityName cityID:(NSString *)cityID
 {
-     [CoreArchive setStr:cityName key:LocationAddress];
-     [CoreArchive setStr:cityID key:AddressID];
+    if ([cityID isEqualToString:@"id"]) {
+        NSMutableDictionary *citys =[CoreArchive objectForKey:commonSelectan];
+        for (id cityArray in citys.allValues) {
+            if ([cityArray isKindOfClass:[NSArray class]]) {
+                for (id cityDic in cityArray) {
+                    if ([cityDic isKindOfClass:[NSDictionary class]]) {
+                        
+                        if ([cityDic[@"area"] isEqualToString:cityName]) {
+                             cityID = cityDic[@"id"];
+                        }
+                    }
+                }
+            }
+            
+            
+        }
+    }
+    
+   if ([cityID isEqualToString:@"id"]) {
+    
+      [[ToolManager shareInstance] showAlertMessage:@"找不到该城市id"];
+       return;
+   }
 
     NSMutableArray *recentArrayMore = allocAndInit(NSMutableArray);
     
@@ -447,8 +478,8 @@
     }
     
     NSMutableDictionary *locationDic =allocAndInit(NSMutableDictionary);
-    [locationDic setValue:[CoreArchive strForKey:LocationAddress] forKey:@"area"];
-    [locationDic setValue:[CoreArchive strForKey:AddressID] forKey:@"id"];
+    [locationDic setValue:cityName forKey:@"area"];
+    [locationDic setValue:cityID forKey:@"id"];
     if ([recentArrayMore containsObject:locationDic]) {
         [recentArrayMore removeObject:locationDic];
     }
@@ -463,6 +494,7 @@
     
     
     [CoreArchive setobject:recentArrayMore key:RecentCityData];
+
      self.returnBlock(cityName,cityID);
     
     [self.navigationController popViewControllerAnimated:YES];

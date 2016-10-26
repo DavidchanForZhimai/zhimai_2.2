@@ -9,9 +9,11 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 typedef void (^CallBackLocation)(CLLocationCoordinate2D location);
+typedef void (^CallBackLocationCityName)(NSString * cityName);
 @interface LoCationManager : NSObject<CLLocationManagerDelegate>
 
 @property(nonatomic,copy)CallBackLocation callBackLocation;
+@property(nonatomic,copy)CallBackLocationCityName callBackLocationCityName;
 
 @property (nonatomic,strong)CLLocationManager *locationMNG;
 +(LoCationManager *)shareInstance;
