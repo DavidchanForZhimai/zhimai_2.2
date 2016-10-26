@@ -53,6 +53,10 @@
         [weakSelf twoBtn:weakSelf];
         
     };
+    articleDetailView.enterDetailBlock = ^(UIViewController *view)
+    {
+        [weakSelf.navigationController pushViewController:view animated:YES];
+    };
     [self.view addSubview:articleDetailView];
 }
 #pragma mark

@@ -13,6 +13,10 @@
 #import "BaseButton.h"
 #import "UILabel+Extend.h"
 #import "NSString+Extend.h"
+#import "MyDetialViewController.h"
+@interface MyArticleDetailView() <UIAlertViewDelegate>
+
+@end
 @implementation MyArticleDetailView
 
 - (instancetype)initWithFrame:(CGRect)frame postWithUrl:(NSString*)postWithUrl param:(NSMutableDictionary*)param
@@ -106,13 +110,20 @@
                     
                     UIView *bg = allocAndInitWithFrame(UIView, frame(0, height, APPWIDTH, 110));
                     bg.backgroundColor = AppViewBGColor;
+                    bg.userInteractionEnabled = YES;
+                    self.userInteractionEnabled = YES;
                     [self addSubview:bg];
                     
                     UIImageView *bg1 = allocAndInitWithFrame(UIImageView, frame(10, 10, APPWIDTH - 20, 90));
+                    bg1.userInteractionEnabled = YES;
                     bg1.image = [UIImage imageNamed:@"mingpian_back"];
                     [bg addSubview:bg1];
                     
                     UIImageView *icon = allocAndInitWithFrame(UIImageView, frame(10, 20, 50, 50));
+                    icon.userInteractionEnabled = YES;
+                    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(iconTap:)];
+                    tap.numberOfTapsRequired = 1;
+                    [icon addGestureRecognizer:tap];
                    
                     [[ToolManager shareInstance] imageView:icon setImageWithURL:modal.datas.isaddress_imgurl placeholderType:PlaceholderTypeUserHead];
                     
@@ -135,6 +146,12 @@
                     UIImage *shouji=[UIImage imageNamed:@"shouji(1)"];
                     
                     BaseButton *shoujibtn= [[BaseButton alloc]initWithFrame:frame(frameX(name), CGRectGetMaxY(name.frame) +26*SpacedFonts+20, 100, shouji.size.height+6) setTitle:modal.datas.isaddress_tel titleSize:22*SpacedFonts  titleColor:WhiteColor backgroundImage:nil iconImage:shouji highlightImage:nil setTitleOrgin:CGPointMake(3, 3) setImageOrgin:CGPointMake(3, 3) inView:bg1];
+                    shoujibtn.didClickBtnBlock = ^
+                    {
+                        
+                        UIAlertView *alertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"是否要拨打电话 %@",modal.datas.isaddress_tel] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+                        [alertV show];
+                    };
                     
                     shoujibtn.backgroundColor=[UIColor orangeColor];
                     shoujibtn.radius=(shouji.size.height+6)/2.0;
@@ -259,6 +276,40 @@
     [webView evaluateJavaScript:@"ResizeImages();" completionHandler:^(id objc, NSError *error) {
         
     }];
+    
+}
+#pragma mark
+#pragma mark - UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+
+        if (buttonIndex==0) {
+            return;
+        }else if (buttonIndex==1) {
+            
+            NSString *str=[NSString stringWithFormat:@"tel://%@",modal.datas.isaddress_tel];
+            NSURL *url=[NSURL URLWithString:str];
+            [[UIApplication sharedApplication]openURL:url];
+            
+        }
+    
+}
+
+#pragma mark
+#pragma mark 头像点击
+- (void)iconTap:(UITapGestureRecognizer *)sender
+{
+    
+    MyDetialViewController *myDetialViewCT=allocAndInit(MyDetialViewController);
+    if (modal.datas.product_uid) {
+        myDetialViewCT.userID=modal.datas.product_uid;
+        
+        if (_enterDetailBlock) {
+            _enterDetailBlock(myDetialViewCT);
+        }
+
+    }
+    
     
 }
 @end

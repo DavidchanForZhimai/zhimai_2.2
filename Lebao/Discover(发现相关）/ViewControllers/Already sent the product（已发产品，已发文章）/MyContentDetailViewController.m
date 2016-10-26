@@ -98,6 +98,10 @@ typedef enum{
          weakSelf.modal =modal;
         [weakSelf addBotoomView:weakSelf];
     };
+    articleDetailView.enterDetailBlock = ^(UIViewController *view)
+    {
+         [weakSelf.navigationController pushViewController:view animated:YES];
+    };
    
     articleDetailView.isEdit = !_isNoEdit;
     [self.view addSubview:articleDetailView];

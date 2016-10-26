@@ -25,6 +25,10 @@
 @property (nonatomic, copy) NSString *desc;
 @property (nonatomic, copy) NSString *test;
 @property (nonatomic, copy) NSString *testurl;
+
+@property (nonatomic, copy) NSString *title;
+@property (nonatomic, copy) NSString *content;
+@property (nonatomic, copy) NSString *url;
 @end
 
 @interface InviteFriendsDatas : NSObject
@@ -41,10 +45,6 @@
 
 
 @interface InviteFriendsViewController : BaseViewController
-
+@property(nonatomic,strong)UIImage *shareImage;
 @end
 
-@interface InviteFriendsCell : UITableViewCell
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier cellHeight:(float)cellHeight cellWidth:(float)cellWidth;
-- (void)dataModal:(InviteFriendsDatas *)modal isFirst:(BOOL)isFirst;
-@end

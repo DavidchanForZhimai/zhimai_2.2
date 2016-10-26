@@ -23,6 +23,7 @@
 #import "OtherDynamicdViewController.h"
 #import "MeetSucceedVC.h"
 #import "VIPPrivilegeVC.h"
+#import "InviteFriendsViewController.h"
 #define cellH  40
 #define PersonalURL [NSString stringWithFormat:@"%@user/index",HttpURL]
 @interface MeViewController ()<UITableViewDataSource,UITableViewDelegate>
@@ -386,6 +387,13 @@
                 AuthenticationHomeViewController *authen = allocAndInit(AuthenticationHomeViewController);
                 authen.authen = modal.authen;
                 [nav pushViewController:authen animated:YES];
+                return ;
+            }
+            if ([dict[@"viewController"] isEqualToString:@"InviteFriendsViewController"]) {
+                
+                InviteFriendsViewController *invite = allocAndInit(InviteFriendsViewController);
+                invite.shareImage =userIcon.image ;
+                [nav pushViewController:invite animated:YES];
                 return ;
             }
             

@@ -12,6 +12,8 @@
 typedef void (^EditBlock) (MyArticleDetailModal *modal);
 typedef void (^ContributionBlock) (BOOL is);
 typedef void (^ModalBlock) (MyArticleDetailModal *modal);
+
+typedef void (^EnterDetailBlock) (UIViewController * viewContoller);
 @interface MyArticleDetailView : UIScrollView<IMYWebViewDelegate>
 {
     MyArticleDetailModal *modal;
@@ -25,6 +27,8 @@ typedef void (^ModalBlock) (MyArticleDetailModal *modal);
 @property(nonatomic,copy)EditBlock editBlock;
 @property(nonatomic,copy)ContributionBlock contributionBlock;
 @property(nonatomic,copy)ModalBlock modalBlock;
+
+@property(nonatomic,copy)EnterDetailBlock enterDetailBlock;
 - (instancetype)initWithFrame:(CGRect)frame postWithUrl:(NSString*)postWithUrl param:(NSMutableDictionary*)param ;
 
 @end

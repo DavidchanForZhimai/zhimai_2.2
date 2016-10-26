@@ -124,6 +124,10 @@ typedef enum{
         
         
     };
+    _articleDetailView.enterDetailBlock = ^(UIViewController *view)
+    {
+        [weakSelf.navigationController pushViewController:view animated:YES];
+    };
    
     _articleDetailView.isEdit = !_isNoEdit;
     //    articleDetailView.ishasNextPage = NO;

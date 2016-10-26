@@ -30,7 +30,7 @@ typedef NS_ENUM(NSInteger,ShareType) {
 //本地分享
 - (void)showLocalShareView:(NSArray *)arrays otherParamer:(NSArray *)Paramer title:(NSString *)title desc:(NSString *)desc  image:(UIImage *)image shareID:(NSString *)str isWxShareSucceedShouldNotice:(BOOL)isWxShareSucceedShouldNotice isAuthen:(BOOL)isAuthen;
 
-//动态分享
+//动态分享(分享url)
 - (void)dynamicShareTo:(NSString *)title desc:(NSString *)desc image:(UIImage *)image shareurl:(NSString *)url;
 //分享到微信
 @property(nonatomic,assign)BOOL isWxShareSucceedShouldNotice;

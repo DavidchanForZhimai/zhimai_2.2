@@ -8,22 +8,13 @@
 
 #import "InviteFriendsViewController.h"
 #import "XLDataService.h"
-#import "QRCodeGenerator.h"//二维码
-#import "M80AttributedLabel.h"
-#import "GeneratePosterViewController.h"
-#import "RankingInvitedtalentViewController.h"
-#import "NSString+Extend.h"
+#import "YLJViewController.h"
+#import "WetChatShareManager.h"
 //我的URL ：appinterface/personal
 #define PersonalURL [NSString stringWithFormat:@"%@user/invite",HttpURL]
-#define PosterURL [NSString stringWithFormat:@"%@user/poster",HttpURL]
-@interface InviteFriendsViewController ()<UITableViewDataSource,UITableViewDelegate,M80AttributedLabelDelegate>
+@interface InviteFriendsViewController ()
 @property(nonatomic,strong)NSMutableArray *inviteFriendsArray;
 @property(nonatomic,strong)UITableView *inviteFriendsView;
-@property(nonatomic,strong)UITableView *myInstructionsView;
-@property(nonatomic,strong)BaseButton *scoredRecord;
-@property(nonatomic,strong)UILabel *scoredRecordLb;
-@property(nonatomic,strong)BaseButton *instructions;
-@property(nonatomic,strong)UILabel *instructionsLb;
 
 @end
 
@@ -62,13 +53,9 @@
 #pragma mark - Navi_View
 - (void)navView
 {
+   
     [self navViewTitleAndBackBtn:@"邀请好友"];
-//    BaseButton *_inviteFriends = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 50, StatusBarHeight, 50, NavigationBarHeight) backgroundImage:nil iconImage:[UIImage imageNamed:@"daren"] highlightImage:nil inView:self.view];
-//    __weak typeof(self) weakSelf = self;
-//    _inviteFriends.didClickBtnBlock = ^
-//    {
-//        PushView(weakSelf, allocAndInit(RankingInvitedtalentViewController));
-//    };
+
   
 }
 
@@ -78,179 +65,107 @@
 {
     _inviteFriendsArray= [NSMutableArray new];
     _inviteFriendsView =[[UITableView alloc]initWithFrame:frame(0, StatusBarHeight + NavigationBarHeight, APPWIDTH, APPHEIGHT - (StatusBarHeight + NavigationBarHeight)) style:UITableViewStyleGrouped];
-    _inviteFriendsView.delegate = self;
-    _inviteFriendsView.dataSource = self;
     _inviteFriendsView.backgroundColor =[UIColor clearColor];
     _inviteFriendsView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _inviteFriendsView.tableHeaderView = [self headerView];
     [self.view addSubview:_inviteFriendsView];
     
-    
-    _myInstructionsView =[[UITableView alloc]initWithFrame:frame(0, StatusBarHeight + NavigationBarHeight, APPWIDTH, APPHEIGHT - (StatusBarHeight + NavigationBarHeight)) style:UITableViewStyleGrouped];
-    _myInstructionsView.delegate = self;
-    _myInstructionsView.dataSource = self;
-    _myInstructionsView.backgroundColor =[UIColor clearColor];
-    _myInstructionsView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [self.view addSubview:_myInstructionsView];
-    
-    self.inviteFriendsView.hidden = NO;
-    self.myInstructionsView.hidden = YES;
     
 }
 - (UIView *)headerView
 {
-    UIView *headView = allocAndInitWithFrame(UIView, frame(0, 0, APPWIDTH, 155*ScreenMultiple + 260));
-    headView.backgroundColor =WhiteColor;
-    UIImageView *imageViewbg =allocAndInitWithFrame(UIImageView, frame(0, 0, APPWIDTH, 155*ScreenMultiple));
-    imageViewbg.image = [UIImage imageNamed:@"icon_ me_invitefriends"];
+    UIView *headView = allocAndInitWithFrame(UIView, frame(0, 0, APPWIDTH, 0));
+    headView.backgroundColor =[UIColor clearColor];
+    UIImage  *image = [UIImage imageNamed:@"icon_ me_invitefriends"];
+    UIImageView *imageViewbg =allocAndInitWithFrame(UIImageView, frame(0, 0, APPWIDTH,image.size.height/image.size.width*APPWIDTH));
+    imageViewbg.image = image;
     [headView addSubview:imageViewbg];
-//    df493f
-    UILabel * inviteLable = [UILabel createLabelWithFrame:frame((APPWIDTH - 94)/2.0, 155*ScreenMultiple  -47, 94, 94) text:[NSString stringWithFormat:@"邀请码\n%@\n",modal.invitecode] fontSize:24*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter inView:imageViewbg];
+//    邀请码
+    NSString * invitecode=@"";
+    if (modal.invitecode&&modal.invitecode.length>0) {
+        invitecode = [NSString stringWithFormat:@"\n%@",modal.invitecode];
+    }
+    UILabel * inviteLable = [UILabel createLabelWithFrame:frame((APPWIDTH - 94)/2.0, imageViewbg.height -97*0.4, 94, 94) text:[NSString stringWithFormat:@"邀请码%@",invitecode] fontSize:26*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentCenter inView:imageViewbg];
     inviteLable.backgroundColor = WhiteColor;
     [inviteLable setRound];
     inviteLable.numberOfLines = 0;
     
     NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:inviteLable.text];
     
+    [str addAttribute:NSForegroundColorAttributeName
+                    value:AppMainColor
+                    range:[inviteLable.text  rangeOfString:invitecode]];
+        
     [str addAttribute:NSFontAttributeName
-                value:Size(32)
-                range:[inviteLable.text  rangeOfString:@"邀请码"]];
+                    value:Size(38)
+                    range:[inviteLable.text  rangeOfString:invitecode]];
     inviteLable.attributedText = str;
 
-    if (modal.invitecode&&![modal.invitecode isEqualToString:@""]) {
-        [str addAttribute:NSForegroundColorAttributeName
-                    value:hexColor(df493f)
-                    range:[inviteLable.text  rangeOfString:modal.invitecode]];
-        
-        [str addAttribute:NSFontAttributeName
-                    value:Size(38)
-                    range:[inviteLable.text  rangeOfString:modal.invitecode]];
-        inviteLable.attributedText = str;
+    
+    
+    [inviteLable setBorder:AppMainColor width:3];
+    
+    //已累计邀请
+    NSString * count=@"";
+    if (modal.count&&modal.count.length>0) {
+        count = [NSString stringWithFormat:@"%@人\n",modal.count];
+    }
+    UILabel * hasInvitecode = [UILabel createLabelWithFrame:frame((APPWIDTH - 120)/2.0, CGRectGetMaxY(inviteLable.frame)+ 45, 120, 67) text:[NSString stringWithFormat:@"%@已累计邀请",count] fontSize:24*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter inView:headView];
+    hasInvitecode.backgroundColor = WhiteColor;
+    [hasInvitecode setRadius:5];
+    [hasInvitecode setBorder:LineBg width:0.5];
+     hasInvitecode.numberOfLines = 0;
+    
+    NSMutableAttributedString *hasstr = [[NSMutableAttributedString alloc] initWithString:hasInvitecode.text];
+    
+    [hasstr addAttribute:NSForegroundColorAttributeName
+                value:[UIColor colorWithRed:0.9878 green:0.6834 blue:0.11 alpha:1.0]
+                range:[hasInvitecode.text  rangeOfString:count]];
+    
+    [hasstr addAttribute:NSFontAttributeName
+                value:Size(50)
+                range:[hasInvitecode.text  rangeOfString:count]];
+    hasInvitecode.attributedText = hasstr;
+    hasInvitecode.userInteractionEnabled = YES;
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hasInvitecodeTap:)];
+    tap.numberOfTapsRequired = 1;
+    [hasInvitecode addGestureRecognizer:tap];
 
-    }
-    
-    [inviteLable setBorder:hexColor(df493f) width:3];
-    
-    //二维码
-    UIImageView * imageView = [[UIImageView alloc] initWithFrame:CGRectMake((APPWIDTH - 100)/2.0, CGRectGetMaxY(inviteLable.frame) + 10, 100, 100)];
-    if (modal.inviteurl &&![modal.inviteurl isEqualToString:@""] ) {
-         imageView.image = [QRCodeGenerator qrImageForString:modal.inviteurl imageSize:imageView.bounds.size.width];
-        [headView addSubview:imageView];
-    }
-    
-    //生成海报
-    BaseButton *haibao = [[BaseButton alloc]initWithFrame:frame(APPWIDTH/3.0, CGRectGetMaxY(imageView.frame) + 10, APPWIDTH/3.0, 30) setTitle:@"生成海报" titleSize:28*SpacedFonts titleColor:WhiteColor textAlignment:NSTextAlignmentCenter backgroundColor:AppMainColor inView:headView];
-    [haibao setRadius:5];
-    haibao.didClickBtnBlock = ^
+    //立即邀请
+    BaseButton *lijiqiaoqing = [[BaseButton alloc]initWithFrame:frame(30*ScreenMultiple, CGRectGetMaxY(hasInvitecode.frame) + 45, APPWIDTH-60*ScreenMultiple, 40*ScreenMultiple) setTitle:@"立即邀请" titleSize:32*SpacedFonts titleColor:WhiteColor textAlignment:NSTextAlignmentCenter backgroundColor:AppMainColor inView:headView];
+    [lijiqiaoqing setRadius:5];
+    __weak typeof(self) weakSelf = self;
+    lijiqiaoqing.didClickBtnBlock = ^
     {
-        [[ToolManager shareInstance] showWithStatus:@"生成海报中..."];
-        NSMutableDictionary *param = [Parameter parameterWithSessicon];
-        [param setValue:modal.invitecode forKey:@"invite"];
-//        NSLog(@"param =%@",param);
-        [XLDataService postWithUrl:PosterURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-            if (dataObj) {
-//                NSLog(@"dataObj =%@",dataObj);
-                if ([dataObj[@"rtcode"] integerValue]==1) {
-                    [[ToolManager shareInstance] dismiss];
-                    
-                    GeneratePosterViewController *poster = allocAndInit(GeneratePosterViewController);
-                    poster.url =dataObj[@"datas"];
-                    PushView(self, poster);
-                }
-                else
-                {
-                    [[ToolManager shareInstance] showInfoWithStatus:dataObj[@"rtmsg"]];
-                }
-                
-            }
-            else
-            {
-                [[ToolManager shareInstance] showInfoWithStatus];
-            }
-        }];
-        
+        if (modal.url&&modal.url.length>0) {
+            [[WetChatShareManager shareInstance] dynamicShareTo:modal.title desc:modal.content image:weakSelf.shareImage shareurl:modal.url];
+        }
+        else
+        {
+            [[ToolManager shareInstance] showAlertMessage:@"分享数据错误"];
+        }
         
     };
     
-
-    UIView *segment = allocAndInitWithFrame(UIView, frame(0, frameHeight(headView) - 50, APPWIDTH, 40));
-    segment.backgroundColor =WhiteColor;
-    [headView addSubview:segment];
-    
-    __weak InviteFriendsViewController *weakSelf =self;
-    
-    _scoredRecord = [[BaseButton alloc]initWithFrame:frame(0, 0, frameWidth(segment)/2.0, frameHeight(segment)) setTitle:[NSString stringWithFormat:@"成功邀请(%@)",modal.count] titleSize:26*SpacedFonts titleColor:AppMainColor textAlignment:NSTextAlignmentCenter backgroundColor:hexColor(dae9f7) inView:segment];
-
-    
-    _instructions = [[BaseButton alloc]initWithFrame:frame(frameWidth(segment)/2.0, 0, frameWidth(segment)/2.0, frameHeight(segment)) setTitle:@"说明" titleSize:26*SpacedFonts titleColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:WhiteColor inView:segment];
-    _scoredRecordLb = allocAndInitWithFrame(UILabel, frame(0, 0, frameWidth(segment)/2.0, 4));
-    
-    [segment addSubview:_scoredRecordLb];
-    
-    _instructionsLb =allocAndInitWithFrame(UILabel, frame(frameWidth(segment)/2.0, 0, frameWidth(segment)/2.0, 4));
-    [segment addSubview:_instructionsLb];
-    
-    if (_selected ==0) {
-        [weakSelf.scoredRecord setTitleColor:AppMainColor forState:UIControlStateNormal];
-        [weakSelf.scoredRecord setBackgroundColor:hexColor(dae9f7)];
-        [weakSelf.instructions setTitleColor:LightBlackTitleColor forState:UIControlStateNormal];
-        [weakSelf.instructions setBackgroundColor:WhiteColor];
-        _instructionsLb.backgroundColor = WhiteColor;
-        _scoredRecordLb.backgroundColor = AppMainColor;
+    headView.frame = CGRectMake(headView.x, headView.y, headView.width, CGRectGetMaxY(lijiqiaoqing.frame)+ 20);
+    return headView;
+}
+#pragma mark
+#pragma mark - hasInvitecodeTap
+- (void)hasInvitecodeTap:(UITapGestureRecognizer *)sender
+{
+    if (self.inviteFriendsArray.count>0) {
+        YLJViewController *vc = [[YLJViewController alloc]init];
+        vc.datas = self.inviteFriendsArray;
+        [self.navigationController pushViewController:vc animated:YES];
     }
     else
     {
-        [weakSelf.instructions setTitleColor:AppMainColor forState:UIControlStateNormal];
-        [weakSelf.instructions setBackgroundColor:hexColor(dae9f7)];
-        [weakSelf.scoredRecord setTitleColor:LightBlackTitleColor forState:UIControlStateNormal];
-        [weakSelf.scoredRecord setBackgroundColor:WhiteColor];
-        
-        _instructionsLb.backgroundColor = AppMainColor;
-        _scoredRecordLb.backgroundColor = WhiteColor;
+        [[ToolManager shareInstance] showAlertMessage:@"没有邀请数据"];
     }
     
-    
-    _scoredRecord.didClickBtnBlock = ^
-    {
-        _selected = 0;
-        [weakSelf.scoredRecord setTitleColor:AppMainColor forState:UIControlStateNormal];
-        [weakSelf.scoredRecord setBackgroundColor:hexColor(dae9f7)];
-        [weakSelf.instructions setTitleColor:LightBlackTitleColor forState:UIControlStateNormal];
-        [weakSelf.instructions setBackgroundColor:WhiteColor];
-        
-        weakSelf.instructionsLb.backgroundColor = WhiteColor;
-        weakSelf.scoredRecordLb.backgroundColor = AppMainColor;
-        [weakSelf.inviteFriendsView reloadData];
-        [weakSelf.myInstructionsView reloadData];
-        weakSelf.inviteFriendsView.hidden = NO;
-        weakSelf.myInstructionsView.hidden = YES;
-        
-        
-    };
-    
-    
-    _instructions.didClickBtnBlock = ^
-    {
-        _selected = 1;
-        [weakSelf.instructions setTitleColor:AppMainColor forState:UIControlStateNormal];
-        [weakSelf.instructions setBackgroundColor:hexColor(dae9f7)];
-        [weakSelf.scoredRecord setTitleColor:LightBlackTitleColor forState:UIControlStateNormal];
-        [weakSelf.scoredRecord setBackgroundColor:WhiteColor];
-        
-        weakSelf.instructionsLb.backgroundColor = AppMainColor;
-        weakSelf.scoredRecordLb.backgroundColor = WhiteColor;
-        
-        [weakSelf.inviteFriendsView  reloadData];
-        [weakSelf.myInstructionsView reloadData];
-        weakSelf.myInstructionsView.hidden = NO;
-        weakSelf.inviteFriendsView.hidden = YES;
-        
-    };
-    
-    UIView *lineView = allocAndInitWithFrame(UIView, frame(0, frameHeight(headView) - 10, APPWIDTH, 10));
-    lineView.backgroundColor =AppViewBGColor;
-    [headView addSubview:lineView];
-    
-    return headView;
+
 }
 #pragma mark
 #pragma mark - netWork-
@@ -261,7 +176,7 @@
     [[ToolManager shareInstance] showWithStatus];
   
     [XLDataService postWithUrl:PersonalURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-      //  NSLog(@"dataObj===%@",dataObj);
+        NSLog(@"dataObj===%@",dataObj);
         if (dataObj) {
             modal = [InviteFriendsModal mj_objectWithKeyValues:dataObj];
             
@@ -282,9 +197,9 @@
                     [_inviteFriendsArray addObject:data];
                 }
                 
-                [_inviteFriendsView reloadData];
-                [_myInstructionsView reloadData];
-                
+                [_inviteFriendsView beginUpdates];
+                _inviteFriendsView.tableHeaderView = [self headerView];
+                [_inviteFriendsView endUpdates];
                 [[ToolManager shareInstance] dismiss];
             }
             else
@@ -302,118 +217,7 @@
     
     
 }
-#pragma mark
-#pragma mark - TableViewDelegate TableViewDataSource
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    if (_selected ==0) {
-        return _inviteFriendsArray.count;
-    }
-    return 1;
-    
-}
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    
-    return 1;
-}
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 155*ScreenMultiple + 260;
-    
-}
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    
-    return [self headerView];
-}
-- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 0.01f;
-}
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    
-    return allocAndInit(UIView);
-    
-}
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (_selected ==0) {
-        return 35;
-    }
-    
-    UILabel * label = allocAndInit(UILabel);
-    CGSize  size = [label sizeWithMultiLineContent:modal.desc rowWidth:APPWIDTH - 20 font:Size(24)];
-    return size.height + 50 ;
-    
-}
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (_selected ==0) {
-        static NSString *cellID =@"InviteFriendsCell";
-        InviteFriendsCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-        if (!cell) {
-            cell = [[InviteFriendsCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID cellHeight:35 cellWidth:frameWidth(_inviteFriendsView)];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            
-        }
-        InviteFriendsDatas *data = _inviteFriendsArray[indexPath.row];
-        BOOL isFirst = NO;
-        if (indexPath.row==0) {
-            isFirst = YES;
-        }
-        else
-        {
-            isFirst = NO;
-        }
-        [cell dataModal:data isFirst:isFirst];
-        return cell;
-    }
-    
-    static NSString *cellID =@"tableViewCellID";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-    if (!cell) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID ];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
-        UILabel *title = [UILabel createLabelWithFrame:frame(10, 0, 48*SpacedFonts, 30) text:@"说明" fontSize:24*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentLeft inView:cell];
-        
-        M80AttributedLabel *des= [[M80AttributedLabel alloc]initWithFrame:CGRectZero];
-        des.textColor =LightBlackTitleColor;
-        des.font = Size(24);
-        des.linkColor = hexColor(df493f);
-        des.underLineForLink = NO;
-        UILabel * label = allocAndInit(UILabel);
-        CGSize  size = [label sizeWithMultiLineContent:modal.desc rowWidth:APPWIDTH - 20 font:Size(24)];
-         ;
-        NSRange range   = [modal.desc rangeOfString:modal.test];
-        des.text = modal.desc;
-        [des addCustomLink:[NSValue valueWithRange:range]
-                    forRange:range];
-        des.frame =frame(frameX(title), 30, APPWIDTH - 2*frameX(title), size.height + 30);
-        des.delegate = self;
-        [cell addSubview:des];
-        
-    }
-    
-    return cell;
-    
-    
-    
-}
-#pragma mark
-#pragma mark m80AttributedLabel Delegate
-- (void)m80AttributedLabel:(M80AttributedLabel *)label
-             clickedOnLink:(id)linkData
-{
-    [[ToolManager shareInstance]loadWebViewWithUrl:modal.testurl title:modal.test pushView:self rightBtn:nil];
-}
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    
-    
-}
+
 
 #pragma mark
 #pragma mark - buttonAction -
@@ -439,76 +243,5 @@
  // Pass the selected object to the new view controller.
  }
  */
-
-@end
-@implementation InviteFriendsCell
-{
-
-    UILabel   *_userName;
-    UILabel   *_tel;
-    UILabel   *_time;
-    UILabel   *_status;
-    UILabel   *_line;
-}
-
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier cellHeight:(float)cellHeight cellWidth:(float)cellWidth
-{
-    self =[super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
-        
-        self.backgroundColor =[UIColor whiteColor];
-        self.selectionStyle =  UITableViewCellSelectionStyleNone;
-        
-        
-        _userName = [UILabel createLabelWithFrame:frame(0, 0, frameWidth(self)/4.0 - 10, cellHeight) text:@"" fontSize:24*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentCenter inView:self];
-        
-         _tel = [UILabel createLabelWithFrame:frame(CGRectGetMaxX(_userName.frame), frameY(_userName), frameWidth(_userName) + 20, frameHeight(_userName)) text:@"" fontSize:24*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentCenter inView:self];
-        
-         _time = [UILabel createLabelWithFrame:frame(CGRectGetMaxX(_tel.frame), frameY(_tel), frameWidth(_userName) + 20, frameHeight(_tel)) text:@"" fontSize:24*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentCenter inView:self];
-        
-         _status = [UILabel createLabelWithFrame:frame(CGRectGetMaxX(_time.frame), frameY(_time), frameWidth(_userName), frameHeight(_time)) text:@"" fontSize:24*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentCenter inView:self];
-        
-        _line = [UILabel CreateLineFrame:frame(0, cellHeight -  1, cellWidth, 1) inView:self];
-        _line.hidden = YES;
-    }
-    
-    return self;
-}
-
-
-- (void)dataModal:(InviteFriendsDatas *)modal isFirst:(BOOL)isFirst {
-    
-    _line.hidden = YES;
-    if (isFirst) {
-       _line.hidden = NO;
-    }
-    _userName.text = modal.realname;
-    
-    _tel.text = [NSString stringWithFormat:@"%@",modal.tel];
-    
-    if ([modal.createtime intValue]>0) {
-        _time.text =[modal.createtime timeformatString:@"yyyy-MM-dd"];
-    }
-    else
-    {
-        _time.text  = modal.createtime;
-    }
-    
-    NSString *str = modal.authen;
-    if ([modal.authen intValue]==1) {
-       str = @"未认证";
-    }
-    if ([modal.authen intValue]==2) {
-        str = @"认证中";
-    }
-    if ([modal.authen intValue]==3) {
-        str = @"已认证";
-    }
-    if ([modal.authen intValue]==9) {
-        str = @"被驳回";
-    }
-     _status.text = str;
-    
-}
 
 @end
