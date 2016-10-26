@@ -33,7 +33,6 @@
 
 @property (nonatomic, strong) NSString *num;
 
-@property (nonatomic, strong) NSString *residue;
 
 @end
 

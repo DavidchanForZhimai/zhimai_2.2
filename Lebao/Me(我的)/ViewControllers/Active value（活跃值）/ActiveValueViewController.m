@@ -119,8 +119,11 @@
         num = modal.num;
     }
     NSString *residue = @"0";
-    if (modal.residue&&modal.residue.length>0) {
-        residue = modal.residue;
+    if (modal.ac&&[modal.ac isKindOfClass:[NSDictionary class]]) {
+        if (modal.ac[[NSString stringWithFormat:@"v%li",level + 1]]) {
+             residue = [NSString stringWithFormat:@"%d",[modal.ac[[NSString stringWithFormat:@"v%li",level + 1]] intValue] - [num intValue]];
+        }
+       
     }
     
     float W =  bgView.height - 32;
