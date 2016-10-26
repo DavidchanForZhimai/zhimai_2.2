@@ -145,7 +145,7 @@
         {
             [[ToolManager shareInstance] showAlertMessage:@"分享数据错误"];
         }
-        
+    
     };
     
     headView.frame = CGRectMake(headView.x, headView.y, headView.width, CGRectGetMaxY(lijiqiaoqing.frame)+ 20);
@@ -176,7 +176,7 @@
     [[ToolManager shareInstance] showWithStatus];
   
     [XLDataService postWithUrl:PersonalURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        NSLog(@"dataObj===%@",dataObj);
+//        NSLog(@"dataObj===%@",dataObj);
         if (dataObj) {
             modal = [InviteFriendsModal mj_objectWithKeyValues:dataObj];
             

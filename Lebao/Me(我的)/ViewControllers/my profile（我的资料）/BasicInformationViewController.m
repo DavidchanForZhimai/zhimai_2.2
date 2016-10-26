@@ -296,9 +296,9 @@
             return;
         }
         
-        if (weakSelf.addTextField.text.length>6) {
+        if (weakSelf.addTextField.text.length>5) {
             weakSelf.addTextField.text = @"";
-            weakSelf.addTextField.placeholder = @"标签不能超过6个字符";
+            weakSelf.addTextField.placeholder = @"标签不能超过5个字";
             return;
         }
         
@@ -1388,12 +1388,12 @@
     _modal.service = [service mj_JSONString];
     _modal.resource = [resource mj_JSONString];
     NSMutableDictionary *parame =[Parameter parameterWithSessicon];
-    if ([_modal.imgurl isEqualToString:@""]||[_modal.sex isEqualToString:@""]||[_modal.area isEqualToString:@""]||[_modal.realname isEqualToString:@""]||[_modal.tel isEqualToString:@""]||[_modal.address isEqualToString:@""]||[_modal.workyears isEqualToString:@""]||[_modal.position isEqualToString:@""]||[_modal.service isEqualToString:@""]||[_modal.resource isEqualToString:@""]||[_modal.mylabels isEqualToString:@""]) {
-        
-        
-        [[ToolManager shareInstance] showAlertMessage:@"请完善资料！！"];
-        return;
-    }
+//    if ([_modal.imgurl isEqualToString:@""]||[_modal.sex isEqualToString:@""]||[_modal.area isEqualToString:@""]||[_modal.realname isEqualToString:@""]||[_modal.tel isEqualToString:@""]||[_modal.address isEqualToString:@""]||[_modal.workyears isEqualToString:@""]||[_modal.position isEqualToString:@""]||[_modal.service isEqualToString:@""]||[_modal.resource isEqualToString:@""]||[_modal.mylabels isEqualToString:@""]) {
+//        
+//        
+//        [[ToolManager shareInstance] showAlertMessage:@"请完善资料！！"];
+//        return;
+//    }
     
     
     [parame setObject:_modal.imgurl forKey:@"imgurl"];

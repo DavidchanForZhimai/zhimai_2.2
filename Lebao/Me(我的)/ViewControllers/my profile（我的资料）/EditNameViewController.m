@@ -50,7 +50,7 @@ typedef enum
     }
        else if (_editPageTag == EditZhiyePageTag)
     {
-        title =@"修改职业";
+        title =@"修改职位";
     }
     else if (_editPageTag == EditCompanyTag)
     {
@@ -76,7 +76,30 @@ typedef enum
     else if (sender.tag == ButtonActionTagFinish)
     {
         if (_editBlock) {
-          
+           
+        if (_editPageTag == EditNamePageTag&&_modityTextField.text.length>5) {
+            
+            [[ToolManager shareInstance] showAlertMessage:@"名字不能超过5个字"];
+            return;
+        }
+        if (_editPageTag == EditZhiyePageTag&&_modityTextField.text.length>10) {
+                
+            [[ToolManager shareInstance] showAlertMessage:@"职位不能超过10个字"];
+            return;
+        }
+        if (_editPageTag == EditCompanyTag&&_modityTextField.text.length>15) {
+                
+            [[ToolManager shareInstance] showAlertMessage:@"公司名称不能超过15个字"];
+            
+            return;
+        }
+        if (_editPageTag == EditWorkYearsPageTag&&([_modityTextField.text intValue]<1|| [_modityTextField.text intValue]>50)) {
+            [[ToolManager shareInstance] showAlertMessage:@"从业年限范围为1-50"];
+            
+            return;
+        }
+            
+             NSLog(@"_editPageTag =%d,_modityTextView.text=%@",_editPageTag,_modityTextField.text);
          _editBlock(_modityTextField.text);
            
             PopView(self);
