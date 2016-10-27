@@ -75,7 +75,7 @@
     
     else if([resp isKindOfClass:[PayResp class]]){
         //支付返回结果，实际支付结果需要去微信服务器端查询
-        NSString *strMsg;
+//        NSString *strMsg;
          PayResp *payResp = (PayResp *)resp;
         switch (payResp.errCode) {
             case WXSuccess:
@@ -83,8 +83,8 @@
                 break;
                 
             default:
-                strMsg = [NSString stringWithFormat:@"支付结果：失败！retcode = %d, retstr = %@", payResp.errCode,payResp.errStr];
-                 [[ToolManager shareInstance] showErrorWithStatus:strMsg];
+//                strMsg = @"支付失败";
+//                 [[ToolManager shareInstance] showErrorWithStatus:strMsg];
                 break;
         }
        
@@ -101,19 +101,19 @@
         
         case WXErrCodeCommon:
             
-            [[ToolManager  shareInstance] showErrorWithStatus:@"普通错误类型"];
+//            [[ToolManager  shareInstance] showErrorWithStatus:@"普通错误类型"];
             break;
         case WXErrCodeUserCancel:
-            [[ToolManager  shareInstance] showErrorWithStatus:@"用户点击取消并返回"];
+//            [[ToolManager  shareInstance] showErrorWithStatus:@"用户点击取消并返回"];
             break;
         case WXErrCodeSentFail:
-            [[ToolManager  shareInstance] showErrorWithStatus:@"发送失败"];
+//            [[ToolManager  shareInstance] showErrorWithStatus:@"发送失败"];
             break;
         case WXErrCodeAuthDeny:
-            [[ToolManager  shareInstance] showErrorWithStatus:@"授权失败"];
+//            [[ToolManager  shareInstance] showErrorWithStatus:@"授权失败"];
             break;
         case WXErrCodeUnsupport:
-            [[ToolManager  shareInstance] showErrorWithStatus:@"微信不支持"];
+//            [[ToolManager  shareInstance] showErrorWithStatus:@"微信不支持"];
             break;
             
         default:
