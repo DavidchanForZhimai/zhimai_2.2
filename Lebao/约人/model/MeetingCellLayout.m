@@ -177,7 +177,7 @@
         LWTextStorage *resourceTextStorage=[[LWTextStorage alloc]init];
         float resourceTextStorageheight = resourceTextStorage.bottom;
         if (![model.resource isEqualToString:@""]&&model.resource) {
-        resourceTextStorage.text=@"资源特点";
+        resourceTextStorage.text=@"人脉资源";
         resourceTextStorage.font=Size(26.0);
         resourceTextStorage.frame=CGRectMake(_avatarStorage.left, productLbStorageheight + 10, 52, CGFLOAT_MAX);
         resourceTextStorage.textColor = [UIColor colorWithRed:0.522 green:0.525 blue:0.529 alpha:1.000];

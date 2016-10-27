@@ -42,4 +42,9 @@
 @property(nonatomic,strong)NSString* evaluate;//是否评价了
 @property(nonatomic,assign)int relation;//是否添加好友
 
+
+//约见评价
+@property(nonatomic,copy)NSString *create_at;//时间
+@property(nonatomic,assign)int scord;//分值
+@property(nonatomic,copy)NSString *content;//时间
 @end

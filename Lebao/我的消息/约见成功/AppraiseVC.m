@@ -113,7 +113,7 @@
                 if (modal.i_evaluate) {
                     for (UIButton *btn in bgView.subviews) {
                         if (btn.tag>=10&&btn.tag<=10+modal.i_evaluate.scord) {
-                            [btn setImage:[UIImage imageNamed:@"pingjia"] forState:UIControlStateNormal];
+                            [btn setImage:[UIImage imageNamed:@"[pingjia]"] forState:UIControlStateNormal];
                         }
                     }
                     
@@ -175,7 +175,7 @@
         UIButton *startBtn=[UIButton buttonWithType:UIButtonTypeCustom];
         startBtn.tag=11+i;
         startBtn.frame=CGRectMake((APPWIDTH-20*5-15*4)/2.0+i*35,CGRectGetMaxY(renzhenImgV.frame)+10, 20, 20);
-        [startBtn setImage:[UIImage imageNamed:@"weixuanpingjia"] forState:UIControlStateNormal];
+        [startBtn setImage:[UIImage imageNamed:@"[weixuanpingjia]"] forState:UIControlStateNormal];
         [startBtn addTarget:self action:@selector(startBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         [bgView addSubview:startBtn];
         
@@ -193,10 +193,10 @@
 {
     for (UIButton *btn in bgView.subviews) {
         if (btn.tag>=10&&btn.tag<=sender.tag) {
-            [btn setImage:[UIImage imageNamed:@"pingjia"] forState:UIControlStateNormal];
+            [btn setImage:[UIImage imageNamed:@"[pingjia]"] forState:UIControlStateNormal];
         }
         if (btn.tag>=10&&btn.tag>sender.tag) {
-            [btn setImage:[UIImage imageNamed:@"weixuanpingjia"] forState:UIControlStateNormal];
+            [btn setImage:[UIImage imageNamed:@"[weixuanpingjia]"] forState:UIControlStateNormal];
         }
     }
     scord=sender.tag-10;
@@ -270,9 +270,9 @@
         startBtn.tag=21+i;
         startBtn.frame=CGRectMake((APPWIDTH-20*5-15*4)/2.0+i*35,CGRectGetMaxY(lab.frame)+10, 20, 20);
         if (i<otherScord) {
-            [startBtn setImage:[UIImage imageNamed:@"pingjia"] forState:UIControlStateNormal];
+            [startBtn setImage:[UIImage imageNamed:@"[pingjia]"] forState:UIControlStateNormal];
         }else{
-        [startBtn setImage:[UIImage imageNamed:@"weixuanpingjia"] forState:UIControlStateNormal];
+        [startBtn setImage:[UIImage imageNamed:@"[weixuanpingjia]"] forState:UIControlStateNormal];
         }
         [bgView2 addSubview:startBtn];
     }

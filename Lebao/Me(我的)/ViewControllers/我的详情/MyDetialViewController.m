@@ -20,6 +20,7 @@
 #import "MeetingModel.h"
 #import "GJGCChatFriendViewController.h"
 #import "LWImageBrowser.h"
+#import "EvaluateVC.h"
 #define TagHeight 22
 #define MininumTagWidth (APPWIDTH - 120)/5.0
 #define MaxinumTagWidth (APPWIDTH - 20)
@@ -28,6 +29,7 @@
 @property(nonatomic,strong)NSString *authen;
 @property(nonatomic,strong)NSString *connection_count;
 @property(nonatomic,strong)NSString *dynamic_count;
+@property(nonatomic,strong)NSString *near_count;
 @property(nonatomic,strong)NSString *realname;
 @property(nonatomic,strong)NSString *Id;
 @property(nonatomic,strong)NSString *imgurl;
@@ -199,7 +201,7 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;
+    return 2;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -227,39 +229,60 @@
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
         
-        
         UILabel *dt =  [UILabel createLabelWithFrame:frame(20, 0, 100, 40) text:@"他的动态" fontSize:14 textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:cell];
         dt.tag = 88;
         UILabel *label =  [UILabel createLabelWithFrame:frame(APPWIDTH - 100, 0, 70, 40) text:headerModel.dynamic_count fontSize:12 textColor:LightBlackTitleColor textAlignment:NSTextAlignmentRight inView:cell];
         label.tag =888;
         
+
         cell.accessoryType =UITableViewCellAccessoryDisclosureIndicator;
     }
     NSString *title;
-    if (headerModel.isme) {
-        title = @"我的动态";
+    UILabel *dt = [cell viewWithTag:88];
+    UILabel *label = [cell viewWithTag:888];
+    if (indexPath.row==0) {
+        if (headerModel.isme) {
+            title = @"我的动态";
+        }
+        else
+        {
+            title = @"他的动态";
+        }
+        
+        dt.text = title;
+        label.text = headerModel.dynamic_count;
     }
     else
     {
-        title = @"他的动态";
+        dt.text = @"约见评价";
+        label.text = headerModel.near_count;
     }
+   
 
-    UILabel *dt = [cell viewWithTag:88];
-    dt.text = title;
     
-    UILabel *label = [cell viewWithTag:888];
-    
-    label.text = headerModel.dynamic_count;
     return cell;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    OtherDynamicdViewController *otherDynamicdVC =[[OtherDynamicdViewController alloc]init];
-    
-    otherDynamicdVC.dynamicdName = headerModel.realname;
-    otherDynamicdVC.dynamicdID   = _userID;
-    [self.navigationController pushViewController:otherDynamicdVC animated:YES];
+    if (indexPath.row==0) {
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        OtherDynamicdViewController *otherDynamicdVC =[[OtherDynamicdViewController alloc]init];
+        
+        otherDynamicdVC.dynamicdName = headerModel.realname;
+        otherDynamicdVC.dynamicdID   = _userID;
+        [self.navigationController pushViewController:otherDynamicdVC animated:YES];
+    }
+    else if (indexPath.row==1)
+    {
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        EvaluateVC *evaluateVC =[[EvaluateVC alloc]init];
+        
+        evaluateVC.name = headerModel.realname;
+        evaluateVC.userid   = _userID;
+        [self.navigationController pushViewController:evaluateVC animated:YES];
+        
+    }
+   
 }
 
 #pragma mark getter
@@ -486,7 +509,7 @@
     if (_resourseTagsLb) {
         return  _resourseTagsLb;
     }
-    _resourseTagsLb =[UILabel createLabelWithFrame:CGRectZero text:@"资源特点" fontSize:14 textColor:[UIColor colorWithRed:0.9843 green:0.5137 blue:0.3412 alpha:1.0] textAlignment:NSTextAlignmentLeft inView:nil];
+    _resourseTagsLb =[UILabel createLabelWithFrame:CGRectZero text:@"人脉资源" fontSize:14 textColor:[UIColor colorWithRed:0.9843 green:0.5137 blue:0.3412 alpha:1.0] textAlignment:NSTextAlignmentLeft inView:nil];
     
     return  _resourseTagsLb;
     

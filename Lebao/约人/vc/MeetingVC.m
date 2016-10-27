@@ -23,6 +23,7 @@
 #import "BasicInformationViewController.h"
 #import "AuthenticationHomeViewController.h"//身份认证
 #import "DateHelper.h"
+#import "VIPPrivilegeVC.h"
 @interface MeetingVC ()<UITableViewDelegate,UITableViewDataSource,MeetHeadVDelegate,EjectViewDelegate,MeettingTableViewDelegate,UIAlertViewDelegate>
 {
     float OffsetY;
@@ -165,13 +166,13 @@
 - (void)netWorkRefresh:(BOOL)isRefresh andIsLoadMoreData:(BOOL)isMoreLoadMoreData isShouldClearData:(BOOL)isShouldClearData//加载数据
 {
     
-    [[LoCationManager shareInstance] creatLocationManager];
-    [LoCationManager shareInstance].callBackLocation = ^(CLLocationCoordinate2D location)
-    {
+//    [[LoCationManager shareInstance] creatLocationManager];
+//    [LoCationManager shareInstance].callBackLocation = ^(CLLocationCoordinate2D location)
+//    {
         //            测试用,要删掉
-        //    CLLocationCoordinate2D location;
-        //    location.latitude=24.491534;
-        //    location.longitude=118.180851;
+            CLLocationCoordinate2D location;
+            location.latitude=24.491534;
+            location.longitude=118.180851;
         if (self.nearByManArr.count==0) {
             [[ToolManager shareInstance] showWithStatus];
         }
@@ -237,7 +238,7 @@
             
         }];
         
-    };
+//    };
     
 }
 
@@ -503,7 +504,15 @@
                 alertView.tag=22222;
                 alertView.delegate=self;
                 [alertView show];
+            }else if (modal.rtcode ==4005){
+                [[ToolManager shareInstance]dismiss];
+                
+                UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"知脉君温馨提示" message:[NSString stringWithFormat:@"%@",modal.rtmsg] delegate:self cancelButtonTitle:@"再看看" otherButtonTitles:@"马上开通", nil];
+                alertView.tag=22223;
+                alertView.delegate=self;
+                [alertView show];
             }
+
             else
             {
                 [[ToolManager shareInstance] showAlertMessage:modal.rtmsg];
@@ -583,6 +592,13 @@
             
         }else if(buttonIndex==1){
             PushView(self, allocAndInit(BasicInformationViewController));
+        }
+    }
+    else if (alertView.tag==22223) {
+        if (buttonIndex==0) {
+            
+        }else if(buttonIndex==1){
+            PushView(self, allocAndInit(VIPPrivilegeVC));
         }
     }
 }
