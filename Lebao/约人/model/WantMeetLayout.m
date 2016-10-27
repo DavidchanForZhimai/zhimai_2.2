@@ -68,7 +68,13 @@
         LWTextStorage* industryTextStorage = [[LWTextStorage alloc] init];
         
         if (model.position.length>0) {
-            industryTextStorage.text =[NSString stringWithFormat:@"%@  ",model.position];
+            if (model.address.length>10) {
+                industryTextStorage.text=[model.address substringToIndex:10];
+                industryTextStorage.text=[industryTextStorage.text stringByAppendingString:@"..."];
+            }else{
+                industryTextStorage.text =[NSString stringWithFormat:@"%@  ",model.position];
+            }
+
         }
         else{
             industryTextStorage.text=@"";
@@ -83,7 +89,12 @@
         //公司
         LWTextStorage* addressStorage = [[LWTextStorage alloc] init];
         if (model.address.length>0) {
-            addressStorage.text =[NSString stringWithFormat:@"%@",model.address];
+            if (model.address.length>15) {
+                addressStorage.text=[model.address substringToIndex:15];
+                addressStorage.text=[addressStorage.text stringByAppendingString:@"..."];
+            }else{
+                addressStorage.text =[NSString stringWithFormat:@"%@",model.address];
+            }
         }
         addressStorage.textColor = [UIColor colorWithRed:0.549 green:0.5569 blue:0.5608 alpha:1.0];
         addressStorage.font = Size(24.0);
