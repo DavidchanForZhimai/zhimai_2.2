@@ -87,15 +87,14 @@
     NSMutableDictionary *parame = [Parameter parameterWithSessicon];
   
     [parame setValue:saveIndustry_label[@"code"] forKey:@"industry"];
-    [[ToolManager shareInstance] showWithStatus:@"保存行业..."];
-   
+ 
     [XLDataService postWithUrl:SaveIndustryURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
 
         if (dataObj) {
             if ([dataObj[@"rtcode"] intValue] ==1) {
                 [[ToolManager shareInstance] dismiss];
        
-                self.editBlock(saveIndustry_label[@"name"]);
+                self.editBlock(saveIndustry_label[@"name"],saveIndustry_label[@"code"]);
                 PopView(self);
                 
             }

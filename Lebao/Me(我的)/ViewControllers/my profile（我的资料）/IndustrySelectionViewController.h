@@ -7,8 +7,8 @@
 //
 
 #import "BaseViewController.h"
-typedef void (^EditBlock)(NSString *text);
+typedef void (^EditIndustryBlock)(NSString *text,NSString *num);
 @interface IndustrySelectionViewController : BaseViewController
-@property(nonatomic,copy)EditBlock editBlock;
+@property(nonatomic,copy)EditIndustryBlock editBlock;
 @property(nonatomic,strong)id dataObj;
 @end

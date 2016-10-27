@@ -62,7 +62,7 @@ typedef enum {
 #pragma mark - Navi_View
 - (void)navView
 {
-    [self navViewTitleAndBackBtn:@"诚意金" ];
+    [self navViewTitleAndBackBtn:@"我的钱包" ];
     
     
 }
@@ -161,7 +161,7 @@ typedef enum {
    UILabel *_instructions = [UILabel createLabelWithFrame:frame(16, CGRectGetMaxY(_rechargeBtn.frame) +33, 4*24*SpacedFonts , 24*SpacedFonts) text:@"充值说明" fontSize:24*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentLeft inView:_rechargeView];
     
     
-   _rechargeiInstructions = [UILabel createLabelWithFrame:frame(16, CGRectGetMaxY(_instructions.frame) + 10, frameWidth(_rechargeView) - 30 , 36) text:@"1、知脉暂时支持微信支付\n2、充值金额主要用于平台的跨界传播、跨界合作等用途\n3、充值金额自行设定\n4、红包中的金额只能用于平台中的消费（如发布跨界红包等），不能直接提现" fontSize:24*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:_rechargeView];
+    _rechargeiInstructions = [UILabel createLabelWithFrame:frame(16, CGRectGetMaxY(_instructions.frame) + 10, frameWidth(_rechargeView) - 30 , 36) text:@"1、知脉目前仅支持微信支付充值\n2、充值的金额主要用于平台的打赏、购买会员等消费，也可以再次提现到微信钱包\n3、红包中的金额只能用于平台消费，无法提现" fontSize:24*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:_rechargeView];
     
     _rechargeiInstructions.numberOfLines = 0;
     CGSize size = [_rechargeiInstructions sizeWithMultiLineContent:_rechargeiInstructions.text rowWidth:frameWidth(_rechargeiInstructions) font:Size(24)];

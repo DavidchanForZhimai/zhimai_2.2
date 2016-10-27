@@ -472,7 +472,7 @@
     if (_productTagsLb) {
         return  _productTagsLb;
     }
-    _productTagsLb =[UILabel createLabelWithFrame:CGRectMake(20, 10, APPWIDTH - 40, 35) text:@"产品标签" fontSize:14 textColor:AppMainColor textAlignment:NSTextAlignmentLeft inView:nil];
+    _productTagsLb =[UILabel createLabelWithFrame:CGRectMake(20, 10, APPWIDTH - 40, 35) text:@"产品服务" fontSize:14 textColor:AppMainColor textAlignment:NSTextAlignmentLeft inView:nil];
     
     return  _productTagsLb;
     

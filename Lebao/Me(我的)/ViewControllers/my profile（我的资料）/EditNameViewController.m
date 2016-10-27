@@ -87,12 +87,7 @@ typedef enum
             [[ToolManager shareInstance] showAlertMessage:@"职位不能超过10个字"];
             return;
         }
-        if (_editPageTag == EditCompanyTag&&_modityTextField.text.length>15) {
-                
-            [[ToolManager shareInstance] showAlertMessage:@"公司名称不能超过15个字"];
-            
-            return;
-        }
+    
         if (_editPageTag == EditWorkYearsPageTag&&([_modityTextField.text intValue]<1|| [_modityTextField.text intValue]>50)) {
             [[ToolManager shareInstance] showAlertMessage:@"从业年限范围为1-50"];
             

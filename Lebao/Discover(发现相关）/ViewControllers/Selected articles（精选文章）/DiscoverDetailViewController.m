@@ -62,9 +62,9 @@
 //        default:
 //            break;
 //    }
-    if (_Nav_title) {
-        title =  _Nav_title;
-    }
+//    if (_Nav_title) {
+//        title =  _Nav_title;
+//    }
     [self navViewTitleAndBackBtn:title];
     
     
@@ -211,42 +211,42 @@
         ;
     };
     
-     NSString *imageName = weakSelf.modal.datas.iscollect?@"icon_discover_collection":@"icon_widelyspreaddetail_collect";
-    _collect = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 80, StatusBarHeight, 40, NavigationBarHeight) backgroundImage:nil iconImage:[UIImage imageNamed:imageName] highlightImage:nil inView:self.view];
-    _collect.didClickBtnBlock = ^
-    {
+//     NSString *imageName = weakSelf.modal.datas.iscollect?@"icon_discover_collection":@"icon_widelyspreaddetail_collect";
+//    _collect = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 80, StatusBarHeight, 40, NavigationBarHeight) backgroundImage:nil iconImage:[UIImage imageNamed:imageName] highlightImage:nil inView:self.view];
+//    _collect.didClickBtnBlock = ^
+//    {
+//        
+//        NSMutableDictionary * parameter =[Parameter parameterWithSessicon];
+//        [parameter setObject: weakSelf.modal.datas.ID forKey: @"acid"];
+//        NSString *url =  weakSelf.modal.datas.iscollect?[NSString stringWithFormat:@"%@collection/del",HttpURL]:[NSString stringWithFormat:@"%@collection/add",HttpURL];
+////        NSLog(@"parameter =%@",parameter);
+//        [XLDataService postWithUrl:url param:parameter modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+//            
+////            NSLog(@"dataObj =%@",dataObj);
+//            if (dataObj) {
+//                
+//                if ([dataObj[@"rtcode"] intValue] ==1) {
+//                    NSString *succeed = weakSelf.modal.datas.iscollect?@"取消成功":@"收藏成功";
+//                    [[ToolManager shareInstance] showSuccessWithStatus:succeed];
+//
+//                    weakSelf.modal.datas.iscollect = !weakSelf.modal.datas.iscollect;
+//                    NSString *imageName = weakSelf.modal.datas.iscollect?@"icon_discover_collection":@"icon_widelyspreaddetail_collect";
+//                    [weakSelf.collect setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+//                }
+//                else
+//                {
+//                    [[ToolManager shareInstance] showInfoWithStatus:dataObj[@"rtmsg"]];
+//                }
+//            }
+//            else
+//            {
+//                [[ToolManager shareInstance] showInfoWithStatus];
+//            }
+//        }];
+//        
+    
         
-        NSMutableDictionary * parameter =[Parameter parameterWithSessicon];
-        [parameter setObject: weakSelf.modal.datas.ID forKey: @"acid"];
-        NSString *url =  weakSelf.modal.datas.iscollect?[NSString stringWithFormat:@"%@collection/del",HttpURL]:[NSString stringWithFormat:@"%@collection/add",HttpURL];
-//        NSLog(@"parameter =%@",parameter);
-        [XLDataService postWithUrl:url param:parameter modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-            
-//            NSLog(@"dataObj =%@",dataObj);
-            if (dataObj) {
-                
-                if ([dataObj[@"rtcode"] intValue] ==1) {
-                    NSString *succeed = weakSelf.modal.datas.iscollect?@"取消成功":@"收藏成功";
-                    [[ToolManager shareInstance] showSuccessWithStatus:succeed];
-
-                    weakSelf.modal.datas.iscollect = !weakSelf.modal.datas.iscollect;
-                    NSString *imageName = weakSelf.modal.datas.iscollect?@"icon_discover_collection":@"icon_widelyspreaddetail_collect";
-                    [weakSelf.collect setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
-                }
-                else
-                {
-                    [[ToolManager shareInstance] showInfoWithStatus:dataObj[@"rtmsg"]];
-                }
-            }
-            else
-            {
-                [[ToolManager shareInstance] showInfoWithStatus];
-            }
-        }];
-        
-        
-        
-    };
+//    };
 }
 #pragma mark
 #pragma mark - buttonAction -
