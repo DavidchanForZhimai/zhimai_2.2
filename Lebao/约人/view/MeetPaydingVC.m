@@ -260,13 +260,14 @@ typedef enum{
             
         }];
     }else if (_whatZfType==vipType)
-    { NSLog(@"self.param=%@",self.param);
-    
+    {
+
+        NSLog(@"self.param=%@",self.param);
         [XLDataService putWithUrl:vipOpenURL param:self.param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
             if(dataObj){
                 
                 MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
-//                NSLog(@"dataObj=%@",dataObj);
+                NSLog(@"dataObj=%@",dataObj);
                 if (model.rtcode==1) {
                     
                     if (_moneyType==weixinzhifuType) {

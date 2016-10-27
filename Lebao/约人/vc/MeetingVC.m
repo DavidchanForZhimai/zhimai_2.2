@@ -557,7 +557,7 @@
         //        NSLog(@"model=%@",model);
         NSMutableDictionary *param=[Parameter parameterWithSessicon];
         [param setObject:model.userid forKey:@"userid"];
-        [param setObject:customAlertView.money forKey:@"reward"];
+        [param setObject:[NSString stringWithFormat:@"%.2f",[customAlertView.money floatValue]] forKey:@"reward"];
         
         [param setObject:customAlertView.logField.text forKey:@"remark"];
         [param setObject:model.distance forKey:@"distance"];

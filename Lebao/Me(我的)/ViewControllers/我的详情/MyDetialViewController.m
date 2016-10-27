@@ -790,7 +790,7 @@
         MeetPaydingVC * payVC = [[MeetPaydingVC alloc]init];
         NSMutableDictionary *param=[Parameter parameterWithSessicon];
         [param setObject:_userID forKey:@"beinvited"];
-        [param setObject:customAlertView.money forKey:@"reward"];
+        [param setObject:[NSString stringWithFormat:@"%.2f",[customAlertView.money floatValue]] forKey:@"reward"];
         payVC.param=param;
         payVC.jineStr =[NSString stringWithFormat:@"%.2f",[customAlertView.money floatValue]];
         payVC.whatZfType=1;

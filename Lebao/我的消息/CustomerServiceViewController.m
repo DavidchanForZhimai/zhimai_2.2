@@ -72,7 +72,7 @@
         [[ToolManager shareInstance] showWithStatus];
     }
     [XLDataService postWithUrl:CustomerlistURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-       // NSLog(@"dataObj =%@",dataObj);
+        NSLog(@"dataObj =%@",dataObj);
         if (isRefresh) {
             [[ToolManager shareInstance]endHeaderWithRefreshing
              :_customerServiceView];

@@ -289,7 +289,7 @@
     vipModel *model=[_allArr firstObject];
     MeetPaydingVC * payVC = [[MeetPaydingVC alloc]init];
     NSMutableDictionary *param=[Parameter parameterWithSessicon];
-    [param setObject:@(model.prices[0].price) forKey:@"price"];
+    [param setObject:[NSString stringWithFormat:@"%d",model.prices[0].price] forKey:@"price"];
     payVC.param=param;
     payVC.jineStr =[NSString stringWithFormat:@"%d",model.prices[0].price];
     payVC.whatZfType=2;
