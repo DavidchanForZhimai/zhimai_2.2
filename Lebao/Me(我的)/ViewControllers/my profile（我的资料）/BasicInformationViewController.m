@@ -889,17 +889,23 @@
                 NSMutableArray *array;
                 NSArray *arrayc = [_modal.industry componentsSeparatedByString:@"_"];
                 if (arrayc.count>1) {
-                    if (_modal.service_labels[arrayc[0]]) {
-                        array= _modal.service_labels[arrayc[0]][@"label"];
-                        if (array.count>0) {
-                            for (NSDictionary *service_labels in array) {
-                                if (service_labels[@"labelname"]) {
-                                    [self.addProductsTags addObject:service_labels[@"labelname"]];
+                    if (_modal.service_labels.count>0) {
+                        for (NSDictionary *dic in _modal.service_labels) {
+                            
+                            if ([arrayc[0] isEqualToString:dic[@"sortkey"]]) {
+                                array=dic[@"label"];
+                                if (array.count>0) {
+                                    for (NSDictionary *service_labels in array) {
+                                        if (service_labels[@"labelname"]) {
+                                            [self.addProductsTags addObject:service_labels[@"labelname"]];
+                                        }
+                                        
+                                    }
+                                    
+                                    
                                 }
-                                
+
                             }
-                            
-                            
                         }
                     }
                 }
@@ -1299,17 +1305,23 @@
                             NSMutableArray *array;
                             NSArray *arrayc = [_modal.industry componentsSeparatedByString:@"_"];
                             if (arrayc.count>1) {
-                                if (_modal.service_labels[arrayc[0]]) {
-                                    array= _modal.service_labels[arrayc[0]][@"label"];
-                                    if (array.count>0) {
-                                        for (NSDictionary *service_labels in array) {
-                                            if (service_labels[@"labelname"]) {
-                                                [self.addProductsTags addObject:service_labels[@"labelname"]];
+                                if (_modal.service_labels.count>0) {
+                                    for (NSDictionary *dic in _modal.service_labels) {
+                                        
+                                        if ([arrayc[0] isEqualToString:dic[@"sortkey"]]) {
+                                            array=dic[@"label"];
+                                            if (array.count>0) {
+                                                for (NSDictionary *service_labels in array) {
+                                                    if (service_labels[@"labelname"]) {
+                                                        [self.addProductsTags addObject:service_labels[@"labelname"]];
+                                                    }
+                                                    
+                                                }
+                                                
+                                                
                                             }
                                             
                                         }
-                                        
-                                        
                                     }
                                 }
                             }
