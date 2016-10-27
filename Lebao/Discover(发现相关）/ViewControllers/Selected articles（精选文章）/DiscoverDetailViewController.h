@@ -23,6 +23,7 @@
 @property(nonatomic,strong) NSString *ID;
 @property(nonatomic,strong) NSString *acid;
 @property(nonatomic,strong) NSString *shareurl;
+@property(nonatomic,strong) NSString *share_url;
 @property(nonatomic,strong) NSString *title;
 @property(nonatomic,strong) NSString *readcount;
 @property(nonatomic,assign) BOOL iscollect;

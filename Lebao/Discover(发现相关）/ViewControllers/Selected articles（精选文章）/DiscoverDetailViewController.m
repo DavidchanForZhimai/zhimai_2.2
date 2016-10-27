@@ -86,7 +86,7 @@
     [XLDataService postWithUrl:ArticlelibURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         [[ToolManager shareInstance] dismiss];
         
-//        NSLog(@"data =%@",dataObj);
+        NSLog(@"data =%@",dataObj);
         weakSelf.webView = allocAndInitWithFrame(IMYWebView, CGRectZero);
         weakSelf.webView.backgroundColor = WhiteColor;
         weakSelf.webView.delegate = self;
@@ -204,49 +204,9 @@
     share.didClickBtnBlock = ^
     {
         
-        NSArray *arrays =[NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"显示自己微名片",@"title",@"1",@"item", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"是否参与排名",@"title",@"1",@"item", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"是否显示原作者",@"title",@"1",@"item", nil], nil];
-     
-//        NSLog(@"%@",_shareImage);
-        [[WetChatShareManager shareInstance] showLocalShareView:arrays otherParamer:[NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"acid",@"key",weakSelf.modal.datas.ID,@"value", nil], nil] title:_modal.datas.title desc:@"" image:_shareImage shareID:_modal.datas.ID isWxShareSucceedShouldNotice:NO isAuthen:YES]
-        ;
+        [[WetChatShareManager shareInstance] dynamicShareTo:_modal.datas.title desc:_modal.datas.title image:_shareImage shareurl:_modal.datas.share_url];
     };
     
-//     NSString *imageName = weakSelf.modal.datas.iscollect?@"icon_discover_collection":@"icon_widelyspreaddetail_collect";
-//    _collect = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 80, StatusBarHeight, 40, NavigationBarHeight) backgroundImage:nil iconImage:[UIImage imageNamed:imageName] highlightImage:nil inView:self.view];
-//    _collect.didClickBtnBlock = ^
-//    {
-//        
-//        NSMutableDictionary * parameter =[Parameter parameterWithSessicon];
-//        [parameter setObject: weakSelf.modal.datas.ID forKey: @"acid"];
-//        NSString *url =  weakSelf.modal.datas.iscollect?[NSString stringWithFormat:@"%@collection/del",HttpURL]:[NSString stringWithFormat:@"%@collection/add",HttpURL];
-////        NSLog(@"parameter =%@",parameter);
-//        [XLDataService postWithUrl:url param:parameter modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-//            
-////            NSLog(@"dataObj =%@",dataObj);
-//            if (dataObj) {
-//                
-//                if ([dataObj[@"rtcode"] intValue] ==1) {
-//                    NSString *succeed = weakSelf.modal.datas.iscollect?@"取消成功":@"收藏成功";
-//                    [[ToolManager shareInstance] showSuccessWithStatus:succeed];
-//
-//                    weakSelf.modal.datas.iscollect = !weakSelf.modal.datas.iscollect;
-//                    NSString *imageName = weakSelf.modal.datas.iscollect?@"icon_discover_collection":@"icon_widelyspreaddetail_collect";
-//                    [weakSelf.collect setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
-//                }
-//                else
-//                {
-//                    [[ToolManager shareInstance] showInfoWithStatus:dataObj[@"rtmsg"]];
-//                }
-//            }
-//            else
-//            {
-//                [[ToolManager shareInstance] showInfoWithStatus];
-//            }
-//        }];
-//        
-    
-        
-//    };
 }
 #pragma mark
 #pragma mark - buttonAction -
