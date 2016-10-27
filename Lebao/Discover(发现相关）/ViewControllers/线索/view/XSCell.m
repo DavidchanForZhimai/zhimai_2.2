@@ -78,14 +78,14 @@
     _timeLab.textAlignment = NSTextAlignmentRight;
     [customV addSubview:_timeLab];
     
-    _lookLab = [[UILabel alloc]initWithFrame:CGRectMake(customV.frame.size.width-145, 36.5, 60, 20)];
+    _lookLab = [[UILabel alloc]initWithFrame:CGRectMake(customV.frame.size.width-145,_positionLab.y, 60, 12)];
     _lookLab.backgroundColor = [UIColor clearColor];
     _lookLab.font = [UIFont systemFontOfSize:12];
     _lookLab.textAlignment = NSTextAlignmentCenter;
     _lookLab.textColor = [UIColor colorWithWhite:0.514 alpha:1.000];
     [customV addSubview:_lookLab];
     
-    _commentLab = [[UILabel alloc]initWithFrame:CGRectMake(customV.frame.size.width-75, 36.5, 60, 20)];
+    _commentLab = [[UILabel alloc]initWithFrame:CGRectMake(customV.frame.size.width-75,_positionLab.y, 60, 12)];
     _commentLab.backgroundColor = [UIColor clearColor];
     _commentLab.textAlignment = NSTextAlignmentRight;
     _commentLab.font = [UIFont systemFontOfSize:12];

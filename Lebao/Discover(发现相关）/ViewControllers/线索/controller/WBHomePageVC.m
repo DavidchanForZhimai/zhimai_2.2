@@ -237,7 +237,7 @@
         cell.positionLab.text =str;
         
         if (cell.positionLab.text.length==0) {
-            cell.positionLab.frame=CGRectMake(cell.positionLab.x, cell.positionLab.y, 0, 0);
+            cell.positionLab.frame=CGRectMake(cell.positionLab.x, cell.positionLab.y-8, 0, 0);
         }
         cell.addressLab.frame=CGRectMake(cell.userNameLab.x,CGRectGetMaxY(cell.positionLab.frame)+8,APPWIDTH-cell.userNameLab.frame.origin.x, 12);
         
@@ -273,8 +273,9 @@
             cell.timeLab.text = [self getDateStringWithDate:data DateFormat:@"MM-dd HH:mm"];
         }
         cell.lookLab.text = [NSString stringWithFormat:@"查看:%@",[_xsJsonArr[indexPath.row] objectForKey:@"readcount"]];
-        cell.commentLab.text = [NSString stringWithFormat:@"评论:%@",[_xsJsonArr[indexPath.row] objectForKey:@"commentnum"]];
-        
+        cell.lookLab.frame = CGRectMake(cell.lookLab.x,CGRectGetMaxY(cell.userNameLab.frame)+8, 60, 12);
+               cell.commentLab.text = [NSString stringWithFormat:@"评论:%@",[_xsJsonArr[indexPath.row] objectForKey:@"commentnum"]];
+        cell.commentLab.frame =CGRectMake(cell.commentLab.x,CGRectGetMaxY(cell.userNameLab.frame)+8, 60, 12);
         if ([[_xsJsonArr[indexPath.row]objectForKey:@"industry"] isEqualToString:BAOXIAN]) {
             [cell.hanyeBtn setTitle:@"保险" forState:UIControlStateNormal];
         }else if ([[_xsJsonArr[indexPath.row]objectForKey:@"industry"] isEqualToString:JINRONG])

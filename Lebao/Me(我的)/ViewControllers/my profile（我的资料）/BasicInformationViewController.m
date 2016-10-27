@@ -1420,7 +1420,19 @@
 {
     
     if (isShouldShow) {
+        
+        if (!_modal) {
+            
+            [[ToolManager shareInstance] showAlertMessage:@"提交失败"];
+            return;
+        }
         [[ToolManager shareInstance] showWithStatus:@"修改中.."];
+    }
+    else
+    {
+        if (!_modal) {
+            return;
+        }
     }
     
     NSMutableArray *mylabels = [NSMutableArray new];
