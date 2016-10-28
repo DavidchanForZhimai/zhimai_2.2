@@ -116,7 +116,9 @@
     UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake((APPWIDTH - image.size.width)/2.0, 100, image.size.width, image.size.height)];
     imageView.image = image;
     [_authenticationHomeView addSubview:imageView];
-    _authenticationHomeView.contentSize=CGSizeMake(0, CGRectGetMaxY(imageView.frame)+10);
+    
+    [UILabel createLabelWithFrame:CGRectMake(0, CGRectGetMaxY(imageView.frame)+ 10, APPWIDTH, 30) text:@"(如无名片，也可以上传身份证，工牌以及其他证明材料)" fontSize:12 textColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter inView:_authenticationHomeView];
+    _authenticationHomeView.contentSize=CGSizeMake(0, CGRectGetMaxY(imageView.frame)+50);
     return  _authenticationHomeView;
 }
 - (UIView *)authenView
@@ -124,7 +126,7 @@
     
     if (!_authenView) {
          UIImage  *image = [UIImage imageNamed:@"icon_me_mingpian"];
-        _authenView  = [[UIView alloc]initWithFrame:CGRectMake(0, image.size.height + 130, APPWIDTH, 120)];
+        _authenView  = [[UIView alloc]initWithFrame:CGRectMake(0, image.size.height + 160, APPWIDTH, 120)];
         _authenView.backgroundColor = WhiteColor;
         
         [_authenView addSubview:self.authenImageView];
