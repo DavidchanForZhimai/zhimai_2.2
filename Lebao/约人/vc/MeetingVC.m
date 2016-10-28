@@ -322,9 +322,9 @@
         NSMutableDictionary *param = [Parameter parameterWithSessicon];
         [param setObject:@"append" forKey:@"type"];
         [XLDataService putWithUrl:meetCheckedURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-            //            NSLog(@"param====%@",param);
+//                        NSLog(@"param====%@",param);
             if (dataObj) {
-                //                NSLog(@"meetObj====%@",dataObj);
+//                                NSLog(@"meetObj====%@",dataObj);
                 MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
                 if (modal.rtcode ==1) {
                     [[LoCationManager shareInstance] creatLocationManager];
@@ -476,7 +476,7 @@
     NSMutableDictionary *param = [Parameter parameterWithSessicon];
     [param setObject:@"invited" forKey:@"type"];
     [XLDataService putWithUrl:meetCheckedURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        //                    NSLog(@"param====%@",param);
+                            NSLog(@"dataObj====%@",dataObj);
         if (dataObj) {
             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
             if (modal.rtcode ==1) {

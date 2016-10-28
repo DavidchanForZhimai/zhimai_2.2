@@ -17,9 +17,10 @@
 #import "AddConnectionView.h"
 #import "CoreArchive.h"
 #import "ViewController.h"
+#import "AuthenticationHomeViewController.h"
 @interface CanmeetTabVC ()<UITableViewDelegate,UITableViewDataSource,MeettingTableViewDelegate,UIAlertViewDelegate,EjectViewDelegate,AddConnectionViewDelegate>
 {
-    AddConnectionView *alertView;
+    AddConnectionView *connectionView;
     
 }
 @property(nonatomic,copy)NSString *keyword;
@@ -297,14 +298,40 @@
 #pragma mark - MeettingTableViewCellDelegate 添加人脉按钮地点击
 - (void)tableViewCellDidSeleteMessageBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath
 {
+    [[ToolManager shareInstance] showWithStatus];
+    NSMutableDictionary *param=[Parameter parameterWithSessicon];
+    [param setObject:@"connection_add" forKey:@"type"];
+    NSLog(@"param===%@",param);
+    [XLDataService putWithUrl:connetionCheckedURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+        if(dataObj){
+            [[ToolManager shareInstance] dismiss];
+                            NSLog(@"dataobj===%@",dataObj);
+            if ([dataObj[@"rtcode"] intValue]==1) {
+    
     CGFloat dilX = 25;
     CGFloat dilH = 250;
-    alertView = [[AddConnectionView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.view];
-    alertView.center = CGPointMake(APPWIDTH/2, APPHEIGHT/2-30);
-    alertView.delegate = self;
-    alertView.titleStr = @"提示";
-    alertView.indexth=indexPath;
-    alertView.title2Str=@"打赏让加人脉更顺畅!";
+    connectionView = [[AddConnectionView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.view];
+    connectionView.center = CGPointMake(APPWIDTH/2, APPHEIGHT/2-30);
+    connectionView.delegate = self;
+    connectionView.titleStr = @"提示";
+    connectionView.indexth=indexPath;
+    connectionView.title2Str=@"打赏让加人脉更顺畅!";
+            }
+            else if ([dataObj[@"rtcode"] intValue]==4001){
+                [[ToolManager shareInstance]dismiss];
+                UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"去身份认证吗?" message:@"身份认证后才能添加人脉哦" delegate:self cancelButtonTitle:@"不去" otherButtonTitles:@"走起", nil];
+                alertView.tag=22221;
+                alertView.delegate=self;
+                [alertView show];
+                
+            }
+        }
+        else
+        {
+            [[ToolManager shareInstance] showInfoWithStatus];
+            
+        }
+    }];
 }
 
 #pragma mark - YXCustomAlertViewDelegate
@@ -361,7 +388,15 @@
         
     }
 }
-
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (alertView.tag==22221) {
+        if (buttonIndex==0) {
+            
+        }else if(buttonIndex==1){
+            PushView(self, allocAndInit(AuthenticationHomeViewController));
+        }
+    }
+}
 -(void)tableViewCellDidSeleteHeadImg:(LWImageStorage *)imageStoragen layout:(MeetingCellLayout *)layout{
     MyDetialViewController *myDetialViewCT=allocAndInit(MyDetialViewController);
     MeetingData *data=layout.model;

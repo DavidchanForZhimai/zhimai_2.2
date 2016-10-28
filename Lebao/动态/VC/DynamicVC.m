@@ -24,11 +24,13 @@
 #import "XianSuoDetailVC.h"
 #import "MyXSDetailVC.h"
 #import "MyLQDetailVC.h"
+#import "XLDataService.h"
+#import "AuthenticationHomeViewController.h"
 #define kToolBarH 44
 #define kTextFieldH 30
 #define xsTabTag  110
 #define jjrTabTag 120
-@interface DynamicVC ()<UITableViewDelegate,UITableViewDataSource,TableViewCellDelegate,UIScrollViewDelegate,UITextFieldDelegate>
+@interface DynamicVC ()<UITableViewDelegate,UITableViewDataSource,TableViewCellDelegate,UIScrollViewDelegate,UITextFieldDelegate,UIAlertViewDelegate>
 {
 
     UIButton * jjrBtn;
@@ -259,16 +261,43 @@
     BaseButton *topBtn= [[BaseButton alloc]initWithFrame:frame(10, 10, SCREEN_WIDTH-20, 35) setTitle:@"分享你的新鲜事" titleSize:26*SpacedFonts titleColor:LightBlackTitleColor backgroundImage:nil iconImage:image highlightImage:image setTitleOrgin:CGPointMake((35 -26*SpacedFonts)/2.0 , 10 -image.size.width) setImageOrgin:CGPointMake((35 -image.size.height)/2.0 , SCREEN_WIDTH -image.size.width - 30) inView:topV];
     topBtn.shouldAnmial = NO;
     topBtn.didClickBtnBlock = ^
-    
-    {   PublishDynamicVC *publishDynamicVC  =  allocAndInit(PublishDynamicVC);
-        publishDynamicVC.faBuSucceedBlock = ^
-        {
-            
-            jjrpageNumb = 1;
-            [self getjjrJsonIsRefresh:NO andIsLoadMoreData:NO andShouldClearData:YES];
-        };
-        PushView(self, publishDynamicVC);
-    };
+    {
+        [[ToolManager shareInstance] showWithStatus];
+        NSMutableDictionary *param=[Parameter parameterWithSessicon];
+        [param setObject:@"dynamic_add" forKey:@"type"];
+        NSLog(@"param===%@",param);
+        [XLDataService putWithUrl:dynamicCheckedURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+            if(dataObj){
+                [[ToolManager shareInstance] dismiss];
+                NSLog(@"dataobj===%@",dataObj);
+                if ([dataObj[@"rtcode"] intValue]==1) {
+                    
+                    PublishDynamicVC *publishDynamicVC  =  allocAndInit(PublishDynamicVC);
+                    publishDynamicVC.faBuSucceedBlock = ^
+                    {
+                        
+                        jjrpageNumb = 1;
+                        [self getjjrJsonIsRefresh:NO andIsLoadMoreData:NO andShouldClearData:YES];
+                    };
+                    PushView(self, publishDynamicVC);
+                }
+                else if ([dataObj[@"rtcode"] intValue]==4001){
+                    [[ToolManager shareInstance]dismiss];
+                    UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"去身份认证吗?" message:@"身份认证后才能发布动态哦" delegate:self cancelButtonTitle:@"不去" otherButtonTitles:@"走起", nil];
+                    alertView.tag=22221;
+                    alertView.delegate=self;
+                    [alertView show];
+                    
+                }
+            }
+            else
+            {
+                [[ToolManager shareInstance] showInfoWithStatus];
+                
+            }
+        }];
+
+            };
     topBtn.backgroundColor  = [UIColor whiteColor];
     
     return topV;
@@ -786,6 +815,16 @@
     detail.imageurl = layout.statusModel.imgurl;
     PushView(self, detail);
 }
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (alertView.tag==22221) {
+        if (buttonIndex==0) {
+            
+        }else if(buttonIndex==1){
+            PushView(self, allocAndInit(AuthenticationHomeViewController));
+        }
+    }
+}
+
 #pragma mark
 #pragma mark 点击进入线索
 - (void)tableViewCell:(TableViewCell *)cell didClickedLikeButtonWithClueID:(NSString *)clueID atIndexPath:(NSIndexPath *)indexPath

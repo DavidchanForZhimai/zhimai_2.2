@@ -21,6 +21,7 @@
 #import "GJGCChatFriendViewController.h"
 #import "LWImageBrowser.h"
 #import "EvaluateVC.h"
+#import "AuthenticationHomeViewController.h"
 #define TagHeight 22
 #define MininumTagWidth (APPWIDTH - 120)/5.0
 #define MaxinumTagWidth (APPWIDTH - 20)
@@ -135,7 +136,7 @@
 }
 @end
 
-@interface MyDetialViewController ()<UITableViewDelegate,UITableViewDataSource,DWTagsViewDelegate,AddConnectionViewDelegate>
+@interface MyDetialViewController ()<UITableViewDelegate,UITableViewDataSource,DWTagsViewDelegate,AddConnectionViewDelegate,UIAlertViewDelegate>
 
 @property(nonatomic,strong)UITableView *myDetailTV;
 @property(nonatomic,strong)LWAsyncDisplayView *userView;
@@ -166,7 +167,7 @@
 {
     HeaderModel *headerModel;
     UIButton *addConnectionsBtn;
-    AddConnectionView *alertV;
+    AddConnectionView *connectionView;
     UITapGestureRecognizer *recognizerTap;
 }
 -(void)viewWillAppear:(BOOL)animated
@@ -732,13 +733,38 @@
 -(void)addConnectionsBtnClick:(UIButton *)sender
 {
     if (sender.tag==2222) {
-        CGFloat dilX = 25;
-        CGFloat dilH = 250;
-        alertV = [[AddConnectionView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.view];
-        alertV.center = CGPointMake(APPWIDTH/2, APPHEIGHT/2-30);
-        alertV.delegate = self;
-        alertV.titleStr = @"提示";
-        alertV.title2Str=@"打赏让加人脉更顺畅!";
+        [[ToolManager shareInstance] showWithStatus];
+        NSMutableDictionary *param=[Parameter parameterWithSessicon];
+        [param setObject:@"connection_add" forKey:@"type"];
+        [XLDataService putWithUrl:connetionCheckedURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+            if(dataObj){
+                [[ToolManager shareInstance] dismiss];
+                if ([dataObj[@"rtcode"] intValue]==1) {
+                    
+                    CGFloat dilX = 25;
+                    CGFloat dilH = 250;
+                    connectionView = [[AddConnectionView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.view];
+                    connectionView.center = CGPointMake(APPWIDTH/2, APPHEIGHT/2-30);
+                    connectionView.delegate = self;
+                    connectionView.titleStr = @"提示";
+                    connectionView.title2Str=@"打赏让加人脉更顺畅!";
+                }
+                else if ([dataObj[@"rtcode"] intValue]==4001){
+                    [[ToolManager shareInstance]dismiss];
+                    UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"去身份认证吗?" message:@"身份认证后才能添加人脉哦" delegate:self cancelButtonTitle:@"不去" otherButtonTitles:@"走起", nil];
+                    alertView.tag=333;
+                    alertView.delegate=self;
+                    [alertView show];
+                    
+                }
+            }
+            else
+            {
+                [[ToolManager shareInstance] showInfoWithStatus];
+                
+            }
+        }];
+
 
     }else if (sender.tag==2223) {
     }else if (sender.tag==2224) {
@@ -770,7 +796,7 @@
                     UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"添加人脉请求已发出,请耐心等待" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
                      [[NSNotificationCenter defaultCenter]postNotificationName:@"KReflashCanMeet" object:@{@"userid":headerModel.Id,@"relation":@"1",@"reward":@"0"}];
                     [successAlertV show];
-                    [alertV.window removeGestureRecognizer:recognizerTap];
+                    [connectionView.window removeGestureRecognizer:recognizerTap];
                 }
                 else
                 {
@@ -796,7 +822,7 @@
         payVC.whatZfType=1;
         [self.navigationController pushViewController:payVC animated:YES];
         [customAlertView dissMiss];
-        [alertV.window removeGestureRecognizer:recognizerTap];
+        [connectionView.window removeGestureRecognizer:recognizerTap];
         }else{
             [[ToolManager shareInstance] showAlertMessage:@"金额格式不正确"];
         }
@@ -887,6 +913,15 @@
     
     
     return btn;
+}
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (alertView.tag==333) {
+        if (buttonIndex==0) {
+            
+        }else if(buttonIndex==1){
+            PushView(self, allocAndInit(AuthenticationHomeViewController));
+        }
+    }
 }
 -(void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
