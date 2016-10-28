@@ -68,9 +68,9 @@
         LWTextStorage* industryTextStorage = [[LWTextStorage alloc] init];
         
         if (model.position.length>0) {
-            if (model.address.length>10) {
-                industryTextStorage.text=[model.address substringToIndex:10];
-                industryTextStorage.text=[industryTextStorage.text stringByAppendingString:@"..."];
+            if (model.position.length>10) {
+                industryTextStorage.text=[model.position substringToIndex:10];
+                industryTextStorage.text=[industryTextStorage.text stringByAppendingString:@"...  "];
             }else{
                 industryTextStorage.text =[NSString stringWithFormat:@"%@  ",model.position];
             }
