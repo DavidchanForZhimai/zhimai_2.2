@@ -9,7 +9,12 @@
 #import "RegistNextViewController.h"
 #import "RegistFinishViewController.h"
 #import "XLDataService.h"
+#import "CoreArchive.h"
+#import "NSString+Password.h"
 #define sendtypeRegister  @"register"//注册
+#define rememberUserName  @"rememberUserName"
+
+#define RegisterURL [NSString stringWithFormat:@"%@site/register",HttpURL]
 #define SendcaptchaURL [NSString stringWithFormat:@"%@site/sendcaptcha",HttpURL]
 @interface RegistNextViewController ()
 
@@ -55,13 +60,26 @@ typedef enum {
             
             return;
         }
-        
-        RegistFinishViewController *finish = allocAndInit(RegistFinishViewController);
-        finish.invCode = weakSelf.invCode;
-        finish.verCode = _verificationCode.text;
-        finish.password = weakSelf.password;
-        finish.phoneNum = weakSelf.phoneNum;
-        [weakSelf.navigationController pushViewController:finish animated:NO];
+        [[ToolManager shareInstance] showWithStatus:@"注册提交..."];
+        NSMutableDictionary * sendcaptchaParam = allocAndInit(NSMutableDictionary);
+        [sendcaptchaParam setObject:_phoneNum forKey:KuserName];
+        [sendcaptchaParam setObject:[_password md5]  forKey:passWord];
+        [sendcaptchaParam setObject:_verificationCode.text forKey:captchaCode];
+        if (_invCode.length>0) {
+            [sendcaptchaParam setObject:_invCode forKey:@"recommend"];
+        }
+        //        NSLog(@"sendcaptchaParam =%@",sendcaptchaParam);
+        [XLDataService postWithUrl:RegisterURL param:sendcaptchaParam modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+            DDLog(@"dataObj =%@",dataObj);
+            
+            if (error) {
+                
+                [[ToolManager shareInstance] showInfoWithStatus];
+                
+            }
+            [weakSelf dealWithCode:dataObj];
+        }];
+
         
     };
 
@@ -69,7 +87,42 @@ typedef enum {
 
     [self mainView];
 }
+- (void)dealWithCode:(id)dataObj
+{
+    if (dataObj) {
+        NSDictionary *msg = (NSDictionary *)dataObj;
+        
+        switch ([msg[@"rtcode"] integerValue]) {
+            case 1:
+            {
+                [CoreArchive setStr:_phoneNum key:KuserName];
+                [CoreArchive setStr:[_password md5] key:passWord];
+                [CoreArchive setStr:_phoneNum key:rememberUserName];
+                
+                [[ToolManager shareInstance] showSuccessWithStatus:@"注册成功！"];
+                
 
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    RegistFinishViewController *finish = allocAndInit(RegistFinishViewController);
+                    finish.invCode = _invCode;
+                    finish.verCode = _verificationCode.text;
+                    finish.password = _password;
+                    finish.phoneNum = _phoneNum;
+                    [self.navigationController pushViewController:finish animated:NO];
+                    
+                });
+            }
+                
+                break;
+            default:
+                
+                [[ToolManager shareInstance] showInfoWithStatus:msg[@"rtmsg"]];
+                
+                break;
+        }
+    }
+    
+}
 #pragma mark - mainView
 -(void)mainView{
     
@@ -199,6 +252,7 @@ typedef enum {
     }
     
 }
+
 #pragma mark
 #pragma mark - Time out
 - (void)timeOut
