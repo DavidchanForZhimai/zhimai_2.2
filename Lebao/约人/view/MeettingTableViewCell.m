@@ -188,12 +188,7 @@
         [_delegate tableViewCellDidSeleteAgreeAndRefuseBtn:sender layout:_cellLayout];
     }
 }
-//- (void)agreeBtnClick:(UIButton *)sender
-//{
-//    if ([_delegate conformsToProtocol:@protocol(MeettingTableViewDelegate)]&&[_delegate respondsToSelector:@selector(tableViewCellDidSeleteMeetingBtn: andIndexPath:)]) {
-//        [_delegate tableViewCellDidSeleteAgreeBtn:sender andIndexPath:_indexPath];
-//    }
-//}
+
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code

@@ -56,10 +56,8 @@
         nameTextStorage.text = [NSString stringWithFormat:@"%@ %@ %@",model.realname,authen,vip];
         nameTextStorage.font = Size(28.0);
         nameTextStorage.frame = CGRectMake(_avatarStorage.right + 10, 12.0, SCREEN_WIDTH - (_avatarStorage.right), CGFLOAT_MAX);
-        [nameTextStorage lw_addLinkWithData:[NSString stringWithFormat:@"%@",model.userid]
-                                      range:NSMakeRange(0,model.realname.length)
-                                  linkColor:BlackTitleColor
-                             highLightColor:RGB(0, 0, 0, 0.15)];
+        
+        [nameTextStorage lw_addLinkWithData:[NSString stringWithFormat:@"%@",model.userid] range:NSMakeRange(0,model.realname.length) linkColor:BlackTitleColor highLightColor:RGB(0, 0, 0, 0.15)];
         
         [LWTextParser parseEmojiWithTextStorage:nameTextStorage];
         
@@ -74,7 +72,7 @@
             }else{
                 industryTextStorage.text =[NSString stringWithFormat:@"%@  ",model.position];
             }
-
+            
         }
         else{
             industryTextStorage.text=@"";
@@ -124,7 +122,7 @@
         LWTextStorage *meetReasonTextStorage=[[LWTextStorage alloc]init];
         meetReasonTextStorage.text=@"约见理由";
         meetReasonTextStorage.font=Size(26.0);
-        meetReasonTextStorage.frame=CGRectMake(nameTextStorage.left, _line1Rect.origin.y+10, 52, CGFLOAT_MAX);
+        meetReasonTextStorage.frame=CGRectMake(nameTextStorage.left, _line1Rect.origin.y+10, [meetReasonTextStorage.text sizeWithFont:[UIFont systemFontOfSize:13] maxSize:CGSizeMake(APPWIDTH,13)].width+5, CGFLOAT_MAX);
         meetReasonTextStorage.textColor = [UIColor colorWithRed:0.522 green:0.525 blue:0.529 alpha:1.000];
         
         float meetReasonStorageheight = meetReasonTextStorage.bottom;
@@ -134,7 +132,7 @@
             LWTextStorage *meetReason=[[LWTextStorage alloc]init];
             meetReason.text=model.remark;
             meetReason.font=Size(26.0);
-            meetReason.frame=CGRectMake(meetReasonTextStorage.right+10, _line1Rect.origin.y+10, 52, CGFLOAT_MAX);
+            meetReason.frame=CGRectMake(meetReasonTextStorage.right+10, _line1Rect.origin.y+10, [meetReason.text sizeWithFont:[UIFont systemFontOfSize:13] maxSize:CGSizeMake(APPWIDTH,13)].width+5, CGFLOAT_MAX);
             meetReason.textColor = [UIColor colorWithRed:0.522 green:0.525 blue:0.529 alpha:1.000];
             meetReasonStorageheight = meetReason.bottom;
             [self addStorage:meetReason];
@@ -145,7 +143,7 @@
         LWTextStorage *MeetGiveTextStorage=[[LWTextStorage alloc]init];
         MeetGiveTextStorage.text=@"约见打赏";
         MeetGiveTextStorage.font=Size(26.0);
-        MeetGiveTextStorage.frame=CGRectMake(nameTextStorage.left, meetReasonStorageheight + 10, 52, CGFLOAT_MAX);
+        MeetGiveTextStorage.frame=CGRectMake(nameTextStorage.left, meetReasonStorageheight + 10, [MeetGiveTextStorage.text sizeWithFont:[UIFont systemFontOfSize:13] maxSize:CGSizeMake(APPWIDTH,13)].width+5, CGFLOAT_MAX);
         MeetGiveTextStorage.textColor = [UIColor colorWithRed:0.522 green:0.525 blue:0.529 alpha:1.000];
         float MeetGiveTextStorageheight = MeetGiveTextStorage.bottom;
         if (model.reward&&![model.reward isEqualToString:@""]) {

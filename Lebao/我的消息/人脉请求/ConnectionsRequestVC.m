@@ -241,10 +241,10 @@
     MeetingCellLayout *layout1=self.nearByManArr[clickRow.row];
     telMessData=layout1.model;
     [param setObject:telMessData.meetId forKey:@"id"];
-    NSLog(@"param====%@",param);
+//    NSLog(@"param====%@",param);
     [[ToolManager shareInstance] showWithStatus];
     [XLDataService putWithUrl:conductConnectionsURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        NSLog(@"conductObj=%@",dataObj);
+//        NSLog(@"conductObj=%@",dataObj);
         if (dataObj) {
             MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
             

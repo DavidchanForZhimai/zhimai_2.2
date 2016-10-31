@@ -133,7 +133,7 @@
         if (![model.service isEqualToString:@""]&&model.service) {
         productTextStorage.text=@"产品服务";
         productTextStorage.font=Size(26.0);
-        productTextStorage.frame=CGRectMake(_avatarStorage.left, _line1Rect.origin.y+10, 52, CGFLOAT_MAX);
+        productTextStorage.frame=CGRectMake(_avatarStorage.left, _line1Rect.origin.y+10, [productTextStorage.text sizeWithFont:[UIFont systemFontOfSize:13] maxSize:CGSizeMake(APPWIDTH,13)].width+5, CGFLOAT_MAX);
         productLbStorageheight = productTextStorage.bottom;
         productTextStorage.textColor = [UIColor colorWithRed:0.522 green:0.525 blue:0.529 alpha:1.000];
         
@@ -189,21 +189,17 @@
             }
             [self addStorage:productTextStorage];
         }else{
-            productTextStorage.frame=CGRectMake(_avatarStorage.left, _line1Rect.origin.y, 52, 0);
+            productTextStorage.frame=CGRectMake(_avatarStorage.left, _line1Rect.origin.y, [productTextStorage.text sizeWithFont:[UIFont systemFontOfSize:13] maxSize:CGSizeMake(APPWIDTH,13)].width+5, 0);
             productLbStorageheight = productTextStorage.bottom;
         }
-       
-        
-        
-        
-        
+ 
         
         LWTextStorage *resourceTextStorage=[[LWTextStorage alloc]init];
         float resourceTextStorageheight = resourceTextStorage.bottom;
         if (![model.resource isEqualToString:@""]&&model.resource) {
         resourceTextStorage.text=@"人脉资源";
         resourceTextStorage.font=Size(26.0);
-        resourceTextStorage.frame=CGRectMake(_avatarStorage.left, productLbStorageheight + 10, 52, CGFLOAT_MAX);
+        resourceTextStorage.frame=CGRectMake(_avatarStorage.left, productLbStorageheight + 10, [resourceTextStorage.text sizeWithFont:[UIFont systemFontOfSize:13] maxSize:CGSizeMake(APPWIDTH,13)].width+5, CGFLOAT_MAX);
         resourceTextStorage.textColor = [UIColor colorWithRed:0.522 green:0.525 blue:0.529 alpha:1.000];
         
         
@@ -251,8 +247,6 @@
                         resourceTextStorageheight = resourceLbStorage.bottom;
                         
                     }
-
-                    
                     wid1 =(img.size.width + expectSize.width+10);
                 }
                 [resourceStr appendFormat:@"[biaoqian]  %@   ",resourceArr[i]];
@@ -261,10 +255,20 @@
 
         }else
         {
-            resourceTextStorage.frame=CGRectMake(_avatarStorage.left, productLbStorageheight, 52, 0);
+            resourceTextStorage.frame=CGRectMake(_avatarStorage.left, productLbStorageheight, [resourceTextStorage.text sizeWithFont:[UIFont systemFontOfSize:13] maxSize:CGSizeMake(APPWIDTH,13)].width+5, 0);
             resourceTextStorageheight = resourceTextStorage.bottom;
         }
         
+        if([model.reward intValue]>0){
+            LWTextStorage *rewardStorage=[[LWTextStorage alloc]init];
+                rewardStorage.text=[NSString stringWithFormat:@"人脉打赏    %@元",model.reward];
+                rewardStorage.font=Size(26.0);
+                rewardStorage.frame=CGRectMake(_avatarStorage.left, resourceTextStorageheight+10, [rewardStorage.text sizeWithFont:[UIFont systemFontOfSize:13] maxSize:CGSizeMake(APPWIDTH,13)].width+5, CGFLOAT_MAX);
+                resourceTextStorageheight = rewardStorage.bottom;
+                rewardStorage.textColor = [UIColor colorWithRed:0.522 green:0.525 blue:0.529 alpha:1.000];
+                [self addStorage:rewardStorage];
+
+        }
         
                 if (isTime) {
             _line2Rect  = CGRectMake(0, resourceTextStorageheight + 10, APPWIDTH, 0.5);
