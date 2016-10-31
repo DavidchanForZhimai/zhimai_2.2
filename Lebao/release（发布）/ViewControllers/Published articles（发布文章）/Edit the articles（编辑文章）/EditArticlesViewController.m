@@ -14,7 +14,6 @@
 #import "WetChatShareManager.h"
 #import "UpLoadImageManager.h"
 #import "IMYWebView.h"
-#import "SelectedPruductViewController.h"
 //我的内容
 #define MyreleaseURL [NSString stringWithFormat:@"%@release/save",HttpURL]
 //发布文章
@@ -26,10 +25,6 @@
 @interface EditArticlesViewController ()<IMYWebViewDelegate,UITextFieldDelegate>
 @property(nonatomic,strong)IMYWebView  *contentTextView;
 @property(nonatomic,strong)BaseButton  *coverImage;
-@property(nonatomic,strong)BaseButton *supplementaryProductsView;
-@property(nonatomic,strong)BaseButton *supplementaryProductsViewDele;
-@property(nonatomic,strong)UIImageView *supplementaryProductsImage;
-@property(nonatomic,strong)UILabel *supplementaryProductsLabel;
 @property(nonatomic,strong)UIScrollView *mainScrollView;
 @end
 typedef NS_ENUM(int,ButtonActionTag) {
@@ -37,14 +32,12 @@ typedef NS_ENUM(int,ButtonActionTag) {
     ButtonActionTagImage=2,
     ButtonActionTagAdd ,
     ButtonActionTagSave ,
-//    ButtonActionTagShare,
+
     
 };
 typedef NS_ENUM(int,SwitchActionTag) {
     
     SwitchActionTagBusinessCard =2,
-    SwitchActionTagRanking ,
-//    SwitchActionTagShare,
     SwitchActionTagCollect,
      SwitchActionTagRed,
 };
@@ -65,20 +58,15 @@ typedef NS_ENUM(int,SwitchActionTag) {
     UIImageView *_releaseImage;
     
     UISwitch *_businessCardSwitch;
-    UISwitch *_rankingSwitch;
-//    UISwitch *_shareSwitch;
     UISwitch *_collectSwitch;
     UISwitch *_redSwitch;
     
     UILabel *_businessCardLb;
-    UILabel *_rankingLb;
-//    UILabel *_shareLb;
+
     UILabel *_collectLb;
     UILabel *_redLb;
     UIView *_redView;
     
-   
-    BaseButton *supplementaryProducts;
     
     UIColor *fontColor;
     
@@ -119,7 +107,7 @@ typedef NS_ENUM(int,SwitchActionTag) {
     else
     {
         [self mainView];
-        [self bottomView];
+        [self bottomViews];
     }
     
 }
@@ -255,33 +243,10 @@ typedef NS_ENUM(int,SwitchActionTag) {
     [_businessCardSwitch addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
     [_businessCard addSubview:_businessCardSwitch];
     
-    // Participate in ranking
-    UIView *_ranking =allocAndInitWithFrame(UIView , frame(0, CGRectGetMaxY(_businessCard.frame)+0.5, APPWIDTH, cellHeight));
-    _ranking.backgroundColor =[UIColor whiteColor];
-    [_mainScrollView addSubview:_ranking];
-    
-    UIColor *  _rankingColor;
-    if (_data.isRanking) {
-        _rankingColor = BlackTitleColor;
-    }
-    else{
-        _rankingColor = LightBlackTitleColor;
-    }
-    _rankingLb = [UILabel createLabelWithFrame:frame(10, 0, 200, 35) text:@"参与排名" fontSize:28*SpacedFonts textColor:_rankingColor textAlignment:NSTextAlignmentLeft inView:_ranking];
-    
-    _rankingSwitch =allocAndInitWithFrame(UISwitch, frame(frameWidth(_businessCard) -60, 5, 50, 30));
-    _rankingSwitch.tag = SwitchActionTagRanking;
-    _rankingSwitch.onTintColor = AppMainColor;
-    [_rankingSwitch addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
-    _rankingSwitch.on =_data.isRanking;
-    
-    [_ranking addSubview:_rankingSwitch];
-    
-    
     
     //    _collect to the original
     
-    UIView *_collect =allocAndInitWithFrame(UIView , frame(0, CGRectGetMaxY(_ranking.frame)+0.5, APPWIDTH, cellHeight));
+    UIView *_collect =allocAndInitWithFrame(UIView , frame(0, CGRectGetMaxY(_businessCard.frame)+0.5, APPWIDTH, cellHeight));
     _collect.backgroundColor =[UIColor whiteColor];
     [_mainScrollView addSubview:_collect];
     
@@ -302,30 +267,7 @@ typedef NS_ENUM(int,SwitchActionTag) {
     [_collectSwitch addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
     [_collect addSubview:_collectSwitch];
     
-//    //    Share to the original
-//    
-//    UIView *_share =allocAndInitWithFrame(UIView , frame(0, CGRectGetMaxY(_collect.frame)+0.5, APPWIDTH, cellHeight));
-//    _share.backgroundColor =[UIColor whiteColor];
-//    [_mainScrollView addSubview:_share];
-//    
-//    UIColor *  _shareColor;
-//    if (_data.islibrary) {
-//        _shareColor = BlackTitleColor;
-//    }
-//    else{
-//        _shareColor = LightBlackTitleColor;
-//    }
-//    _shareLb = [UILabel createLabelWithFrame:frame(10, 0, 5*28*SpacedFonts, cellHeight) text:@"贡献到原创" fontSize:28*SpacedFonts textColor:_shareColor textAlignment:NSTextAlignmentLeft inView:_share];
-//    
-//    _shareSwitch =allocAndInitWithFrame(UISwitch, frame(frameWidth(_businessCard) -60, 5, 50, 30));
-//    _shareSwitch.on =_data.islibrary;
-//    _shareSwitch.tag = SwitchActionTagShare;
-//    _shareSwitch.onTintColor = AppMainColor;
-//    [_shareSwitch addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
-//    [_share addSubview:_shareSwitch];
-//    
-   
-    
+
     //    Share to the original
     
     _redView =allocAndInitWithFrame(UIView , frame(0, CGRectGetMaxY(_collect.frame)+0.5, APPWIDTH, cellHeight));
@@ -382,107 +324,22 @@ typedef NS_ENUM(int,SwitchActionTag) {
     desc.frame = frame(frameX(desc), frameY(desc), frameWidth(desc), size.height);
     _redViewBg.frame = frame(frameX(_redViewBg), frameY(_redViewBg), frameWidth(desc), size.height + 10 + frameHeight(_redViewBg));
     
-    //选择附带产品
-    
-    _supplementaryProductsView = [[BaseButton alloc]initWithFrame:frame(0, CGRectGetMaxY(_redView.frame)+0.5, APPWIDTH, cellHeight) setTitle:@"" titleSize:0 titleColor:WhiteColor textAlignment:0 backgroundColor:WhiteColor inView:_mainScrollView];
-    
-    UIImage *image = [UIImage imageNamed:@"jjr_gengduo"];
-    supplementaryProducts = [[BaseButton alloc]initWithFrame:frame(0, 0, APPWIDTH, cellHeight) setTitle:@"选择附带产品" titleSize:28*SpacedFonts titleColor:BlackTitleColor backgroundImage:nil iconImage:image highlightImage:nil setTitleOrgin:CGPointMake((cellHeight - 28*SpacedFonts)/2.0 , 10 - image.size.width) setImageOrgin:CGPointMake((cellHeight - image.size.height)/2.0 ,APPWIDTH - (image.size.width + 10)) inView:_supplementaryProductsView];
-    supplementaryProducts.backgroundColor = WhiteColor;
-    
-    if (_data.productID&& [_data.productID intValue]>0) {
-        [weakSelf addProductWithId:_data.productID andImageUrl:_data.product_imgurl andTitle:_data.product_title andView:weakSelf andCellHeight:cellHeight];
-    }
-    
+    if (_data.isreward) {
+        
+        if (CGRectGetMaxY(_redViewBg.frame) +10>frameHeight(_mainScrollView)) {
+            
+            _mainScrollView.contentSize =CGSizeMake(frameWidth(_mainScrollView), CGRectGetMaxY(_redViewBg.frame) +10);
+        }
 
-    supplementaryProducts.didClickBtnBlock = ^
+    }
+    else
     {
-        if ( weakSelf.data.product.count>0) {
-            SelectedPruductViewController *pruduct = allocAndInit(SelectedPruductViewController);
-            pruduct.selectedPruductArray = weakSelf.data.product;
-        //    NSLog(@"weakSelf.data.product =%@",weakSelf.data.product);
-            pruduct.selectedPruductSureBlock = ^(NSDictionary *dic)
-            {
-         //       NSLog(@"dic =%@",dic);
-                [weakSelf addProductWithId:dic[@"id"] andImageUrl:dic[@"imgurl"] andTitle:dic[@"title"] andView:weakSelf andCellHeight:cellHeight];
-            };
-            
-            PushView(weakSelf, pruduct);
+    if (CGRectGetMaxY(_redView.frame) +10>frameHeight(_mainScrollView)) {
         
-        }
-        else
-        {
-            [[ToolManager shareInstance] showAlertMessage:@"没有可选择的产品"];
-            return ;
-        }
-        
-    };
-    
-    if (CGRectGetMaxY(_supplementaryProductsView.frame) +10>frameHeight(_mainScrollView)) {
-        
-        _mainScrollView.contentSize =CGSizeMake(frameWidth(_mainScrollView), CGRectGetMaxY(_supplementaryProductsView.frame) +10);
+        _mainScrollView.contentSize =CGSizeMake(frameWidth(_mainScrollView), CGRectGetMaxY(_redView.frame) +10);
+    }
     }
     
-}
-- (void)addProductWithId:(NSString *)Id andImageUrl:(NSString *)imageUrl andTitle:(NSString *)title andView:(EditArticlesViewController *)weakSelf
-           andCellHeight:(float)cellHeight
-{
-//    NSLog(@"weakSelf.data.productID = %@",weakSelf.data.productID);
-    weakSelf.data.productID =Id;
-    
-    if (frameHeight(weakSelf.supplementaryProductsView)<60||[Id intValue]>0) {
-        weakSelf.supplementaryProductsView.frame = frame(frameX(weakSelf.supplementaryProductsView), frameY(weakSelf.supplementaryProductsView), frameWidth(weakSelf.supplementaryProductsView), cellHeight + 60);
-        
-        if (!weakSelf.supplementaryProductsImage) {
-            weakSelf.supplementaryProductsImage = allocAndInitWithFrame(UIImageView, frame(10, cellHeight + 5, 80, 50));
-            [weakSelf.supplementaryProductsView addSubview: weakSelf.supplementaryProductsImage ];
-        }
-        if (!weakSelf.supplementaryProductsLabel) {
-            weakSelf.supplementaryProductsLabel = allocAndInitWithFrame(UILabel, frame(CGRectGetMaxX(weakSelf.supplementaryProductsImage.frame) + 5, cellHeight, frameWidth(weakSelf.supplementaryProductsView) - CGRectGetMaxX(weakSelf.supplementaryProductsImage.frame) - 60, 60));
-            
-            weakSelf.supplementaryProductsLabel.font = Size(28);
-            weakSelf.supplementaryProductsLabel.numberOfLines = 0;
-            weakSelf.supplementaryProductsLabel.textColor = BlackTitleColor;
-            [weakSelf.supplementaryProductsView addSubview: weakSelf.supplementaryProductsLabel];
-        }
-        if (!weakSelf.supplementaryProductsViewDele) {
-            weakSelf.supplementaryProductsViewDele = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 50, cellHeight, 50, 60) setTitle:@"删除" titleSize:24*SpacedFonts titleColor:LightBlackTitleColor textAlignment:NSTextAlignmentRight backgroundColor:WhiteColor inView:weakSelf.supplementaryProductsView];
-            weakSelf.supplementaryProductsViewDele.didClickBtnBlock = ^
-            {
-                self.data.productID = nil;
-                [self.supplementaryProductsViewDele removeFromSuperview];
-                [self.supplementaryProductsImage removeFromSuperview];
-                [self.supplementaryProductsLabel removeFromSuperview];
-                self.supplementaryProductsViewDele  = nil;
-                self.supplementaryProductsImage  = nil;
-                self.supplementaryProductsLabel  = nil;
-                
-                self.supplementaryProductsView.frame = frame(frameX(self.supplementaryProductsView), frameY(self.supplementaryProductsView), frameWidth(self.supplementaryProductsView), cellHeight );
-                if (CGRectGetMaxY(self.supplementaryProductsView.frame) +10>frameHeight(self.mainScrollView)) {
-                    
-                    self.mainScrollView.contentSize =CGSizeMake(frameWidth(self.mainScrollView), CGRectGetMaxY(self.supplementaryProductsView.frame) +10);
-                    
-                    [self.mainScrollView scrollRectToVisible:frame(frameX(self.mainScrollView), frameY(self.mainScrollView), frameWidth(self.mainScrollView), self.mainScrollView.contentSize.height) animated:YES];
-                }
-                
-                
-                
-            };
-            
-        }
-        
-        [[ToolManager shareInstance] imageView:weakSelf.supplementaryProductsImage setImageWithURL:imageUrl placeholderType:PlaceholderTypeImageUnProcessing];
-        weakSelf.supplementaryProductsLabel.text = title;
-        
-        
-        if (CGRectGetMaxY(weakSelf.supplementaryProductsView.frame) +10>frameHeight(weakSelf.mainScrollView)) {
-            
-            weakSelf.mainScrollView.contentSize =CGSizeMake(frameWidth(weakSelf.mainScrollView), CGRectGetMaxY(weakSelf.supplementaryProductsView.frame) +10);
-            
-            [weakSelf.mainScrollView scrollRectToVisible:frame(frameX(weakSelf.mainScrollView), frameY(weakSelf.mainScrollView), frameWidth(weakSelf.mainScrollView), weakSelf.mainScrollView.contentSize.height) animated:YES];
-        }
-        
-    }
 }
 #pragma mark - UITextField delegate
 
@@ -571,27 +428,7 @@ typedef NS_ENUM(int,SwitchActionTag) {
         }
         
     }
-    else if (sender.tag ==SwitchActionTagRanking)
-    {
-        if (sender.isOn) {
-            _rankingLb.textColor = BlackTitleColor;
-        }
-        else
-        {
-            _rankingLb.textColor = LightBlackTitleColor;
-        }
-    }
-//    else if(sender.tag ==SwitchActionTagShare)
-//    {
-//        if (sender.isOn) {
-//            _shareLb.textColor = BlackTitleColor;
-//        }
-//        else
-//        {
-//            _shareLb.textColor = LightBlackTitleColor;
-//        }
-//        
-//    }
+
     else if (sender.tag ==SwitchActionTagCollect)
     {
         if (sender.isOn) {
@@ -609,11 +446,9 @@ typedef NS_ENUM(int,SwitchActionTag) {
             
             _redLb.textColor = BlackTitleColor;
             
-            _supplementaryProductsView.frame = frame(frameX(_supplementaryProductsView), CGRectGetMaxY(_redViewBg.frame) + 10, frameWidth(_supplementaryProductsView), frameHeight(_supplementaryProductsView));
-            
-            if (CGRectGetMaxY(_supplementaryProductsView.frame) +10>frameHeight(_mainScrollView)) {
+            if (CGRectGetMaxY(_redViewBg.frame) +10>frameHeight(_mainScrollView)) {
                 
-                _mainScrollView.contentSize =CGSizeMake(frameWidth(_mainScrollView), CGRectGetMaxY(_supplementaryProductsView.frame) +10);
+                _mainScrollView.contentSize =CGSizeMake(frameWidth(_mainScrollView), CGRectGetMaxY(_redViewBg.frame) +10);
                 
                 [_mainScrollView scrollRectToVisible:frame(frameX(_mainScrollView), frameY(_mainScrollView), frameWidth(_mainScrollView), _mainScrollView.contentSize.height) animated:YES];
             }
@@ -623,10 +458,10 @@ typedef NS_ENUM(int,SwitchActionTag) {
         else
         {
             _redLb.textColor = LightBlackTitleColor;
-            _supplementaryProductsView.frame = frame(frameX(_supplementaryProductsView), CGRectGetMaxY(_redView.frame), frameWidth(_supplementaryProductsView), frameHeight(_supplementaryProductsView));
-            if (CGRectGetMaxY(supplementaryProducts.frame) +10>frameHeight(_mainScrollView)) {
+    
+            if (CGRectGetMaxY(_redView.frame) +10>frameHeight(_mainScrollView)) {
                 
-                _mainScrollView.contentSize =CGSizeMake(frameWidth(_mainScrollView), CGRectGetMaxY(_supplementaryProductsView.frame) +10);
+                _mainScrollView.contentSize =CGSizeMake(frameWidth(_mainScrollView), CGRectGetMaxY(_redView.frame) +10);
             }
 
         }
@@ -682,7 +517,7 @@ typedef NS_ENUM(int,SwitchActionTag) {
         [parameter setObject:_data.content forKey:@"content"];
         [parameter setObject:@(_businessCardSwitch.isOn) forKey:@"isaddress"];
         [parameter setObject:@(_collectSwitch.isOn) forKey:@"isgetclue"];
-        [parameter setObject:@(_rankingSwitch.isOn) forKey:@"isranking"];
+        [parameter setObject:@(_data.isRanking) forKey:@"isranking"];
 
         if (_data.productID) {
             
@@ -705,7 +540,7 @@ typedef NS_ENUM(int,SwitchActionTag) {
         }
         [[ToolManager shareInstance] showWithStatus:@"保存中..."];
         __weak EditArticlesViewController *weakSelf =self;
-//        NSLog(@"parameter = %@",parameter);
+        NSLog(@"parameter = %@",parameter);
         [XLDataService postWithUrl:MyreleaseURL param:parameter modelClass:nil responseBlock:^(id dataObj, NSError *error) {
                        
             if (dataObj) {

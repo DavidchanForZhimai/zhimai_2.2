@@ -96,7 +96,7 @@ typedef NS_ENUM(int,SwitchActionTag) {
     if (_data.isEdit) {
         [self navView:@"产品编辑"];
         [self mainView];
-        [self bottomView];
+        [self bottomViews];
     }
     else
     {
@@ -111,7 +111,7 @@ typedef NS_ENUM(int,SwitchActionTag) {
                 _data.imageurl = [NSMutableArray new];
                 _data.selecteds = [NSMutableArray arrayWithObjects:@"0", @"0",@"0",@"0",@"0",@"0",nil];
                 [self mainView];
-                [self bottomView];
+                [self bottomViews];
             }
             else
             {
@@ -760,7 +760,7 @@ typedef NS_ENUM(int,SwitchActionTag) {
 }
 
 #pragma mark - BottomView
-- (void)bottomView
+- (void)bottomViews
 {
 
     UIView *_botoomView = allocAndInitWithFrame(UIView, frame(0, APPHEIGHT - 50, APPWIDTH, 50));

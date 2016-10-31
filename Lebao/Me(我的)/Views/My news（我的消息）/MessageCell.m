@@ -12,7 +12,7 @@
 #import "NSString+Extend.h"
 @implementation MessageCell
 {
-    UIImageView *_userIcon;
+    
     UILabel *_userName;
     UILabel *_descripLb;
     UILabel *_time;
@@ -50,15 +50,15 @@
 }
 - (void)setData:(NotificationData *)modal
 {
-    [[ToolManager shareInstance] imageView:_userIcon setImageWithURL:modal.imgurl placeholderType:PlaceholderTypeUserHead];
+    if (modal.imgurl) {
+        [[ToolManager shareInstance] imageView:_userIcon setImageWithURL:modal.imgurl placeholderType:PlaceholderTypeUserHead];
+    }
     _userName.text = modal.realname;
     _descripLb.text = modal.content;
     _time.text = [modal.createtime timeformatString:@"yyyy-MM-dd"];
     
 }
-- (void)awakeFromNib {
-    // Initialization code
-}
+
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

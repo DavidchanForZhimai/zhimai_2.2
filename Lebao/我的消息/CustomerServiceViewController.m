@@ -164,7 +164,10 @@
     NotificationData *data=  _customerServiceArray[indexPath.row];
     cell.message.hidden = ![data.num boolValue];
     cell.message.text =data.num;
+  
     [cell setData:data];
+   
+    cell.userIcon.image = [UIImage imageNamed:@"icon_me_custom"];
     
     return cell;
     

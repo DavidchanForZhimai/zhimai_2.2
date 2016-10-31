@@ -10,6 +10,7 @@
 #import "NotificationModal.h"
 @interface MessageCell : UITableViewCell
 @property(nonatomic,strong)UILabel *message;
+@property(nonatomic,strong)UIImageView *userIcon;
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier cellHeight:(float)cellHeight cellWidth:(float)cellWidth;
 - (void)setData:(NotificationData *)modal;
 @end
