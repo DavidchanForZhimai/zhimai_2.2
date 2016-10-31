@@ -22,7 +22,13 @@ typedef void (^GJGCChatInputPanelRecordStateChangeBlock) (GJGCChatInputPanel *pa
 
 typedef void (^GJGCChatInputPanelInputTextViewHeightChangedBlock) (GJGCChatInputPanel *panel,CGFloat changeDelta);
 
+
 @interface GJGCChatInputPanel : UIView
+
+/* 输入条 */
+@property (nonatomic,strong)GJGCChatInputBar *inputBar;
+
+@property (nonatomic,assign)InputBarType inputBarType;
 
 @property (nonatomic,weak)id<GJGCChatInputPanelDelegate> delegate;
 
@@ -44,7 +50,7 @@ typedef void (^GJGCChatInputPanelInputTextViewHeightChangedBlock) (GJGCChatInput
 
 @property (nonatomic,strong)NSString *inputBarTextViewPlaceHolder;
 
-- (instancetype)initWithPanelDelegate:(id<GJGCChatInputPanelDelegate>)aDelegate;
+- (instancetype)initWithPanelDelegate:(id<GJGCChatInputPanelDelegate>)aDelegate inputBarType:(InputBarType)inputBarType;
 
 - (instancetype)initForCommentBarWithPanelDelegate:(id<GJGCChatInputPanelDelegate>)aDelegate;
 

@@ -830,7 +830,7 @@
         talk.talkType = GJGCChatFriendTalkTypePrivate;
         talk.toId =headerModel.Id;
         talk.toUserName =headerModel.realname;
-        GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
+        GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk ];
         privateChat.type = MessageTypeNormlPage;
         [self.navigationController pushViewController:privateChat animated:YES];
         

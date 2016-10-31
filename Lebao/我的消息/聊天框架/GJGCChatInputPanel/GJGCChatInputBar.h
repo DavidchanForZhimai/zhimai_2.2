@@ -37,15 +37,21 @@ typedef void (^GJGCChatInputBarDidChangeActionBlock) (GJGCChatInputBar *inputBar
  */
 typedef void (^GJGCChatInputBarDidTapOnSendTextBlock) (GJGCChatInputBar *inputBar,NSString *text);
 
+typedef NS_ENUM(NSUInteger,InputBarType) {
+    InputBarTypeNormal = 0,
+    InputBarTypeCustom = 1
+};
 
 @interface GJGCChatInputBar : UIView
+
+@property (nonatomic,assign)InputBarType inputBarType;
 
 @property (nonatomic,assign)CGFloat barHeight;
 
 @property (nonatomic,assign)CGFloat inputTextStateBarHeight;
 
 @property (nonatomic,strong)NSString *panelIdentifier;
-
+- (instancetype)initWithFrame:(CGRect)frame inputBarType:(InputBarType)inputBarType;
 /**
  *  文本输入默认占位
  */

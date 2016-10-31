@@ -18,8 +18,7 @@
                                 GJCFAudioRecordDelegate
                                 >
 
-/* 输入条 */
-@property (nonatomic,strong)GJGCChatInputBar *inputBar;
+
 
 /* 表情面板 */
 @property (nonatomic,strong)GJGCChatInputExpandEmojiPanel *emojiPanel;
@@ -42,12 +41,12 @@
 
 #pragma mark - 生命周期
 
-- (instancetype)initWithPanelDelegate:(id<GJGCChatInputPanelDelegate>)aDelegate;
+- (instancetype)initWithPanelDelegate:(id<GJGCChatInputPanelDelegate>)aDelegate inputBarType:(InputBarType)inputBarType;
 {
     if (self = [super init]) {
         
         self.delegate = aDelegate;
-        
+        self.inputBarType = inputBarType;
         _panelIndentifier = [NSString stringWithFormat:@"GJGCChatInputPanel_%@",GJCFStringCurrentTimeStamp];
         
         self.emojiPanel = [[GJGCChatInputExpandEmojiPanel alloc]initWithFrame:CGRectMake(0, self.inputBarHeight, GJCFSystemScreenWidth, 216)];
@@ -84,6 +83,7 @@
     [GJCFNotificationCenter removeObserver:self];
 }
 
+
 #pragma mark - 内部接口
 
 - (void)initSubViews
@@ -92,9 +92,10 @@
     self.backgroundColor = GJCFQuickHexColor(@"fafafa");
 
     /* 输入条 */
-    self.inputBar = [[GJGCChatInputBar alloc]initWithFrame:(CGRect){0,0,GJCFSystemScreenWidth,self.inputBarHeight}];
+    self.inputBar = [[GJGCChatInputBar alloc]initWithFrame:(CGRect){0,0,GJCFSystemScreenWidth,self.inputBarHeight} inputBarType:_inputBarType];
     self.inputBar.barHeight = self.inputBarHeight;
     self.inputBar.panelIdentifier = self.panelIndentifier;
+    
     [self addSubview:self.inputBar];
     
     GJCFWeakSelf weakSelf = self;

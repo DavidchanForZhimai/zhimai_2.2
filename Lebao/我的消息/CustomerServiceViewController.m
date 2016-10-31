@@ -176,10 +176,12 @@
     GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
     talk.talkType = GJGCChatFriendTalkTypePrivate;
     talk.toId = data.senderid;
+    talk.inputBarType = InputBarTypeCustom;
     talk.toUserName = data.realname;
     
-    GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
+    GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk ];
     privateChat.type = MessageTypeCustomPage;
+    
     [self.navigationController pushViewController:privateChat animated:YES];
     
     MessageCell *cell  = [tableView cellForRowAtIndexPath:indexPath];

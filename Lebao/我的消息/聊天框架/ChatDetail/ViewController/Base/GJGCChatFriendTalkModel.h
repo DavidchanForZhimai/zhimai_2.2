@@ -11,7 +11,10 @@
 
 #define GJGCTalkTypeString(talkType) [GJGCChatFriendTalkModel talkTypeString:talkType]
 
+
 @interface GJGCChatFriendTalkModel : NSObject
+
+@property (nonatomic,assign)int inputBarType;
 
 @property (nonatomic,copy)NSString *toId;
 

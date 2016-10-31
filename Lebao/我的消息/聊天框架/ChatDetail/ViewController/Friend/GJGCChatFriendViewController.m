@@ -107,6 +107,9 @@ GJCUCaptureViewControllerDelegate>
     [self.chatListTable addSubview:refresh];
     [refresh addTarget:self action:@selector(refreshViewControlEventValueChanged) forControlEvents:UIControlEventValueChanged];
     [self refreshViewControlEventValueChanged];
+    
+    
+    
 }
 #pragma mark -RefreshViewControlEventValueChanged
 - (void)refreshViewControlEventValueChanged
@@ -143,7 +146,7 @@ GJCUCaptureViewControllerDelegate>
     [param setObject:@(_page) forKey:@"page"];
     
     [XLDataService postWithUrl:CommunicatelistURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-//        NSLog(@"dataObj =%@ param=%@",dataObj,param);
+        NSLog(@"dataObj =%@ param=%@",dataObj,param);
         [refresh endRefreshing];
         
         if (dataObj) {
@@ -161,6 +164,10 @@ GJCUCaptureViewControllerDelegate>
         
                     GJGCChatFriendContentModel *chatContentModel = [[GJGCChatFriendContentModel alloc]init];
                     chatContentModel.baseMessageType = GJGCChatBaseMessageTypeChatMessage;
+                    //没有类型默认为文本类型
+                    if (!data.msgtype) {
+                        data.msgtype = GJGCChatFriendContentTypeText;
+                    }
                     chatContentModel.contentType = data.msgtype;
                     NSString *text = data.content;
                     NSDictionary *parseTextDict = [GJGCChatFriendCellStyle formateSimpleTextMessage:text];

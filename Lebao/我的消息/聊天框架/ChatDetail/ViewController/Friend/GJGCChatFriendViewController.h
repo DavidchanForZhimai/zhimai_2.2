@@ -24,7 +24,6 @@ typedef NS_ENUM(NSUInteger,MessageType) {
 
 @property(nonatomic,assign)MessageType type;
 @property(nonatomic,strong)NSString *receiver;
-
 //接受消息
 - (void)reciverNotiWithData:(NSDictionary *)dic;
 

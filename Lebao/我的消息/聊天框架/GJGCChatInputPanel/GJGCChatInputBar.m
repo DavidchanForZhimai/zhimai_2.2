@@ -45,10 +45,10 @@
     return self;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame
+- (instancetype)initWithFrame:(CGRect)frame inputBarType:(InputBarType)inputBarType
 {
     if (self = [super initWithFrame:frame]) {
-        
+        _inputBarType = inputBarType;
         [self initSubViews];
     }
     return self;
@@ -81,132 +81,176 @@
     
     [self setBackgroundColor:GJCFQuickHexColor(@"f3f3f3")];
     
-    /* 录音按钮 */
-
-    UIImage *recordIcon = GJCFQuickImage(@"聊天-icon-语音及切换键盘-灰");
-    UIImage *keybordIcon = GJCFQuickImage(@"聊天-icon-文字键盘");
-    self.recordAudioBarItem = [[GJGCChatInputBarItem alloc]initWithSelectedIcon:keybordIcon withNormalIcon:recordIcon];
+     GJCFWeakSelf weakSelf = self;
     
-    if (GJCFSystemiPhone6Plus) {
+    if (_inputBarType != InputBarTypeCustom) {
+        /* 录音按钮 */
         
-        self.recordAudioBarItem.frame = CGRectMake(self.itemToBarMargin, 8,35, 35);
+        UIImage *recordIcon = GJCFQuickImage(@"聊天-icon-语音及切换键盘-灰");
+        UIImage *keybordIcon = GJCFQuickImage(@"聊天-icon-文字键盘");
+        self.recordAudioBarItem = [[GJGCChatInputBarItem alloc]initWithSelectedIcon:keybordIcon withNormalIcon:recordIcon];
         
-    }else{
+        if (GJCFSystemiPhone6Plus) {
+            
+            self.recordAudioBarItem.frame = CGRectMake(self.itemToBarMargin, 8,35, 35);
+            
+        }else{
+            
+            self.recordAudioBarItem.frame = CGRectMake(self.itemToBarMargin, 0,35, 35);
+            self.recordAudioBarItem.gjcf_centerY = self.barHeight/2;
+        }
         
-        self.recordAudioBarItem.frame = CGRectMake(self.itemToBarMargin, 0,35, 35);
-        self.recordAudioBarItem.gjcf_centerY = self.barHeight/2;
-    }
-
-    [self addSubview:self.recordAudioBarItem];
-
-    GJCFWeakSelf weakSelf = self;
-    [self.recordAudioBarItem configStateChangeEventBlock:^(GJGCChatInputBarItem *item, BOOL changeToState) {
-        
-        [weakSelf barItem:item changeToState:changeToState];
-    }];
-    
-    [self.recordAudioBarItem configAuthorizeBlock:^BOOL(GJGCChatInputBarItem *item) {
+         [self addSubview:self.recordAudioBarItem];
        
-        BOOL canUse = weakSelf.disableActionType != GJGCChatInputBarActionTypeRecordAudio;
-        
-        if ([weakSelf.inputTextView isInputTextFirstResponse]) {
-            [weakSelf.inputTextView  resignFirstResponder];
-        }
-        
-        if (!canUse) {
+        [self.recordAudioBarItem configStateChangeEventBlock:^(GJGCChatInputBarItem *item, BOOL changeToState) {
             
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf barItem:item changeToState:changeToState];
+        }];
+        
+        [self.recordAudioBarItem configAuthorizeBlock:^BOOL(GJGCChatInputBarItem *item) {
+            
+            BOOL canUse = weakSelf.disableActionType != GJGCChatInputBarActionTypeRecordAudio;
+            
+            if ([weakSelf.inputTextView isInputTextFirstResponse]) {
+                [weakSelf.inputTextView  resignFirstResponder];
+            }
+            
+            if (!canUse) {
                 
-                NSLog(@"Audio Record Limit!!!!!!");
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    
+                    NSLog(@"Audio Record Limit!!!!!!");
+                    
+                });
+            }
+            
+            return canUse;
+        }];
+        
+        //    /* 展开面板按钮 */
+        //    UIImage *extendIcon = GJCFQuickImage(@"聊天-icon-选择照片帖子");
+        //    self.openPanelBarItem = [[GJGCChatInputBarItem alloc]initWithSelectedIcon:keybordIcon withNormalIcon:extendIcon];
+        //    if (GJCFSystemiPhone6Plus) {
+        //        self.openPanelBarItem.frame = CGRectMake(0, 8,35, 35);
+        //    }else{
+        //        self.openPanelBarItem.frame = CGRectMake(0, 0,35, 35);
+        //        self.openPanelBarItem.gjcf_centerY = self.barHeight/2;
+        //    }
+        //    [self addSubview:self.openPanelBarItem];
+        //    self.openPanelBarItem.gjcf_right = GJCFSystemScreenWidth - self.itemToBarMargin;
+        //
+        //    [self.openPanelBarItem configStateChangeEventBlock:^(GJGCChatInputBarItem *item, BOOL changeToState) {
+        //        [weakSelf barItem:item changeToState:changeToState];
+        //    }];
+        //    self.sendButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        //        if (GJCFSystemiPhone6Plus) {
+        //            self.sendButton.frame = CGRectMake(0, 10.5,35, 30);
+        //        }else{
+        //            self.sendButton.frame = CGRectMake(0, 2.5,35, 30);
+        //            self.sendButton.gjcf_centerY = self.barHeight/2;
+        //        }
+        //    self.sendButton.layer.masksToBounds = YES;
+        //     self.sendButton.layer.cornerRadius = 5.0;
+        //    self.sendButton.titleLabel.font = [UIFont systemFontOfSize:12.0];
+        //    [self.sendButton setTitle:@"发送" forState:UIControlStateNormal];
+        //    [self.sendButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        //    [self.sendButton setBackgroundColor:AppMainColor];
+        //    self.sendButton.gjcf_right = GJCFSystemScreenWidth - self.itemToBarMargin;
+        //    [self addSubview:self.sendButton];
+        
+        /* 输入文本 */
+        self.inputTextView = [[GJGCChatInputTextView alloc]initWithFrame:CGRectMake(self.recordAudioBarItem.gjcf_right + self.itemMargin ,0,GJCFSystemScreenWidth - 35 * 2 - self.itemToBarMargin - self.itemMargin * 3 , 32)];
+        [self addSubview:self.inputTextView];
+        [self.inputTextView setRecordAudioBackgroundImage:GJCFQuickImage(@"输入框-灰色")];
+        [self.inputTextView setInputTextBackgroundImage:GJCFQuickImage(@"输入框-白色")];
+        [self.inputTextView setPreRecordTitle:@"按住说话"];
+        [self.inputTextView setRecordingTitle:@"松开结束"];
+        self.inputTextView.gjcf_centerY = self.barHeight/2;
+        [self.inputTextView configFinishInputTextBlock:^(GJGCChatInputTextView *textView, NSString *text) {
+            if (weakSelf.textSendBlock) {
+                weakSelf.textSendBlock(weakSelf,text);
+            }
+        }];
+        [self.inputTextView configTextViewDidBecomeFirstResponse:^(GJGCChatInputTextView *textView) {
+            
+            weakSelf.inputTextView.recordState = NO;
+            weakSelf.recordAudioBarItem.selected = NO;
+            
+            weakSelf.emojiBarItem.selected = NO;
+            weakSelf.openPanelBarItem.selected = NO;
+            
+            
+        }];
+        
+        [self.inputTextView configFrameChangeBlock:^(GJGCChatInputTextView *textView, CGFloat changeDetal) {
+            
+            if (weakSelf.changeFrameBlock) {
                 
-            });
-        }
-        
-        return canUse;
-    }];
-    
-//    /* 展开面板按钮 */
-//    UIImage *extendIcon = GJCFQuickImage(@"聊天-icon-选择照片帖子");
-//    self.openPanelBarItem = [[GJGCChatInputBarItem alloc]initWithSelectedIcon:keybordIcon withNormalIcon:extendIcon];
-//    if (GJCFSystemiPhone6Plus) {
-//        self.openPanelBarItem.frame = CGRectMake(0, 8,35, 35);
-//    }else{
-//        self.openPanelBarItem.frame = CGRectMake(0, 0,35, 35);
-//        self.openPanelBarItem.gjcf_centerY = self.barHeight/2;
-//    }
-//    [self addSubview:self.openPanelBarItem];
-//    self.openPanelBarItem.gjcf_right = GJCFSystemScreenWidth - self.itemToBarMargin;
-//
-//    [self.openPanelBarItem configStateChangeEventBlock:^(GJGCChatInputBarItem *item, BOOL changeToState) {
-//        [weakSelf barItem:item changeToState:changeToState];
-//    }];
-//    self.sendButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//        if (GJCFSystemiPhone6Plus) {
-//            self.sendButton.frame = CGRectMake(0, 10.5,35, 30);
-//        }else{
-//            self.sendButton.frame = CGRectMake(0, 2.5,35, 30);
-//            self.sendButton.gjcf_centerY = self.barHeight/2;
-//        }
-//    self.sendButton.layer.masksToBounds = YES;
-//     self.sendButton.layer.cornerRadius = 5.0;
-//    self.sendButton.titleLabel.font = [UIFont systemFontOfSize:12.0];
-//    [self.sendButton setTitle:@"发送" forState:UIControlStateNormal];
-//    [self.sendButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//    [self.sendButton setBackgroundColor:AppMainColor];
-//    self.sendButton.gjcf_right = GJCFSystemScreenWidth - self.itemToBarMargin;
-//    [self addSubview:self.sendButton];
-    
-    /* 输入文本 */
-    self.inputTextView = [[GJGCChatInputTextView alloc]initWithFrame:CGRectMake(self.recordAudioBarItem.gjcf_right + self.itemMargin ,0,GJCFSystemScreenWidth - 35 * 2 - self.itemToBarMargin - self.itemMargin * 3 , 32)];
-    [self addSubview:self.inputTextView];
-    [self.inputTextView setRecordAudioBackgroundImage:GJCFQuickImage(@"输入框-灰色")];
-    [self.inputTextView setInputTextBackgroundImage:GJCFQuickImage(@"输入框-白色")];
-    [self.inputTextView setPreRecordTitle:@"按住说话"];
-    [self.inputTextView setRecordingTitle:@"松开结束"];
-    self.inputTextView.gjcf_centerY = self.barHeight/2;
-    [self.inputTextView configFinishInputTextBlock:^(GJGCChatInputTextView *textView, NSString *text) {
-        if (weakSelf.textSendBlock) {
-            weakSelf.textSendBlock(weakSelf,text);
-        }
-    }];
-    [self.inputTextView configTextViewDidBecomeFirstResponse:^(GJGCChatInputTextView *textView) {
-        
-        weakSelf.inputTextView.recordState = NO;
-        weakSelf.recordAudioBarItem.selected = NO;
-        
-        weakSelf.emojiBarItem.selected = NO;
-        weakSelf.openPanelBarItem.selected = NO;
-        
-
-    }];
-    
-    [self.inputTextView configFrameChangeBlock:^(GJGCChatInputTextView *textView, CGFloat changeDetal) {
-       
-        if (weakSelf.changeFrameBlock) {
+                weakSelf.gjcf_height +=  changeDetal;
+                
+                weakSelf.inputTextStateBarHeight = weakSelf.gjcf_height;
+                
+                weakSelf.changeFrameBlock(weakSelf,changeDetal);
+                
+            }
             
-            weakSelf.gjcf_height +=  changeDetal;
-            
-            weakSelf.inputTextStateBarHeight = weakSelf.gjcf_height;
-
-            weakSelf.changeFrameBlock(weakSelf,changeDetal);
+        }];
         
+        /* 表情按钮 */
+        UIImage *emojiIcon = GJCFQuickImage(@"聊天-icon-选择表情");
+        self.emojiBarItem = [[GJGCChatInputBarItem alloc]initWithSelectedIcon:keybordIcon withNormalIcon:emojiIcon];
+        if (GJCFSystemiPhone6Plus) {
+            self.emojiBarItem.frame = CGRectMake(self.inputTextView.gjcf_right+self.itemMargin, 8,35, 35);
+        }else{
+            self.emojiBarItem.frame = CGRectMake(self.inputTextView.gjcf_right+self.itemMargin, 0,35, 35);
+            self.emojiBarItem.gjcf_centerY = self.barHeight/2;
         }
-        
-    }];
-    
-    /* 表情按钮 */
-    UIImage *emojiIcon = GJCFQuickImage(@"聊天-icon-选择表情");
-    self.emojiBarItem = [[GJGCChatInputBarItem alloc]initWithSelectedIcon:keybordIcon withNormalIcon:emojiIcon];
-    if (GJCFSystemiPhone6Plus) {
-        self.emojiBarItem.frame = CGRectMake(self.inputTextView.gjcf_right+self.itemMargin, 8,35, 35);
-    }else{
-        self.emojiBarItem.frame = CGRectMake(self.inputTextView.gjcf_right+self.itemMargin, 0,35, 35);
-        self.emojiBarItem.gjcf_centerY = self.barHeight/2;
+        [self addSubview:self.emojiBarItem];
+        [self.emojiBarItem configStateChangeEventBlock:^(GJGCChatInputBarItem *item, BOOL changeToState) {
+            [weakSelf barItem:item changeToState:changeToState];
+        }];
     }
-    [self addSubview:self.emojiBarItem];
-    [self.emojiBarItem configStateChangeEventBlock:^(GJGCChatInputBarItem *item, BOOL changeToState) {
-        [weakSelf barItem:item changeToState:changeToState];
-    }];
+    else
+    {
+        /* 输入文本 */
+        self.inputTextView = [[GJGCChatInputTextView alloc]initWithFrame:CGRectMake(2*self.itemMargin ,0,GJCFSystemScreenWidth - self.itemMargin * 4 , 32)];
+        [self addSubview:self.inputTextView];
+        [self.inputTextView setRecordAudioBackgroundImage:GJCFQuickImage(@"输入框-灰色")];
+        [self.inputTextView setInputTextBackgroundImage:GJCFQuickImage(@"输入框-白色")];
+        [self.inputTextView setPreRecordTitle:@"按住说话"];
+        [self.inputTextView setRecordingTitle:@"松开结束"];
+        self.inputTextView.gjcf_centerY = self.barHeight/2;
+        [self.inputTextView configFinishInputTextBlock:^(GJGCChatInputTextView *textView, NSString *text) {
+            if (weakSelf.textSendBlock) {
+                weakSelf.textSendBlock(weakSelf,text);
+            }
+        }];
+        [self.inputTextView configTextViewDidBecomeFirstResponse:^(GJGCChatInputTextView *textView) {
+            
+            weakSelf.inputTextView.recordState = NO;
+            weakSelf.recordAudioBarItem.selected = NO;
+            
+            weakSelf.emojiBarItem.selected = NO;
+            weakSelf.openPanelBarItem.selected = NO;
+            
+            
+        }];
+        
+        [self.inputTextView configFrameChangeBlock:^(GJGCChatInputTextView *textView, CGFloat changeDetal) {
+            
+            if (weakSelf.changeFrameBlock) {
+                
+                weakSelf.gjcf_height +=  changeDetal;
+                
+                weakSelf.inputTextStateBarHeight = weakSelf.gjcf_height;
+                
+                weakSelf.changeFrameBlock(weakSelf,changeDetal);
+                
+            }
+            
+        }];
+
+    }
     
     /* 观察进入前台 */
     [GJCFNotificationCenter addObserver:self selector:@selector(becomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];

@@ -28,7 +28,9 @@
     if (self = [super init]) {
         
         _taklInfo = talkModel;
-        
+        if (!_taklInfo.inputBarType) {
+            _taklInfo.inputBarType = InputBarTypeNormal;
+        }
         [self initDataManager];
         
         /* 观察程序前后台切换 */
@@ -124,6 +126,7 @@
 #pragma mark - 初始化设置
 - (void)initSubViews
 {
+ 
     CGFloat originY = GJCFSystemNavigationBarHeight + GJCFSystemOriginYDelta;
     
     /* 对话列表 */
@@ -142,7 +145,9 @@
 
     
     /* 输入面板 */
-    self.inputPanel = [[GJGCChatInputPanel alloc]initWithPanelDelegate:self];
+ 
+    self.inputPanel = [[GJGCChatInputPanel alloc]initWithPanelDelegate:self inputBarType:_taklInfo.inputBarType];
+
     self.inputPanel.frame = (CGRect){0,GJCFSystemScreenHeight-self.inputPanel.inputBarHeight-originY,GJCFSystemScreenWidth,self.inputPanel.inputBarHeight+216};
     
     GJCFWeakSelf weakSelf = self;
