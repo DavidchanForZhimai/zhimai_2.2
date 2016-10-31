@@ -119,7 +119,7 @@ typedef enum {
     _verificationCode.font = _userName.font;
     _verificationCode.clearButtonMode = UITextFieldViewModeWhileEditing;
     _verificationCode.textColor =_userName.textColor;
-    _verificationCode.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"如有邀请码请输入" attributes:@{NSForegroundColorAttributeName: LightBlackTitleColor}];
+    _verificationCode.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"邀请码(非必选)" attributes:@{NSForegroundColorAttributeName: LightBlackTitleColor}];
 
     [mainScrollView addSubview:_verificationCode];
     
@@ -138,7 +138,7 @@ typedef enum {
     BaseButton *_invitation = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 110, frameY(_verificationCode), 110, frameHeight(_verificationCode)) setTitle:@"了解邀请码" titleSize:26*SpacedFonts titleColor:AppMainColor textAlignment:NSTextAlignmentCenter backgroundColor:[UIColor clearColor] inView:mainScrollView];
     _invitation.didClickBtnBlock = ^
     {
-        [[ToolManager shareInstance] showAlertViewTitle:@"什么是邀请码?" contentText:@"每个手机号码注册成功后，系统会随机生成唯一的邀请码。填写邀请码有什么好处?\n1.可以互相提升活跃值。\n2.后续的推广奖励模式举例：B通过A的邀请码注册，B开通了会员，A可以获得奖励；C通过B的邀请码注册，C开通了会员，B能获 得奖励，A同时也能获得奖励。\n3.在使用过程中，可以向邀请人请教" showAlertViewBlcok:^{
+        [[ToolManager shareInstance] showAlertViewTitle:@"什么是邀请码?" contentText:@" 1、每个手机号码注册成功后，系统会随机生成唯一的邀请码\n2、可以作为后续推广奖励的重要依据\n3、在使用过程中，可以向邀请人请教" showAlertViewBlcok:^{
             
         }];
     };

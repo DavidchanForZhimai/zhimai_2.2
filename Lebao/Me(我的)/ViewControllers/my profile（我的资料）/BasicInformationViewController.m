@@ -1463,31 +1463,46 @@
     _modal.service = [service mj_JSONString];
     _modal.resource = [resource mj_JSONString];
     NSMutableDictionary *parame =[Parameter parameterWithSessicon];
-    //    if ([_modal.imgurl isEqualToString:@""]||[_modal.sex isEqualToString:@""]||[_modal.area isEqualToString:@""]||[_modal.realname isEqualToString:@""]||[_modal.tel isEqualToString:@""]||[_modal.address isEqualToString:@""]||[_modal.workyears isEqualToString:@""]||[_modal.position isEqualToString:@""]||[_modal.service isEqualToString:@""]||[_modal.resource isEqualToString:@""]||[_modal.mylabels isEqualToString:@""]) {
-    //
-    //
-    //        [[ToolManager shareInstance] showAlertMessage:@"请完善资料！！"];
-    //        return;
-    //    }
+
+    if (_modal.imgurl) {
+        [parame setObject:_modal.imgurl forKey:@"imgurl"];
+    }
+    if (_modal.sex) {
+        [parame setObject:_modal.sex forKey:@"sex"];
+    }
+    if (_modal.area) {
+        [parame setObject:_modal.area forKey:@"area"];
+    }
+    if (_modal.realname) {
+        [parame setObject:_modal.realname forKey:@"realname"];
+    }
+    if (_modal.tel) {
+        [parame setObject:_modal.tel forKey:@"tel"];
+    }
+    if (_modal.address) {
+        [parame setObject:_modal.address forKey:@"address"];
+    }
     
-    
-    [parame setObject:_modal.imgurl forKey:@"imgurl"];
-    [parame setObject:_modal.sex forKey:@"sex"];
-    [parame setObject:_modal.area forKey:@"area"];
-    [parame setObject:_modal.realname forKey:@"realname"];
-    [parame setObject:_modal.tel forKey:@"tel"];
-    [parame setObject:_modal.address forKey:@"address"];
-    [parame setObject:_modal.workyears forKey:@"workyears"];
-    
-    //    [parame setObject:_modal.focus_industrys forKey:@"focus_industrys"];
-    //    [parame setObject:_modal.industry forKey:@"industry"];
-    [parame setObject:_modal.position forKey:@"position"];
-    [parame setObject:_modal.service forKey:@"service"];
-    [parame setObject:_modal.resource forKey:@"resource"];
-    [parame setObject:_modal.mylabels forKey:@"mylabels"];
-    [parame setObject:_modal.filllabels forKey:@"filllabels"];
-    
-    //    NSLog(@"parame =%@",parame);
+    if (_modal.workyears) {
+        [parame setObject:_modal.workyears forKey:@"workyears"];
+    }
+    if (_modal.position) {
+        [parame setObject:_modal.position forKey:@"position"];
+    }
+    if (_modal.resource) {
+        [parame setObject:_modal.resource forKey:@"resource"];
+    }
+    if (_modal.service) {
+        [parame setObject:_modal.service forKey:@"service"];
+    }
+    if (_modal.mylabels) {
+        [parame setObject:_modal.mylabels forKey:@"mylabels"];
+    }
+    if (_modal.filllabels) {
+        [parame setObject:_modal.filllabels forKey:@"filllabels"];
+    }
+
+    NSLog(@"parame =%@",parame);
     [XLDataService postWithUrl:SaveMemberURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         if (dataObj) {
             if ([dataObj[@"rtcode"] intValue] ==1) {
