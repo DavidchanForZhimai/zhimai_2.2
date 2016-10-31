@@ -12,6 +12,7 @@
 #import "XLDataService.h"
 #import "CoreArchive.h"
 #import "BPush.h"
+#import "NSString+Extend.h"
 #define LoginURL [NSString stringWithFormat:@"%@site/login",HttpURL]
 #define rememberPassWord  @"rememberPassWord"
 #define rememberUserName  @"rememberUserName"
@@ -113,11 +114,12 @@ typedef enum {
     UIImage *iconImage = [UIImage imageNamed:@"xuanzheweixuanzhong"];
     UIImage *highlightImage = [UIImage imageNamed:@"xuanzhexuanzhong"];
     
-    float rememberW = 88*SpacedFonts + iconImage.size.width + 5;
+    NSString *str = @"记住密码";
+    float rememberW = [str sizeWithFont:[UIFont systemFontOfSize:22*SpacedFonts] maxSize:CGSizeMake(1000, 20)].width + iconImage.size.width + 5;
     float rememberH = iconImage.size.height;
     
     __weak typeof(self) weakSelf = self;
-    _remember = [[BaseButton alloc]initWithFrame:frame(cellX + frameX(_passWordleftImageView) , CGRectGetMaxY(line2.frame) + 15, rememberW, rememberH) setTitle:@"记住密码" titleSize:22*SpacedFonts titleColor:BlackTitleColor backgroundImage:nil iconImage:iconImage highlightImage:highlightImage setTitleOrgin:CGPointMake((rememberH -22*SpacedFonts)/2.0 , 5) setImageOrgin:CGPointMake(0 , 0) inView:mainScrollView];
+    _remember = [[BaseButton alloc]initWithFrame:frame(cellX + frameX(_passWordleftImageView) , CGRectGetMaxY(line2.frame) + 15, rememberW, rememberH) setTitle:str titleSize:22*SpacedFonts titleColor:BlackTitleColor backgroundImage:nil iconImage:iconImage highlightImage:highlightImage setTitleOrgin:CGPointMake((rememberH -22*SpacedFonts)/2.0 , 5) setImageOrgin:CGPointMake(0 , 0) inView:mainScrollView];
     _remember.titleLabel.textAlignment = NSTextAlignmentCenter;
     _remember.shouldAnmial = NO;
     if ([CoreArchive boolForKey:isremember]) {

@@ -102,7 +102,7 @@ typedef NS_ENUM(int,SwitchActionTag) {
                     _data.author =dataObj[@"author"];
                     _data.product =dataObj[@"product"];
                     [self mainView];
-                    [self bottomView];
+                    [self bottomViews];
                 }
                 else
                 {
@@ -207,7 +207,7 @@ typedef NS_ENUM(int,SwitchActionTag) {
     UILabel *line = allocAndInitWithFrame(UILabel , frame(10,CGRectGetMaxY(_bg.frame)+ 10, 3, 28*SpacedFonts));
     line.backgroundColor = AppMainColor;
     [_mainScrollView addSubview:line];
-    [UILabel createLabelWithFrame:frame(CGRectGetMaxX(line.frame) + 4, frameY(line), 4*SpacedFonts*28,  28*SpacedFonts) text:@"添加封面" fontSize:28*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentLeft inView:_mainScrollView];
+    [UILabel createLabelWithFrame:frame(CGRectGetMaxX(line.frame) + 4, frameY(line), 150,  28*SpacedFonts) text:@"添加封面" fontSize:28*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentLeft inView:_mainScrollView];
     
     UIView *_coverView = allocAndInitWithFrame(UIView , frame(0, CGRectGetMaxY(line.frame) + 10, APPWIDTH, 90));
     _coverView.backgroundColor = WhiteColor;
@@ -246,7 +246,7 @@ typedef NS_ENUM(int,SwitchActionTag) {
     else{
         _businessCardColor = LightBlackTitleColor;
     }
-    _businessCardLb = [UILabel createLabelWithFrame:frame(10, 0, 5*28*SpacedFonts, cellHeight) text:@"显示微名片" fontSize:28*SpacedFonts textColor:_businessCardColor textAlignment:NSTextAlignmentLeft inView:_businessCard];
+    _businessCardLb = [UILabel createLabelWithFrame:frame(10, 0, 200, cellHeight) text:@"显示微名片" fontSize:28*SpacedFonts textColor:_businessCardColor textAlignment:NSTextAlignmentLeft inView:_businessCard];
     
     _businessCardSwitch =allocAndInitWithFrame(UISwitch, frame(frameWidth(_businessCard) -60, 5, 50, 30));
     _businessCardSwitch.on = _data.isAddress;
@@ -267,7 +267,7 @@ typedef NS_ENUM(int,SwitchActionTag) {
     else{
         _rankingColor = LightBlackTitleColor;
     }
-    _rankingLb = [UILabel createLabelWithFrame:frame(10, 0, 4*28*SpacedFonts, 35) text:@"参与排名" fontSize:28*SpacedFonts textColor:_rankingColor textAlignment:NSTextAlignmentLeft inView:_ranking];
+    _rankingLb = [UILabel createLabelWithFrame:frame(10, 0, 200, 35) text:@"参与排名" fontSize:28*SpacedFonts textColor:_rankingColor textAlignment:NSTextAlignmentLeft inView:_ranking];
     
     _rankingSwitch =allocAndInitWithFrame(UISwitch, frame(frameWidth(_businessCard) -60, 5, 50, 30));
     _rankingSwitch.tag = SwitchActionTagRanking;
@@ -293,7 +293,7 @@ typedef NS_ENUM(int,SwitchActionTag) {
         _collectColor = LightBlackTitleColor;
     }
     
-    _collectLb = [UILabel createLabelWithFrame:frame(10, 0, 6*28*SpacedFonts, cellHeight) text:@"收集传播路径" fontSize:28*SpacedFonts textColor:_collectColor textAlignment:NSTextAlignmentLeft inView:_collect];
+    _collectLb = [UILabel createLabelWithFrame:frame(10, 0, 200, cellHeight) text:@"收集传播路径" fontSize:28*SpacedFonts textColor:_collectColor textAlignment:NSTextAlignmentLeft inView:_collect];
     
     _collectSwitch =allocAndInitWithFrame(UISwitch, frame(frameWidth(_businessCard) -60, 5, 50, 30));
     _collectSwitch.on =_data.isgetclue;
@@ -644,7 +644,7 @@ typedef NS_ENUM(int,SwitchActionTag) {
 }
 
 #pragma mark - BottomView
-- (void)bottomView
+- (void)bottomViews
 {
     UIView *_botoomView = allocAndInitWithFrame(UIView, frame(0, APPHEIGHT - 50, APPWIDTH, 50));
     _botoomView.backgroundColor = WhiteColor;

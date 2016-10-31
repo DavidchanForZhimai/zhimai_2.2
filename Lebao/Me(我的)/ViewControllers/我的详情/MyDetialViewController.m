@@ -161,6 +161,9 @@
 @property(nonatomic,strong)UILabel *impressionTagsLb;//个人标签
 @property(nonatomic,copy)NSMutableArray *impressionTags;
 
+@property(nonatomic,strong)BaseButton *lookMore;
+@property(nonatomic,assign)BOOL islookMore;
+
 @end
 
 @implementation MyDetialViewController
@@ -181,10 +184,7 @@
     [self navViewTitleAndBackBtn:@"个人详情"];
     [self.view addSubview:self.myDetailTV];
     [self netWork];
-    addConnectionsBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    addConnectionsBtn.frame=CGRectMake(0,APPHEIGHT-TabBarHeight,APPWIDTH, TabBarHeight);
-    addConnectionsBtn.tag=2222;
-    [self.view addSubview:addConnectionsBtn];
+   
 }
 
 -(void)reflashBtn:(NSNotification *)notification
@@ -464,6 +464,10 @@
     //好友印象
     [self.viewFooter addSubview:self.impressionTagsLb];
     [self.viewFooter addSubview:self.impressionTagsView];
+    
+     [self.viewFooter addSubview:self.lookMore];
+    
+     _viewFooter.userInteractionEnabled = YES;
     //设置位置
     [self tagsViewReSetFrame];
     return _viewFooter;
@@ -663,6 +667,32 @@
     _impressionTags = [[NSMutableArray alloc]init];
     return _impressionTags;
 }
+- (BaseButton *)lookMore
+{
+    if (_lookMore) {
+        return _lookMore;
+    }
+    _lookMore = [[BaseButton alloc]initWithFrame:CGRectZero setTitle:@"查看更多" titleSize:13 titleColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:WhiteColor inView:nil];
+    _lookMore.userInteractionEnabled = YES;
+    if (self.impressionTags.count>10) {
+        
+        self.lookMore.hidden = NO;
+        
+    }
+    else
+    {
+        self.lookMore.hidden = YES;
+    }
+
+    __weak typeof(self) weakSelf = self;
+    _lookMore.didClickBtnBlock = ^
+    {
+        weakSelf.islookMore = !weakSelf.islookMore;
+        [weakSelf tagsViewReSetFrame];
+    };
+    
+    return _lookMore;
+}
 #pragma mark
 #pragma mark resetFrame
 - (void)tagsViewReSetFrame
@@ -677,10 +707,37 @@
     
     _impressionTagsLb.frame = CGRectMake(20, CGRectGetMaxY(_personsTagsView.frame), APPWIDTH, 35);
     
-    _impressionTagsView.frame =CGRectMake(20, CGRectGetMaxY(_impressionTagsLb.frame), APPWIDTH - 40, [_impressionTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
+    if (self.impressionTags.count<=10) {
+        
+        _impressionTagsView.tagsArray = self.impressionTags;
+        _impressionTagsView.frame =CGRectMake(20, CGRectGetMaxY(_impressionTagsLb.frame), APPWIDTH - 40, [_impressionTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
+        _lookMore.frame = CGRectMake(0, CGRectGetMaxY(_impressionTagsView.frame), APPWIDTH, 0);
+       _viewFooter.frame = frame(0, 0, APPWIDTH, CGRectGetMaxY(_impressionTagsView.frame) + 10);
+        
+    }
+    else
+    {
+        NSMutableArray *array;
+        if (self.islookMore) {
+            [_lookMore setTitle:@"点击收回" forState:UIControlStateNormal];
+            array = self.impressionTags;
+        }
+        else
+        {
+            [_lookMore setTitle:@"查看更多" forState:UIControlStateNormal];
+            array = (NSMutableArray *)[self.impressionTags subarrayWithRange:NSMakeRange(0, 10)];
+        }
+        _impressionTagsView.tagsArray = array;
+        _impressionTagsView.frame =CGRectMake(20, CGRectGetMaxY(_impressionTagsLb.frame), APPWIDTH - 40, [_impressionTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
+        
+        _lookMore.frame = CGRectMake(0, CGRectGetMaxY(_impressionTagsView.frame) + 10, APPWIDTH, 30);
+        _viewFooter.frame = frame(0, 0, APPWIDTH, CGRectGetMaxY(_lookMore.frame) + 10);
+        
+    }
     
-    _viewFooter.frame = frame(0, 0, APPWIDTH, CGRectGetMaxY(_impressionTagsView.frame) + 10);
-    
+    [self.myDetailTV beginUpdates];
+    _myDetailTV.tableFooterView = self.viewFooter;
+     [self.myDetailTV endUpdates];
     
 }
 #pragma mark --bottomView底部view
@@ -860,10 +917,23 @@
                     [self.resourseaTags addObjectsFromArray:[headerModel.resource componentsSeparatedByString:@","]];
                     
                 }
-                [self.impressionTags addObjectsFromArray:headerModel.impression] ;
+                [self.impressionTags addObjectsFromArray:headerModel.impression];
                 
                 [self navViewTitleAndBackBtn:headerModel.realname];
+                
+                
+                _myDetailTV.tableHeaderView = self.viewHeader;
+                _myDetailTV.tableFooterView = self.viewFooter;
+                
+                [_myDetailTV reloadData];
+                
                 if (!headerModel.isme) {
+                    
+                    addConnectionsBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+                    addConnectionsBtn.frame=CGRectMake(0,APPHEIGHT-TabBarHeight,APPWIDTH, TabBarHeight);
+                    addConnectionsBtn.tag=2222;
+                    [self.view addSubview:addConnectionsBtn];
+                    
                     [self addBottomViewWithBtnStr:[dataObj[@"relation"] intValue] andReward:[dataObj[@"reward"] floatValue]];
                     _myDetailTV.frame = CGRectMake(0, _myDetailTV.y,_myDetailTV.width, APPHEIGHT - (_myDetailTV.y) -TabBarHeight);
                 }else{
@@ -872,9 +942,6 @@
                     _myDetailTV.frame = CGRectMake(0, _myDetailTV.y,_myDetailTV.width, APPHEIGHT - (_myDetailTV.y));
                     
                 }
-                _myDetailTV.tableHeaderView = self.viewHeader;
-                _myDetailTV.tableFooterView = self.viewFooter;
-                [_myDetailTV reloadData];
                 
             }
             else

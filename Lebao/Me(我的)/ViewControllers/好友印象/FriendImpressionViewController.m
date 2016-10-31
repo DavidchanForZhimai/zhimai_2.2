@@ -24,6 +24,7 @@
 @property(nonatomic,copy)NSString *openid;
 @property(nonatomic,copy)NSString *relation_label;
 @property(nonatomic,copy)NSMutableArray *labels;
+
 @end
 @implementation FriendImpressionData
 
@@ -153,7 +154,8 @@
 @property(nonatomic,strong)BaseButton *evaluation;
 @property(nonatomic,strong)DWTagsView *impressionTagsView;//求cell高用的
 @property(nonatomic,copy)NSMutableArray *impressionTags;
-@property(assign)int page;;
+@property(assign)int page;
+@property(nonatomic,assign)BOOL islookMore;
 @end
 
 @implementation FriendImpressionViewController
@@ -266,8 +268,31 @@
 {
     if (indexPath.section ==0) {
         
-        self.impressionTagsView.tagsArray = self.impressionTags;
-        return [_impressionTagsView.collectionView.collectionViewLayout collectionViewContentSize].height + 40;
+        float hh= 0;
+ 
+        if (self.impressionTags.count>10) {
+            if (_islookMore) {
+                self.impressionTagsView.tagsArray = self.impressionTags;
+            }
+            else
+            {
+                
+             self.impressionTagsView.tagsArray = (NSMutableArray *)[self.impressionTags subarrayWithRange:NSMakeRange(0, 10)];
+            }
+            
+             hh= [_impressionTagsView.collectionView.collectionViewLayout collectionViewContentSize].height + 70;
+            
+        }
+        else
+        {
+         
+            self.impressionTagsView.tagsArray = self.impressionTags;
+            hh = [_impressionTagsView.collectionView.collectionViewLayout collectionViewContentSize].height + 40;
+            
+        }
+        
+      
+        return hh;
     }
     else
     {
@@ -309,12 +334,41 @@
             impressionTagsView.tag = 888;
             [cell addSubview:impressionTagsView];
             
+            BaseButton *lookMore = [[BaseButton alloc]initWithFrame:CGRectZero setTitle:@"查看更多" titleSize:13 titleColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:WhiteColor inView:cell];
+            lookMore.hidden = YES;
+            lookMore.tag = 8888;
+            __weak typeof(self) weakSelf = self;
+            lookMore.didClickBtnBlock = ^
+            {
+                weakSelf.islookMore = !weakSelf.islookMore;
+                [weakSelf.impressionView reloadData];
+            };
             
         }
         
         DWTagsView *impressionTagsView = [cell viewWithTag:888];
-        impressionTagsView.tagsArray = self.impressionTags;
+        BaseButton *lookMore = [cell viewWithTag:8888];
+      
+        if(self.impressionTags.count>10) {
+            lookMore.hidden = NO;
+            if (self.islookMore) {
+                impressionTagsView.tagsArray = self.impressionTags;
+                [lookMore setTitle:@"点击收回" forState:UIControlStateNormal];
+            }
+            else
+            {
+                impressionTagsView.tagsArray = (NSMutableArray *)[self.impressionTags subarrayWithRange:NSMakeRange(0, 10)];
+                [lookMore setTitle:@"查看更多" forState:UIControlStateNormal];
+            }
+        }
+        else
+        {
+        
+            lookMore.hidden = YES;
+            impressionTagsView.tagsArray= self.impressionTags;
+        }
         impressionTagsView.frame = CGRectMake(20, 20, APPWIDTH - 40, [impressionTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
+        lookMore.frame = CGRectMake(0, CGRectGetMaxY(impressionTagsView.frame) + 20, APPWIDTH , 30);
         return cell;
     }
     else
