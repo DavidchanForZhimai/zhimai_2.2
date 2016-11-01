@@ -97,11 +97,16 @@
         addressStorage.font = Size(24.0);
         
         addressStorage.frame = CGRectMake(industryTextStorage.left, industryTextStorage.bottom + 8, industryTextStorage.width, CGFLOAT_MAX);
+        if ((![model.service isEqualToString:@""]&&model.service)||(![model.resource isEqualToString:@""]&&model.resource)) {
         if (addressStorage.text.length>0) {
             _line1Rect  = CGRectMake(0, addressStorage.bottom + 10, APPWIDTH, 0.5);
-        }else{
+        }else if (industryTextStorage.text.length>0){
+            addressStorage.frame = CGRectMake(industryTextStorage.left, industryTextStorage.bottom, industryTextStorage.width, 0);
+            _line1Rect  = CGRectMake(0, industryTextStorage.bottom + 10, APPWIDTH, 0.5);
+        }else {
             _line1Rect  = CGRectMake(0, _avatarStorage.bottom + 10, APPWIDTH, 0.5);
         }
+            }
         if(meetBtn){
         //约见按钮
         _meetBtnRect = CGRectMake(APPWIDTH-70, 20, 60, 30);

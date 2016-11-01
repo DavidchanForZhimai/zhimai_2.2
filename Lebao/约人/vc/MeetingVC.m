@@ -239,7 +239,7 @@
         }];
         
     };
-    
+
 }
 
 -(void)addYrBtn
@@ -310,8 +310,8 @@
     [self shakeToShow:_yrBtn];
     NSDate *date2= [[NSUserDefaults standardUserDefaults]objectForKey:@"dateForYoukong"];
     NSDateComponents *d=[DateHelper calculatorExpireDatetimeWithData:date2];
-    if (date2!=nil&&[d minute]<30&&[d hour]<1&&[d day]<1&&[d month]<1&&[d year]<1) {
-        [[ToolManager shareInstance] showAlertMessage:[NSString stringWithFormat:@"您已点击有空,%ld分钟%ld秒内有效",29-[d minute],59-[d second]]];
+    if (date2!=nil&&[d minute]<5&&[d hour]<1&&[d day]<1&&[d month]<1&&[d year]<1) {
+        [[ToolManager shareInstance] showAlertMessage:[NSString stringWithFormat:@"您已点击有空,%ld分钟%ld秒内有效",4-[d minute],59-[d second]]];
         return;
     }
     
@@ -336,7 +336,7 @@
                         //                        NSLog(@"param====%@",param);
                         [XLDataService putWithUrl:MeetAppendURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
                             if (dataObj) {
-                                //                                NSLog(@"dataobj=%@",dataObj);
+                                    NSLog(@"dataobj=%@",dataObj);
                                 MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
                                 if (model.rtcode ==1) {
                                     _isopen=YES;

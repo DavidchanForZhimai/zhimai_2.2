@@ -107,6 +107,7 @@
         otherMoneyField.textAlignment=NSTextAlignmentCenter;
         otherMoneyField.layer.cornerRadius=8;
         otherMoneyField.delegate=self;
+        otherMoneyField.hidden=YES;
 //        otherMoneyField.keyboardType=UIKeyboardTypePhonePad;
         otherMoneyField.text=@"1";
         otherMoneyField.backgroundColor=[UIColor whiteColor];
@@ -181,8 +182,10 @@
 {
     otherMoneyField.frame=CGRectMake(20,CGRectGetMaxY(btn1.frame)+15,self.frame.size.width-40, 0+height);
     if(height>0){
+        otherMoneyField.hidden=NO;
         _soundBtn.frame=CGRectMake(20,CGRectGetMaxY(otherMoneyField.frame)+15,self.frame.size.width-80, 32);}
     else{
+        otherMoneyField.hidden=YES;
         _soundBtn.frame=CGRectMake(20,CGRectGetMaxY(btn1.frame)+15,self.frame.size.width-80, 32);
     }
     _logField.frame=_soundBtn.frame;
@@ -261,7 +264,8 @@
      [audioBtn setImage:[UIImage imageNamed:@"yuejian_luyinhou"] forState:UIControlStateNormal];
     audioBtn.tag=12;
     _logField.frame=_soundBtn.frame;
-
+    _soundBtn.hidden=YES;
+    _logField.hidden=NO;
 }
 
 
@@ -274,11 +278,15 @@
         sender.tag=11;
         [sender setImage:[UIImage imageNamed:@"yuejian_jianpan"] forState:UIControlStateNormal];
         _logField.frame=CGRectMake(CGRectGetMaxX(_logField.frame), CGRectGetMaxY(_logField.frame), 0, 0);
+        _logField.hidden=YES;
+        _soundBtn.hidden=NO;
         
     }else if(sender.tag==11){
         sender.tag=10;
         [sender setImage:[UIImage imageNamed:@"yuejian_luying"] forState:UIControlStateNormal];
        _logField.frame=_soundBtn.frame;
+        _soundBtn.hidden=YES;
+        _logField.hidden=NO;
     }else if(sender.tag==12){
         sender.tag=13;
         [sender setImage:[UIImage imageNamed:@"yuejian_bofang"] forState:UIControlStateNormal];

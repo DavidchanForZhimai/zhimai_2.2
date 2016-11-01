@@ -118,7 +118,7 @@ typedef enum {
     NSString * zhifuType ;
         if (_moneyType == zhimaizhifuType) {
         zhifuType = @"amount";
-    }else
+    }else if (_moneyType == weixinzhifuType)
         
     {
         zhifuType  = @"wx";
@@ -137,7 +137,7 @@ typedef enum {
 //                [data writeToFile:@"/Users/yanwenbin/Desktop/mp3.mp3" atomically:YES];
                 
                         [[XianSuoDetailInfo shareInstance]faBuKuaJieWithTitle:_titStr andContent:_content andIndustry:_industry andCost:_qwjeStr andPaytype:zhifuType audiosUrl:audioDic[@"audiourl"] andCallBack:^(BOOL issucced, NSString *info, NSDictionary *jsonDic) {
-                
+                            
                             if (issucced == YES) {
                 
                                 if (_moneyType==weixinzhifuType) {
@@ -188,17 +188,18 @@ typedef enum {
 
     }else if(_zfymType == LingQuZhiFu){
        
-           [[XianSuoDetailInfo shareInstance]lqxsWithID:_xsID andRadio:[_bfb stringByReplacingOccurrencesOfString:@"%" withString:@""] andDeposit:_jineStr andPaytype:@"amount" andCallBack:^(BOOL issucced, NSString *info, NSDictionary *jsonDic) {
+           [[XianSuoDetailInfo shareInstance]lqxsWithID:_xsID andRadio:[_bfb stringByReplacingOccurrencesOfString:@"%" withString:@""] andDeposit:_jineStr andPaytype:zhifuType andCallBack:^(BOOL issucced, NSString *info, NSDictionary *jsonDic) {
                myKuaJieVC.isLinquVC = YES;
+              
                 if (issucced == YES) {
                     if (_moneyType==weixinzhifuType) {
-                        [[WetChatPayManager shareInstance]wxPay:jsonDic succeedMeg:@"发布成功！" recharge:@"0" wetChatPaySucceed:^(NSString *payMoney) {
+                        [[WetChatPayManager shareInstance]wxPay:jsonDic[@"datas"] succeedMeg:@"领取成功！" recharge:@"0" wetChatPaySucceed:^(NSString *payMoney) {
                             
                            PushView(self, myKuaJieVC);
                         }];
                         return ;
                     }
-                    [[ToolManager shareInstance] showSuccessWithStatus:@"发布成功！"];
+                    [[ToolManager shareInstance] showSuccessWithStatus:@"领取成功！"];
                     PushView(self, myKuaJieVC);
                 }
                 else

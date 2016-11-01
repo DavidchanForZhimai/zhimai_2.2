@@ -55,7 +55,7 @@
     _selectedindex= 0;
     _arrayTitle = @[@"保险",@"房产",@"车行",@"金融",@"其他"];
     // Do any additional setup after loading the view.
-    [self setTitle:@"完善资料"];
+    [self navViewTitle:@"完善资料"];
     BaseButton *next = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 60, StatusBarHeight, 60, NavigationBarHeight) setTitle:@"完成" titleSize:28*SpacedFonts titleColor:BlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:[UIColor clearColor] inView:self.view];
     
     __weak RegistFinishViewController *weakSelf = self;
