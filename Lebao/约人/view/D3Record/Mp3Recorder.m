@@ -12,7 +12,7 @@
 @property (nonatomic, strong) AVAudioSession *session;
 @property (nonatomic, strong) AVAudioRecorder *recorder;
 @property (nonatomic, strong) NSString *path;
-@property (nonatomic,strong) AVAudioPlayer *audioPlayer;//音频播放器，用于播放录音文件
+//@property (nonatomic,strong) AVAudioPlayer *audioPlayer;//音频播放器，用于播放录音文件
 @end
 
 @implementation Mp3Recorder
@@ -220,23 +220,23 @@
  *
  *  @return 播放器
  */
--(AVAudioPlayer *)audioPlayer{
-    if (!_audioPlayer) {
-        NSURL *url=[NSURL URLWithString:[self cafPath]] ;
-        NSError *error=nil;
-        _audioPlayer=[[AVAudioPlayer alloc]initWithContentsOfURL:url error:&error];
-        _audioPlayer.numberOfLoops=0;
-        _audioPlayer.delegate = self;
-        [_audioPlayer prepareToPlay];
-        if (error) {
-            NSLog(@"创建播放器过程中发生错误，错误信息：%@",error.localizedDescription);
-            return nil;
-            
-        }
-    }
-   
-    return _audioPlayer;
-}
+//-(AVAudioPlayer *)audioPlayer{
+//    if (!_audioPlayer) {
+//        NSURL *url=[NSURL URLWithString:[self cafPath]] ;
+//        NSError *error=nil;
+//        _audioPlayer=[[AVAudioPlayer alloc]initWithContentsOfURL:url error:&error];
+//        _audioPlayer.numberOfLoops=0;
+////        _audioPlayer.delegate = self;
+//        [_audioPlayer prepareToPlay];
+//        if (error) {
+//            NSLog(@"创建播放器过程中发生错误，错误信息：%@",error.localizedDescription);
+//            return nil;
+//            
+//        }
+//    }
+//   
+//    return _audioPlayer;
+//}
 
 - (NSString *)mp3Path
 {

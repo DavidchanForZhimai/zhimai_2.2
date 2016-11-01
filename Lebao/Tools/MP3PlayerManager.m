@@ -62,6 +62,7 @@ static MP3PlayerManager* mP3PlayerManager;
     _url = url;
     
     [self setPlayer];
+    [self setAudioSession];
     [self.audioPlayer play];
     
     

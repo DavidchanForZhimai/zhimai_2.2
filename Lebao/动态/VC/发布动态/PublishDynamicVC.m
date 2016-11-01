@@ -17,6 +17,7 @@
 #import "Parameter.h"
 #import "LWImageBrowser.h"
 #import "CooperateView.h"
+#import <AVFoundation/AVFoundation.h>
 #define PADDING 10
 #define kScreenHeight [UIScreen mainScreen].bounds.size.height
 #define kScreenWidth [UIScreen mainScreen].bounds.size.width
@@ -430,6 +431,7 @@
     [self resetLayout];
     
 }
+
 //添加图片事件
 - (void)BtnAddPhoneClick{
     [self.view endEditing:YES];
@@ -505,12 +507,16 @@
     
     if (actionSheet.tag==1001) {
         if (buttonIndex==0) {
-            
+            if (![self captureDeviceStatus]) {
+                return;
+            }
             [self callCameraOrPhotoWithType:UIImagePickerControllerSourceTypeCamera];
             
             
         }else if (buttonIndex==1) {
-            
+            if (![self assetsLibraryStatus]) {
+                return;
+            }
             TZImagePickerController *imagePickerVc = [[TZImagePickerController alloc] initWithMaxImagesCount:Pnumb delegate:nil];
             // 你可以通过block或者代理，来得到用户选择的照片.
             [imagePickerVc setDidFinishPickingPhotosHandle:^(NSArray<UIImage *> *photos, NSArray *assets) {
@@ -576,6 +582,40 @@
         
     }
 }
+//判断相机的
+- (BOOL)captureDeviceStatus
+{
+    AVAuthorizationStatus status = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+    
+    if (status == AVAuthorizationStatusDenied || status == AVAuthorizationStatusRestricted) {
+        [[[UIAlertView alloc] initWithTitle:@"无法打开相机" message:@"请在“设置-隐私-相机”选项中允许访问你的相机" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil] show];
+        return NO;
+        
+    } else {
+        
+        return YES;
+        
+    }
+}
+//判断相册的
+- (BOOL)assetsLibraryStatus
+{
+    if (!iOS9) {
+        ALAuthorizationStatus status = [ALAssetsLibrary authorizationStatus];
+        
+        if (status == ALAuthorizationStatusDenied || ALAuthorizationStatusRestricted) {
+            [[[UIAlertView alloc] initWithTitle:@"无法打开照片" message:@"请在“设置-隐私-照片”选项中允许访问你的照片" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil] show];
+            return NO;
+            
+        } else {
+            
+            return YES;
+            
+        }
+    }
+    return YES;
+}
+
 #pragma UIImagePickerControllerDelegate
 //相册或则相机选择上传的实现
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)aImage editingInfo:(NSDictionary *)editingInfo{
