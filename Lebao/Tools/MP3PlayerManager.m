@@ -27,6 +27,9 @@ static MP3PlayerManager* mP3PlayerManager;
 //录音
 - (void)audioRecorderWithURl:(NSString *)url
 {
+    if (![self checkRecordPermission]) {
+        return;
+    }
     _url = url;
     [self setAudioSession];
     [self setRecorder];
@@ -57,6 +60,7 @@ static MP3PlayerManager* mP3PlayerManager;
          NSLog(@"file path:%@",url);
    
     _url = url;
+    
     [self setPlayer];
     [self.audioPlayer play];
     
@@ -173,6 +177,7 @@ static MP3PlayerManager* mP3PlayerManager;
         NSURL *url=[self getSavePath];
         NSError *error=nil;
         _audioPlayer=[[AVAudioPlayer alloc]initWithContentsOfURL:url error:&error];
+        self.audioPlayer.volume = 1.0f;
         _audioPlayer.numberOfLoops=0;
         [_audioPlayer prepareToPlay];
         _audioPlayer.delegate = self;
@@ -423,4 +428,31 @@ static MP3PlayerManager* mP3PlayerManager;
         }
     }];
 }
+#pragma mark - 检查麦克风权限
+
+- (BOOL)checkRecordPermission
+{
+    AVAudioSession *avSession = [AVAudioSession sharedInstance];
+    
+    if (avSession && [avSession respondsToSelector:@selector(requestRecordPermission:)]) {
+        
+        __block BOOL isPermission;
+        
+        [avSession requestRecordPermission:^(BOOL granted) {
+            
+            if (!granted) {
+                
+                [[[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"请在“设置-隐私-麦克风”选项中允许知脉访问您的麦克风" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil] show];
+            }
+            
+            isPermission = granted;
+            
+        }];
+        
+        return isPermission;
+    }
+    
+    return YES;
+}
+
 @end

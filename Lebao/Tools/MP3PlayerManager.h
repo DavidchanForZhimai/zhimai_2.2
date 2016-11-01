@@ -28,6 +28,7 @@ typedef void (^FinishDownloadBlock)(BOOL succeed);
 - (void)stopPlayer;
 -(void)pausePlayer;
 -(void)playerNil;
+- (BOOL)checkRecordPermission;
 - (void)audioPlayerWithURl:(NSString *)url;
 
 

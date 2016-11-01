@@ -186,12 +186,13 @@
         [[ToolManager shareInstance] seleteImageFormSystem:weakSelf seleteImageFormSystemBlcok:^(UIImage *image) {
                 [[ToolManager shareInstance] showWithStatus:@"修改中.."];
                 [[UpLoadImageManager shareInstance] upLoadImageType:@"authen" image:image   imageBlock:^(UpLoadImageModal * upLoadImageModal) {
-                        NSMutableDictionary * parame = [Parameter parameterWithSessicon];
                     
+                        NSMutableDictionary * parame = [Parameter parameterWithSessicon];
                         [parame setObject:upLoadImageModal.imgurl forKey:@"cardpic"];
                     
                         [XLDataService postWithUrl:SaveAuthenURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-                    
+                            NSLog(@"dataObj =%@ parame =%@",dataObj
+                                  ,parame);
                             if (dataObj) {
                                 if ([dataObj[@"rtcode"] integerValue]==1) {
                                     url =upLoadImageModal.imgurl;;

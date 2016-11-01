@@ -38,6 +38,9 @@
 // 判断是否为iOS8
 #define iOS8 ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
 
+// 判断是否为iOS9
+#define iOS9 ([[[UIDevice currentDevice] systemVersion] floatValue] >= 9.0)
+
 //判断是否为iPhone
 #define IPHONE (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
 

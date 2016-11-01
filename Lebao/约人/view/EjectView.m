@@ -119,7 +119,7 @@
         _soundBtn.layer.borderWidth=1;
         [_soundBtn setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
         [_soundBtn setTitle:@"按住  说话" forState:UIControlStateNormal];
-        [_soundBtn initRecord:self maxtime:60];
+        [_soundBtn initRecord:self maxtime:60 title:@"松开停止录音"];
         _soundBtn.layer.cornerRadius = 8;
         [self addSubview:_soundBtn];
         

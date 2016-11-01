@@ -1502,7 +1502,7 @@
         [parame setObject:_modal.filllabels forKey:@"filllabels"];
     }
 
-    NSLog(@"parame =%@",parame);
+//    NSLog(@"parame =%@",parame);
     [XLDataService postWithUrl:SaveMemberURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         if (dataObj) {
             if ([dataObj[@"rtcode"] intValue] ==1) {

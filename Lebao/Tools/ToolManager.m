@@ -33,6 +33,8 @@
 #import "MMExampleDrawerVisualStateManager.h"
 #import "MeViewController.h"
 #import "XLDataService.h"
+#import <AVFoundation/AVFoundation.h>
+#import <Photos/Photos.h>
 #define ShowWithStatus  @"加载数据..."
 #define ShowInfoWithStatus @"亲，请求失败，重试！"
 #define ShowSuccessWithStatus  @"Great Success!"
@@ -232,11 +234,20 @@ static dispatch_once_t once;
             if (buttonIndex ==0) {
                 
                 //来源:相机
+               
+                if (![self captureDeviceStatus]) {
+                    return;
+                }
                 sourceType = UIImagePickerControllerSourceTypeCamera;
             }
             else if (buttonIndex ==1)
             {
-                //来源:相册
+
+                if (![self assetsLibraryStatus]) {
+                        
+                    return;
+                }
+
                 sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
                 
             }
@@ -254,6 +265,39 @@ static dispatch_once_t once;
     }];
     
     [_actionSheetView show];
+}
+//判断相机的
+- (BOOL)captureDeviceStatus
+{
+    AVAuthorizationStatus status = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+    
+    if (status == AVAuthorizationStatusDenied || status == AVAuthorizationStatusRestricted) {
+        [[[UIAlertView alloc] initWithTitle:@"无法打开相机" message:@"请在“设置-隐私-相机”选项中允许访问你的相机" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil] show];
+        return NO;
+        
+    } else {
+        
+        return YES;
+        
+    }
+}
+//判断相册的
+- (BOOL)assetsLibraryStatus
+{
+    if (!iOS9) {
+    ALAuthorizationStatus status = [ALAssetsLibrary authorizationStatus];
+    
+    if (status == kCLAuthorizationStatusDenied || kCLAuthorizationStatusRestricted) {
+        [[[UIAlertView alloc] initWithTitle:@"无法打开照片" message:@"请在“设置-隐私-照片”选项中允许访问你的照片" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil] show];
+        return NO;
+        
+    } else {
+        
+        return YES;
+        
+    }
+    }
+    return YES;
 }
 #pragma mark
 #pragma mark 提示选择

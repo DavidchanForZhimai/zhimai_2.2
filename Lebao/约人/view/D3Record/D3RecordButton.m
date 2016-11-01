@@ -15,6 +15,7 @@
     self.delegate = delegate;
     maxTime = _maxTime;
     title = _title;
+    
     mp3 = [[Mp3Recorder alloc]initWithDelegate:self];
     
     [self addTarget:self action:@selector(startRecord) forControlEvents:UIControlEventTouchDown];
@@ -28,9 +29,38 @@
     [self initRecord:delegate maxtime:_maxTime title:nil];
 }
 
+#pragma mark - 检查麦克风权限
+
+- (BOOL)checkRecordPermission
+{
+    AVAudioSession *avSession = [AVAudioSession sharedInstance];
+    
+    if (avSession && [avSession respondsToSelector:@selector(requestRecordPermission:)]) {
+        
+        __block BOOL isPermission;
+        
+        [avSession requestRecordPermission:^(BOOL granted) {
+            
+            if (!granted) {
+                
+                [[[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"请在“设置-隐私-麦克风”选项中允许知脉访问您的麦克风" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil] show];
+            }
+            
+            isPermission = granted;
+            
+        }];
+        
+        return isPermission;
+    }
+    
+    return YES;
+}
 
 //开始录音
 -(void)startRecord{
+    if (![self checkRecordPermission]) {
+        return;
+    }
     [mp3 startRecord];
     [RecordHUD show];
     [self setHUDTitle];

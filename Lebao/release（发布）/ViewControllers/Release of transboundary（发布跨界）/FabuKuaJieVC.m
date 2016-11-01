@@ -165,11 +165,8 @@
 {
     
   
-    if (![[MP3PlayerManager shareInstance] canRecord]) {
+    if (![[MP3PlayerManager shareInstance] checkRecordPermission]) {
         
-        [[ToolManager shareInstance] showAlertViewTitle:@"提示" contentText:@"请到设置-隐私-麦克风-打开麦克风权限" showAlertViewBlcok:^{
-            
-        }];
         return;
     }
   

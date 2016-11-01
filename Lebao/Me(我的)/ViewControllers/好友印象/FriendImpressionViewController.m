@@ -54,7 +54,6 @@
     UIImageView *userICon;
     UILabel *userName;
     UILabel *time;
-    
     UIImageView *weixinIcon;
     UILabel *from;
     
