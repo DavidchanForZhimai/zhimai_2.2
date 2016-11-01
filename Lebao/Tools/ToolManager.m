@@ -34,7 +34,6 @@
 #import "MeViewController.h"
 #import "XLDataService.h"
 #import <AVFoundation/AVFoundation.h>
-#import <Photos/Photos.h>
 #define ShowWithStatus  @"加载数据..."
 #define ShowInfoWithStatus @"亲，请求失败，重试！"
 #define ShowSuccessWithStatus  @"Great Success!"
@@ -287,7 +286,7 @@ static dispatch_once_t once;
     if (!iOS9) {
     ALAuthorizationStatus status = [ALAssetsLibrary authorizationStatus];
     
-    if (status == kCLAuthorizationStatusDenied || kCLAuthorizationStatusRestricted) {
+    if (status == ALAuthorizationStatusDenied || ALAuthorizationStatusRestricted) {
         [[[UIAlertView alloc] initWithTitle:@"无法打开照片" message:@"请在“设置-隐私-照片”选项中允许访问你的照片" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil] show];
         return NO;
         
