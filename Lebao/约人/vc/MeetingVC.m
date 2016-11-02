@@ -276,7 +276,7 @@
         [self netWorkRefresh:NO andIsLoadMoreData:YES isShouldClearData:NO];
     }];
     [self.view addSubview:_yrTab];
-    _headView=[[MeetHeadV alloc]initWithFrame:CGRectMake(0, 0, APPWIDTH, 254)];
+    _headView=[[MeetHeadV alloc]initWithFrame:CGRectMake(0, 0, APPWIDTH, 255)];
     _headView.delegate = self;
     self.yrTab.tableHeaderView=_headView;
     

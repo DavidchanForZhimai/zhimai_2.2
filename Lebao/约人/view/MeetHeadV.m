@@ -47,16 +47,6 @@
 -(void)creatUI
 {
     
-    
-    //    self.backgroundColor=[UIColor clearColor];
-    //    UIView *bgView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, APPWIDTH, 200)];
-    //
-    //    [self addSubview:bgView];
-    
-    //    UIImageView *bgImgV=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, APPWIDTH, 200)];
-    //    bgImgV.userInteractionEnabled=YES;
-    //    bgImgV.image=[UIImage imageNamed:@"wodeBG"];
-    //    [self addSubview:bgImgV];
     CALayer *bgImgV=[[CALayer alloc]init];
     bgImgV.contents=(id)[UIImage imageNamed:@"wodeBG"].CGImage;
     bgImgV.frame=CGRectMake(0, 0, APPWIDTH, 200);
@@ -88,11 +78,11 @@
     [self shakeToShow:_vlayer3];
     
     CALayer *underView=[[CALayer alloc]init];
-    underView.frame=CGRectMake(0, CGRectGetMaxY(bgImgV.frame), APPWIDTH, 44);
+    underView.frame=CGRectMake(0, CGRectGetMaxY(bgImgV.frame), APPWIDTH, 45);
     underView.backgroundColor=[UIColor whiteColor].CGColor;
     [self.layer addSublayer:underView];
     _nearManLab=[[UILabel alloc]init];
-    _nearManLab.frame=CGRectMake(15, 210, 160, 20);
+    _nearManLab.frame=CGRectMake(15, CGRectGetMaxY(bgImgV.frame)+15, 160, 15);
     _nearManLab.textColor=[UIColor colorWithRed:0.424 green:0.427 blue:0.431 alpha:1.000];
     _nearManLab.textAlignment=NSTextAlignmentLeft;
     _nearManLab.font=[UIFont systemFontOfSize:15];
@@ -101,7 +91,7 @@
     
     
     UIButton *genduoBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    genduoBtn.frame=CGRectMake(APPWIDTH-44, 200, 44, 44);
+    genduoBtn.frame=CGRectMake(APPWIDTH-45, 200, 45, 45);
     [genduoBtn setImage:[UIImage imageNamed:@"gengduo"] forState:UIControlStateNormal];
     [genduoBtn addTarget:self action:@selector(genduoAction:)  forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:genduoBtn];

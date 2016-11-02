@@ -195,7 +195,7 @@
         messageLab.text=@"您还未开通会员";
     }
     
-    messageLab.frame= CGRectMake(CGRectGetMaxX(headImagV.frame) + 10, CGRectGetMaxY(nameLab.frame) + 10,messageLab.text.length*12, 12);
+    messageLab.frame= CGRectMake(CGRectGetMaxX(headImagV.frame) + 10, CGRectGetMaxY(nameLab.frame) + 10,APPWIDTH-CGRectGetMaxX(headImagV.frame)-20, 12);
     [vipView addSubview:messageLab];
     
     
