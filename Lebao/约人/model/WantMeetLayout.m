@@ -169,7 +169,7 @@
         LWTextStorage* timerLab=[[LWTextStorage alloc]initWithFrame:CGRectMake(0, distanceLab.top, APPWIDTH-10, distanceLab.height)];
         
         
-        timerLab.text=[NSString stringWithFormat:@"%@有空",[model.time updateTime]];
+        timerLab.text=[NSString stringWithFormat:@"%@",[model.time timeformatString:@"yyyy-MM-dd HH:mm"]];
         
         timerLab.textAlignment=NSTextAlignmentRight;
         timerLab.textColor=[UIColor colorWithRed:0.482 green:0.486 blue:0.494 alpha:1.000];

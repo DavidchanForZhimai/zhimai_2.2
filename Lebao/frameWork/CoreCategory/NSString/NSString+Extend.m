@@ -103,5 +103,49 @@
 //    return [NSString stringWithFormat:@"%ld年前",years];
 }
 /** , 返回更新时间 */
-
+/** , 返回更新时间 */
+- (NSString *)updateTimeForHourAndMiniter{
+    // 获取当前时时间戳
+    NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
+    // 创建歌曲时间戳
+    NSTimeInterval createTime = self.floatValue;
+    // 时间差
+    NSTimeInterval time = currentTime - createTime;
+    if (time<0) {
+        time =-time;
+    }
+    // 秒转秒钟
+    NSInteger seconds = time;
+    if (seconds<60) {
+        //        return [NSString stringWithFormat:@"%ld秒前",seconds];
+        return @"刚刚";
+    }
+    // 秒转分钟
+    NSInteger mins = time/60;
+    if (mins<60) {
+        return [NSString stringWithFormat:@"%ld分钟前",mins];
+    }
+    // 秒转小时
+    NSInteger hours = time/3600;
+    
+    if (hours<24) {
+        return [NSString stringWithFormat:@"%ld小时%ld分钟前",hours,seconds%3600/60];
+    }
+    //秒转天数
+    NSInteger days = time/3600/24;
+    if (days <= 3) {
+        return [NSString stringWithFormat:@"%ld天%ld小时前",days,(seconds%3600*24)/3600];
+    }
+    //转时间格式
+    return [self timeformatString:@"yyyy-MM-dd"];
+    //    //秒转月
+    //    NSInteger months = time/3600/24/30;
+    //    if (months < 12) {
+    //        return [NSString stringWithFormat:@"%ld月前",months];
+    //    }
+    //    //秒转年
+    //    NSInteger years = time/3600/24/30/12;
+    //    return [NSString stringWithFormat:@"%ld年前",years];
+}
+/** , 返回更新时间 */
 @end

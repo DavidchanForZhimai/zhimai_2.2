@@ -23,5 +23,5 @@
 
 
 - (NSString *)updateTime;
-
+- (NSString *)updateTimeForHourAndMiniter;
 @end

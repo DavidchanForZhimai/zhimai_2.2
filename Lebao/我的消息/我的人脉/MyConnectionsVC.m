@@ -19,7 +19,8 @@
 #import "NSString+Extend.h"
 #import "GJGCChatFriendViewController.h"
 #import "MyDetialViewController.h"
-@interface MyConnectionsVC ()<UITableViewDelegate,UITableViewDataSource,EjectViewDelegate,MeettingTableViewDelegate,UIAlertViewDelegate>
+#import "FnyApplyForVC.h"//我的申请
+@interface MyConnectionsVC ()<UITableViewDelegate,UITableViewDataSource,MeettingTableViewDelegate,UIAlertViewDelegate>
 {
     BOOL audioMark;
 }
@@ -55,7 +56,18 @@
     [[ToolManager shareInstance]showWithStatus];
     [self netWorkRefresh:NO andIsLoadMoreData:NO isShouldClearData:NO];
     
+    UIButton *applyForBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+    applyForBtn.frame=CGRectMake(APPWIDTH-50, StatusBarHeight, 50, NavigationBarHeight);
+    [applyForBtn setTitle:@"申请" forState:UIControlStateNormal];
+    [applyForBtn setTitleColor:BlackTitleColor forState:UIControlStateNormal];
+    [applyForBtn addTarget:self action:@selector(applyForBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:applyForBtn];
     
+}
+//我的申请人脉点击事件
+-(void)applyForBtnClicked:(UIButton *)sender
+{
+    PushView(self, allocAndInit(FnyApplyForVC));
 }
 - (void)buttonAction:(UIButton *)sender
 {
@@ -224,21 +236,7 @@
 {
     return NO;
 }
-#pragma mark
-//#pragma mark - MeettingTableViewCellDelegate 约见按钮地点击
-//- (void)tableViewCellDidSeleteMeetingBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath
-//{
-//    //do something
-//    
-//    CGFloat dilX = 25;
-//    CGFloat dilH = 250;
-//    EjectView *alertV = [[EjectView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.view];
-//    alertV.center = CGPointMake(APPWIDTH/2, APPHEIGHT/2-30);
-//    alertV.delegate = self;
-//    alertV.titleStr = @"温馨提示";
-//    alertV.title2Str=@"意思一下,打赏让“约”来的正式一点";
-//    alertV.indexth=indexPath;
-//}
+
 #pragma mark - MeettingTableViewCellDelegate 头像按钮点击
 -(void)tableViewCellDidSeleteHeadImg:(LWImageStorage *)imageStoragen layout:(MeetingCellLayout *)layout
 {
@@ -306,38 +304,7 @@
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
     }
 }
-#pragma mark - YXCustomAlertViewDelegate
-//- (void) customAlertView:(EjectView *) customAlertView clickedButtonAtIndex:(NSInteger)buttonIndex
-//{
-//    
-//    if (buttonIndex==0) {
-//        audioMark=NO;
-//        [customAlertView dissMiss];
-//        customAlertView = nil;
-//    }else
-//    {
-//        MeetPaydingVC * payVC = [[MeetPaydingVC alloc]init];
-//        MeetingCellLayout *layout=self.nearByManArr[customAlertView.indexth.row];
-//        MeetingData *model =layout.model;
-//        NSMutableDictionary *param=[Parameter parameterWithSessicon];
-//        [param setObject:model.userid forKey:@"userid"];
-//        [param setObject:customAlertView.money forKey:@"reward"];
-//        
-//        [param setObject:customAlertView.logField.text forKey:@"remark"];
-//        [param setObject:model.distance forKey:@"distance"];
-//        
-//        payVC.param=param;
-//        payVC.jineStr =[NSString stringWithFormat:@"%.2f",[customAlertView.money floatValue]];
-//        payVC.audioData=customAlertView.audioData;
-//        payVC.whatZfType=0;
-//        [self.navigationController pushViewController:payVC animated:YES];
-//        
-//        
-//        [customAlertView dissMiss];
-//        customAlertView = nil;
-//        
-//    }
-//}
+
 
 
 - (void)didReceiveMemoryWarning {
