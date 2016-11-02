@@ -140,7 +140,7 @@
         productTextStorage.font=Size(26.0);
         productTextStorage.frame=CGRectMake(_avatarStorage.left, _line1Rect.origin.y+10, [productTextStorage.text sizeWithFont:[UIFont systemFontOfSize:13] maxSize:CGSizeMake(APPWIDTH,13)].width+5, CGFLOAT_MAX);
         productLbStorageheight = productTextStorage.bottom;
-        productTextStorage.textColor = [UIColor colorWithRed:0.522 green:0.525 blue:0.529 alpha:1.000];
+        productTextStorage.textColor = [UIColor colorWithWhite:0.400 alpha:1.000];
         
         
         
@@ -167,7 +167,7 @@
                     }
                     LWTextStorage* productLbStorage = [[LWTextStorage alloc] init];
                     productLbStorage.font = Size(24.0);
-                    productLbStorage.textColor = [UIColor colorWithRed:0.482 green:0.486 blue:0.494 alpha:1.000];
+                    productLbStorage.textColor = [UIColor colorWithWhite:0.400 alpha:1.000];
                     productLbStorage.text = productStr;
                     productLbStorage.frame = CGRectMake(productTextStorage.right + 10, productTextStorage.top+height1, SCREEN_WIDTH - (productTextStorage.right) - 20, CGFLOAT_MAX);
                     [LWTextParser parseEmojiWithTextStorage:productLbStorage];
@@ -179,7 +179,7 @@
                     if (i==productArr.count-1&&wid1>(SCREEN_WIDTH - (productTextStorage.right) - 10)) {
                         LWTextStorage* productLbStorage = [[LWTextStorage alloc] init];
                         productLbStorage.font = Size(24.0);
-                        productLbStorage.textColor = [UIColor colorWithRed:0.482 green:0.486 blue:0.494 alpha:1.000];
+                        productLbStorage.textColor = [UIColor colorWithWhite:0.400 alpha:1.000];
                         productLbStorage.text = [NSString stringWithFormat:@"[biaoqian]  %@   ",productArr[i]];
                         productLbStorage.frame = CGRectMake(productTextStorage.right + 10, productTextStorage.top+height1, SCREEN_WIDTH - (productTextStorage.right) - 20, CGFLOAT_MAX);
                         [LWTextParser parseEmojiWithTextStorage:productLbStorage];
@@ -205,7 +205,7 @@
         resourceTextStorage.text=@"人脉资源";
         resourceTextStorage.font=Size(26.0);
         resourceTextStorage.frame=CGRectMake(_avatarStorage.left, productLbStorageheight + 10, [resourceTextStorage.text sizeWithFont:[UIFont systemFontOfSize:13] maxSize:CGSizeMake(APPWIDTH,13)].width+5, CGFLOAT_MAX);
-        resourceTextStorage.textColor = [UIColor colorWithRed:0.522 green:0.525 blue:0.529 alpha:1.000];
+        resourceTextStorage.textColor = [UIColor colorWithWhite:0.400 alpha:1.000];
         
         
         
@@ -232,7 +232,7 @@
                     }
                     LWTextStorage* resourceLbStorage = [[LWTextStorage alloc] init];
                     resourceLbStorage.font = Size(24.0);
-                    resourceLbStorage.textColor = [UIColor colorWithRed:0.482 green:0.486 blue:0.494 alpha:1.000];
+                    resourceLbStorage.textColor = [UIColor colorWithWhite:0.400 alpha:1.000];
                     resourceLbStorage.text = resourceStr;
                     resourceLbStorage.frame = CGRectMake(resourceTextStorage.right + 10, resourceTextStorage.top+height1, SCREEN_WIDTH - (resourceTextStorage.right) - 20, CGFLOAT_MAX);
                     [LWTextParser parseEmojiWithTextStorage:resourceLbStorage];
@@ -244,7 +244,7 @@
                     if (i==resourceArr.count-1&&wid1>(SCREEN_WIDTH - (resourceTextStorage.right) - 10)) {
                         LWTextStorage* resourceLbStorage = [[LWTextStorage alloc] init];
                         resourceLbStorage.font = Size(24.0);
-                        resourceLbStorage.textColor = [UIColor colorWithRed:0.482 green:0.486 blue:0.494 alpha:1.000];
+                        resourceLbStorage.textColor = [UIColor colorWithWhite:0.400 alpha:1.000];
                         resourceLbStorage.text = [NSString stringWithFormat:@"[biaoqian]  %@   ",resourceArr[i]];
                         resourceLbStorage.frame = CGRectMake(resourceTextStorage.right + 10, resourceTextStorage.top+height1, SCREEN_WIDTH - (resourceTextStorage.right) - 20, CGFLOAT_MAX);
                         [LWTextParser parseEmojiWithTextStorage:resourceLbStorage];
@@ -270,7 +270,7 @@
                 rewardStorage.font=Size(26.0);
                 rewardStorage.frame=CGRectMake(_avatarStorage.left, resourceTextStorageheight+10, [rewardStorage.text sizeWithFont:[UIFont systemFontOfSize:13] maxSize:CGSizeMake(APPWIDTH,13)].width+5, CGFLOAT_MAX);
                 resourceTextStorageheight = rewardStorage.bottom;
-                rewardStorage.textColor = [UIColor colorWithRed:0.522 green:0.525 blue:0.529 alpha:1.000];
+                rewardStorage.textColor = [UIColor colorWithWhite:0.400 alpha:1.000];
                 [self addStorage:rewardStorage];
 
         }
@@ -280,12 +280,13 @@
         float distance=[model.distance floatValue]/1000.00;
         LWTextStorage* distanceLab=[[LWTextStorage alloc]initWithFrame:CGRectMake(_avatarStorage.left,_line2Rect.origin.y+8, nameTextStorage.width, nameTextStorage.height)];
         distanceLab.text=[NSString stringWithFormat:@"%.2lfkm",distance];
-        distanceLab.textColor=[UIColor colorWithRed:0.482 green:0.486 blue:0.494 alpha:1.000];
+        distanceLab.font=Size(24.0);
+        distanceLab.textColor=[UIColor colorWithRed:0.549 green:0.5569 blue:0.5608 alpha:1.0];
         LWTextStorage* timerLab=[[LWTextStorage alloc]initWithFrame:CGRectMake(0, distanceLab.top, APPWIDTH-10, distanceLab.height)];
         timerLab.text=[NSString stringWithFormat:@"%@有空",[model.time updateTime]];
         timerLab.textAlignment=NSTextAlignmentRight;
-        timerLab.textColor=[UIColor colorWithRed:0.482 green:0.486 blue:0.494 alpha:1.000];
-        timerLab.font=Size(26.0);
+        timerLab.textColor=[UIColor colorWithRed:0.549 green:0.5569 blue:0.5608 alpha:1.0];
+        timerLab.font=Size(24.0);
         [self addStorage:distanceLab];
         [self addStorage:timerLab];
         }

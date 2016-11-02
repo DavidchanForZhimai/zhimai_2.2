@@ -72,6 +72,12 @@ static MP3PlayerManager* mP3PlayerManager;
 {
     
     [self.audioPlayer stop];
+    //删除近距离事件监听
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
+    if ([UIDevice currentDevice].proximityMonitoringEnabled == YES) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceProximityStateDidChangeNotification object:nil];
+    }
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
     _audioPlayer=nil;
     if (_playFinishBlock) {
         _playFinishBlock(YES);
@@ -184,9 +190,34 @@ static MP3PlayerManager* mP3PlayerManager;
         [_audioPlayer prepareToPlay];
         _audioPlayer.delegate = self;
     }
+    //添加近距离事件监听，添加前先设置为YES，如果设置完后还是NO的读话，说明当前设备没有近距离传感器
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
+    if ([UIDevice currentDevice].proximityMonitoringEnabled == YES) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sensorStateChange:)name:UIDeviceProximityStateDidChangeNotification object:nil];
+    }
+    
+   
     
     
-    
+}
+#pragma mark - 处理近距离监听触发事件
+-(void)sensorStateChange:(NSNotificationCenter *)notification;
+{
+    //如果此时手机靠近面部放在耳朵旁，那么声音将通过听筒输出，并将屏幕变暗（省电啊）
+    if ([[UIDevice currentDevice] proximityState] == YES)//黑屏
+    {
+        NSLog(@"Device is close to user");
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+        
+    }
+    else//没黑屏幕
+    {
+        NSLog(@"Device is not close to user");
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+        if (![self.audioPlayer isPlaying]) {//没有播放了，也没有在黑屏状态下，就可以把距离传感器关了
+            [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
+        }
+    }
 }
 //扬声器模式
 -(void)setAudioWaiFangSession
@@ -212,6 +243,13 @@ static MP3PlayerManager* mP3PlayerManager;
 {
 //        NSLog(@"录音完成!");
     _audioPlayer=nil;
+    //删除近距离事件监听
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
+    if ([UIDevice currentDevice].proximityMonitoringEnabled == YES) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceProximityStateDidChangeNotification object:nil];
+    }
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
+
     if (_playFinishBlock) {
         _playFinishBlock(YES);
     }
