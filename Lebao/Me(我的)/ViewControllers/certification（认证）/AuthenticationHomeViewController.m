@@ -176,8 +176,24 @@
         return _upload;
     }
     
-    _upload = [[BaseButton alloc]initWithFrame:CGRectMake(30, CGRectGetMaxY(self.authenView.frame) + 40, APPWIDTH - 60, 35) setTitle:@"上传自己的名片" titleSize:28*SpacedFonts titleColor:WhiteColor textAlignment:NSTextAlignmentCenter backgroundColor:AppMainColor inView:nil];
+    NSString *str = @"上传自己的名片";
+    BOOL isEnable = YES;
+    if (_authen ==2) {
+       str = @"上传成功，待审核";
+       isEnable = NO;
+    }
+    if (_authen ==3) {
+        str = @"已审核通过";
+        isEnable = NO;
+    }
+    if (_authen ==9) {
+        str = @"审核失败，重新上传";
+        isEnable = YES;
+    }
+    
+    _upload = [[BaseButton alloc]initWithFrame:CGRectMake(30, CGRectGetMaxY(self.authenView.frame) + 40, APPWIDTH - 60, 40) setTitle:str titleSize:28*SpacedFonts titleColor:WhiteColor textAlignment:NSTextAlignmentCenter backgroundColor:AppMainColor inView:nil];
     [_upload setRadius:5];
+    _upload.enabled = isEnable;
     _upload.shouldAnmial = NO;
     __weak typeof(self) weakSelf = self;
     _upload.didClickBtnBlock = ^
@@ -185,25 +201,26 @@
         
         [[ToolManager shareInstance] seleteImageFormSystem:weakSelf seleteImageFormSystemBlcok:^(UIImage *image) {
                 [[ToolManager shareInstance] showWithStatus:@"修改中.."];
-                [[UpLoadImageManager shareInstance] upLoadImageType:@"authen" image:image   imageBlock:^(UpLoadImageModal * upLoadImageModal) {
+                [[UpLoadImageManager shareInstance] upLoadImageType:@"authen" image:image imageBlock:^(UpLoadImageModal * upLoadImageModal) {
                     
                         NSMutableDictionary * parame = [Parameter parameterWithSessicon];
                         [parame setObject:upLoadImageModal.imgurl forKey:@"cardpic"];
                     
                         [XLDataService postWithUrl:SaveAuthenURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-                            NSLog(@"dataObj =%@ parame =%@",dataObj
-                                  ,parame);
+                           
                             if (dataObj) {
                                 if ([dataObj[@"rtcode"] integerValue]==1) {
                                     url =upLoadImageModal.imgurl;;
                                     [[ToolManager shareInstance] showSuccessWithStatus:@"上传成功！"];
+                                    [weakSelf.upload setTitle:@"上传成功，待审核" forState:UIControlStateNormal];
+                                    weakSelf.upload.enabled = NO;
                                     [weakSelf.authenView removeFromSuperview];
                                     [weakSelf.authenticationHomeView addSubview:weakSelf.authenView];
                                     [[ToolManager shareInstance] imageView:weakSelf.authenImageView setImageWithURL:upLoadImageModal.imgurl placeholderType:PlaceholderTypeOther];
                                     weakSelf.authenImageView.contentMode = UIViewContentModeScaleAspectFit;
                                     weakSelf.upload.frame = CGRectMake(30, CGRectGetMaxY(weakSelf.authenView.frame) + 40, APPWIDTH - 60, 35);
                                     
-                                    if (CGRectGetMaxY(weakSelf.upload.frame) +10 >weakSelf.authenticationHomeView.height) {
+                                    if (CGRectGetMaxY(weakSelf.upload.frame) + 20 >weakSelf.authenticationHomeView.height) {
                                         weakSelf.authenticationHomeView.contentSize = CGSizeMake(weakSelf.authenticationHomeView.width, CGRectGetMaxY(weakSelf.upload.frame) +10);
                                     }
 
@@ -211,11 +228,15 @@
                                 else
                                 {
                                     [[ToolManager shareInstance]showInfoWithStatus:dataObj[@"rtmsg"]];
+                                    [weakSelf.upload setTitle:@"上传失败，重新上传" forState:UIControlStateNormal];
+                                    weakSelf.upload.enabled = YES;
                                 }
                                 
                             }
                             else
                             {
+                                [weakSelf.upload setTitle:@"上传失败，重新上传" forState:UIControlStateNormal];
+                                weakSelf.upload.enabled = YES;
                                 [[ToolManager shareInstance]showInfoWithStatus];
                             }
                             

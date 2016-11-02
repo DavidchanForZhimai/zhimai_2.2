@@ -49,17 +49,17 @@
     
      // Do any additional setup after loading the view.
      [self navViewTitleAndBackBtn:@"系统消息"];
-     BaseButton *allreadBtn = [[BaseButton alloc]initWithFrame:CGRectMake(APPWIDTH - 70, StatusBarHeight, 60, NavigationBarHeight - 1) setTitle:@"全部已读" titleSize:14 titleColor:BlackTitleColor textAlignment:NSTextAlignmentRight backgroundColor:WhiteColor inView:self.view];
-    
-    allreadBtn.didClickBtnBlock = ^
-    {
-        [XLDataService postWithUrl:SystemAllReadMessageURL param:[Parameter parameterWithSessicon] modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-            
-            
-        }];
-
-
-    };
+//     BaseButton *allreadBtn = [[BaseButton alloc]initWithFrame:CGRectMake(APPWIDTH - 70, StatusBarHeight, 60, NavigationBarHeight - 1) setTitle:@"全部已读" titleSize:14 titleColor:BlackTitleColor textAlignment:NSTextAlignmentRight backgroundColor:WhiteColor inView:self.view];
+//    
+//    allreadBtn.didClickBtnBlock = ^
+//    {
+//        [XLDataService postWithUrl:SystemAllReadMessageURL param:[Parameter parameterWithSessicon] modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+//            
+//            
+//        }];
+//
+//
+//    };
   
    
     [self addTableView];

@@ -282,11 +282,13 @@
         distanceLab.text=[NSString stringWithFormat:@"%.2lfkm",distance];
         distanceLab.font=Size(24.0);
         distanceLab.textColor=[UIColor colorWithRed:0.549 green:0.5569 blue:0.5608 alpha:1.0];
-        LWTextStorage* timerLab=[[LWTextStorage alloc]initWithFrame:CGRectMake(0, distanceLab.top, APPWIDTH-10, distanceLab.height)];
+        LWTextStorage* timerLab=[[LWTextStorage alloc]initWithFrame:CGRectMake(0, distanceLab.top, APPWIDTH-10, nameTextStorage.height)];
         timerLab.text=[NSString stringWithFormat:@"%@有空",[model.time updateTimeForHourAndMiniter]];
+
         timerLab.textAlignment=NSTextAlignmentRight;
         timerLab.textColor=[UIColor colorWithRed:0.549 green:0.5569 blue:0.5608 alpha:1.0];
         timerLab.font=Size(24.0);
+      
         [self addStorage:distanceLab];
         [self addStorage:timerLab];
         }
