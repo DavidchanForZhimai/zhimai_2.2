@@ -98,14 +98,13 @@
         addressStorage.font = Size(24.0);
         
         addressStorage.frame = CGRectMake(industryTextStorage.left, industryTextStorage.bottom + 8, industryTextStorage.width, CGFLOAT_MAX);
-        if ((![model.service isEqualToString:@""]&&model.service)||(![model.resource isEqualToString:@""]&&model.resource)) {
+        
             if (addressStorage.text.length>0) {
                 _line1Rect  = CGRectMake(0, addressStorage.bottom + 10, APPWIDTH, 0.5);
             }else if (industryTextStorage.text.length>0){
                 addressStorage.frame = CGRectMake(industryTextStorage.left, industryTextStorage.bottom, industryTextStorage.width, 0);
                 _line1Rect  = CGRectMake(0, industryTextStorage.bottom + 10, APPWIDTH, 0.5);
-            }
-        }else {
+            }else {
             _line1Rect  = CGRectMake(0, _avatarStorage.bottom + 10, APPWIDTH, 0.5);
         }
         
@@ -115,17 +114,20 @@
         [self addStorage:addressStorage];
         
         
-        
+        LWTextStorage* rewardStorage=[[LWTextStorage alloc]initWithFrame:CGRectMake(_avatarStorage.left,_line1Rect.origin.y+10, nameTextStorage.width, CGFLOAT_MAX)];
+        rewardStorage.font=Size(24.0);
         if([model.reward intValue]>0){
-            LWTextStorage* rewardStorage=[[LWTextStorage alloc]initWithFrame:CGRectMake(_avatarStorage.left,_line1Rect.origin.y+8, nameTextStorage.width, nameTextStorage.height)];
             rewardStorage.text=[NSString stringWithFormat:@"人脉打赏    %@元",model.reward];
-            rewardStorage.font=Size(24.0);
-            rewardStorage.frame=CGRectMake(_avatarStorage.left,_line1Rect.origin.y+8, [rewardStorage.text sizeWithFont:[UIFont systemFontOfSize:13] maxSize:CGSizeMake(APPWIDTH,13)].width+5, CGFLOAT_MAX);
-            rewardStorage.textColor=[UIColor colorWithRed:0.549 green:0.5569 blue:0.5608 alpha:1.0];
-            [self addStorage:rewardStorage];
-            }
+        }else{
+            rewardStorage.text=@"人脉打赏    无";
+        }
+        rewardStorage.frame=CGRectMake(_avatarStorage.left,_line1Rect.origin.y+10, [rewardStorage.text sizeWithFont:[UIFont systemFontOfSize:13] maxSize:CGSizeMake(APPWIDTH,13)].width+5, CGFLOAT_MAX);
+        rewardStorage.textColor=[UIColor colorWithRed:0.549 green:0.5569 blue:0.5608 alpha:1.0];
+        [self addStorage:rewardStorage];
+
+
         
-            LWTextStorage* timerLab=[[LWTextStorage alloc]initWithFrame:CGRectMake(0,_line1Rect.origin.y+8, APPWIDTH-10, CGFLOAT_MAX)];
+            LWTextStorage* timerLab=[[LWTextStorage alloc]initWithFrame:CGRectMake(0,_line1Rect.origin.y+10, APPWIDTH-10, CGFLOAT_MAX)];
             timerLab.text=[NSString stringWithFormat:@"%@",[model.time timeformatString:@"yyyy-MM-dd HH:mm"]];
             timerLab.textAlignment=NSTextAlignmentRight;
             timerLab.textColor=[UIColor colorWithRed:0.549 green:0.5569 blue:0.5608 alpha:1.0];

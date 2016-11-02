@@ -8,13 +8,17 @@
 
 #import "FnyApplyForVC.h"
 #import "FnyApplyForCell.h"
-//#import "MJRefresh.h"
 #import "XLDataService.h"
 #import "MyDetialViewController.h"
 #import "CoreArchive.h"
-//#import "ViewController.h"
+//取消列表
+#define  connetionApplyURL [NSString stringWithFormat:@"%@connection/apply",HttpURL]
+//取消人脉添加
+#define  cancelApplyURL [NSString stringWithFormat:@"%@connection/cancel",HttpURL]
 @interface FnyApplyForVC ()<UITableViewDelegate,UITableViewDataSource,FnyApplyForCellDelegate,UIAlertViewDelegate>
-
+{
+    FnyApplyForCellLayout *cancellayout;
+}
 @property(nonatomic,assign)NSInteger page;
 @property(nonatomic,strong)NSMutableArray *allMeetArr;
 @property (nonatomic,strong)UITableView *tableView;
@@ -102,9 +106,8 @@
         [[ToolManager shareInstance] showWithStatus];
     }
     [param setObject:@(_page) forKey:@"page"];
-    [param setObject:@"" forKey:@"industrys"];
-    //    NSLog(@"param====%@",param);
-    [XLDataService putWithUrl:canseeURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+//        NSLog(@"param====%@",param);
+    [XLDataService putWithUrl:connetionApplyURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         
         if (isRefresh) {
             
@@ -117,7 +120,7 @@
             [self.allMeetArr removeAllObjects];
         }
         if (dataObj) {
-            //            NSLog(@"meetObj====%@",dataObj);
+//                        NSLog(@"meetObj====%@",dataObj);
             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
             if (_page ==1) {
                 [[ToolManager shareInstance] moreDataStatus:self.tableView];
@@ -190,43 +193,57 @@
 #pragma mark - MeettingTableViewCellDelegate 添加人脉按钮地点击
 - (void)tableViewCellDidSeleteCancelBtn:(UIButton *)btn layout:(FnyApplyForCellLayout *)layout
 {
-    [[ToolManager shareInstance] showWithStatus];
-    NSMutableDictionary *param=[Parameter parameterWithSessicon];
-    [param setObject:@"connection_add" forKey:@"type"];
-    NSLog(@"param===%@",param);
-    [XLDataService putWithUrl:connetionCheckedURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        if(dataObj){
-            [[ToolManager shareInstance] dismiss];
-            NSLog(@"dataobj===%@",dataObj);
-            if ([dataObj[@"rtcode"] intValue]==1) {
-                
-               
-            }
-            else if ([dataObj[@"rtcode"] intValue]==4001){
-                [[ToolManager shareInstance]dismiss];
-                UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"去身份认证吗?" message:@"身份认证后才能添加人脉哦" delegate:self cancelButtonTitle:@"不去" otherButtonTitles:@"走起", nil];
-                alertView.tag=22221;
-                alertView.delegate=self;
-                [alertView show];
-                
-            }
-        }
-        else
-        {
-            [[ToolManager shareInstance] showInfoWithStatus];
-            
-        }
-    }];
+    cancellayout=layout;
+    if ([layout.model.reward intValue]>0) {
+        
+        [[[UIAlertView alloc] initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"是否取消对%@的人脉请求,\n并退还您打赏的%@元打赏金",layout.model.realname,layout.model.reward] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定",nil] show];
+
+    }else{
+        [[[UIAlertView alloc] initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"是否取消对%@的人脉请求",layout.model.realname] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定",nil] show];
+    }
+    
 }
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (alertView.tag==22221) {
+    
         if (buttonIndex==0) {
             
         }else if(buttonIndex==1){
+            NSIndexPath *cancelIndexPath;
+            for (int i =0; i<self.allMeetArr.count; i++) {
+                if ([cancellayout isEqual:(FnyApplyForCellLayout*)self.allMeetArr[i]]) {
+                    cancelIndexPath = [NSIndexPath indexPathForRow:i inSection:0];
+                }
+            }
             
+            [[ToolManager shareInstance] showWithStatus];
+            NSMutableDictionary *param=[Parameter parameterWithSessicon];
+            [param setObject:cancellayout.model.meetId forKey:@"id"];
+//            NSLog(@"param===%@",param);
+            [XLDataService putWithUrl:cancelApplyURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+                if(dataObj){
+                    [[ToolManager shareInstance] dismiss];
+//                    NSLog(@"dataobj===%@",dataObj);
+                    if ([dataObj[@"rtcode"] intValue]==1) {
+                        [[ToolManager shareInstance] showAlertMessage:@"删除人脉成功"];
+                        [self.allMeetArr removeObjectAtIndex:cancelIndexPath.row];
+                        // Delete the row from the data source.
+                        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:cancelIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+
+                    }
+                    else {
+                        [[ToolManager shareInstance]showAlertMessage:dataObj[@"rtmsg"]];
+                    }
+                }
+                else
+                {
+                    [[ToolManager shareInstance] showInfoWithStatus];
+                    
+                }
+            }];
+
         }
-    }
+    
 }
 -(void)tableViewCellDidSeleteHeadImg:(LWImageStorage *)imageStoragen layout:(FnyApplyForCellLayout *)layout{
     MyDetialViewController *myDetialViewCT=allocAndInit(MyDetialViewController);

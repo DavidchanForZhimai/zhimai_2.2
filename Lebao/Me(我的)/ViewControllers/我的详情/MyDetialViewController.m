@@ -869,7 +869,7 @@
 
     }else
     {
-        if ([customAlertView.money floatValue]>1) {
+        if ([customAlertView.money floatValue]>=1) {
         MeetPaydingVC * payVC = [[MeetPaydingVC alloc]init];
         NSMutableDictionary *param=[Parameter parameterWithSessicon];
         [param setObject:_userID forKey:@"beinvited"];
@@ -881,7 +881,7 @@
         [customAlertView dissMiss];
         [connectionView.window removeGestureRecognizer:recognizerTap];
         }else{
-            [[ToolManager shareInstance] showAlertMessage:@"金额格式不正确,必须大于1元"];
+            [[ToolManager shareInstance] showAlertMessage:@"金额格式不正确,必须大等于1元"];
         }
     }
 }

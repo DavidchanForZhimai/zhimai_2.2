@@ -549,7 +549,7 @@
         
     }else
     {
-        if ([customAlertView.money floatValue]>0) {
+        if ([customAlertView.money floatValue]>=1) {
         
         MeetPaydingVC * payVC = [[MeetPaydingVC alloc]init];
         MeetingCellLayout *layout=(MeetingCellLayout *)self.nearByManArr[customAlertView.indexth.row];
@@ -574,7 +574,7 @@
         [customAlertView dissMiss];
         customAlertView = nil;
         }else{
-            [[ToolManager shareInstance] showAlertMessage:@"金额格式不正确"];
+            [[ToolManager shareInstance] showAlertMessage:@"金额格式不正确,必须大等于1元"];
         }
         
     }

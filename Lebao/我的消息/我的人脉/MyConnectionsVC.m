@@ -57,8 +57,9 @@
     [self netWorkRefresh:NO andIsLoadMoreData:NO isShouldClearData:NO];
     
     UIButton *applyForBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    applyForBtn.frame=CGRectMake(APPWIDTH-50, StatusBarHeight, 50, NavigationBarHeight);
+    applyForBtn.frame=CGRectMake(APPWIDTH-60, StatusBarHeight, 50, NavigationBarHeight);
     [applyForBtn setTitle:@"申请" forState:UIControlStateNormal];
+    applyForBtn.titleLabel.font=[UIFont systemFontOfSize:15];
     [applyForBtn setTitleColor:BlackTitleColor forState:UIControlStateNormal];
     [applyForBtn addTarget:self action:@selector(applyForBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:applyForBtn];

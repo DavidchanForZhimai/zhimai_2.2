@@ -166,11 +166,12 @@
     UIImage *certifyimag;
     if (_modal.authen==3) {
         certifyimag=[UIImage imageNamed:@"[iconprofilerenzhen]"];
+        certifyImgV.frame=CGRectMake(CGRectGetMaxX(nameLab.frame)+5, CGRectGetMaxY(nameLab.frame)-certifyimag.size.height, certifyimag.size.width,certifyimag.size.height);
+        certifyImgV.image=certifyimag;
     }else{
-        certifyimag=[UIImage imageNamed:@"[iconprofileweirenzhen]"];
+        certifyImgV.frame=CGRectMake(CGRectGetMaxX(nameLab.frame), CGRectGetMaxY(nameLab.frame)-certifyimag.size.height, 0,0);
+        certifyImgV.image=nil;
     }
-    certifyImgV.frame=CGRectMake(CGRectGetMaxX(nameLab.frame)+5, CGRectGetMaxY(nameLab.frame)-certifyimag.size.height, certifyimag.size.width,certifyimag.size.height);
-    certifyImgV.image=certifyimag;
     [vipView addSubview:certifyImgV];
     
     UIImageView *VIPImgV=[[UIImageView alloc]init];//vip
@@ -178,7 +179,7 @@
     if (model.vip ==1) {
         VIPimag=[UIImage imageNamed:@"[iconprofilevip]"];
     }else{
-        VIPimag=[UIImage imageNamed:@"[iconprofilevipweikaitong]"];
+        VIPimag=nil;
     }
     VIPImgV.frame=CGRectMake(CGRectGetMaxX(certifyImgV.frame)+5,certifyImgV.y, VIPimag.size.width, VIPimag.size.height);
     VIPImgV.image=VIPimag;
