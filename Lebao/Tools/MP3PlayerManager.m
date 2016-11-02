@@ -62,7 +62,7 @@ static MP3PlayerManager* mP3PlayerManager;
     _url = url;
     
     [self setPlayer];
-    [self setAudioSession];
+
     [self.audioPlayer play];
     
     
@@ -178,6 +178,7 @@ static MP3PlayerManager* mP3PlayerManager;
         NSURL *url=[self getSavePath];
         NSError *error=nil;
         _audioPlayer=[[AVAudioPlayer alloc]initWithContentsOfURL:url error:&error];
+        [self setAudioWaiFangSession];
         self.audioPlayer.volume = 1.0f;
         _audioPlayer.numberOfLoops=0;
         [_audioPlayer prepareToPlay];
@@ -187,7 +188,14 @@ static MP3PlayerManager* mP3PlayerManager;
     
     
 }
-
+//扬声器模式
+-(void)setAudioWaiFangSession
+{
+    AVAudioSession *audioSession=[AVAudioSession sharedInstance];
+    //设置为播放
+    [audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
+    [audioSession setActive:YES error:nil];
+}
 #pragma mark - 录音机代理方法
 /**
  *  录音完成，录音完成后播放录音
