@@ -347,7 +347,7 @@
         self.comentButton.frame = self.cellLayout.commentPosition;
         self.webSiteBtn.frame = self.cellLayout.websiteRect;
         self.webSiteBtn.titleEdgeInsets = UIEdgeInsetsMake(4,45, 4,10);
-        
+        self.webSiteBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         if (self.cellLayout.statusModel.type == DTDataTypeArticle) {
             self.webSiteimg.frame = CGRectMake(5, 5, 37, 37);
             [[ToolManager shareInstance] imageView:self.webSiteimg setImageWithURL:self.cellLayout.statusModel.typeinfo.imgurl placeholderType:PlaceholderTypeOther];

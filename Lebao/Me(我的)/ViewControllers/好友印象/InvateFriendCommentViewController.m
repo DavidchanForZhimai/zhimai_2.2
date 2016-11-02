@@ -197,7 +197,7 @@
     }
     
     UIImage *image = [UIImage imageNamed:@"icon_me_yinxiangweixing"];
-    _wxFriend = [[BaseButton alloc]initWithFrame:CGRectMake(70*ScreenMultiple, _bg.height - 85,48, image.size.height + 20) setTitle:@"微信好友" titleSize:12 titleColor:[UIColor colorWithRed:0.2941 green:0.5647 blue:0.9961 alpha:1.0] backgroundImage:nil iconImage:image highlightImage:image setTitleOrgin:CGPointMake(image.size.height + 8,  - image.size.width) setImageOrgin:CGPointMake(0, (48 - image.size.width)/2.0) inView:nil];
+    _wxFriend = [[BaseButton alloc]initWithFrame:CGRectMake(60, _bg.height - (image.size.height + 40),60, image.size.height + 20) setTitle:@"微信好友" titleSize:12 titleColor:[UIColor colorWithRed:0.2941 green:0.5647 blue:0.9961 alpha:1.0] backgroundImage:nil iconImage:image highlightImage:image setTitleOrgin:CGPointMake(image.size.height + 4,  - image.size.width + 6) setImageOrgin:CGPointMake(0, (60 - image.size.width)/2.0) inView:nil];
     __weak typeof(self) weakSelf = self;
     _wxFriend.didClickBtnBlock = ^
     {
@@ -214,7 +214,7 @@
     }
     
     UIImage *image = [UIImage imageNamed:@"icon_me_yinxiangpenyouquan"];
-    _wxTimeLine = [[BaseButton alloc]initWithFrame:CGRectMake(self.bg.width - 48-70*ScreenMultiple, _bg.height - 85,48, image.size.height + 20) setTitle:@"朋友圈" titleSize:12 titleColor:[UIColor colorWithRed:0.2941 green:0.5647 blue:0.9961 alpha:1.0] backgroundImage:nil iconImage:image highlightImage:image setTitleOrgin:CGPointMake(image.size.height + 8,  6- image.size.width) setImageOrgin:CGPointMake(0, (48 - image.size.width)/2.0) inView:nil];
+    _wxTimeLine = [[BaseButton alloc]initWithFrame:CGRectMake(self.bg.width - 120, _bg.height - (image.size.height + 40),60, image.size.height + 20) setTitle:@"朋友圈" titleSize:12 titleColor:[UIColor colorWithRed:0.2941 green:0.5647 blue:0.9961 alpha:1.0] backgroundImage:nil iconImage:image highlightImage:image setTitleOrgin:CGPointMake(image.size.height + 4,  12- image.size.width) setImageOrgin:CGPointMake(0, (60 - image.size.width)/2.0) inView:nil];
     __weak typeof(self) weakSelf = self;
     _wxTimeLine.didClickBtnBlock = ^
     {
