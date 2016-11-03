@@ -795,9 +795,10 @@
         [param setObject:@"connection_add" forKey:@"type"];
         [XLDataService putWithUrl:connetionCheckedURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
             if(dataObj){
-                [[ToolManager shareInstance] dismiss];
+//                NSLog(@"dataobj===%@",dataObj);
+                
                 if ([dataObj[@"rtcode"] intValue]==1) {
-                    
+                    [[ToolManager shareInstance] dismiss];
                     CGFloat dilX = 25;
                     CGFloat dilH = 250;
                     connectionView = [[AddConnectionView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.view];
@@ -813,6 +814,10 @@
                     alertView.delegate=self;
                     [alertView show];
                     
+                }
+                else
+                {
+                    [[ToolManager shareInstance] showAlertMessage:dataObj[@"rtmsg"]];
                 }
             }
             else
@@ -847,9 +852,11 @@
         [[ToolManager shareInstance] showWithStatus];
         [XLDataService putWithUrl:addConnectionsURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
             if(dataObj){
-                [[ToolManager shareInstance] dismiss];
+//                NSLog(@"dataobj===%@",dataObj);
+                
                 MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
                 if (model.rtcode==1) {
+                    [[ToolManager shareInstance] dismiss];
                     UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"添加人脉请求已发出,请耐心等待" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
                      [[NSNotificationCenter defaultCenter]postNotificationName:@"KReflashCanMeet" object:@{@"userid":headerModel.Id,@"relation":@"1",@"reward":@"0"}];
                     [successAlertV show];
