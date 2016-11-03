@@ -9,8 +9,9 @@
 #import "VIPPrivilegeVC.h"
 #import "XLDataService.h"
 #import "VipPrivilegeCell.h"
-#import "MeetPaydingVC.h"
+//#import "MeetPaydingVC.h"
 #import "NSString+Extend.h"
+#import "VipPayVC.h"
 @interface privilegeData : NSObject
 
 @property(nonatomic,copy)NSString *ordinary;
@@ -288,7 +289,7 @@
 -(void)vipAction:(UIButton *)sender
 {
     vipModel *model=[_allArr firstObject];
-    MeetPaydingVC * payVC = [[MeetPaydingVC alloc]init];
+    VipPayVC * payVC = [[VipPayVC alloc]init];
     NSMutableDictionary *param=[Parameter parameterWithSessicon];
     [param setObject:[NSString stringWithFormat:@"%d",model.prices[0].price] forKey:@"price"];
     payVC.param=param;

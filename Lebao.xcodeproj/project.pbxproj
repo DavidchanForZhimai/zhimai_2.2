@@ -1085,6 +1085,8 @@
 		709114791D93D01B008CB7F9 /* addConnections@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 709114771D93D01B008CB7F9 /* addConnections@2x.png */; };
 		7091147A1D93D01B008CB7F9 /* addConnections@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 709114781D93D01B008CB7F9 /* addConnections@3x.png */; };
 		709B152F1D801AC6009CAFB8 /* MeetNumModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 709B152E1D801AC6009CAFB8 /* MeetNumModel.m */; };
+		70A407331DCB0BB100C0B750 /* VipPayVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 70A407311DCB0BB100C0B750 /* VipPayVC.m */; };
+		70A407341DCB0BB100C0B750 /* VipPayVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 70A407321DCB0BB100C0B750 /* VipPayVC.xib */; };
 		70AEA4731D8E221700162FE3 /* MyDetialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70AEA4721D8E221700162FE3 /* MyDetialViewController.m */; };
 		70CB3E621DAE3ECA004927B9 /* XIAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 70CB3E611DAE3ECA004927B9 /* XIAlertView.m */; };
 		70CB3E651DAE3ED8004927B9 /* hezuochenggong@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 70CB3E631DAE3ED8004927B9 /* hezuochenggong@2x.png */; };
@@ -2844,6 +2846,9 @@
 		709114781D93D01B008CB7F9 /* addConnections@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "addConnections@3x.png"; sourceTree = "<group>"; };
 		709B152D1D801AC6009CAFB8 /* MeetNumModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeetNumModel.h; sourceTree = "<group>"; };
 		709B152E1D801AC6009CAFB8 /* MeetNumModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeetNumModel.m; sourceTree = "<group>"; };
+		70A407301DCB0BB100C0B750 /* VipPayVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VipPayVC.h; sourceTree = "<group>"; };
+		70A407311DCB0BB100C0B750 /* VipPayVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VipPayVC.m; sourceTree = "<group>"; };
+		70A407321DCB0BB100C0B750 /* VipPayVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VipPayVC.xib; sourceTree = "<group>"; };
 		70AEA4711D8E221700162FE3 /* MyDetialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyDetialViewController.h; sourceTree = "<group>"; };
 		70AEA4721D8E221700162FE3 /* MyDetialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyDetialViewController.m; sourceTree = "<group>"; };
 		70CB3E601DAE3ECA004927B9 /* XIAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XIAlertView.h; sourceTree = "<group>"; };
@@ -6270,6 +6275,9 @@
 				701C25C51D86AC220099F644 /* MeetPaydingVC.h */,
 				701C25C61D86AC220099F644 /* MeetPaydingVC.m */,
 				701C25C71D86AC220099F644 /* MeetPaydingVC.xib */,
+				70A407301DCB0BB100C0B750 /* VipPayVC.h */,
+				70A407311DCB0BB100C0B750 /* VipPayVC.m */,
+				70A407321DCB0BB100C0B750 /* VipPayVC.xib */,
 			);
 			name = "主页面的支付";
 			sourceTree = "<group>";
@@ -7540,6 +7548,7 @@
 				63237D3B1D8E827B00F4ED60 /* [iconprofilerenzhen]@3x.png in Resources */,
 				707CCAA31D8F977400E0E730 /* mic_2.png in Resources */,
 				63302F6D1D921FA50019E9D6 /* 020[惊恐]@2x.png in Resources */,
+				70A407341DCB0BB100C0B750 /* VipPayVC.xib in Resources */,
 				63302F5D1D921FA50019E9D6 /* 005[微笑]@2x.png in Resources */,
 				70ED0A8B1D75662C00F4565A /* [pipeidu]@2x.png in Resources */,
 				63237D501D8F791C00F4ED60 /* icon_message_toutiao@2x.png in Resources */,
@@ -8175,6 +8184,7 @@
 				70796DE51D6B024E005B8441 /* LWActionSheetTableViewCell.m in Sources */,
 				63F141B51C8971C800479102 /* MCRadarChartView.m in Sources */,
 				63302F291D921FA50019E9D6 /* GJCFCoreTextAttributedStringStyle.m in Sources */,
+				70A407331DCB0BB100C0B750 /* VipPayVC.m in Sources */,
 				701C25B31D8661070099F644 /* WantMeetLayout.m in Sources */,
 				63302EFF1D921FA50019E9D6 /* wav.mm in Sources */,
 				63302F251D921FA50019E9D6 /* GJCFCoreTextFrame.m in Sources */,
