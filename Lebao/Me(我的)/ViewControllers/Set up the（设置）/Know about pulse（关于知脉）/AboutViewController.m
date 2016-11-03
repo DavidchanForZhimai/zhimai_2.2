@@ -100,7 +100,7 @@
 {
     UIView *view = allocAndInit(UIView);
     UIImageView *bg = allocAndInitWithFrame(UIImageView, frame((APPWIDTH -77*ScreenMultiple)/2.0, 33*ScreenMultiple, 77*ScreenMultiple, 77*ScreenMultiple));
-    bg.image =[UIImage imageNamed:@"appIcon_logo_about"];
+    bg.image =[UIImage imageNamed:@"AppIconLogo"];
     [view addSubview:bg];
     
     NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
