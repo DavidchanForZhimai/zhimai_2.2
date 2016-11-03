@@ -104,12 +104,18 @@
                     
                 }
                 if (_customerServiceArray.count==0) {
-                    [self isShowEmptyStatus:YES];
+                    
+                    NotificationData *data = [[NotificationData alloc]init];
+                    data.imgurl = @"";
+                    NSTimeInterval time = [[NSDate date] timeIntervalSince1970];
+                    long long int date = (long long int)time;
+                    data.createtime = [NSString stringWithFormat:@"%lld",date];
+                    data.senderid = @"0";
+                    data.realname = @"客服";
+                    data.content = @"为您解决问题";
+                  [_customerServiceArray addObject:data];
                 }
-                else
-                {
-                    [self isShowEmptyStatus:NO];
-                }
+                
                 [_customerServiceView reloadData];
                 
             }

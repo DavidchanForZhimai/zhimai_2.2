@@ -42,9 +42,9 @@
 #define BaseIphone6Width 750.0
 #define Bang  1.0/2.0f
 
-@interface ToolManager()<UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface ToolManager()<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIAlertViewDelegate>
 
-//@property (nonatomic, strong) CLLocationManager *locationManager; //定位
+@property (nonatomic, strong) NSString *updataUrl; //定位
 @end
 
 @implementation ToolManager
@@ -62,10 +62,10 @@ static dispatch_once_t once;
             [SVProgressHUD setDefaultStyle:SVProgressHUDStyleDark];
             [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeClear];
             [SVProgressHUD setDefaultAnimationType:SVProgressHUDAnimationTypeNative];
-           
+            
         });
     }
-   
+    
     return toolManager;
     
 }
@@ -92,7 +92,7 @@ static dispatch_once_t once;
         
     }
     NSString * url = [self urlAppend:imageURL];
-
+    
     if ([imageView isKindOfClass:[UIImageView class]]) {
         
         UIImageView *  image =(UIImageView *)imageView;
@@ -102,15 +102,15 @@ static dispatch_once_t once;
                 placeholderImage = [UIImage imageNamed:@"ditu"];
                 break;
             case PlaceholderTypeUserHead:
-                 placeholderImage = [UIImage imageNamed:@"defaulthead"];
+                placeholderImage = [UIImage imageNamed:@"defaulthead"];
                 image.contentMode = UIViewContentModeScaleAspectFill;
                 break;
-                case PlaceholderTypeOther:
+            case PlaceholderTypeOther:
                 placeholderImage =[UIImage imageNamed:@"icon_placeholder"];
                 image.contentMode = UIViewContentModeScaleToFill;
                 break;
                 
-                case PlaceholderTypeImageUnProcessing:
+            case PlaceholderTypeImageUnProcessing:
                 placeholderImage =[UIImage imageNamed:@"icon_placeholder"];
                 image.contentMode =UIViewContentModeScaleToFill;
                 break;
@@ -120,7 +120,7 @@ static dispatch_once_t once;
         }
         
         [image sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:placeholderImage];
-      
+        
     }
     else if ([imageView isKindOfClass:[UIButton class]])
     {
@@ -147,7 +147,7 @@ static dispatch_once_t once;
             default:
                 break;
         }
-
+        
         [button sd_setImageWithURL:[NSURL URLWithString:url] forState:UIControlStateNormal placeholderImage:placeholderImage];
     }
     
@@ -157,13 +157,13 @@ static dispatch_once_t once;
 
 - (void)addReleseDctView:(UIViewController *)view
 {
-   
+    
     //  添加popview
     [BHBPopView showToView:[UIApplication sharedApplication].keyWindow  andImages:@[@"iconfont-fabukuajie",@"iconfont-chanpin",@"iconfont-lianjie",@"iconfont-wenzhang"] andTitles:@[@"发布线索",[NSString stringWithFormat:@"发布%@",[CoreArchive strForKey:Industry]],@"封装链接",@"发布文章"] andSelectBlock:^(BHBItem *item, NSInteger index) {
         
         switch (index) {
             case 0:
-    
+                
                 [view.navigationController pushViewController:allocAndInit(FabuKuaJieVC) animated:NO];
                 break;
             case 1:
@@ -191,9 +191,9 @@ static dispatch_once_t once;
                 
                 break;
             }
-
+                
             case 2:
-              [view.navigationController pushViewController:allocAndInit(ReleaseDocumentsPackagetViewController) animated:NO];
+                [view.navigationController pushViewController:allocAndInit(ReleaseDocumentsPackagetViewController) animated:NO];
                 
                 break;
             case 3:
@@ -211,21 +211,21 @@ static dispatch_once_t once;
                 [view.navigationController pushViewController:release animated:NO];
             }
                 break;
-   
+                
                 
             default:
                 break;
         }
         
     }];
-
+    
 }
 #pragma mark
 #pragma mark 选择相机
 - (void)seleteImageFormSystem:(UIViewController *)view seleteImageFormSystemBlcok:(SeleteImageFormSystemBlcok )block
 {
     _seleteImageFormSystemBlcok = block;
-
+    
     DWActionSheetView *_actionSheetView = [DWActionSheetView showActionSheetWithTitle:nil cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@[@"拍照",@"从手机相册选择"] handler:^(DWActionSheetView *actionSheetView, NSInteger buttonIndex) {
         
         if (buttonIndex>-1) {
@@ -233,7 +233,7 @@ static dispatch_once_t once;
             if (buttonIndex ==0) {
                 
                 //来源:相机
-               
+                
                 if (![self captureDeviceStatus]) {
                     return;
                 }
@@ -241,12 +241,12 @@ static dispatch_once_t once;
             }
             else if (buttonIndex ==1)
             {
-
+                
                 if (![self assetsLibraryStatus]) {
-                        
+                    
                     return;
                 }
-
+                
                 sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
                 
             }
@@ -284,17 +284,17 @@ static dispatch_once_t once;
 - (BOOL)assetsLibraryStatus
 {
     if (!iOS9) {
-    ALAuthorizationStatus status = [ALAssetsLibrary authorizationStatus];
-    
-    if (status == ALAuthorizationStatusDenied || ALAuthorizationStatusRestricted) {
-        [[[UIAlertView alloc] initWithTitle:@"无法打开照片" message:@"请在“设置-隐私-照片”选项中允许访问你的照片" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil] show];
-        return NO;
+        ALAuthorizationStatus status = [ALAssetsLibrary authorizationStatus];
         
-    } else {
-        
-        return YES;
-        
-    }
+        if (status == ALAuthorizationStatusDenied || ALAuthorizationStatusRestricted) {
+            [[[UIAlertView alloc] initWithTitle:@"无法打开照片" message:@"请在“设置-隐私-照片”选项中允许访问你的照片" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil] show];
+            return NO;
+            
+        } else {
+            
+            return YES;
+            
+        }
     }
     return YES;
 }
@@ -325,7 +325,7 @@ static dispatch_once_t once;
 - (void)enterLoginView
 {
     if (getAppDelegate().window.rootViewController) {
-       [getAppDelegate().window.rootViewController removeFromParentViewController];
+        [getAppDelegate().window.rootViewController removeFromParentViewController];
     }
     UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:allocAndInit(SelectedLoginViewController)];
     getAppDelegate().window.rootViewController = nav;
@@ -342,8 +342,8 @@ static dispatch_once_t once;
     UINavigationController * rightSideNavController = [[UINavigationController alloc] initWithRootViewController:allocAndInit(MeViewController)];
     [rightSideNavController setRestorationIdentifier:@"MMExampleRightNavigationControllerRestorationKey"];
     _drawerController = [[MMDrawerController alloc]
-                             initWithCenterViewController:getAppDelegate().mainTab
-                             rightDrawerViewController:rightSideNavController];
+                         initWithCenterViewController:getAppDelegate().mainTab
+                         rightDrawerViewController:rightSideNavController];
     [_drawerController setRestorationIdentifier:@"MMDrawer"];
     [_drawerController setShowsShadow:NO];
     [_drawerController setMaximumRightDrawerWidth:APPWIDTH - 60*ScreenMultiple];
@@ -353,15 +353,15 @@ static dispatch_once_t once;
     [_drawerController
      setDrawerVisualStateBlock:^(MMDrawerController *drawerController, MMDrawerSide drawerSide, CGFloat percentVisible) {
          
-                  MMDrawerControllerDrawerVisualStateBlock block;
-                  block = [[MMExampleDrawerVisualStateManager sharedManager]
-                           drawerVisualStateBlockForDrawerSide:drawerSide];
-                  if(block){
-                      block(drawerController, drawerSide, percentVisible);
-                  }
-            }];
-
-
+         MMDrawerControllerDrawerVisualStateBlock block;
+         block = [[MMExampleDrawerVisualStateManager sharedManager]
+                  drawerVisualStateBlockForDrawerSide:drawerSide];
+         if(block){
+             block(drawerController, drawerSide, percentVisible);
+         }
+     }];
+    
+    
     getAppDelegate().window.rootViewController = _drawerController;
     
     [getAppDelegate().window.layer transitionWithAnimType:TransitionAnimTypeRippleEffect subType:TransitionSubtypesFromRight curve:TransitionCurveEaseInEaseOut duration:1.0f];
@@ -370,42 +370,42 @@ static dispatch_once_t once;
 #pragma mark push
 - (void)pushViewAnimation:(UIViewController *)viewController1 toViewController:(UIViewController *)viewController2
 {
-   [viewController1.navigationController pushViewController:viewController2 animated:YES];
+    [viewController1.navigationController pushViewController:viewController2 animated:YES];
     
     if ([viewController1.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         
         viewController1.navigationController.interactivePopGestureRecognizer.delegate =nil;
     }
-
+    
     
 }
 - (void)popViewAnimation:(UIViewController *)viewController1
 {
     [viewController1.navigationController popViewControllerAnimated:YES];
     
-//    if ([viewController1.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
-//        
-//        viewController1.navigationController.interactivePopGestureRecognizer.delegate =nil;
-//    }
+    //    if ([viewController1.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+    //
+    //        viewController1.navigationController.interactivePopGestureRecognizer.delegate =nil;
+    //    }
     
 }
 - (void)popToRootViewAnimation:(UIViewController *)viewController1
 {
     [viewController1.navigationController popToRootViewControllerAnimated:YES];
     
-//    if ([viewController1.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
-//        
-//        viewController1.navigationController.interactivePopGestureRecognizer.delegate =nil;
-//    }
+    //    if ([viewController1.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+    //
+    //        viewController1.navigationController.interactivePopGestureRecognizer.delegate =nil;
+    //    }
 }
 - (void)popToPointViewAnimation:(UIViewController *)viewController1 toViewController:(NSString *)viewControllerStr
 {
-   
+    
     for (UIViewController * controller in  viewController1.navigationController.childViewControllers) {
         
         if ([viewControllerStr isEqualToString:NSStringFromClass([controller class])]) {
             [viewController1 .navigationController popToViewController:
-            controller animated:YES];
+             controller animated:YES];
         }
     }
     
@@ -420,7 +420,7 @@ static dispatch_once_t once;
 - (void)modelViewAnimation:(UIViewController *)viewController1 toViewController:(UIViewController *)viewController2
 {
     [viewController1 presentViewController:viewController2 animated:YES completion:nil];
-   
+    
 }
 - (void)dismissViewAnimation:(UIViewController *)viewController1
 {
@@ -435,30 +435,30 @@ static dispatch_once_t once;
         return 1.0;
     }
     else
-    return APPWIDTH/320.0;
+        return APPWIDTH/320.0;
 }
 
 - (float)spacedFonts
 {
-//    if (iphone6Plus_5_5) {
-//        
-//        return [self bandFonts]*APPWIDTH/BaseIphone6Width;
-//    }
-//    else
-//    {
-        return [self bandFonts];
-//    }
+    //    if (iphone6Plus_5_5) {
+    //
+    //        return [self bandFonts]*APPWIDTH/BaseIphone6Width;
+    //    }
+    //    else
+    //    {
+    return [self bandFonts];
+    //    }
     
 }
 - (float)bandFonts
 {
-
+    
     return  Bang;
 }
 #pragma mark - Dismiss Methods Sample
 - (void)show
 {
- 
+    
     [SVProgressHUD show];
     
 }
@@ -470,11 +470,11 @@ static dispatch_once_t once;
 - (void)showWithStatus
 {
     
-  [SVProgressHUD showWithStatus:ShowWithStatus];
+    [SVProgressHUD showWithStatus:ShowWithStatus];
 }
 - (void)showInfoWithStatus
 {
-       [SVProgressHUD showInfoWithStatus:ShowInfoWithStatus];
+    [SVProgressHUD showInfoWithStatus:ShowInfoWithStatus];
 }
 - (void)showSuccessWithStatus
 {
@@ -484,8 +484,8 @@ static dispatch_once_t once;
 }
 - (void)showErrorWithStatus
 {
-   
-   [SVProgressHUD showErrorWithStatus:ShowErrorWithStatus];
+    
+    [SVProgressHUD showErrorWithStatus:ShowErrorWithStatus];
 }
 - (void)showWithStatus:(NSString *)text
 {
@@ -495,22 +495,22 @@ static dispatch_once_t once;
 }
 - (void)showInfoWithStatus:(NSString *)text
 {
-
+    
     [SVProgressHUD showInfoWithStatus:text];
 }
 - (void)showSuccessWithStatus:(NSString *)text
 {
-   
+    
     [SVProgressHUD showSuccessWithStatus:text];
 }
 - (void)showErrorWithStatus:(NSString *)text
 {
-   [SVProgressHUD showErrorWithStatus:text];
+    [SVProgressHUD showErrorWithStatus:text];
 }
 
 - (void)dismiss
 {
-   [SVProgressHUD dismiss];
+    [SVProgressHUD dismiss];
 }
 
 
@@ -522,21 +522,21 @@ static dispatch_once_t once;
         // 进入刷新状态后会自动调用这个block
         refreshingBlock();
     }];
-//    //系统
-//
-//    _refreshingBlock = refreshingBlock;
-//    UIRefreshControl *control = allocAndInit(UIRefreshControl);
-//    control.tintColor = AppMainColor;
-//    [scrollView addSubview:control];
-//    NSLog(@"control =%@",control);
-//   
-//    [control addTarget:self action:@selector(refreshingBlock:) forControlEvents:UIControlEventValueChanged];
+    //    //系统
+    //
+    //    _refreshingBlock = refreshingBlock;
+    //    UIRefreshControl *control = allocAndInit(UIRefreshControl);
+    //    control.tintColor = AppMainColor;
+    //    [scrollView addSubview:control];
+    //    NSLog(@"control =%@",control);
+    //
+    //    [control addTarget:self action:@selector(refreshingBlock:) forControlEvents:UIControlEventValueChanged];
     
 }
 - (void)scrollView:(UIScrollView *)scrollView footerWithRefreshingBlock:(RefreshComponentRefreshingBlock)refreshingBlock
 {
     
-//    mj
+    //    mj
     scrollView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
         // 进入刷新状态后会自动调用这个block
         refreshingBlock();
@@ -563,22 +563,22 @@ static dispatch_once_t once;
 - (void)endHeaderWithRefreshing:(UIScrollView *)scrollView{
     
     [scrollView.mj_header endRefreshing];
-//    for (UIView *view in scrollView.subviews) {
-//        if ([view isKindOfClass:[UIRefreshControl class]]) {
-//            UIRefreshControl*  refreshView = (UIRefreshControl*)view;
-//            [refreshView endRefreshing];
-////             NSLog(@"isRefresh");
-//            NSLog(@"refreshView =%@",refreshView);
-//        }
-//    }
-   
-
+    //    for (UIView *view in scrollView.subviews) {
+    //        if ([view isKindOfClass:[UIRefreshControl class]]) {
+    //            UIRefreshControl*  refreshView = (UIRefreshControl*)view;
+    //            [refreshView endRefreshing];
+    ////             NSLog(@"isRefresh");
+    //            NSLog(@"refreshView =%@",refreshView);
+    //        }
+    //    }
+    
+    
 }
 
 - (void)endFooterWithRefreshing:(UIScrollView *)scrollView
 {
-     [scrollView.mj_footer endRefreshing];
-    }
+    [scrollView.mj_footer endRefreshing];
+}
 
 
 - (void)loadWebViewWithUrl:(NSString *)url title:(NSString *)title pushView:(UIViewController *)view rightBtn:(UIButton *)rightBt
@@ -591,10 +591,10 @@ static dispatch_once_t once;
     {
         urlStr = [NSString stringWithFormat:@"%@%@",HttpURL,url];
     }
-//    NSLog(@"urlStr =%@",urlStr);
+    //    NSLog(@"urlStr =%@",urlStr);
     urlStr = [urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     DWWebViewController *webContro =allocAndInit(DWWebViewController);
-//     NSLog(@"urlStr =%@",urlStr);
+    //     NSLog(@"urlStr =%@",urlStr);
     webContro.homeUrl = [NSURL URLWithString:urlStr];
     webContro.title = title;
     
@@ -603,14 +603,14 @@ static dispatch_once_t once;
         [webContro.view addSubview:rightBt];
         
     }
-   
+    
     [view.navigationController pushViewController:webContro animated:YES];
 }
 
 #pragma mark
 #pragma mark 定位
 //- (void)locationPositionBlock:(LocationPositionBlock)locationPositionBlock{
-//    
+//
 //    _locationPositionBlock = locationPositionBlock;
 //    // 判断定位操作是否被允许
 //    if([CLLocationManager locationServicesEnabled]) {
@@ -655,11 +655,11 @@ static dispatch_once_t once;
 //                 //四大直辖市的城市信息无法通过locality获得，只能通过获取省份的方法来获得（如果city为空，则可知为直辖市）
 //                 city = placemark.administrativeArea;
 //             }
-//             
+//
 //             if (_locationPositionBlock) {
 //                 _locationPositionBlock(city);
 //             }
-//             
+//
 //             //系统会一直更新数据，直到选择停止更新，因为我们只需要获得一次经纬度即可，所以获取之后就停止更新
 //             [manager stopUpdatingLocation];
 //         }else if (error == nil && [array count] == 0)
@@ -679,53 +679,54 @@ static dispatch_once_t once;
     
     NSString *oldVersion = infoDict[@"CFBundleShortVersionString"];
     
-    NSString *url = [[NSString alloc] initWithFormat:@"http://itunes.apple.com/cn/lookup?id=1112425830"];
+    NSString *url = [[NSString alloc] initWithFormat:@"%@common/updateios",HttpURL];
     
-    [XLDataService putWithUrl:url param:nil modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-//        NSLog(@"dataObj =%@",dataObj);
-        NSNumber *number = dataObj[@"resultCount"];
-        NSArray *array = dataObj[@"results"];
-        if (array.count>0) {
-            if (number.intValue == 1) {
-                NSString *newVersion =array[0][@"version"];
+    [XLDataService putWithUrl:url param:[Parameter parameterWithSessicon] modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+        NSLog(@"dataObj =%@",dataObj);
+        if ([dataObj[@"rtcode"] integerValue]==1) {
+            
+            NSString *newVersion =dataObj[@"version"];
+            _updataUrl =dataObj[@"url"];
+            NSArray *newArray = [newVersion componentsSeparatedByString:@"."];
+            NSArray *oldArray = [oldVersion componentsSeparatedByString:@"."];
+            int count=(int)newArray.count;
+            if (oldArray.count<newArray.count) {
+                count = (int) oldArray.count;
+            }
+            BOOL sure = NO;
+            for (int i =0; i<count; i++) {
                 
-                NSArray *newArray = [newVersion componentsSeparatedByString:@"."];
-                NSArray *oldArray = [oldVersion componentsSeparatedByString:@"."];
-                int count=(int)newArray.count;
-                if (oldArray.count<newArray.count) {
-                    count = (int) oldArray.count;
+                if ([oldArray[i] integerValue]==[newArray[i] integerValue]) {
+                    continue;
                 }
-                BOOL sure = NO;
-                for (int i =0; i<count; i++) {
-                    
-                    if ([oldArray[i] integerValue]==[newArray[i] integerValue]) {
-                        continue;
-                    }
-                    
-                    if ([oldArray[i] integerValue]<[newArray[i] integerValue]) {
-                        sure = YES;
-                        break;
-                    }
-                    else
-                    {
-                        sure = NO;
-                        break;
-                    }
-                    
+                
+                if ([oldArray[i] integerValue]<[newArray[i] integerValue]) {
+                    sure = YES;
+                    break;
                 }
-                if (sure) {
-                    DXAlertView *alert = [[DXAlertView alloc] initWithTitle:[NSString stringWithFormat:@"检测到新版本(%@),是否更新?",newVersion] contentText:[NSString stringWithFormat:@"%@",array[0][@"releaseNotes"]] leftButtonTitle:@"取消" rightButtonTitle:@"更新"];
-                    alert.rightBlock = ^
-                    {
-                        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:array[0][@"artistViewUrl"]]];
-                    };
-                    [alert show];
+                else
+                {
+                    sure = NO;
+                    break;
                 }
                 
             }
-
+            if (sure) {
+                UIAlertView *view = [[UIAlertView alloc]initWithTitle:[NSString stringWithFormat:@"检测到新版本(%@),是否更新?",newVersion] message:[NSString stringWithFormat:@"%@",dataObj[@"info"]] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"更新", nil];
+                view.tag = 888;
+                [view show];
+            }
+            
         }
         
     }];
+}
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag ==888) {
+        if (buttonIndex ==1) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:_updataUrl]];
+        }
+    }
 }
 @end
