@@ -810,7 +810,7 @@
                 }
                 else if ([dataObj[@"rtcode"] intValue]==4001){
                     [[ToolManager shareInstance]dismiss];
-                    UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"去身份认证吗?" message:@"身份认证后才能添加人脉哦" delegate:self cancelButtonTitle:@"不去" otherButtonTitles:@"走起", nil];
+                    UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"去身份认证吗?" message:@"身份认证后才能添加人脉哦" delegate:self cancelButtonTitle:nil otherButtonTitles:@"不去",@"走起", nil];
                     alertView.tag=333;
                     alertView.delegate=self;
                     [alertView show];
@@ -865,7 +865,7 @@
                 }else if (model.rtcode ==4005){
                     [[ToolManager shareInstance]dismiss];
                     
-                    UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"知脉君温馨提示" message:[NSString stringWithFormat:@"%@",model.rtmsg] delegate:self cancelButtonTitle:@"再看看" otherButtonTitles:@"马上开通", nil];
+                    UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"知脉君温馨提示" message:[NSString stringWithFormat:@"%@",model.rtmsg] delegate:self cancelButtonTitle:nil otherButtonTitles:@"再看看",@"马上开通", nil];
                     alertView.tag=22223;
                     alertView.delegate=self;
                     [alertView show];

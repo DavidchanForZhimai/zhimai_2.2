@@ -149,7 +149,7 @@
                     shoujibtn.didClickBtnBlock = ^
                     {
                         
-                        UIAlertView *alertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"是否要拨打电话 %@",modal.datas.isaddress_tel] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+                        UIAlertView *alertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"是否要拨打电话 %@",modal.datas.isaddress_tel] delegate:self cancelButtonTitle:nil otherButtonTitles:@"取消",@"确定", nil];
                         [alertV show];
                     };
                     

@@ -712,7 +712,7 @@ static dispatch_once_t once;
                 
             }
             if (sure) {
-                UIAlertView *view = [[UIAlertView alloc]initWithTitle:[NSString stringWithFormat:@"检测到新版本(%@),是否更新?",newVersion] message:[NSString stringWithFormat:@"%@",dataObj[@"info"]] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"更新", nil];
+                UIAlertView *view = [[UIAlertView alloc]initWithTitle:[NSString stringWithFormat:@"检测到新版本(%@),是否更新?",newVersion] message:[NSString stringWithFormat:@"%@",dataObj[@"info"]] delegate:self cancelButtonTitle:nil otherButtonTitles:@"取消",@"更新", nil];
                 view.tag = 888;
                 [view show];
             }
