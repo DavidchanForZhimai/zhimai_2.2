@@ -97,7 +97,7 @@
 {
     
     [[HomeInfo shareInstance]getHomePageDT:jjrpageNumb brokerid:nil andcallBack:^(BOOL issucced, NSString* info, NSDictionary* jsonDic) {
-        //        NSLog(@"jsonDic =%@",jsonDic);
+        NSLog(@"jsonDic =%@",jsonDic);
         if (isRefresh) {
             [[ToolManager shareInstance] endHeaderWithRefreshing:_dtTab];
         }
@@ -144,9 +144,10 @@
                     LWLayout* layout = [self layoutWithStatusModel:data index:i];
                     [self.jjrJsonArr addObject:layout];
                 }
-                [_dtTab reloadData];
+                
             }
             
+            [_dtTab reloadData];
             
         }else
         {
