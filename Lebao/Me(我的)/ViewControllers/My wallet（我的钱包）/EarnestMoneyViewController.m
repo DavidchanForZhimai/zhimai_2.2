@@ -112,7 +112,7 @@ typedef enum {
     line.backgroundColor= AppMainColor;
     [_mainScrollView addSubview:line];
     
-    [UILabel createLabelWithFrame:frame(16, CGRectGetMaxY(footView.frame), 4*26*SpacedFonts  , 36) text:@"我要充值" fontSize:26*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentLeft inView:_mainScrollView];
+    [UILabel createLabelWithFrame:frame(16, CGRectGetMaxY(footView.frame), 150, 36) text:@"我要充值" fontSize:26*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentLeft inView:_mainScrollView];
     
     _rechargeView = allocAndInitWithFrame(UIView, frame(0, CGRectGetMaxY(line.frame) + 10, frameWidth(_mainScrollView), APPHEIGHT - (CGRectGetMaxY(line.frame) + 10)));
     _rechargeView.backgroundColor = WhiteColor;
@@ -158,7 +158,7 @@ typedef enum {
     
     };
 
-   UILabel *_instructions = [UILabel createLabelWithFrame:frame(16, CGRectGetMaxY(_rechargeBtn.frame) +33, 4*24*SpacedFonts , 24*SpacedFonts) text:@"充值说明" fontSize:24*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentLeft inView:_rechargeView];
+   UILabel *_instructions = [UILabel createLabelWithFrame:frame(16, CGRectGetMaxY(_rechargeBtn.frame) +33, 150 , 24*SpacedFonts) text:@"充值说明" fontSize:24*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentLeft inView:_rechargeView];
     
     
     _rechargeiInstructions = [UILabel createLabelWithFrame:frame(16, CGRectGetMaxY(_instructions.frame) + 10, frameWidth(_rechargeView) - 30 , 36) text:@"1、知脉目前仅支持微信支付充值\n2、充值的金额主要用于平台的打赏、购买会员等消费，也可以再次提现到微信钱包\n3、红包中的金额只能用于平台消费，无法提现" fontSize:24*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:_rechargeView];

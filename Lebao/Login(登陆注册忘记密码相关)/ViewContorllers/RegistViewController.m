@@ -115,7 +115,7 @@ typedef enum {
     
     _verificationCode = allocAndInitWithFrame(UITextField, frame(frameX(_userName), CGRectGetMaxY(line2.frame) + bH , frameWidth(_userName) - 50, frameHeight(_userName)));
     _verificationCode.placeholder = @"如有邀请码请输入";
-    _verificationCode.keyboardType = UIKeyboardTypeNumberPad;
+    _verificationCode.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
     _verificationCode.font = _userName.font;
     _verificationCode.clearButtonMode = UITextFieldViewModeWhileEditing;
     _verificationCode.textColor =_userName.textColor;
