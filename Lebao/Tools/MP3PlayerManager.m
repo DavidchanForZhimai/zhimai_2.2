@@ -31,7 +31,7 @@ static MP3PlayerManager* mP3PlayerManager;
         return;
     }
     _url = url;
-    [self setAudioSession];
+//    [self setAudioSession];
     [self setRecorder];
     [self.audioRecorder record];
     //首次使用应用时如果调用record方法会询问用户是否允许使用麦克风
@@ -96,12 +96,12 @@ static MP3PlayerManager* mP3PlayerManager;
 /**
  *  设置音频会话
  */
--(void)setAudioSession{
-    AVAudioSession *audioSession=[AVAudioSession sharedInstance];
-    //设置为播放和录音状态，以便可以在录制完之后播放录音
-    [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
-    [audioSession setActive:YES error:nil];
-}
+//-(void)setAudioSession{
+//    AVAudioSession *audioSession=[AVAudioSession sharedInstance];
+//    //设置为播放和录音状态，以便可以在录制完之后播放录音
+//    [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+//    [audioSession setActive:YES error:nil];
+//}
 
 /**
  *  取得录音文件保存路径
@@ -184,7 +184,7 @@ static MP3PlayerManager* mP3PlayerManager;
         NSURL *url=[self getSavePath];
         NSError *error=nil;
         _audioPlayer=[[AVAudioPlayer alloc]initWithContentsOfURL:url error:&error];
-        [self setAudioWaiFangSession];
+//        [self setAudioWaiFangSession];
         self.audioPlayer.volume = 1.0f;
         _audioPlayer.numberOfLoops=0;
         [_audioPlayer prepareToPlay];
@@ -220,13 +220,13 @@ static MP3PlayerManager* mP3PlayerManager;
     }
 }
 //扬声器模式
--(void)setAudioWaiFangSession
-{
-    AVAudioSession *audioSession=[AVAudioSession sharedInstance];
-    //设置为播放
-    [audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
-    [audioSession setActive:YES error:nil];
-}
+//-(void)setAudioWaiFangSession
+//{
+//    AVAudioSession *audioSession=[AVAudioSession sharedInstance];
+//    //设置为播放
+//    [audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
+//    [audioSession setActive:YES error:nil];
+//}
 #pragma mark - 录音机代理方法
 /**
  *  录音完成，录音完成后播放录音

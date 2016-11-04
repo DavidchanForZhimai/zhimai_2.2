@@ -15,7 +15,7 @@
 #import "MP3PlayerManager.h"
 #import "XLDataService.h"
 #import "MeetingModel.h"
-
+#import "VIPPrivilegeVC.h"
 @interface MeetPaydingVC ()<UIAlertViewDelegate>
 typedef enum {
     zhimaizhifuType=0,//知脉支付
@@ -245,6 +245,13 @@ typedef enum{
                     [self.navigationController popViewControllerAnimated:YES];
                    
                     
+                }else if (model.rtcode ==4005){
+                    [[ToolManager shareInstance]dismiss];
+                    
+                    UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"知脉君温馨提示" message:[NSString stringWithFormat:@"%@",model.rtmsg] delegate:self cancelButtonTitle:@"再看看" otherButtonTitles:@"马上开通", nil];
+                    alertView.tag=22223;
+                    alertView.delegate=self;
+                    [alertView show];
                 }
                 
                 else
@@ -305,7 +312,16 @@ typedef enum{
 
     }
 }
-
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    
+    if (alertView.tag==22223) {
+    if (buttonIndex==0) {
+        
+    }else if(buttonIndex==1){
+        PushView(self, allocAndInit(VIPPrivilegeVC));
+    }
+}
+}
 //- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 //{
 //    if (alertView.tag==666) {

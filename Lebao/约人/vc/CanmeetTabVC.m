@@ -18,6 +18,7 @@
 #import "CoreArchive.h"
 #import "ViewController.h"
 #import "AuthenticationHomeViewController.h"
+#import "VIPPrivilegeVC.h"
 @interface CanmeetTabVC ()<UITableViewDelegate,UITableViewDataSource,MeettingTableViewDelegate,UIAlertViewDelegate,EjectViewDelegate,AddConnectionViewDelegate>
 {
     AddConnectionView *connectionView;
@@ -353,6 +354,13 @@
                     [self.allMeetArr replaceObjectAtIndex:customAlertView.indexth.row withObject:layout];
                     [self.tableView reloadRowsAtIndexPaths: @[[NSIndexPath indexPathForRow:customAlertView.indexth.row inSection:0]] withRowAnimation:NO];
                     
+                }else if (model.rtcode ==4005){
+                    [[ToolManager shareInstance]dismiss];
+                    
+                    UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"知脉君温馨提示" message:[NSString stringWithFormat:@"%@",model.rtmsg] delegate:self cancelButtonTitle:@"再看看" otherButtonTitles:@"马上开通", nil];
+                    alertView.tag=22223;
+                    alertView.delegate=self;
+                    [alertView show];
                 }
                 else
                 {
@@ -394,6 +402,12 @@
             
         }else if(buttonIndex==1){
             PushView(self, allocAndInit(AuthenticationHomeViewController));
+        }
+    }else if (alertView.tag==22223) {
+        if (buttonIndex==0) {
+            
+        }else if(buttonIndex==1){
+            PushView(self, allocAndInit(VIPPrivilegeVC));
         }
     }
 }

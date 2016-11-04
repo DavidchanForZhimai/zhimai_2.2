@@ -21,6 +21,7 @@
 #import "GJGCChatFriendViewController.h"
 #import "LWImageBrowser.h"
 #import "EvaluateVC.h"
+#import "VIPPrivilegeVC.h"
 #import "AuthenticationHomeViewController.h"
 #define TagHeight 22
 #define MininumTagWidth (APPWIDTH - 120)/5.0
@@ -861,6 +862,13 @@
                      [[NSNotificationCenter defaultCenter]postNotificationName:@"KReflashCanMeet" object:@{@"userid":headerModel.Id,@"relation":@"1",@"reward":@"0"}];
                     [successAlertV show];
                     [connectionView.window removeGestureRecognizer:recognizerTap];
+                }else if (model.rtcode ==4005){
+                    [[ToolManager shareInstance]dismiss];
+                    
+                    UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"知脉君温馨提示" message:[NSString stringWithFormat:@"%@",model.rtmsg] delegate:self cancelButtonTitle:@"再看看" otherButtonTitles:@"马上开通", nil];
+                    alertView.tag=22223;
+                    alertView.delegate=self;
+                    [alertView show];
                 }
                 else
                 {
@@ -994,6 +1002,12 @@
             
         }else if(buttonIndex==1){
             PushView(self, allocAndInit(AuthenticationHomeViewController));
+        }
+    }else if (alertView.tag==22223) {
+        if (buttonIndex==0) {
+            
+        }else if(buttonIndex==1){
+            PushView(self, allocAndInit(VIPPrivilegeVC));
         }
     }
 }

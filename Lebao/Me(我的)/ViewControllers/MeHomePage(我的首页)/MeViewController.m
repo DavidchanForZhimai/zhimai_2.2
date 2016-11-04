@@ -328,7 +328,7 @@
     {
         cell.detail.hidden = YES;
     }
-    if (indexPath.row ==3) {
+    if ([dict[@"viewController"] isEqualToString:@"AuthenticationHomeViewController"]) {
         
         cell.authen.hidden = NO;
         
@@ -379,7 +379,7 @@
             UINavigationController *nav =(UINavigationController *)tabBar.viewControllers[getAppDelegate().mainTab.selectedIndex];
             if ([dict[@"viewController"] isEqualToString:@"VIPPrivilegeVC"]){
                 VIPPrivilegeVC *vipVC=allocAndInit(VIPPrivilegeVC);
-                vipVC.modal=modal;
+//                vipVC.modal=modal;/
                 [nav pushViewController:vipVC animated:YES];
                 return ;
             }

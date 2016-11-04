@@ -33,6 +33,7 @@
 @property(nonatomic,assign)int rtcode;
 @property(nonatomic,copy)NSString *rtmsg;
 @property(nonatomic,copy)NSString *realname;
+@property(nonatomic,copy)NSString *imgurl;
 @property(nonatomic,strong)NSArray<pricesData *> *prices;
 @property(nonatomic,strong)NSArray<privilegeData*> *privilege;
 @end
@@ -154,18 +155,18 @@
     
     UIImageView *headImagV=[[UIImageView alloc]init];//头像
     headImagV.frame = CGRectMake(10, 23, 44, 44);
-    [[ToolManager shareInstance] imageView:headImagV setImageWithURL:_modal.imgurl placeholderType:PlaceholderTypeUserHead];
+    [[ToolManager shareInstance] imageView:headImagV setImageWithURL:model.imgurl placeholderType:PlaceholderTypeUserHead];
     [vipView addSubview:headImagV];
     
     UILabel *nameLab=[[UILabel alloc]init];//名字
     nameLab.font=[UIFont systemFontOfSize:15];
-    nameLab.text=_modal.realname;
+    nameLab.text=model.realname;
     nameLab.frame= CGRectMake(CGRectGetMaxX(headImagV.frame) + 10, headImagV.y+3,[nameLab.text sizeWithFont:[UIFont systemFontOfSize:15] maxSize:CGSizeMake(APPWIDTH,15)].width, 15);
     [vipView addSubview:nameLab];
     
     UIImageView *certifyImgV=[[UIImageView alloc]init];//认证
     UIImage *certifyimag;
-    if (_modal.authen==3) {
+    if (model.authen==3) {
         certifyimag=[UIImage imageNamed:@"[iconprofilerenzhen]"];
         certifyImgV.frame=CGRectMake(CGRectGetMaxX(nameLab.frame)+5, CGRectGetMaxY(nameLab.frame)-certifyimag.size.height, certifyimag.size.width,certifyimag.size.height);
         certifyImgV.image=certifyimag;

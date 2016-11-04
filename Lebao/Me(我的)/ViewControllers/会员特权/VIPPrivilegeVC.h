@@ -12,6 +12,6 @@
 
 @interface VIPPrivilegeVC : BaseViewController
 
-@property (nonatomic,strong)MeViewModal *modal;
+//@property (nonatomic,strong)MeViewModal *modal;
 
 @end

@@ -281,10 +281,11 @@
                 MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
                 
                 if (model.rtcode==1) {
-                    [[ToolManager shareInstance] showAlertMessage:@"删除人脉成功"];
+                    
                     [self.nearByManArr removeObjectAtIndex:indexPath.row];
                     // Delete the row from the data source.
                     [_yrTab deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                    [[ToolManager shareInstance] showAlertMessage:@"删除人脉成功"];
                 }
                 else
                 {
