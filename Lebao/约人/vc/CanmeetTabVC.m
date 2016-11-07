@@ -70,7 +70,7 @@
     [self navViewTitleAndBackBtn:@""];
         //搜索按钮
     
-        _search = [[BaseButton alloc]initWithFrame:frame(40*ScreenMultiple, StatusBarHeight + 7, 200*ScreenMultiple, NavigationBarHeight - 14) setTitle:@"搜索" titleSize:28*SpacedFonts titleColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:[UIColor clearColor] inView:self.view];
+        _search = [[BaseButton alloc]initWithFrame:frame(80, StatusBarHeight + 7,APPWIDTH-160, NavigationBarHeight - 14) setTitle:@"搜索" titleSize:28*SpacedFonts titleColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:[UIColor clearColor] inView:self.view];
         [_search setRoundWithfloat:_search.height/2.0];
         [_search setBorder:LineBg width:0.5];
    
@@ -93,13 +93,13 @@
     
     UIImage *upImage =[UIImage imageNamed:@"exhibition_up"];
     UILabel *lbUp = allocAndInit(UILabel);
-    CGSize sizeUp = [lbUp sizeWithContent:@"全国" font:[UIFont systemFontOfSize:28*SpacedFonts]];
+    CGSize sizeUp = [lbUp sizeWithContent:@"全国过" font:[UIFont systemFontOfSize:28*SpacedFonts]];
     float sizeW = sizeUp.width;
-    if (sizeUp.width>=140*SpacedFonts) {
-        sizeW = 160*SpacedFonts;
-    }
+//    if (sizeUp.width>=140*SpacedFonts) {
+//        sizeW = 160*SpacedFonts;
+//    }
    
-    self.selectedAddress  =[[BaseButton alloc]initWithFrame:frame(CGRectGetMaxX(_search.frame) +  10, StatusBarHeight, sizeW + 5 + upImage.size.width , NavigationBarHeight) setTitle:@"全国" titleSize:28*SpacedFonts titleColor:BlackTitleColor backgroundImage:nil iconImage:upImage highlightImage:nil setTitleOrgin:CGPointMake( (NavigationBarHeight -28*SpacedFonts)/2.0 ,- upImage.size.width) setImageOrgin:CGPointMake((NavigationBarHeight - upImage.size.height)/2.0,sizeW + 5) inView:self.view];
+    self.selectedAddress  =[[BaseButton alloc]initWithFrame:frame(APPWIDTH-(sizeW + 5 + upImage.size.width)-10, StatusBarHeight, sizeW + 5 + upImage.size.width , NavigationBarHeight) setTitle:@"全国" titleSize:28*SpacedFonts titleColor:BlackTitleColor backgroundImage:nil iconImage:upImage highlightImage:nil setTitleOrgin:CGPointMake( (NavigationBarHeight -28*SpacedFonts)/2.0 ,- upImage.size.width) setImageOrgin:CGPointMake((NavigationBarHeight - upImage.size.height)/2.0,sizeW + 5) inView:self.view];
     
     _selectedAddress.didClickBtnBlock =^
     {
@@ -109,8 +109,13 @@
             NSLog(@"cityID =%@",cityID);
              weakSelf.city = cityID;
             
-            [weakSelf.selectedAddress setTitle:cityname forState:UIControlStateNormal];
-            [weakSelf resetSeletedAddressFrameWithTitle:cityname];
+            NSString *str = cityname;
+            
+            if (cityname.length>3) {
+                str = [NSString stringWithFormat:@"%@...",[cityname substringWithRange:NSMakeRange(0, 2)]];
+            }
+            [weakSelf.selectedAddress setTitle:str forState:UIControlStateNormal];
+//            [weakSelf resetSeletedAddressFrameWithTitle:cityname];
             [weakSelf.allMeetArr removeAllObjects];
              [weakSelf.tableView reloadData];
              weakSelf.page = 1;
@@ -305,10 +310,10 @@
     NSLog(@"param===%@",param);
     [XLDataService putWithUrl:connetionCheckedURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         if(dataObj){
-            [[ToolManager shareInstance] dismiss];
+      
                             NSLog(@"dataobj===%@",dataObj);
             if ([dataObj[@"rtcode"] intValue]==1) {
-    
+          [[ToolManager shareInstance] dismiss];
     CGFloat dilX = 25;
     CGFloat dilH = 250;
     connectionView = [[AddConnectionView alloc] initAlertViewWithFrame:CGRectMake(dilX, 0, 250, dilH) andSuperView:self.view];
@@ -325,6 +330,13 @@
                 alertView.delegate=self;
                 [alertView show];
                 
+            }else if ([dataObj[@"rtcode"] intValue] ==4005){
+                [[ToolManager shareInstance]dismiss];
+                
+                UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"知脉君温馨提示" message:[NSString stringWithFormat:@"%@",dataObj[@"rtmsg"]] delegate:self cancelButtonTitle:nil otherButtonTitles:@"再看看",@"马上开通", nil];
+                alertView.tag=22223;
+                alertView.delegate=self;
+                [alertView show];
             }
         }
         else
