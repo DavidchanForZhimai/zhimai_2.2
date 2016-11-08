@@ -76,10 +76,14 @@ typedef enum
     else if (sender.tag == ButtonActionTagFinish)
     {
         if (_editBlock) {
-           
+            NSString *nameStr=[ _modityTextField.text stringByReplacingOccurrencesOfString:@" " withString:@""];
         if (_editPageTag == EditNamePageTag&&_modityTextField.text.length>5) {
             
             [[ToolManager shareInstance] showAlertMessage:@"名字不能超过5个字"];
+            return;
+        }if (nameStr.length==0) {
+            
+            [[ToolManager shareInstance] showAlertMessage:@"名字不能为空或空格"];
             return;
         }
         if (_editPageTag == EditZhiyePageTag&&_modityTextField.text.length>10) {

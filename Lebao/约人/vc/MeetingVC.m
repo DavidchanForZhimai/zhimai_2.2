@@ -128,11 +128,7 @@
         if (dataObj) {
             MeetNumModel *modal = [MeetNumModel mj_objectWithKeyValues:dataObj];
             
-            NSString *nameStr;
-            
-            
-                nameStr=[modal.realname stringByReplacingOccurrencesOfString:@" " withString:@""];
-                if (nameStr.length==0) {
+                if (modal.realname.length==0) {
                     UIAlertView *alerView=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您没填写姓名哦" delegate:self cancelButtonTitle:nil otherButtonTitles:@"走起", nil];
                     alerView.tag=3333;
                     alerView.delegate=self;
