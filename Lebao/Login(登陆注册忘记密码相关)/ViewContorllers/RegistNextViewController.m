@@ -230,7 +230,7 @@ typedef enum {
 #pragma mark 验证码为灰色不可点击效果
 - (void)uncannyClicker
 {
-    _seconds = 60;
+    _seconds = 120;
     _timer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(countDown) userInfo:nil repeats:YES];
     [_timer fire];
     _verificationCodeBtn.userInteractionEnabled=NO;
@@ -258,7 +258,7 @@ typedef enum {
 - (void)timeOut
 {
     [_timer invalidate];
-    _seconds = 60;
+    _seconds = 120;
     _verificationCodeBtn.userInteractionEnabled=YES;
     _verificationCodeBtn.alpha=1.0;
     [_verificationCodeBtn setTitle:@"重新获取" forState:UIControlStateNormal];
