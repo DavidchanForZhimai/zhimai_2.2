@@ -1090,6 +1090,7 @@
                 
                 break;
             case 3:
+                cell.detailTitle.frame =frame(0, 0, APPWIDTH-13, cell.detailTitle.height);
                 [cell  showTitle:@"手机" icon:nil bg:nil detail:_modal.tel  canEdit:NO];
                 break;
             case 4:

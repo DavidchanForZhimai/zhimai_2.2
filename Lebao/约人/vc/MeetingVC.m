@@ -128,6 +128,17 @@
         if (dataObj) {
             MeetNumModel *modal = [MeetNumModel mj_objectWithKeyValues:dataObj];
             
+            NSString *nameStr;
+            
+            
+                nameStr=[modal.realname stringByReplacingOccurrencesOfString:@" " withString:@""];
+                if (nameStr.length==0) {
+                    UIAlertView *alerView=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您没填写姓名哦" delegate:self cancelButtonTitle:nil otherButtonTitles:@"走起", nil];
+                    alerView.tag=3333;
+                    alerView.delegate=self;
+                    [alerView show];
+                }
+            
             
             NSMutableAttributedString *text1 = [[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"%d\n我想约见",modal.invited]];
             [text1 addAttribute:NSFontAttributeName value:Size(40) range:[[NSString stringWithFormat:@"%d\n我想约见",modal.invited] rangeOfString:[NSString stringWithFormat:@"%d",modal.invited]]];
@@ -600,6 +611,8 @@
         }else if(buttonIndex==1){
             PushView(self, allocAndInit(VIPPrivilegeVC));
         }
+    }else if(alertView.tag==3333){
+        PushView(self, allocAndInit(BasicInformationViewController));
     }
 }
 

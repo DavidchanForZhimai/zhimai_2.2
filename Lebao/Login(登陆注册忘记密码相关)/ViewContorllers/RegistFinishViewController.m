@@ -13,6 +13,7 @@
 #import "IndustrySelectionViewController.h"
 #define rememberUserName  @"rememberUserName"
 #import "NSString+Password.h"
+#import "LoginViewController.h"
 #define LoginURL [NSString stringWithFormat:@"%@site/login",HttpURL]
 #define IndustryURL [NSString stringWithFormat:@"%@user/industry",HttpURL]
 #define signmemberURL [NSString stringWithFormat:@"%@user/sign-member",HttpURL]
@@ -47,8 +48,8 @@
     //          NSLog(@"sendcaptchaParam =%@",sendcaptchaParam);
     [XLDataService postWithUrl:LoginURL param:sendcaptchaParam modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         if (error) {
-            
             [[ToolManager shareInstance] showInfoWithStatus];
+            PushView(self, allocAndInit(LoginViewController));
         }
     }];
     _selectedArray = allocAndInit(NSMutableArray);

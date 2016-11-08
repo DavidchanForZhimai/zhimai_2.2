@@ -15,6 +15,7 @@
 @property (nonatomic,assign)int beinvited;
 @property (nonatomic,assign)int cansee;
 @property (nonatomic,strong)NSMutableArray *cansee_datas;
+@property (nonatomic,copy)NSString *realname;
 @end
 
 @interface canseeDatas : NSObject
