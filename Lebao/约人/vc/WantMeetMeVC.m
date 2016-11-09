@@ -233,8 +233,6 @@
             
         }if (isMoreLoadMoreData) {
             [[ToolManager shareInstance]endFooterWithRefreshing:tabView];
-        }if (isShouldClearData) {
-            [arr removeAllObjects];
         }
         
         if (dataObj) {
@@ -251,6 +249,9 @@
             
             if (modal.rtcode ==1) {
                 [[ToolManager shareInstance]dismiss];
+                if (isShouldClearData) {
+                    [arr removeAllObjects];
+                }
                 for (MeetingData *data in modal.datas) {
                     if ([state isEqualToString:@"10"]) {
                         [arr addObject:[[WantMeetLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andTelBtn:NO]];

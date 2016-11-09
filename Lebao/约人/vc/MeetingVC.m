@@ -120,51 +120,52 @@
     NSMutableDictionary *param = [Parameter parameterWithSessicon];
     [XLDataService putWithUrl:WantURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         
-        if (isShouldClearData) {
-            [self.headimgArr removeAllObjects];
-            [self.headUserIdArr removeAllObjects];
-        }
+        
         
         if (dataObj) {
             MeetNumModel *modal = [MeetNumModel mj_objectWithKeyValues:dataObj];
-            
-                if (modal.realname.length==0) {
+//            NSLog(@"dataonj==%@",dataObj);
+            if (modal.rtcode==1) {
+                if (isShouldClearData) {
+                    [self.headimgArr removeAllObjects];
+                    [self.headUserIdArr removeAllObjects];
+                }
+                
+                if (modal.realname.length==0&&modal.realname) {
                     UIAlertView *alerView=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您没填写姓名哦" delegate:self cancelButtonTitle:nil otherButtonTitles:@"走起", nil];
                     alerView.tag=3333;
                     alerView.delegate=self;
                     [alerView show];
                 }
-            
-            
-            NSMutableAttributedString *text1 = [[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"%d\n我想约见",modal.invited]];
-            [text1 addAttribute:NSFontAttributeName value:Size(40) range:[[NSString stringWithFormat:@"%d\n我想约见",modal.invited] rangeOfString:[NSString stringWithFormat:@"%d",modal.invited]]];
-            [_headView.meWantBtn setAttributedTitle:text1 forState:UIControlStateNormal];
-            _headView.meWantBtn.titleLabel.numberOfLines = 0;
-            
-            NSMutableAttributedString *text = [[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"%d\n想约见我",modal.beinvited]];
-            [text addAttribute:NSFontAttributeName value:Size(40) range:[[NSString stringWithFormat:@"%d\n想约见我",modal.beinvited] rangeOfString:[NSString stringWithFormat:@"%d",modal.beinvited]]];
-            [_headView.wantMeBtn setAttributedTitle:text forState:UIControlStateNormal];
-            _headView.wantMeBtn.titleLabel.numberOfLines = 0;
-            
-            _headView.midBtn.titleLabel.textAlignment=NSTextAlignmentCenter;
-            NSMutableAttributedString *str=[[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"可添加\n%d\n位人脉",modal.cansee]];
-            [str addAttribute:NSFontAttributeName value:Size(60) range:[[NSString stringWithFormat:@"可添加\n%d\n位人脉",modal.cansee] rangeOfString:[NSString stringWithFormat:@"%d",modal.cansee]]];
-            [_headView.midBtn setAttributedTitle:str forState:UIControlStateNormal];
-            _headView.midBtn.titleLabel.numberOfLines=0;
-            
-            for (canseeDatas *data in modal.cansee_datas) {
-                if (data.imgurl!=nil) {
-                    [self.headimgArr addObject:data.imgurl];
-                    [self.headUserIdArr addObject:data.userid];
-                }
                 
+                
+                NSMutableAttributedString *text1 = [[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"%d\n我想约见",modal.invited]];
+                [text1 addAttribute:NSFontAttributeName value:Size(40) range:[[NSString stringWithFormat:@"%d\n我想约见",modal.invited] rangeOfString:[NSString stringWithFormat:@"%d",modal.invited]]];
+                [_headView.meWantBtn setAttributedTitle:text1 forState:UIControlStateNormal];
+                _headView.meWantBtn.titleLabel.numberOfLines = 0;
+                
+                NSMutableAttributedString *text = [[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"%d\n想约见我",modal.beinvited]];
+                [text addAttribute:NSFontAttributeName value:Size(40) range:[[NSString stringWithFormat:@"%d\n想约见我",modal.beinvited] rangeOfString:[NSString stringWithFormat:@"%d",modal.beinvited]]];
+                [_headView.wantMeBtn setAttributedTitle:text forState:UIControlStateNormal];
+                _headView.wantMeBtn.titleLabel.numberOfLines = 0;
+                
+                _headView.midBtn.titleLabel.textAlignment=NSTextAlignmentCenter;
+                NSMutableAttributedString *str=[[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"可添加\n%d\n位人脉",modal.cansee]];
+                [str addAttribute:NSFontAttributeName value:Size(60) range:[[NSString stringWithFormat:@"可添加\n%d\n位人脉",modal.cansee] rangeOfString:[NSString stringWithFormat:@"%d",modal.cansee]]];
+                [_headView.midBtn setAttributedTitle:str forState:UIControlStateNormal];
+                _headView.midBtn.titleLabel.numberOfLines=0;
+                
+                for (canseeDatas *data in modal.cansee_datas) {
+                    if (data.imgurl!=nil) {
+                        [self.headimgArr addObject:data.imgurl];
+                        [self.headUserIdArr addObject:data.userid];
+                    }
+                    
+                }
+                _headView.headimgsArr=[NSArray arrayWithArray:self.headimgArr];
+                _headView.userIdArr=[NSArray arrayWithArray:self.headUserIdArr];
+                [_headView addEightImgView];
             }
-            _headView.headimgsArr=[NSArray arrayWithArray:self.headimgArr];
-            _headView.userIdArr=[NSArray arrayWithArray:self.headUserIdArr];
-            [_headView addEightImgView];
-        }  else
-        {
-            [[ToolManager shareInstance] showInfoWithStatus];
         }
         
     }];
@@ -177,9 +178,9 @@
     [LoCationManager shareInstance].callBackLocation = ^(CLLocationCoordinate2D location)
     {
         //            测试用,要删掉
-//            CLLocationCoordinate2D location;
-//            location.latitude=24.491534;
-//            location.longitude=118.180851;
+        //            CLLocationCoordinate2D location;
+        //            location.latitude=24.491534;
+        //            location.longitude=118.180851;
         if (self.nearByManArr.count==0) {
             [[ToolManager shareInstance] showWithStatus];
         }
@@ -194,16 +195,12 @@
             //        NSLog(@"param====%@",param);
             if (isRefresh) {
                 
-                
                 [[ToolManager shareInstance] endHeaderWithRefreshing:_yrTab];
             }
             if (isMoreLoadMoreData) {
                 [[ToolManager shareInstance] endFooterWithRefreshing:_yrTab];
             }
-            if (isShouldClearData) {
-                [self.nearByManArr removeAllObjects];
-                
-            }
+            
             if (dataObj) {
                 //         NSLog(@"meetObj====%@",dataObj);
                 
@@ -221,6 +218,10 @@
                 
                 if (modal.rtcode ==1) {
                     [[ToolManager shareInstance] dismiss];
+                    if (isShouldClearData) {
+                        [self.nearByManArr removeAllObjects];
+                        
+                    }
                     for (MeetingData *data in modal.datas) {
                         data.isSelf = [data.userid  isEqualToString:modal.userid];
                         [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andMessageBtn:NO andOprationBtn:NO andTime:YES]];
@@ -246,7 +247,7 @@
         }];
         
     };
-
+    
 }
 
 -(void)addYrBtn
@@ -329,9 +330,9 @@
         NSMutableDictionary *param = [Parameter parameterWithSessicon];
         [param setObject:@"append" forKey:@"type"];
         [XLDataService putWithUrl:meetCheckedURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-//                        NSLog(@"param====%@",param);
+            //                        NSLog(@"param====%@",param);
             if (dataObj) {
-//                                NSLog(@"meetObj====%@",dataObj);
+                //                                NSLog(@"meetObj====%@",dataObj);
                 MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
                 if (modal.rtcode ==1) {
                     [[LoCationManager shareInstance] creatLocationManager];
@@ -343,7 +344,7 @@
                         //                        NSLog(@"param====%@",param);
                         [XLDataService putWithUrl:MeetAppendURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
                             if (dataObj) {
-                                    NSLog(@"dataobj=%@",dataObj);
+                                NSLog(@"dataobj=%@",dataObj);
                                 MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
                                 if (model.rtcode ==1) {
                                     _isopen=YES;
@@ -483,7 +484,7 @@
     NSMutableDictionary *param = [Parameter parameterWithSessicon];
     [param setObject:@"invited" forKey:@"type"];
     [XLDataService putWithUrl:meetCheckedURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-                            NSLog(@"dataObj====%@",dataObj);
+        NSLog(@"dataObj====%@",dataObj);
         if (dataObj) {
             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
             if (modal.rtcode ==1) {
@@ -519,7 +520,7 @@
                 alertView.delegate=self;
                 [alertView show];
             }
-
+            
             else
             {
                 [[ToolManager shareInstance] showAlertMessage:modal.rtmsg];
@@ -557,29 +558,29 @@
     }else
     {
         if ([customAlertView.money floatValue]>=1) {
-        
-        MeetPaydingVC * payVC = [[MeetPaydingVC alloc]init];
-        MeetingCellLayout *layout=(MeetingCellLayout *)self.nearByManArr[customAlertView.indexth.row];
-        MeetingData *model = layout.model;
-        //        NSLog(@"model=%@",model);
-        NSMutableDictionary *param=[Parameter parameterWithSessicon];
-        [param setObject:model.userid forKey:@"userid"];
-        [param setObject:[NSString stringWithFormat:@"%.2f",[customAlertView.money floatValue]] forKey:@"reward"];
-        
-        [param setObject:customAlertView.logField.text forKey:@"remark"];
-        [param setObject:model.distance forKey:@"distance"];
-        
-        payVC.realname=model.realname;
-        payVC.tel=model.tel;
-        payVC.param=param;
-        payVC.jineStr =[NSString stringWithFormat:@"%.2f",[customAlertView.money floatValue]];
-        payVC.audioData=customAlertView.audioData;
-        payVC.whatZfType=0;
-        [self.navigationController pushViewController:payVC animated:YES];
-        
-        
-        [customAlertView dissMiss];
-        customAlertView = nil;
+            
+            MeetPaydingVC * payVC = [[MeetPaydingVC alloc]init];
+            MeetingCellLayout *layout=(MeetingCellLayout *)self.nearByManArr[customAlertView.indexth.row];
+            MeetingData *model = layout.model;
+            //        NSLog(@"model=%@",model);
+            NSMutableDictionary *param=[Parameter parameterWithSessicon];
+            [param setObject:model.userid forKey:@"userid"];
+            [param setObject:[NSString stringWithFormat:@"%.2f",[customAlertView.money floatValue]] forKey:@"reward"];
+            
+            [param setObject:customAlertView.logField.text forKey:@"remark"];
+            [param setObject:model.distance forKey:@"distance"];
+            
+            payVC.realname=model.realname;
+            payVC.tel=model.tel;
+            payVC.param=param;
+            payVC.jineStr =[NSString stringWithFormat:@"%.2f",[customAlertView.money floatValue]];
+            payVC.audioData=customAlertView.audioData;
+            payVC.whatZfType=0;
+            [self.navigationController pushViewController:payVC animated:YES];
+            
+            
+            [customAlertView dissMiss];
+            customAlertView = nil;
         }else{
             [[ToolManager shareInstance] showAlertMessage:@"金额格式不正确,必须大等于1元"];
         }

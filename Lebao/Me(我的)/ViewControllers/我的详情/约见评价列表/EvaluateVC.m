@@ -84,9 +84,7 @@
         if (isMoreLoadMoreData) {
             [[ToolManager shareInstance] endFooterWithRefreshing:self.tableView];
         }
-        if (isShouldClearData) {
-            [self.evaluateArr removeAllObjects];
-        }
+        
         if (dataObj) {
                         NSLog(@"meetObj====%@",dataObj);
             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
@@ -101,6 +99,9 @@
             
             if (modal.rtcode ==1) {
                 [[ToolManager shareInstance]dismiss];
+                if (isShouldClearData) {
+                    [self.evaluateArr removeAllObjects];
+                }
                 for (MeetingData *data in modal.datas) {
                     [self.evaluateArr addObject:[[EvaluateLayout alloc]initCellLayoutWithModel:data]];
                 }

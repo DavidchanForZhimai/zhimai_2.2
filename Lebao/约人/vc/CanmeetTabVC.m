@@ -99,7 +99,7 @@
 //        sizeW = 160*SpacedFonts;
 //    }
    
-    self.selectedAddress  =[[BaseButton alloc]initWithFrame:frame(APPWIDTH-(sizeW + 5 + upImage.size.width)-10, StatusBarHeight, sizeW + 5 + upImage.size.width , NavigationBarHeight) setTitle:@"全国" titleSize:28*SpacedFonts titleColor:BlackTitleColor backgroundImage:nil iconImage:upImage highlightImage:nil setTitleOrgin:CGPointMake( (NavigationBarHeight -28*SpacedFonts)/2.0 ,- upImage.size.width) setImageOrgin:CGPointMake((NavigationBarHeight - upImage.size.height)/2.0,sizeW + 5) inView:self.view];
+    self.selectedAddress  =[[BaseButton alloc]initWithFrame:frame(APPWIDTH-(sizeW + 5 + upImage.size.width)-10, StatusBarHeight, sizeW + 5 + upImage.size.width , NavigationBarHeight) setTitle:@"   全国" titleSize:28*SpacedFonts titleColor:BlackTitleColor backgroundImage:nil iconImage:upImage highlightImage:nil setTitleOrgin:CGPointMake( (NavigationBarHeight -28*SpacedFonts)/2.0 ,- upImage.size.width) setImageOrgin:CGPointMake((NavigationBarHeight - upImage.size.height)/2.0,sizeW + 5) inView:self.view];
     
     _selectedAddress.didClickBtnBlock =^
     {
@@ -113,6 +113,9 @@
             
             if (cityname.length>3) {
                 str = [NSString stringWithFormat:@"%@...",[cityname substringWithRange:NSMakeRange(0, 2)]];
+            }
+            if (cityname.length==2) {
+                str = [NSString stringWithFormat:@"   %@",[cityname substringWithRange:NSMakeRange(0, 2)]];
             }
             [weakSelf.selectedAddress setTitle:str forState:UIControlStateNormal];
 //            [weakSelf resetSeletedAddressFrameWithTitle:cityname];
@@ -205,9 +208,7 @@
         if (isMoreLoadMoreData) {
             [[ToolManager shareInstance] endFooterWithRefreshing:self.tableView];
         }
-        if (isShouldClearData) {
-            [self.allMeetArr removeAllObjects];
-        }
+        
         if (dataObj) {
 //            NSLog(@"meetObj====%@",dataObj);
             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
@@ -222,6 +223,9 @@
             
             if (modal.rtcode ==1) {
                 [[ToolManager shareInstance]dismiss];
+                if (isShouldClearData) {
+                    [self.allMeetArr removeAllObjects];
+                }
                 for (MeetingData *data in modal.datas) {
                     [self.allMeetArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andMessageBtn:YES andOprationBtn:NO andTime:NO]];
                 }

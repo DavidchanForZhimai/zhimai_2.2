@@ -138,11 +138,7 @@
         if (isMoreLoadMoreData) {
             [[ToolManager shareInstance] endFooterWithRefreshing:headLineTab];
         }
-        if (isShouldClearData) {
-            [self.headLineArr removeAllObjects];
-           
-
-        }
+        
         if (dataObj) {
 //                NSLog(@"meetObj====%@",dataObj);
             newsModel *modal = [newsModel mj_objectWithKeyValues:dataObj];
@@ -155,6 +151,11 @@
             }
             if (modal.rtcode ==1) {
                 [[ToolManager shareInstance] dismiss];
+                if (isShouldClearData) {
+                    [self.headLineArr removeAllObjects];
+                    
+                    
+                }
                 for (newsData *data in modal.datas) {
                     [self.headLineArr addObject:data];
                 }

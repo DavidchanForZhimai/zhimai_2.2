@@ -16,6 +16,7 @@
 @property (nonatomic,assign)int cansee;
 @property (nonatomic,strong)NSMutableArray *cansee_datas;
 @property (nonatomic,copy)NSString *realname;
+@property (nonatomic,assign)int rtcode;
 @end
 
 @interface canseeDatas : NSObject
