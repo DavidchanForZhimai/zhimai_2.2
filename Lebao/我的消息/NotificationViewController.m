@@ -272,7 +272,7 @@
         }
        else if (indexPath.row==2) {
            cell.lab.text=[NSString stringWithFormat:@"%@个",connection_count];
-            cell.message.hidden =![modal.cuscount boolValue];
+
         }
         
         return cell;

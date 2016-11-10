@@ -41,7 +41,9 @@ static LoCationManager *locationManager;
 //        NSLog(@"![CLLocationManager locationServicesEnabled]=%d",[CLLocationManager locationServicesEnabled]);
     }else{
         [[ToolManager shareInstance] showAlertViewTitle:@"温馨提示" contentText:@"请到设置-隐私-定位-开启知脉定位" showAlertViewBlcok:^{
-            
+            if (_callBackLocation) {
+                _callBackLocation(coordinate2D);
+            }
         }];
         return;
     }
