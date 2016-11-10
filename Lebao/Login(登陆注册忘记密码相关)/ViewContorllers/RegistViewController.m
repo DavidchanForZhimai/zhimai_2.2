@@ -119,7 +119,7 @@ typedef enum {
     _verificationCode.font = _userName.font;
     _verificationCode.clearButtonMode = UITextFieldViewModeWhileEditing;
     _verificationCode.textColor =_userName.textColor;
-    _verificationCode.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"邀请码(非必选)" attributes:@{NSForegroundColorAttributeName: LightBlackTitleColor}];
+    _verificationCode.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"邀请码(选填)" attributes:@{NSForegroundColorAttributeName: LightBlackTitleColor}];
 
     [mainScrollView addSubview:_verificationCode];
     
