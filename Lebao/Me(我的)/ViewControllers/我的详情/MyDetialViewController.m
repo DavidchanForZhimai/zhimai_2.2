@@ -302,7 +302,6 @@
     {
         if (weakSelf.model&&weakSelf.model.authen.length>0) {
             BasicInformationViewController *basicInfoVc = [[BasicInformationViewController alloc]init];
-            basicInfoVc.authen = [weakSelf.model.authen intValue];
             [weakSelf.navigationController pushViewController:basicInfoVc animated:YES];
         }
         else
@@ -1020,7 +1019,6 @@
         }else if(buttonIndex==1){
             if (headerModel.authen&&headerModel.authen.length>0) {
                 AuthenticationHomeViewController *authen =  allocAndInit(AuthenticationHomeViewController);
-                authen.authen = [headerModel.authen intValue];
                 PushView(self, authen);
             }
             else

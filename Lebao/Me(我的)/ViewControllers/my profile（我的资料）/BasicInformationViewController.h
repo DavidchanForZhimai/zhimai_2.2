@@ -7,16 +7,16 @@
 //
 
 #import "BaseViewController.h"
-
+typedef void (^AuthenBlock) (NSString *imgurl,NSString *realname,NSString *position, NSString *address);
 @interface BasicInformationViewController : BaseViewController
-@property(nonatomic,assign)int  authen;
+@property(copy,nonatomic)AuthenBlock authenBlock;
 @end
 
 @interface BasicInfoModal : NSObject
 @property(assign,nonatomic) int server_max_limit;
 @property(assign,nonatomic) int resource_max_limit;
 @property(assign,nonatomic) int my_max_limit;
-
+@property(nonatomic,assign)int  authen;
 @property(copy,nonatomic)NSString *synopsis;
 @property(copy,nonatomic)NSString *sex;
 @property(copy,nonatomic)NSString *address;

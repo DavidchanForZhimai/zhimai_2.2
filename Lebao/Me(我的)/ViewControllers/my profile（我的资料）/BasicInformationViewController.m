@@ -833,9 +833,13 @@
 #pragma mark - buttonAction -
 - (void)buttonAction:(UIButton *)sender
 {
-    [self modity:self isShouldShow:NO];
+   
     if (sender.tag ==NavViewButtonActionNavLeftBtnTag ) {
+         [self modity:self isShouldShow:NO];
         PopView(self);
+        if (_authenBlock) {
+            _authenBlock(_modal.imgurl,_modal.realname,_modal.position,_modal.address);
+        }
     }
     
 }
@@ -855,7 +859,7 @@
     NSMutableDictionary *parame = [Parameter parameterWithSessicon];
     [parame setObject:@"info" forKey:Conduct];
     [XLDataService postWithUrl:MemberURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        NSLog(@"dataObj =%@",dataObj);
+//        NSLog(@"dataObj =%@",dataObj);
         if (dataObj) {
             
             _modal = [BasicInfoModal mj_objectWithKeyValues:dataObj];
@@ -1077,7 +1081,7 @@
                 [cell  showTitle:@"头像" icon:_modal.imgurl bg:nil detail:nil canEdit:YES];
                 break;
             case 1:
-                if (_authen==3||_authen==2) {
+                if (_modal.authen==3||_modal.authen==2) {
                      [cell  showTitle:@"姓名" icon:nil bg:nil detail:_modal.realname canEdit:NO];
                 }
                 else{
@@ -1205,7 +1209,7 @@
                 break;
             case 1:
             {
-                if (_authen==3||_authen==2) {
+                if (_modal.authen==3||_modal.authen==2) {
                     
                    [[ToolManager shareInstance ]showAlertMessage:@"认证通过（审核中）不能修改名字！"];
                     return;
@@ -1523,6 +1527,9 @@
                 if (isShouldShow) {
                 [[ToolManager shareInstance] showSuccessWithStatus:@"修改成功"];
                 PopView(weakSelf);
+                if (_authenBlock) {
+                    _authenBlock(_modal.imgurl,_modal.realname,_modal.position,_modal.address);
+                }
                 }
             }
             else

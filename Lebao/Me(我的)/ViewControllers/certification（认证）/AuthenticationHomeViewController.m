@@ -49,6 +49,7 @@
 @property(nonatomic,strong)UILabel *userOtherInfo;
 @property(nonatomic,strong)BaseButton *edit;
 @property(nonatomic,strong)UILabel *returnLiyou;
+@property(nonatomic,strong)AuthenticationModal *modal;
 @end
 
 @implementation AuthenticationHomeViewController
@@ -74,33 +75,35 @@
     [[ToolManager shareInstance] showWithStatus];
     [XLDataService postWithUrl:AuthenURL param:[Parameter parameterWithSessicon] modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         if (dataObj) {
-           AuthenticationModal *modal = [AuthenticationModal mj_objectWithKeyValues:dataObj];
-           
-            if (modal.rtcode ==1) {
+           _modal = [AuthenticationModal mj_objectWithKeyValues:dataObj];
+//            NSLog(@"dataObj =%@",dataObj);
+            if (_modal.rtcode ==1) {
+                _authenticationHomeView.userInteractionEnabled = YES;
                 [[ToolManager shareInstance] dismiss];
-                    url =modal.datas.cardpic;
-                    if (_authen&&_authen!=1&&url.length>0) {
+                    url =_modal.datas.cardpic;
+                    if (_modal.datas.authen&&_modal.datas.authen!=1&&url.length>0) {
                         [[ToolManager shareInstance] imageView:_imageView setImageWithURL:url placeholderType:PlaceholderTypeImageProcessing];
                     }
-                     [[ToolManager shareInstance] imageView:_userIcon setImageWithURL:modal.datas.imgurl placeholderType:PlaceholderTypeUserHead];
-                    _username.text = modal.datas.realname;
+                     [[ToolManager shareInstance] imageView:_userIcon setImageWithURL:_modal.datas.imgurl placeholderType:PlaceholderTypeUserHead];
+                    _username.text = _modal.datas.realname;
                     
                     NSString *position;
-                    if (modal.datas.position.length>0) {
-                        position = [NSString stringWithFormat:@"%@  %@\n",modal.datas.position,modal.datas.tel];
+                    if (_modal.datas.position.length>0) {
+                        position = [NSString stringWithFormat:@"%@  %@\n",_modal.datas.position,_modal.datas.tel];
                        
                     }
                     else
                     {
-                        position = modal.datas.tel;
+                        position = _modal.datas.tel;
                         if (position.length>0) {
-                            position = [NSString stringWithFormat:@"%@/n",modal.datas.tel];
+                            position = [NSString stringWithFormat:@"%@/n",_modal.datas.tel];
                         }
                     }
-                    _userOtherInfo.text = [NSString stringWithFormat:@"%@%@",position,modal.datas.address];
+                    _userOtherInfo.text = [NSString stringWithFormat:@"%@%@",position,_modal.datas.address];
                     
-                    if (_authen ==9) {
-                        _returnLiyou.text =[NSString stringWithFormat:@"驳回理由:%@",modal.datas.remark];
+                    if (_modal.datas.authen ==9) {
+                    
+                        _returnLiyou.text =[NSString stringWithFormat:@"驳回理由:%@",_modal.datas.remark];
                         _returnLiyou.numberOfLines = 0;
                         _returnLiyou.frame = CGRectMake(_returnLiyou.x, _returnLiyou.y, _returnLiyou.width, [_returnLiyou.text sizeWithFont:[UIFont systemFontOfSize:12] maxSize:CGSizeMake(_returnLiyou.width, 1000)].height + 20);
                         NSMutableAttributedString *string = [[NSMutableAttributedString alloc]initWithString:_returnLiyou.text];
@@ -109,18 +112,64 @@
                         _returnLiyou.attributedText = string;
                         _authenticationHomeView.contentSize = CGSizeMake(_authenticationHomeView.width, CGRectGetMaxY(_returnLiyou.frame) + 10);
                     }
-                    
                 
+                NSString *text =@"修改";
+                UIColor *color = hexColor(ff722d);
+                BOOL isEdit = NO;
+                if (_modal.datas.authen ==1||_modal.datas.authen==9) {
+                    text = @"修改";
+                    color = hexColor(ff722d);
+                    isEdit = YES;
+                    
+                }
+                if (_modal.datas.authen==2) {
+                    text = @"审核中";
+                    color = lightGrayTitleColor;
+                    isEdit = NO;
+                }
+                if (_modal.datas.authen==3) {
+                    text = @"审核通过";
+                    color = lightGrayTitleColor;
+                    isEdit = NO;
+                }
+
+                [_edit setTitle:text forState:UIControlStateNormal];
+                [_edit setTitleColor:color forState:UIControlStateNormal];
+                _edit.enabled = isEdit;
+                
+                NSString *str = @"提交认证";
+                BOOL isEnable = NO;
+                UIColor *_uploadColor =rgba(210, 210, 210, 0.8);
+                if (_modal.datas.authen ==2) {
+                    str = @"审核中";
+                    isEnable = NO;
+                    _uploadColor = rgba(210, 210, 210, 0.8);
+                }
+                if (_modal.datas.authen ==3) {
+                    str = @"审核通过";
+                    isEnable = NO;
+                    _uploadColor = rgba(210, 210, 210, 0.8);
+                }
+                if (_modal.datas.authen ==9) {
+                    str = @"审核失败 重新提交";
+                    isEnable = YES;
+                    _uploadColor = AppMainColor;
+                }
+                [_upload setTitle:str forState:UIControlStateNormal];
+                [_upload setBackgroundColor:_uploadColor];
+                _upload.enabled = isEnable;
             }
             else
             {
-                [[ToolManager shareInstance] showInfoWithStatus:modal.rtmsg];
+                [[ToolManager shareInstance] showInfoWithStatus:_modal.rtmsg];
+                 _authenticationHomeView.userInteractionEnabled = NO;
             }
             
         }
         else
         {
             [[ToolManager shareInstance] showInfoWithStatus];
+             _authenticationHomeView.userInteractionEnabled = NO;
         }
         
     }];
@@ -175,43 +224,41 @@
     NSString *text =@"修改";
     UIColor *color = hexColor(ff722d);
     BOOL isEdit = NO;
-    if (_authen ==1||_authen==9) {
-        text = @"修改";
-        color = hexColor(ff722d);
-        isEdit = YES;
-        
-    }
-    if (_authen==2) {
-        text = @"审核中";
-        color = lightGrayTitleColor;
-        isEdit = NO;
-    }
-    if (_authen==3) {
-        text = @"审核通过";
-        color = lightGrayTitleColor;
-        isEdit = NO;
-    }
-    
     _edit = [[BaseButton alloc]initWithFrame:CGRectMake(userView.width - 80, 0, 80, userView.height) setTitle:text titleSize:13 titleColor:color textAlignment:NSTextAlignmentRight backgroundColor:WhiteColor inView:userView];
     _edit.enabled =isEdit;
     __weak typeof(self) weakSelf = self;
     _edit.didClickBtnBlock =^
     {
         BasicInformationViewController *info = [[BasicInformationViewController alloc] init];
-        info.authen = weakSelf.authen;
+        info.authenBlock = ^(NSString *imgurl,NSString *realname,NSString *position, NSString *address)
+        {
+            [[ToolManager shareInstance] imageView:weakSelf.userIcon setImageWithURL:imgurl placeholderType:PlaceholderTypeUserHead];
+            weakSelf.username.text = realname;
+            NSString *positions;
+            if (position.length>0) {
+                positions = [NSString stringWithFormat:@"%@  %@\n",position,_modal.datas.tel];
+                
+            }
+            else
+            {
+                positions = _modal.datas.tel;
+                if (positions.length>0) {
+                    positions = [NSString stringWithFormat:@"%@/n",_modal.datas.tel];
+                }
+            }
+            weakSelf.userOtherInfo.text = [NSString stringWithFormat:@"%@%@",positions,address];
+        };
         [weakSelf.navigationController pushViewController:info animated:YES];
         
     };
-    if (_authen ==9) {
-    _returnLiyou = [UILabel createLabelWithFrame:CGRectMake(10, CGRectGetMaxY(userView.frame) + 10,APPWIDTH - 20,40) text:@"" fontSize:12 textColor:lightGrayTitleColor textAlignment:NSTextAlignmentLeft inView:_authenticationHomeView];
-    }
+      _returnLiyou = [UILabel createLabelWithFrame:CGRectMake(10, CGRectGetMaxY(userView.frame) + 10,APPWIDTH - 20,0) text:@"" fontSize:12 textColor:lightGrayTitleColor textAlignment:NSTextAlignmentLeft inView:_authenticationHomeView];
     
     return  _authenticationHomeView;
 }
 
 -(void)imageViewTap:(UITapGestureRecognizer *)sender
 {
-    if (_authen ==1||_authen==9) {
+    if (_modal.datas.authen ==1||_modal.datas.authen==9) {
         [[ToolManager shareInstance] seleteImageFormSystem:self seleteImageFormSystemBlcok:^(UIImage *image) {
             [[ToolManager shareInstance] showWithStatus:@"上传中"];
             [[UpLoadImageManager shareInstance] upLoadImageType:@"authen" image:image imageBlock:^(UpLoadImageModal * upLoadImageModal) {
@@ -246,19 +293,7 @@
     
     NSString *str = @"提交认证";
     BOOL isEnable = NO;
-    if (_authen ==2) {
-       str = @"审核中";
-       isEnable = NO;
-    }
-    if (_authen ==3) {
-        str = @"审核通过";
-        isEnable = NO;
-    }
-    if (_authen ==9) {
-        str = @"审核失败 重新提交";
-        isEnable = YES;
-    }
-    
+  
     _upload = [[BaseButton alloc]initWithFrame:CGRectMake(0, APPHEIGHT - TabBarHeight, APPWIDTH, TabBarHeight) setTitle:str titleSize:30*SpacedFonts titleColor:WhiteColor textAlignment:NSTextAlignmentCenter backgroundColor:AppMainColor inView:nil];
     _upload.enabled = isEnable;
     if (!isEnable) {
@@ -286,7 +321,7 @@
                     [weakSelf.edit setTitle:@"审核中" forState:UIControlStateNormal];
                     [weakSelf.edit setTitleColor:lightGrayTitleColor forState:UIControlStateNormal];
                     weakSelf.upload.enabled = NO;
-                    weakSelf.authen = 2;
+                    weakSelf.modal.datas.authen = 2;
                     weakSelf.upload.backgroundColor = rgba(210, 210, 210, 0.8);
                     
                 }

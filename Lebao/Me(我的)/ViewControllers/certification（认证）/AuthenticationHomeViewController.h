@@ -52,6 +52,7 @@
 @property(copy,nonatomic)NSString *workyears;
 @property(copy,nonatomic)NSString *tel;
 @property(copy,nonatomic)NSString *remark;
+@property(assign,nonatomic)int authen;
 @end
 
 @interface AuthenIndustry : NSObject
@@ -67,5 +68,5 @@
 @end
 
 @interface AuthenticationHomeViewController : BaseViewController
-@property(nonatomic,assign) int authen;
+//@property(nonatomic,assign) int authen;
 @end

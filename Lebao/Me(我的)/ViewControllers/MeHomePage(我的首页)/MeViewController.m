@@ -381,7 +381,7 @@
             if ([dict[@"viewController"] isEqualToString:@"BasicInformationViewController"]) {
                 
                 BasicInformationViewController *basicInformationViewController = allocAndInit(BasicInformationViewController);
-                basicInformationViewController.authen =modal.authen ;
+
                 [nav pushViewController:basicInformationViewController animated:YES];
                 return ;
             }
@@ -394,7 +394,7 @@
             }
             if ([dict[@"viewController"] isEqualToString:@"AuthenticationHomeViewController"]) {
                 AuthenticationHomeViewController *authen = allocAndInit(AuthenticationHomeViewController);
-                authen.authen = modal.authen;
+//                authen.authen = modal.authen;
                 [nav pushViewController:authen animated:YES];
                 return ;
             }
