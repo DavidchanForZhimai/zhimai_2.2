@@ -45,6 +45,13 @@
 
 @property (nonatomic, copy) NSString *industry;
 
+@property(copy,nonatomic)NSString *sex;
+@property(copy,nonatomic)NSString *address;
+@property(copy,nonatomic)NSString *position;
+@property(copy,nonatomic)NSString *imgurl;
+@property(copy,nonatomic)NSString *workyears;
+@property(copy,nonatomic)NSString *tel;
+@property(copy,nonatomic)NSString *remark;
 @end
 
 @interface AuthenIndustry : NSObject

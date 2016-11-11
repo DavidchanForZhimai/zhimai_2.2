@@ -13,6 +13,10 @@
 #import "XLDataService.h"
 
 #import "LWImageBrowser.h"
+
+#import "BasicInformationViewController.h"
+
+#import "NSString+Extend.h"
 //认证
 #define AuthenURL [NSString stringWithFormat:@"%@user/authen",HttpURL]
 #define SaveAuthenURL [NSString stringWithFormat:@"%@user/save-authen",HttpURL]
@@ -38,23 +42,30 @@
 @interface AuthenticationHomeViewController ()
 @property(nonatomic,strong)UIScrollView *authenticationHomeView;
 @property(nonatomic,strong)BaseButton *upload;
-@property(nonatomic,strong)UIView *authenView;
-@property(nonatomic,strong)UIImageView *authenImageView;
+@property(nonatomic,strong)UIImageView *imageView;
+@property(nonatomic,strong)NSMutableDictionary * parame;
+@property(nonatomic,strong)UIImageView *userIcon;
+@property(nonatomic,strong)UILabel *username;
+@property(nonatomic,strong)UILabel *userOtherInfo;
+@property(nonatomic,strong)BaseButton *edit;
+@property(nonatomic,strong)UILabel *returnLiyou;
 @end
 
 @implementation AuthenticationHomeViewController
 {
     NSString *url;
+    
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self navViewTitleAndBackBtn:@"身份认证"];
-    
     [self.view addSubview:self.authenticationHomeView];
-    [self.authenticationHomeView addSubview:self.upload];
+    [self.view addSubview:self.upload];
     [self netWork];
+    
+    
     
 
 }
@@ -62,24 +73,44 @@
 {
     [[ToolManager shareInstance] showWithStatus];
     [XLDataService postWithUrl:AuthenURL param:[Parameter parameterWithSessicon] modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        
         if (dataObj) {
            AuthenticationModal *modal = [AuthenticationModal mj_objectWithKeyValues:dataObj];
            
             if (modal.rtcode ==1) {
                 [[ToolManager shareInstance] dismiss];
-                if (modal.datas.cardpic&&![modal.datas.cardpic isEqualToString:@""]) {
                     url =modal.datas.cardpic;
-                    [self.authenticationHomeView addSubview:self.authenView];
-                    [[ToolManager shareInstance] imageView:self.authenImageView setImageWithURL:modal.datas.cardpic placeholderType:PlaceholderTypeOther];
-                    self.authenImageView.contentMode = UIViewContentModeScaleAspectFit;
-                    self.upload.frame = CGRectMake(30, CGRectGetMaxY(self.authenView.frame) + 40, APPWIDTH - 60, 35);
-                    
-                    if (CGRectGetMaxY(self.upload.frame) +10 >self.authenticationHomeView.height) {
-                        
-                        self.authenticationHomeView.contentSize = CGSizeMake(self.authenticationHomeView.width, CGRectGetMaxY(self.upload.frame) +10);
+                    if (_authen&&_authen!=1&&url.length>0) {
+                        [[ToolManager shareInstance] imageView:_imageView setImageWithURL:url placeholderType:PlaceholderTypeImageProcessing];
                     }
-                }
+                     [[ToolManager shareInstance] imageView:_userIcon setImageWithURL:modal.datas.imgurl placeholderType:PlaceholderTypeUserHead];
+                    _username.text = modal.datas.realname;
+                    
+                    NSString *position;
+                    if (modal.datas.position.length>0) {
+                        position = [NSString stringWithFormat:@"%@  %@\n",modal.datas.position,modal.datas.tel];
+                       
+                    }
+                    else
+                    {
+                        position = modal.datas.tel;
+                        if (position.length>0) {
+                            position = [NSString stringWithFormat:@"%@/n",modal.datas.tel];
+                        }
+                    }
+                    _userOtherInfo.text = [NSString stringWithFormat:@"%@%@",position,modal.datas.address];
+                    
+                    if (_authen ==9) {
+                        _returnLiyou.text =[NSString stringWithFormat:@"驳回理由:%@",modal.datas.remark];
+                        _returnLiyou.numberOfLines = 0;
+                        _returnLiyou.frame = CGRectMake(_returnLiyou.x, _returnLiyou.y, _returnLiyou.width, [_returnLiyou.text sizeWithFont:[UIFont systemFontOfSize:12] maxSize:CGSizeMake(_returnLiyou.width, 1000)].height + 20);
+                        NSMutableAttributedString *string = [[NSMutableAttributedString alloc]initWithString:_returnLiyou.text];
+                        [string addAttribute:NSForegroundColorAttributeName value:BlackTitleColor range:[_returnLiyou.text rangeOfString:@"驳回理由:"]];
+                        [string addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:13.0] range:[_returnLiyou.text rangeOfString:@"驳回理由:"]];
+                        _returnLiyou.attributedText = string;
+                        _authenticationHomeView.contentSize = CGSizeMake(_authenticationHomeView.width, CGRectGetMaxY(_returnLiyou.frame) + 10);
+                    }
+                    
+                
             }
             else
             {
@@ -103,71 +134,108 @@
     }
     UIImage  *image = [UIImage imageNamed:@"icon_me_mingpian"];
     
-    _authenticationHomeView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, StatusBarHeight + NavigationBarHeight+10, APPWIDTH, APPHEIGHT - (StatusBarHeight + NavigationBarHeight+10))];
+    _authenticationHomeView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, StatusBarHeight + NavigationBarHeight+10, APPWIDTH, APPHEIGHT - (StatusBarHeight + NavigationBarHeight+ TabBarHeight))];
     _authenticationHomeView.backgroundColor = WhiteColor;
-    
-    UILabel *title = [UILabel createLabelWithFrame:CGRectMake(30, 0, APPWIDTH -60, 100) text:@"我该怎么做？\n\n只需要确保您所填写的信息和名片的保持一致，就可以通过审核!" fontSize:24*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter inView:_authenticationHomeView];
+    _authenticationHomeView.scrollEnabled = YES;
+    UILabel *title = [UILabel createLabelWithFrame:CGRectMake(30, 0, APPWIDTH -60, 100) text:@"上传名片认证职业身份\n\n认证成功后将获得“认证“图标，将认识更多优质人脉" fontSize:24*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter inView:_authenticationHomeView];
     NSMutableAttributedString *str = [[NSMutableAttributedString alloc]initWithString:title.text];
-    [str addAttribute:NSFontAttributeName value:Size(32) range:[title.text rangeOfString:@"我该怎么做？"]];
-    [str addAttribute:NSForegroundColorAttributeName value:BlackTitleColor range:[title.text rangeOfString:@"我该怎么做？"]];
+    [str addAttribute:NSFontAttributeName value:Size(32) range:[title.text rangeOfString:@"上传名片认证职业身份"]];
+    [str addAttribute:NSForegroundColorAttributeName value:BlackTitleColor range:[title.text rangeOfString:@"上传名片认证职业身份"]];
     title.attributedText = str;
     title.numberOfLines = 0;
     
-    UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake((APPWIDTH - image.size.width)/2.0, 100, image.size.width, image.size.height)];
-    imageView.image = image;
-    [_authenticationHomeView addSubview:imageView];
+    _imageView = [[UIImageView alloc]initWithFrame:CGRectMake((APPWIDTH - image.size.width)/2.0, 100, image.size.width, image.size.height)];
+    _imageView.image = image;
+   
+    _imageView.userInteractionEnabled = YES;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(imageViewTap:) ];
+    tap.numberOfTapsRequired = 1;
+    [_imageView addGestureRecognizer:tap];
     
-    [UILabel createLabelWithFrame:CGRectMake(0, CGRectGetMaxY(imageView.frame)+ 10, APPWIDTH, 30) text:@"(如无名片，也可以上传身份证，工牌以及其他证明材料)" fontSize:12 textColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter inView:_authenticationHomeView];
-    _authenticationHomeView.contentSize=CGSizeMake(0, CGRectGetMaxY(imageView.frame)+50);
+    [_authenticationHomeView addSubview:_imageView];
+    
+    [UILabel createLabelWithFrame:CGRectMake(10, CGRectGetMaxY(_imageView.frame)+ 10, APPWIDTH, 30) text:@"核对我的认证信息" fontSize:12 textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:_authenticationHomeView];
+    _authenticationHomeView.contentSize=CGSizeMake(0, CGRectGetMaxY(_imageView.frame)+50);
+    
+    UIView *userView =[[UIView alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(_imageView.frame)+ 40, APPWIDTH - 20, 70)];
+    [userView setRadius:3];
+    [userView setBorder:LineBg width:0.5];
+    userView.userInteractionEnabled = YES;
+    [_authenticationHomeView addSubview:userView];
+    
+    _userIcon = [[UIImageView alloc]initWithFrame:CGRectMake(8, 8, 40, 40)];
+    [_userIcon setRound];
+    [userView addSubview:_userIcon];
+    
+    _username = [UILabel createLabelWithFrame:CGRectMake(CGRectGetMaxX(_userIcon.frame) + 5, 10, APPWIDTH/2.0, 15) text:@"" fontSize:14 textColor:BlackTitleColor textAlignment:NSTextAlignmentLeft inView:userView ];
+    
+     _userOtherInfo = [UILabel createLabelWithFrame:CGRectMake(_username.x, CGRectGetMaxY(_username.frame) + 5, APPWIDTH/2.0, 35) text:@"" fontSize:12 textColor:lightGrayTitleColor textAlignment:NSTextAlignmentLeft inView:userView];
+     _userOtherInfo.numberOfLines = 0;
+    
+    NSString *text =@"修改";
+    UIColor *color = hexColor(ff722d);
+    BOOL isEdit = NO;
+    if (_authen ==1||_authen==9) {
+        text = @"修改";
+        color = hexColor(ff722d);
+        isEdit = YES;
+        
+    }
+    if (_authen==2) {
+        text = @"审核中";
+        color = lightGrayTitleColor;
+        isEdit = NO;
+    }
+    if (_authen==3) {
+        text = @"审核通过";
+        color = lightGrayTitleColor;
+        isEdit = NO;
+    }
+    
+    _edit = [[BaseButton alloc]initWithFrame:CGRectMake(userView.width - 80, 0, 80, userView.height) setTitle:text titleSize:13 titleColor:color textAlignment:NSTextAlignmentRight backgroundColor:WhiteColor inView:userView];
+    _edit.enabled =isEdit;
+    __weak typeof(self) weakSelf = self;
+    _edit.didClickBtnBlock =^
+    {
+        BasicInformationViewController *info = [[BasicInformationViewController alloc] init];
+        info.authen = weakSelf.authen;
+        [weakSelf.navigationController pushViewController:info animated:YES];
+        
+    };
+    if (_authen ==9) {
+    _returnLiyou = [UILabel createLabelWithFrame:CGRectMake(10, CGRectGetMaxY(userView.frame) + 10,APPWIDTH - 20,40) text:@"" fontSize:12 textColor:lightGrayTitleColor textAlignment:NSTextAlignmentLeft inView:_authenticationHomeView];
+    }
+    
     return  _authenticationHomeView;
 }
-- (UIView *)authenView
-{
-    
-    if (!_authenView) {
-         UIImage  *image = [UIImage imageNamed:@"icon_me_mingpian"];
-        _authenView  = [[UIView alloc]initWithFrame:CGRectMake(0, image.size.height + 160, APPWIDTH, 120)];
-        _authenView.backgroundColor = WhiteColor;
-        
-        [_authenView addSubview:self.authenImageView];
-        
-        UIView *lien1 = [[UIView alloc]initWithFrame:frame(0, 0, APPHEIGHT, 10)];
-        lien1.backgroundColor = AppViewBGColor;
-        [_authenView addSubview:lien1];
-       
-        UIView *lien2 = [[UIView alloc]initWithFrame:frame(0, 110, APPHEIGHT, 10)];
-        lien2.backgroundColor = AppViewBGColor;
-        [_authenView addSubview:lien2];
-        
-    }
-    
-    return _authenView;
-    
-}
-- (UIImageView *)authenImageView
-{
-    if (!_authenImageView) {
-        _authenImageView = [[UIImageView alloc]initWithFrame:CGRectMake(20, 20, APPWIDTH - 40, 80)];
-    }
-    _authenImageView.userInteractionEnabled = YES;
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(imageViewTap:)];
-    
-    tap.numberOfTapsRequired = 1;
-    
-    [_authenImageView addGestureRecognizer:tap];
-    
-    return _authenImageView;
-}
+
 -(void)imageViewTap:(UITapGestureRecognizer *)sender
 {
-    
-    LWImageBrowserModel* imageModel = [[LWImageBrowserModel alloc]initWithLocalImage:_authenImageView.image imageViewSuperView:_authenView positionAtSuperView:_authenImageView.frame index:0];
+    if (_authen ==1||_authen==9) {
+        [[ToolManager shareInstance] seleteImageFormSystem:self seleteImageFormSystemBlcok:^(UIImage *image) {
+            [[ToolManager shareInstance] showWithStatus:@"上传中"];
+            [[UpLoadImageManager shareInstance] upLoadImageType:@"authen" image:image imageBlock:^(UpLoadImageModal * upLoadImageModal) {
+                [[ToolManager shareInstance] dismiss];
+                _upload.enabled = YES;
+                _upload.backgroundColor = AppMainColor;
+                [[ToolManager shareInstance] imageView:_imageView setImageWithURL:upLoadImageModal.imgurl placeholderType:PlaceholderTypeImageProcessing];
+                _parame = [Parameter parameterWithSessicon];
+                [_parame setObject:upLoadImageModal.imgurl forKey:@"cardpic"];
+                
+            }];
+        }];
+        
+    }
+    else
+    {
+    LWImageBrowserModel* imageModel = [[LWImageBrowserModel alloc]initWithLocalImage:_imageView.image imageViewSuperView:_authenticationHomeView positionAtSuperView:_imageView.frame index:0];
     
     LWImageBrowser* imageBrowser = [[LWImageBrowser alloc] initWithParentViewController:self
                                                                             imageModels:@[imageModel]
                                                                            currentIndex:0];
     imageBrowser.view.backgroundColor = [UIColor blackColor];
     [imageBrowser show];
+    }
 
 }
 - (BaseButton *)upload
@@ -176,85 +244,79 @@
         return _upload;
     }
     
-    NSString *str = @"上传自己的名片";
-    BOOL isEnable = YES;
+    NSString *str = @"提交认证";
+    BOOL isEnable = NO;
     if (_authen ==2) {
-       str = @"上传成功，待审核";
+       str = @"审核中";
        isEnable = NO;
     }
     if (_authen ==3) {
-        str = @"已审核通过";
+        str = @"审核通过";
         isEnable = NO;
     }
     if (_authen ==9) {
-        str = @"审核失败，重新上传";
+        str = @"审核失败 重新提交";
         isEnable = YES;
     }
     
-    _upload = [[BaseButton alloc]initWithFrame:CGRectMake(30, CGRectGetMaxY(self.authenView.frame) + 40, APPWIDTH - 60, 40) setTitle:str titleSize:28*SpacedFonts titleColor:WhiteColor textAlignment:NSTextAlignmentCenter backgroundColor:AppMainColor inView:nil];
-    [_upload setRadius:5];
+    _upload = [[BaseButton alloc]initWithFrame:CGRectMake(0, APPHEIGHT - TabBarHeight, APPWIDTH, TabBarHeight) setTitle:str titleSize:30*SpacedFonts titleColor:WhiteColor textAlignment:NSTextAlignmentCenter backgroundColor:AppMainColor inView:nil];
     _upload.enabled = isEnable;
+    if (!isEnable) {
+        _upload.backgroundColor = rgba(210, 210, 210, 0.8);
+    }
     _upload.shouldAnmial = NO;
     __weak typeof(self) weakSelf = self;
     _upload.didClickBtnBlock = ^
     {
+       
+        if (!weakSelf.parame||weakSelf.parame.allKeys.count<[Parameter parameterWithSessicon].allKeys.count + 1) {
+            
+            [[ToolManager shareInstance] showAlertMessage:@"请上传图片"];
+            return ;
+        }
         
-        [[ToolManager shareInstance] seleteImageFormSystem:weakSelf seleteImageFormSystemBlcok:^(UIImage *image) {
-                [[ToolManager shareInstance] showWithStatus:@"修改中.."];
-                [[UpLoadImageManager shareInstance] upLoadImageType:@"authen" image:image imageBlock:^(UpLoadImageModal * upLoadImageModal) {
+        [XLDataService postWithUrl:SaveAuthenURL param:weakSelf.parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+            
+            if (dataObj) {
+                if ([dataObj[@"rtcode"] integerValue]==1) {
+                  
+                    [[ToolManager shareInstance] showSuccessWithStatus:@"上传成功！"];
+                    [weakSelf.upload setTitle:@"审核中" forState:UIControlStateNormal];
+                    weakSelf.edit.enabled = NO;
+                    [weakSelf.edit setTitle:@"审核中" forState:UIControlStateNormal];
+                    [weakSelf.edit setTitleColor:lightGrayTitleColor forState:UIControlStateNormal];
+                    weakSelf.upload.enabled = NO;
+                    weakSelf.authen = 2;
+                    weakSelf.upload.backgroundColor = rgba(210, 210, 210, 0.8);
                     
-                        NSMutableDictionary * parame = [Parameter parameterWithSessicon];
-                        [parame setObject:upLoadImageModal.imgurl forKey:@"cardpic"];
-                    
-                        [XLDataService postWithUrl:SaveAuthenURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-                           
-                            if (dataObj) {
-                                if ([dataObj[@"rtcode"] integerValue]==1) {
-                                    url =upLoadImageModal.imgurl;;
-                                    [[ToolManager shareInstance] showSuccessWithStatus:@"上传成功！"];
-                                    [weakSelf.upload setTitle:@"上传成功，待审核" forState:UIControlStateNormal];
-                                    weakSelf.upload.enabled = NO;
-                                    [weakSelf.authenView removeFromSuperview];
-                                    [weakSelf.authenticationHomeView addSubview:weakSelf.authenView];
-                                    [[ToolManager shareInstance] imageView:weakSelf.authenImageView setImageWithURL:upLoadImageModal.imgurl placeholderType:PlaceholderTypeOther];
-                                    weakSelf.authenImageView.contentMode = UIViewContentModeScaleAspectFit;
-                                    weakSelf.upload.frame = CGRectMake(30, CGRectGetMaxY(weakSelf.authenView.frame) + 40, APPWIDTH - 60, 35);
-                                    
-                                    if (CGRectGetMaxY(weakSelf.upload.frame) + 20 >weakSelf.authenticationHomeView.height) {
-                                        weakSelf.authenticationHomeView.contentSize = CGSizeMake(weakSelf.authenticationHomeView.width, CGRectGetMaxY(weakSelf.upload.frame) +10);
-                                    }
-
-                                }
-                                else
-                                {
-                                    [[ToolManager shareInstance]showInfoWithStatus:dataObj[@"rtmsg"]];
-                                    [weakSelf.upload setTitle:@"上传失败，重新上传" forState:UIControlStateNormal];
-                                    weakSelf.upload.enabled = YES;
-                                }
-                                
-                            }
-                            else
-                            {
-                                [weakSelf.upload setTitle:@"上传失败，重新上传" forState:UIControlStateNormal];
-                                weakSelf.upload.enabled = YES;
-                                [[ToolManager shareInstance]showInfoWithStatus];
-                            }
-                            
-                            
-                            
-                        }];
-
-                    }];
+                }
+                else
+                {
+                    [[ToolManager shareInstance]showInfoWithStatus:dataObj[@"rtmsg"]];
+                    [weakSelf.upload setTitle:@"上传失败 重新上传" forState:UIControlStateNormal];
+                    weakSelf.upload.enabled = YES;
+                    weakSelf.upload.backgroundColor = AppMainColor;
+                }
                 
+            }
+            else
+            {
+                [weakSelf.upload setTitle:@"上传失败 重新上传" forState:UIControlStateNormal];
+                weakSelf.upload.enabled = YES;
+                [[ToolManager shareInstance]showInfoWithStatus];
+            }
+            
+            
             
         }];
-
+        
+        
     };
      return _upload;
 }
 
 #pragma mark
-#pragma mark - btn 
+#pragma mark - btn
 - (void)buttonAction:(UIButton *)sender
 {
     PopView(self);

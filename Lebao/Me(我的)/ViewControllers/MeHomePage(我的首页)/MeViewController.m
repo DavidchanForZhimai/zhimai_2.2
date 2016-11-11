@@ -377,6 +377,15 @@
             
             UITabBarController *tabBar = (UITabBarController *)[ToolManager shareInstance].drawerController.centerViewController;
             UINavigationController *nav =(UINavigationController *)tabBar.viewControllers[getAppDelegate().mainTab.selectedIndex];
+            
+            if ([dict[@"viewController"] isEqualToString:@"BasicInformationViewController"]) {
+                
+                BasicInformationViewController *basicInformationViewController = allocAndInit(BasicInformationViewController);
+                basicInformationViewController.authen =modal.authen ;
+                [nav pushViewController:basicInformationViewController animated:YES];
+                return ;
+            }
+
             if ([dict[@"viewController"] isEqualToString:@"VIPPrivilegeVC"]){
                 VIPPrivilegeVC *vipVC=allocAndInit(VIPPrivilegeVC);
 //                vipVC.modal=modal;/

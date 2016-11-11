@@ -1077,7 +1077,14 @@
                 [cell  showTitle:@"头像" icon:_modal.imgurl bg:nil detail:nil canEdit:YES];
                 break;
             case 1:
-                [cell  showTitle:@"姓名" icon:nil bg:nil detail:_modal.realname canEdit:YES];
+                if (_authen==3||_authen==2) {
+                     [cell  showTitle:@"姓名" icon:nil bg:nil detail:_modal.realname canEdit:NO];
+                }
+                else{
+                    
+                     [cell  showTitle:@"姓名" icon:nil bg:nil detail:_modal.realname canEdit:YES];
+                }
+               
                 break;
             case 2:
                 if ([_modal.sex isEqualToString:@"1"]) {
@@ -1090,7 +1097,7 @@
                 
                 break;
             case 3:
-                cell.detailTitle.frame =frame(0, 0, APPWIDTH-13, cell.detailTitle.height);
+              
                 [cell  showTitle:@"手机" icon:nil bg:nil detail:_modal.tel  canEdit:NO];
                 break;
             case 4:
@@ -1173,6 +1180,8 @@
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSMutableDictionary *parame = [Parameter parameterWithSessicon];
     [parame setObject:@"edit" forKey:Conduct];
     __weak BasicInformationViewController *weakSelf= self;
@@ -1196,7 +1205,11 @@
                 break;
             case 1:
             {
-                
+                if (_authen==3||_authen==2) {
+                    
+                   [[ToolManager shareInstance ]showAlertMessage:@"认证通过（审核中）不能修改名字！"];
+                    return;
+                }
                 edit.editPageTag =EditNamePageTag;
                 edit.textView =  _modal.realname;
                 edit.editBlock = ^(NSString *text)
@@ -1374,7 +1387,7 @@
         
         
     }
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
 }
 
 #pragma mark

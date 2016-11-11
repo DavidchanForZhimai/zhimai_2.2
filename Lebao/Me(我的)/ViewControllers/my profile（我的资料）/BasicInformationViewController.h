@@ -9,7 +9,7 @@
 #import "BaseViewController.h"
 
 @interface BasicInformationViewController : BaseViewController
-
+@property(nonatomic,assign)int  authen;
 @end
 
 @interface BasicInfoModal : NSObject
@@ -44,6 +44,7 @@
 @end
 
 @interface BasicInformationView : UITableViewCell
+
 @property(nonatomic,strong)UILabel *title;
 @property(nonatomic,strong) UILabel *detailTitle;
 @property(nonatomic,strong) UIImageView *userIcon;

@@ -165,6 +165,7 @@
 @property(nonatomic,strong)BaseButton *lookMore;
 @property(nonatomic,assign)BOOL islookMore;
 
+@property(nonatomic,strong)HeaderModel *model;
 @end
 
 @implementation MyDetialViewController
@@ -296,10 +297,19 @@
     _edit = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 50 ,StatusBarHeight,50, NavigationBarHeight) setTitle:@"编辑" titleSize:28*SpacedFonts titleColor:BlackTitleColor textAlignment:NSTextAlignmentRight backgroundColor:[UIColor clearColor] inView:nil];
     _edit.shouldAnmial = NO;
     __weak typeof(self) weakSelf = self;
+    _model = headerModel;
     _edit.didClickBtnBlock = ^
     {
-        BasicInformationViewController *basicInfoVc = [[BasicInformationViewController alloc]init];
-        [weakSelf.navigationController pushViewController:basicInfoVc animated:YES];
+        if (weakSelf.model&&weakSelf.model.authen.length>0) {
+            BasicInformationViewController *basicInfoVc = [[BasicInformationViewController alloc]init];
+            basicInfoVc.authen = [weakSelf.model.authen intValue];
+            [weakSelf.navigationController pushViewController:basicInfoVc animated:YES];
+        }
+        else
+        {
+             [[ToolManager shareInstance ]showAlertMessage:@"认证信息不全"];
+        }
+        
     };
     return _edit;
 }
@@ -1008,7 +1018,16 @@
         if (buttonIndex==0) {
             
         }else if(buttonIndex==1){
-            PushView(self, allocAndInit(AuthenticationHomeViewController));
+            if (headerModel.authen&&headerModel.authen.length>0) {
+                AuthenticationHomeViewController *authen =  allocAndInit(AuthenticationHomeViewController);
+                authen.authen = [headerModel.authen intValue];
+                PushView(self, authen);
+            }
+            else
+            {
+                [[ToolManager shareInstance ]showAlertMessage:@"认证信息不全"];
+            }
+            
         }
     }else if (alertView.tag==22223) {
         if (buttonIndex==0) {
