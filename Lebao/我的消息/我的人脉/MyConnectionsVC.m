@@ -21,7 +21,7 @@
 #import "MyDetialViewController.h"
 #import "FnyApplyForVC.h"//我的申请
 #import "SearchAndAddTagsViewController.h"
-@interface MyConnectionsVC ()<UITableViewDelegate,UITableViewDataSource,MeettingTableViewDelegate,UIAlertViewDelegate>
+@interface MyConnectionsVC ()<UITableViewDelegate,UITableViewDataSource,MeettingTableViewDelegate,UIAlertViewDelegate,UISearchBarDelegate>
 {
     BOOL audioMark;
 }
@@ -29,7 +29,7 @@
 @property (nonatomic,assign)int page;
 @property (nonatomic,strong)NSMutableArray *nearByManArr;
 @property (nonatomic,assign)BOOL isopen;
-@property(nonatomic, strong)BaseButton  *search;
+@property(nonatomic,strong) UISearchBar * bar;
 @property(nonatomic,copy)NSString *keyword;
 @end
 
@@ -68,32 +68,52 @@
     [applyForBtn addTarget:self action:@selector(applyForBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:applyForBtn];
     
-    //搜索按钮
-    
-    _search = [[BaseButton alloc]initWithFrame:frame(80, StatusBarHeight + 7,APPWIDTH-160, NavigationBarHeight - 14) setTitle:@"搜索" titleSize:28*SpacedFonts titleColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:[UIColor clearColor] inView:self.view];
-    [_search setRoundWithfloat:_search.height/2.0];
-    [_search setBorder:LineBg width:0.5];
-    
-    __weak typeof(self) weakSelf= self;
-    _search.didClickBtnBlock = ^{
-        SearchAndAddTagsViewController * search  =  allocAndInit(SearchAndAddTagsViewController);
-        search.searchResultBlock = ^(NSString *str)
-        {
-            [weakSelf.search setTitle:str forState:UIControlStateNormal];
-            [weakSelf.nearByManArr removeAllObjects];
-            [weakSelf.yrTab reloadData];
-            weakSelf.keyword = str;
-            weakSelf.page = 1;
-            [weakSelf netWorkRefresh:NO andIsLoadMoreData:NO isShouldClearData:YES];
-        };
-        
-        [weakSelf.navigationController pushViewController:search animated:NO];
-        
-    };
 
-    
+    [self.view addSubview:self.bar];
     
 }
+#pragma mark getter
+- (UISearchBar *)bar
+{
+    if (!_bar) {
+        _bar = [[UISearchBar alloc]initWithFrame:frame(80, StatusBarHeight + 7,APPWIDTH-160, NavigationBarHeight - 14)];
+        _bar.backgroundColor = WhiteColor;
+        _bar.barStyle = UIBarStyleDefault;
+        _bar.tintColor = LineBg;
+        _bar.translucent = YES;
+        [_bar setBorder:LineBg width:0.5];
+        [_bar setRadius:_bar.height/2.0];
+        _bar.delegate = self;
+        _bar.placeholder=@"搜索关键字找到我的好友";
+        float version = [[[UIDevice currentDevice] systemVersion] floatValue];
+        if ([_bar respondsToSelector:@selector(barTintColor)]) {
+            
+            float iosversion7_1 = 7.1;
+            
+            if (version >= iosversion7_1)        {
+                
+                [[[[_bar.subviews objectAtIndex:0] subviews] objectAtIndex:0] removeFromSuperview];
+                
+                [_bar setBackgroundColor:[UIColor clearColor]];
+                
+                
+                
+            }
+            
+            
+            else {            //iOS7.0
+                
+                [_bar setBarTintColor:[UIColor clearColor]];
+                [_bar setBackgroundColor:[UIColor clearColor]];
+                
+            }
+            
+        }
+        
+    }
+    return _bar;
+}
+
 //我的申请人脉点击事件
 -(void)applyForBtnClicked:(UIButton *)sender
 {
@@ -108,6 +128,7 @@
     NSMutableDictionary *param = [Parameter parameterWithSessicon];
     [param setObject:@(_page) forKey:@"page"];
     [param setObject:_keyword forKey:@"keyword"];
+    NSLog(@"param====%@",param);
     [XLDataService putWithUrl:myConnectionsURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         if (isRefresh) {
             [[ToolManager shareInstance] endHeaderWithRefreshing:_yrTab];
@@ -118,7 +139,7 @@
        
 
         if (dataObj) {
-//            NSLog(@"Mydataobj====%@",dataObj);
+            NSLog(@"Mydataobj====%@",dataObj);
             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
             if (_page ==1) {
                 [[ToolManager shareInstance] moreDataStatus:_yrTab];
@@ -337,6 +358,18 @@
 }
 
 
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    
+    
+    _keyword= searchBar.text;
+    [_bar resignFirstResponder];
+    [self netWorkRefresh:NO andIsLoadMoreData:NO isShouldClearData:YES];
+    
+}
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    [_bar resignFirstResponder];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -174,13 +174,13 @@
 - (void)netWorkRefresh:(BOOL)isRefresh andIsLoadMoreData:(BOOL)isMoreLoadMoreData isShouldClearData:(BOOL)isShouldClearData//加载数据
 {
     
-//    [[LoCationManager shareInstance] creatLocationManager];
-//    [LoCationManager shareInstance].callBackLocation = ^(CLLocationCoordinate2D location)
-//    {
+    [[LoCationManager shareInstance] creatLocationManager];
+    [LoCationManager shareInstance].callBackLocation = ^(CLLocationCoordinate2D location)
+    {
         //            测试用,要删掉
-                    CLLocationCoordinate2D location;
-                    location.latitude=24.491534;
-                    location.longitude=118.180851;
+//                    CLLocationCoordinate2D location;
+//                    location.latitude=24.491534;
+//                    location.longitude=118.180851;
         if (self.nearByManArr.count==0) {
             [[ToolManager shareInstance] showWithStatus];
         }
@@ -246,7 +246,7 @@
             
         }];
         
-//    };
+    };
     
 }
 
