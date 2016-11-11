@@ -20,6 +20,7 @@
 #import "GJGCChatFriendViewController.h"
 #import "MyDetialViewController.h"
 #import "FnyApplyForVC.h"//我的申请
+#import "SearchAndAddTagsViewController.h"
 @interface MyConnectionsVC ()<UITableViewDelegate,UITableViewDataSource,MeettingTableViewDelegate,UIAlertViewDelegate>
 {
     BOOL audioMark;
@@ -28,6 +29,8 @@
 @property (nonatomic,assign)int page;
 @property (nonatomic,strong)NSMutableArray *nearByManArr;
 @property (nonatomic,assign)BOOL isopen;
+@property(nonatomic, strong)BaseButton  *search;
+@property(nonatomic,copy)NSString *keyword;
 @end
 
 @implementation MyConnectionsVC
@@ -48,9 +51,10 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self navViewTitleAndBackBtn:@"我的人脉"];
+    [self navViewTitleAndBackBtn:@""];
     self.view.backgroundColor=AppViewBGColor;
     [self addTabView];
+    _keyword =@"";
     _page = 1;
     _isopen=NO;
     [[ToolManager shareInstance]showWithStatus];
@@ -63,6 +67,31 @@
     [applyForBtn setTitleColor:BlackTitleColor forState:UIControlStateNormal];
     [applyForBtn addTarget:self action:@selector(applyForBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:applyForBtn];
+    
+    //搜索按钮
+    
+    _search = [[BaseButton alloc]initWithFrame:frame(80, StatusBarHeight + 7,APPWIDTH-160, NavigationBarHeight - 14) setTitle:@"搜索" titleSize:28*SpacedFonts titleColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:[UIColor clearColor] inView:self.view];
+    [_search setRoundWithfloat:_search.height/2.0];
+    [_search setBorder:LineBg width:0.5];
+    
+    __weak typeof(self) weakSelf= self;
+    _search.didClickBtnBlock = ^{
+        SearchAndAddTagsViewController * search  =  allocAndInit(SearchAndAddTagsViewController);
+        search.searchResultBlock = ^(NSString *str)
+        {
+            [weakSelf.search setTitle:str forState:UIControlStateNormal];
+            [weakSelf.nearByManArr removeAllObjects];
+            [weakSelf.yrTab reloadData];
+            weakSelf.keyword = str;
+            weakSelf.page = 1;
+            [weakSelf netWorkRefresh:NO andIsLoadMoreData:NO isShouldClearData:YES];
+        };
+        
+        [weakSelf.navigationController pushViewController:search animated:NO];
+        
+    };
+
+    
     
 }
 //我的申请人脉点击事件
@@ -78,7 +107,7 @@
 {
     NSMutableDictionary *param = [Parameter parameterWithSessicon];
     [param setObject:@(_page) forKey:@"page"];
-
+    [param setObject:_keyword forKey:@"keyword"];
     [XLDataService putWithUrl:myConnectionsURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         if (isRefresh) {
             [[ToolManager shareInstance] endHeaderWithRefreshing:_yrTab];
@@ -103,7 +132,7 @@
                     [self.nearByManArr removeAllObjects];
                 }
                 for (MeetingData *data in modal.datas) {
-                    [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andMessageBtn:YES andOprationBtn:NO andTime:NO]];
+                    [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andMessageBtn:YES andOprationBtn:NO andTime:NO andReward:NO]];
                     
                                   }
                 [_yrTab reloadData];

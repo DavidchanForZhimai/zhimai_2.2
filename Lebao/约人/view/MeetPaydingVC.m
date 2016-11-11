@@ -120,7 +120,7 @@ typedef enum{
 
 - (IBAction)zhifuAction:(id)sender {
     
-    
+    [[ToolManager shareInstance] showWithStatus];
     NSString * zhifuType ;
     if (_moneyType == zhimaizhifuType) {
         zhifuType = @"wallet";
@@ -142,17 +142,20 @@ typedef enum{
                          MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
                          
                          if (model.rtcode==1) {
-                             
+                             [[ToolManager shareInstance] dismiss];
                              if (_moneyType==weixinzhifuType) {
                                  [[WetChatPayManager shareInstance]wxPay:dataObj[@"datas"] succeedMeg:@"发布成功！" recharge:@"0" wetChatPaySucceed:^(NSString *payMoney) {
-                                     UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:nil message:@"请求已发出,请耐心等待对方答复" delegate:self cancelButtonTitle:@"确认" otherButtonTitles: nil];                                     PushView(self, iWantMeetVC);
+                                     [[NSNotificationCenter defaultCenter]postNotificationName:@"KRefreshMeetingViewNotifation" object:@{@"userid":self.param[@"userid"],@"operation":@"meet"}];
+                                     UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:nil message:@"请求已发出,请耐心等待对方答复" delegate:self cancelButtonTitle:@"确认" otherButtonTitles: nil];
+                                     
+                                     PushView(self, iWantMeetVC);
                                      
                                      [successAlertV show];
                                  }];
                                  return ;
                                  
                              }
-                             
+                             [[NSNotificationCenter defaultCenter]postNotificationName:@"KRefreshMeetingViewNotifation" object:@{@"userid":self.param[@"userid"],@"operation":@"meet"}];
                              UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:nil message:@"请求已发出,请耐心等待对方答复" delegate:self cancelButtonTitle:@"确认" otherButtonTitles: nil];
                              PushView(self, iWantMeetVC);
                              [successAlertV show];
@@ -184,7 +187,7 @@ typedef enum{
                     MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
 //                    NSLog(@"dataonk=%@",dataObj);
                     if (model.rtcode==1) {
-                        
+                        [[ToolManager shareInstance] dismiss];
                         if (_moneyType==weixinzhifuType) {
                             [[WetChatPayManager shareInstance]wxPay:dataObj[@"datas"] succeedMeg:@"发布成功！" recharge:@"0" wetChatPaySucceed:^(NSString *payMoney) {
                                 NSLog(@"dataondddk=%@",dataObj[@"datas"] );
@@ -276,6 +279,7 @@ typedef enum{
                 MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
                 NSLog(@"dataObj=%@",dataObj);
                 if (model.rtcode==1) {
+                    [[ToolManager shareInstance] dismiss];
                     
                     if (_moneyType==weixinzhifuType) {
                         [[WetChatPayManager shareInstance]wxPay:dataObj[@"datas"] succeedMeg:@"发送成功！" recharge:@"0" wetChatPaySucceed:^(NSString *payMoney) {

@@ -13,7 +13,7 @@
 #import "NSString+Extend.h"
 @implementation MeetingCellLayout
 
-- (MeetingCellLayout *)initCellLayoutWithModel:(MeetingData *)model andMeetBtn:(BOOL)meetBtn andMessageBtn:(BOOL)messageBtn andOprationBtn:(BOOL)oprationBtn andTime:(BOOL)isTime
+- (MeetingCellLayout *)initCellLayoutWithModel:(MeetingData *)model andMeetBtn:(BOOL)meetBtn andMessageBtn:(BOOL)messageBtn andOprationBtn:(BOOL)oprationBtn andTime:(BOOL)isTime andReward:(BOOL)reward
 {
     self = [super init];
     if (self) {
@@ -264,16 +264,7 @@
             resourceTextStorageheight = resourceTextStorage.bottom;
         }
         
-        if([model.reward intValue]>0){
-            LWTextStorage *rewardStorage=[[LWTextStorage alloc]init];
-            rewardStorage.text=[NSString stringWithFormat:@"人脉打赏    %@元",model.reward];
-            rewardStorage.font=Size(26.0);
-            rewardStorage.frame=CGRectMake(_avatarStorage.left, resourceTextStorageheight+10, [rewardStorage.text sizeWithFont:[UIFont systemFontOfSize:13] maxSize:CGSizeMake(APPWIDTH,13)].width+5, CGFLOAT_MAX);
-            resourceTextStorageheight = rewardStorage.bottom;
-            rewardStorage.textColor = [UIColor colorWithWhite:0.400 alpha:1.000];
-            [self addStorage:rewardStorage];
-            
-        }
+        
         
         if (isTime) {
             _line2Rect  = CGRectMake(0, resourceTextStorageheight + 10, APPWIDTH, 0.5);
@@ -292,6 +283,32 @@
             [self addStorage:distanceLab];
             [self addStorage:timerLab];
         }
+        if (reward) {
+            _line2Rect  = CGRectMake(0, resourceTextStorageheight + 10, APPWIDTH, 0.5);
+            LWTextStorage *rewardStorage=[[LWTextStorage alloc]init];
+            if([model.reward intValue]>0){
+                rewardStorage.text=[NSString stringWithFormat:@"人脉打赏    %@元",model.reward];
+                
+            }else{
+                rewardStorage.text=@"人脉打赏    无";
+            }
+            rewardStorage.font=Size(26.0);
+            rewardStorage.frame=CGRectMake(_avatarStorage.left, _line2Rect.origin.y+10, [rewardStorage.text sizeWithFont:[UIFont systemFontOfSize:13] maxSize:CGSizeMake(APPWIDTH,13)].width+5, CGFLOAT_MAX);
+            resourceTextStorageheight = rewardStorage.bottom;
+            rewardStorage.textColor = [UIColor colorWithWhite:0.400 alpha:1.000];
+            [self addStorage:rewardStorage];
+            
+            LWTextStorage* timerLab=[[LWTextStorage alloc]initWithFrame:CGRectMake(0,_line2Rect.origin.y+10, APPWIDTH-10, CGFLOAT_MAX)];
+            timerLab.text=[NSString stringWithFormat:@"%@",[model.time timeformatString:@"yyyy-MM-dd HH:mm"]];
+            
+            timerLab.textAlignment=NSTextAlignmentRight;
+            timerLab.textColor=[UIColor colorWithRed:0.549 green:0.5569 blue:0.5608 alpha:1.0];
+            timerLab.font=Size(24.0);
+            [self addStorage:timerLab];
+            
+                    }
+        
+        
         self.cellHeight = [self suggestHeightWithBottomMargin:20];
         self.cellMarginsRect = frame(0, self.cellHeight - 10, APPWIDTH, 10);
         

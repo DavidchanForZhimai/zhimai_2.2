@@ -227,7 +227,7 @@
                     [self.allMeetArr removeAllObjects];
                 }
                 for (MeetingData *data in modal.datas) {
-                    [self.allMeetArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andMessageBtn:YES andOprationBtn:NO andTime:NO]];
+                    [self.allMeetArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andMessageBtn:YES andOprationBtn:NO andTime:NO andReward:NO]];
                 }
                 [self.tableView reloadData];
             }

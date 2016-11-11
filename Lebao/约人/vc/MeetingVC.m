@@ -174,13 +174,13 @@
 - (void)netWorkRefresh:(BOOL)isRefresh andIsLoadMoreData:(BOOL)isMoreLoadMoreData isShouldClearData:(BOOL)isShouldClearData//加载数据
 {
     
-    [[LoCationManager shareInstance] creatLocationManager];
-    [LoCationManager shareInstance].callBackLocation = ^(CLLocationCoordinate2D location)
-    {
+//    [[LoCationManager shareInstance] creatLocationManager];
+//    [LoCationManager shareInstance].callBackLocation = ^(CLLocationCoordinate2D location)
+//    {
         //            测试用,要删掉
-        //            CLLocationCoordinate2D location;
-        //            location.latitude=24.491534;
-        //            location.longitude=118.180851;
+                    CLLocationCoordinate2D location;
+                    location.latitude=24.491534;
+                    location.longitude=118.180851;
         if (self.nearByManArr.count==0) {
             [[ToolManager shareInstance] showWithStatus];
         }
@@ -224,7 +224,7 @@
                     }
                     for (MeetingData *data in modal.datas) {
                         data.isSelf = [data.userid  isEqualToString:modal.userid];
-                        [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andMessageBtn:NO andOprationBtn:NO andTime:YES]];
+                        [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andMessageBtn:NO andOprationBtn:NO andTime:YES andReward:NO]];
                     }
                     
                     
@@ -246,7 +246,7 @@
             
         }];
         
-    };
+//    };
     
 }
 
@@ -484,7 +484,7 @@
     NSMutableDictionary *param = [Parameter parameterWithSessicon];
     [param setObject:@"invited" forKey:@"type"];
     [XLDataService putWithUrl:meetCheckedURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        NSLog(@"dataObj====%@",dataObj);
+//        NSLog(@"dataObj====%@",dataObj);
         if (dataObj) {
             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
             if (modal.rtcode ==1) {
@@ -539,9 +539,8 @@
 -(void)tableViewCellDidSeleteHeadImg:(LWImageStorage *)imageStoragen layout:(MeetingCellLayout *)layout
 {
     
-    MyDetialViewController *myDetialViewCT=allocAndInit(MyDetialViewController);
-    MeetingData *data = layout.model;
-    myDetialViewCT.userID=data.userid;
+    MyDetialViewController *myDetialViewCT=[MyDetialViewController new];
+    myDetialViewCT.userID=((MeetingData *)layout.model).userid;
     [self.navigationController pushViewController:myDetialViewCT animated:YES];
 }
 
