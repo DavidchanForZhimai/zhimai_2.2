@@ -50,6 +50,8 @@
 @property(nonatomic,strong)BaseButton *edit;
 @property(nonatomic,strong)UILabel *returnLiyou;
 @property(nonatomic,strong)AuthenticationModal *modal;
+
+@property(nonatomic,strong)UILabel *xinxi;
 @end
 
 @implementation AuthenticationHomeViewController
@@ -66,52 +68,53 @@
     [self.view addSubview:self.upload];
     [self netWork];
     
+     _parame = [Parameter parameterWithSessicon];
     
     
-
 }
 - (void)netWork
 {
     [[ToolManager shareInstance] showWithStatus];
     [XLDataService postWithUrl:AuthenURL param:[Parameter parameterWithSessicon] modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         if (dataObj) {
-           _modal = [AuthenticationModal mj_objectWithKeyValues:dataObj];
-//            NSLog(@"dataObj =%@",dataObj);
+            _modal = [AuthenticationModal mj_objectWithKeyValues:dataObj];
+            //            NSLog(@"dataObj =%@",dataObj);
             if (_modal.rtcode ==1) {
                 _authenticationHomeView.userInteractionEnabled = YES;
                 [[ToolManager shareInstance] dismiss];
-                    url =_modal.datas.cardpic;
-                    if (_modal.datas.authen&&_modal.datas.authen!=1&&url.length>0) {
-                        [[ToolManager shareInstance] imageView:_imageView setImageWithURL:url placeholderType:PlaceholderTypeImageProcessing];
-                    }
-                     [[ToolManager shareInstance] imageView:_userIcon setImageWithURL:_modal.datas.imgurl placeholderType:PlaceholderTypeUserHead];
-                    _username.text = _modal.datas.realname;
+                url =_modal.datas.cardpic;
+                if (_modal.datas.authen&&_modal.datas.authen!=1&&url.length>0) {
+                    [[ToolManager shareInstance] imageView:_imageView setImageWithURL:url placeholderType:PlaceholderTypeImageProcessing];
+                }
+                [[ToolManager shareInstance] imageView:_userIcon setImageWithURL:_modal.datas.imgurl placeholderType:PlaceholderTypeUserHead];
+                _username.text = _modal.datas.realname;
+                
+                NSString *position;
+                if (_modal.datas.position.length>0) {
+                    position = [NSString stringWithFormat:@"%@  %@\n",_modal.datas.position,_modal.datas.tel];
                     
-                    NSString *position;
-                    if (_modal.datas.position.length>0) {
-                        position = [NSString stringWithFormat:@"%@  %@\n",_modal.datas.position,_modal.datas.tel];
-                       
+                }
+                else
+                {
+                    position = _modal.datas.tel;
+                    if (position.length>0) {
+                        position = [NSString stringWithFormat:@"%@/n",_modal.datas.tel];
                     }
-                    else
-                    {
-                        position = _modal.datas.tel;
-                        if (position.length>0) {
-                            position = [NSString stringWithFormat:@"%@/n",_modal.datas.tel];
-                        }
-                    }
-                    _userOtherInfo.text = [NSString stringWithFormat:@"%@%@",position,_modal.datas.address];
+                }
+                _userOtherInfo.text = [NSString stringWithFormat:@"%@%@",position,_modal.datas.address];
+                
+                if (_modal.datas.authen ==9) {
                     
-                    if (_modal.datas.authen ==9) {
-                    
-                        _returnLiyou.text =[NSString stringWithFormat:@"驳回理由:%@",_modal.datas.remark];
-                        _returnLiyou.numberOfLines = 0;
-                        _returnLiyou.frame = CGRectMake(_returnLiyou.x, _returnLiyou.y, _returnLiyou.width, [_returnLiyou.text sizeWithFont:[UIFont systemFontOfSize:12] maxSize:CGSizeMake(_returnLiyou.width, 1000)].height + 20);
-                        NSMutableAttributedString *string = [[NSMutableAttributedString alloc]initWithString:_returnLiyou.text];
-                        [string addAttribute:NSForegroundColorAttributeName value:BlackTitleColor range:[_returnLiyou.text rangeOfString:@"驳回理由:"]];
-                        [string addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:13.0] range:[_returnLiyou.text rangeOfString:@"驳回理由:"]];
-                        _returnLiyou.attributedText = string;
-                        _authenticationHomeView.contentSize = CGSizeMake(_authenticationHomeView.width, CGRectGetMaxY(_returnLiyou.frame) + 10);
-                    }
+                     [_parame setObject:url forKey:@"cardpic"];
+                    _returnLiyou.text =[NSString stringWithFormat:@"驳回理由:%@",_modal.datas.remark];
+                    _returnLiyou.numberOfLines = 0;
+                    _returnLiyou.frame = CGRectMake(_returnLiyou.x, _returnLiyou.y, _returnLiyou.width, [_returnLiyou.text sizeWithFont:[UIFont systemFontOfSize:12] maxSize:CGSizeMake(_returnLiyou.width, 1000)].height + 20);
+                    NSMutableAttributedString *string = [[NSMutableAttributedString alloc]initWithString:_returnLiyou.text];
+                    [string addAttribute:NSForegroundColorAttributeName value:BlackTitleColor range:[_returnLiyou.text rangeOfString:@"驳回理由:"]];
+                    [string addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:13.0] range:[_returnLiyou.text rangeOfString:@"驳回理由:"]];
+                    _returnLiyou.attributedText = string;
+                    _authenticationHomeView.contentSize = CGSizeMake(_authenticationHomeView.width, CGRectGetMaxY(_returnLiyou.frame) + 10);
+                }
                 
                 NSString *text =@"修改";
                 UIColor *color = hexColor(ff722d);
@@ -132,25 +135,29 @@
                     color = lightGrayTitleColor;
                     isEdit = NO;
                 }
-
+                
                 [_edit setTitle:text forState:UIControlStateNormal];
                 [_edit setTitleColor:color forState:UIControlStateNormal];
                 _edit.enabled = isEdit;
                 
                 NSString *str = @"提交认证";
                 BOOL isEnable = NO;
+                _xinxi.text = @"核对我的认证信息";
                 UIColor *_uploadColor =rgba(210, 210, 210, 0.8);
                 if (_modal.datas.authen ==2) {
+                    _xinxi.text = @"我的认证信息";
                     str = @"审核中";
                     isEnable = NO;
                     _uploadColor = rgba(210, 210, 210, 0.8);
                 }
                 if (_modal.datas.authen ==3) {
+                    _xinxi.text = @"我的认证信息";
                     str = @"审核通过";
                     isEnable = NO;
                     _uploadColor = rgba(210, 210, 210, 0.8);
                 }
                 if (_modal.datas.authen ==9) {
+                    _xinxi.text = @"核对我的认证信息";
                     str = @"审核失败 重新提交";
                     isEnable = YES;
                     _uploadColor = AppMainColor;
@@ -162,14 +169,14 @@
             else
             {
                 [[ToolManager shareInstance] showInfoWithStatus:_modal.rtmsg];
-                 _authenticationHomeView.userInteractionEnabled = NO;
+                _authenticationHomeView.userInteractionEnabled = NO;
             }
             
         }
         else
         {
             [[ToolManager shareInstance] showInfoWithStatus];
-             _authenticationHomeView.userInteractionEnabled = NO;
+            _authenticationHomeView.userInteractionEnabled = NO;
         }
         
     }];
@@ -195,7 +202,7 @@
     
     _imageView = [[UIImageView alloc]initWithFrame:CGRectMake((APPWIDTH - image.size.width)/2.0, 100, image.size.width, image.size.height)];
     _imageView.image = image;
-   
+    
     _imageView.userInteractionEnabled = YES;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(imageViewTap:) ];
     tap.numberOfTapsRequired = 1;
@@ -203,7 +210,7 @@
     
     [_authenticationHomeView addSubview:_imageView];
     
-    [UILabel createLabelWithFrame:CGRectMake(10, CGRectGetMaxY(_imageView.frame)+ 10, APPWIDTH, 30) text:@"核对我的认证信息" fontSize:12 textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:_authenticationHomeView];
+    _xinxi = [UILabel createLabelWithFrame:CGRectMake(10, CGRectGetMaxY(_imageView.frame)+ 10, APPWIDTH, 30) text:@"核对我的认证信息" fontSize:12 textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:_authenticationHomeView];
     _authenticationHomeView.contentSize=CGSizeMake(0, CGRectGetMaxY(_imageView.frame)+50);
     
     UIView *userView =[[UIView alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(_imageView.frame)+ 40, APPWIDTH - 20, 70)];
@@ -218,8 +225,8 @@
     
     _username = [UILabel createLabelWithFrame:CGRectMake(CGRectGetMaxX(_userIcon.frame) + 5, 10, APPWIDTH/2.0, 15) text:@"" fontSize:14 textColor:BlackTitleColor textAlignment:NSTextAlignmentLeft inView:userView ];
     
-     _userOtherInfo = [UILabel createLabelWithFrame:CGRectMake(_username.x, CGRectGetMaxY(_username.frame) + 5, APPWIDTH/2.0, 35) text:@"" fontSize:12 textColor:lightGrayTitleColor textAlignment:NSTextAlignmentLeft inView:userView];
-     _userOtherInfo.numberOfLines = 0;
+    _userOtherInfo = [UILabel createLabelWithFrame:CGRectMake(_username.x, CGRectGetMaxY(_username.frame) + 5, APPWIDTH/2.0, 35) text:@"" fontSize:12 textColor:lightGrayTitleColor textAlignment:NSTextAlignmentLeft inView:userView];
+    _userOtherInfo.numberOfLines = 0;
     
     NSString *text =@"修改";
     UIColor *color = hexColor(ff722d);
@@ -251,7 +258,7 @@
         [weakSelf.navigationController pushViewController:info animated:YES];
         
     };
-      _returnLiyou = [UILabel createLabelWithFrame:CGRectMake(10, CGRectGetMaxY(userView.frame) + 10,APPWIDTH - 20,0) text:@"" fontSize:12 textColor:lightGrayTitleColor textAlignment:NSTextAlignmentLeft inView:_authenticationHomeView];
+    _returnLiyou = [UILabel createLabelWithFrame:CGRectMake(10, CGRectGetMaxY(userView.frame) + 10,APPWIDTH - 20,0) text:@"" fontSize:12 textColor:lightGrayTitleColor textAlignment:NSTextAlignmentLeft inView:_authenticationHomeView];
     
     return  _authenticationHomeView;
 }
@@ -266,7 +273,7 @@
                 _upload.enabled = YES;
                 _upload.backgroundColor = AppMainColor;
                 [[ToolManager shareInstance] imageView:_imageView setImageWithURL:upLoadImageModal.imgurl placeholderType:PlaceholderTypeImageProcessing];
-                _parame = [Parameter parameterWithSessicon];
+            
                 [_parame setObject:upLoadImageModal.imgurl forKey:@"cardpic"];
                 
             }];
@@ -275,15 +282,15 @@
     }
     else
     {
-    LWImageBrowserModel* imageModel = [[LWImageBrowserModel alloc]initWithLocalImage:_imageView.image imageViewSuperView:_authenticationHomeView positionAtSuperView:_imageView.frame index:0];
-    
-    LWImageBrowser* imageBrowser = [[LWImageBrowser alloc] initWithParentViewController:self
-                                                                            imageModels:@[imageModel]
-                                                                           currentIndex:0];
-    imageBrowser.view.backgroundColor = [UIColor blackColor];
-    [imageBrowser show];
+        LWImageBrowserModel* imageModel = [[LWImageBrowserModel alloc]initWithLocalImage:_imageView.image imageViewSuperView:_authenticationHomeView positionAtSuperView:_imageView.frame index:0];
+        
+        LWImageBrowser* imageBrowser = [[LWImageBrowser alloc] initWithParentViewController:self
+                                                                                imageModels:@[imageModel]
+                                                                               currentIndex:0];
+        imageBrowser.view.backgroundColor = [UIColor blackColor];
+        [imageBrowser show];
     }
-
+    
 }
 - (BaseButton *)upload
 {
@@ -293,7 +300,7 @@
     
     NSString *str = @"提交认证";
     BOOL isEnable = NO;
-  
+    
     _upload = [[BaseButton alloc]initWithFrame:CGRectMake(0, APPHEIGHT - TabBarHeight, APPWIDTH, TabBarHeight) setTitle:str titleSize:30*SpacedFonts titleColor:WhiteColor textAlignment:NSTextAlignmentCenter backgroundColor:AppMainColor inView:nil];
     _upload.enabled = isEnable;
     if (!isEnable) {
@@ -303,7 +310,7 @@
     __weak typeof(self) weakSelf = self;
     _upload.didClickBtnBlock = ^
     {
-       
+        
         if (!weakSelf.parame||weakSelf.parame.allKeys.count<[Parameter parameterWithSessicon].allKeys.count + 1) {
             
             [[ToolManager shareInstance] showAlertMessage:@"请上传图片"];
@@ -314,7 +321,7 @@
             
             if (dataObj) {
                 if ([dataObj[@"rtcode"] integerValue]==1) {
-                  
+                    
                     [[ToolManager shareInstance] showSuccessWithStatus:@"上传成功！"];
                     [weakSelf.upload setTitle:@"审核中" forState:UIControlStateNormal];
                     weakSelf.edit.enabled = NO;
@@ -322,6 +329,7 @@
                     [weakSelf.edit setTitleColor:lightGrayTitleColor forState:UIControlStateNormal];
                     weakSelf.upload.enabled = NO;
                     weakSelf.modal.datas.authen = 2;
+                     weakSelf.xinxi.text = @"我的认证信息";
                     weakSelf.upload.backgroundColor = rgba(210, 210, 210, 0.8);
                     
                 }
@@ -347,7 +355,7 @@
         
         
     };
-     return _upload;
+    return _upload;
 }
 
 #pragma mark
@@ -362,13 +370,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

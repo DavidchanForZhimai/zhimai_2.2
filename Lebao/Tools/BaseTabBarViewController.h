@@ -7,11 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "NavRootViewController.h"
 @interface BaseTabBarViewController : UITabBarController
-
-@property (strong, nonatomic) UINavigationController *discoverNav;
-@property (strong, nonatomic) UINavigationController *tansboundaryNav;
-@property (strong, nonatomic) UINavigationController *dynamicNav;
-@property (strong, nonatomic) UINavigationController *notificationNav;
+@property (strong, nonatomic) NavRootViewController *discoverNav;
+@property (strong, nonatomic) NavRootViewController *tansboundaryNav;
+@property (strong, nonatomic) NavRootViewController *dynamicNav;
+@property (strong, nonatomic) NavRootViewController *notificationNav;
 @end

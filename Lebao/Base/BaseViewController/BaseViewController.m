@@ -7,11 +7,11 @@
 //
 
 #import "BaseViewController.h"
-
 #import "CoreArchive.h"
 #import "NotificationViewController.h"
-@interface BaseViewController ()<UIGestureRecognizerDelegate>
+@interface BaseViewController ()
 @property(nonatomic,strong)UILabel *v;//空状态
+@property(nonatomic,weak) UIViewController* currentShowVC;
 @end
 
 @implementation BaseViewController
@@ -22,8 +22,6 @@
     // Do any additional setup after loading the view.
 
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:NO];
-    __weak typeof(self) weakSelf = self;
-    self.navigationController.interactivePopGestureRecognizer.delegate =weakSelf;
     self.view.backgroundColor = AppViewBGColor;
     self.navigationController.navigationBarHidden = YES;
     

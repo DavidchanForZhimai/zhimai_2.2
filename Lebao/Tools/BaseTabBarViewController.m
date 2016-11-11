@@ -11,6 +11,7 @@
 #import "DynamicVC.h"
 #import "NotificationViewController.h"
 #import "MeetingVC.h"
+
 @interface BaseTabBarViewController ()
 
 @end
@@ -35,14 +36,14 @@
 {
 
     DiscoverHomePageViewController *discoverVC = [[DiscoverHomePageViewController alloc] init];
-    self.discoverNav = [[UINavigationController alloc] initWithRootViewController:discoverVC];
+    self.discoverNav = [[NavRootViewController alloc] initWithRootViewController:discoverVC];
     
     MeetingVC *meetingVC = [[MeetingVC alloc] init];
-    self.tansboundaryNav = [[UINavigationController alloc] initWithRootViewController:meetingVC];
+    self.tansboundaryNav = [[NavRootViewController alloc] initWithRootViewController:meetingVC];
     DynamicVC *dynamicVC = [[DynamicVC alloc] init];
-    self.dynamicNav = [[UINavigationController alloc] initWithRootViewController:dynamicVC];
+    self.dynamicNav = [[NavRootViewController alloc] initWithRootViewController:dynamicVC];
     NotificationViewController *notificationVC = [[NotificationViewController alloc] init];
-    self.notificationNav = [[UINavigationController alloc] initWithRootViewController:notificationVC];
+    self.notificationNav = [[NavRootViewController alloc] initWithRootViewController:notificationVC];
     
 }
 - (void)setMainTabbar
