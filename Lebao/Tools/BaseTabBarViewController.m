@@ -36,14 +36,14 @@
 {
 
     DiscoverHomePageViewController *discoverVC = [[DiscoverHomePageViewController alloc] init];
-    self.discoverNav = [[NavRootViewController alloc] initWithRootViewController:discoverVC];
+    self.discoverNav = [[UINavigationController alloc] initWithRootViewController:discoverVC];
     
     MeetingVC *meetingVC = [[MeetingVC alloc] init];
-    self.tansboundaryNav = [[NavRootViewController alloc] initWithRootViewController:meetingVC];
+    self.tansboundaryNav = [[UINavigationController alloc] initWithRootViewController:meetingVC];
     DynamicVC *dynamicVC = [[DynamicVC alloc] init];
-    self.dynamicNav = [[NavRootViewController alloc] initWithRootViewController:dynamicVC];
+    self.dynamicNav = [[UINavigationController alloc] initWithRootViewController:dynamicVC];
     NotificationViewController *notificationVC = [[NotificationViewController alloc] init];
-    self.notificationNav = [[NavRootViewController alloc] initWithRootViewController:notificationVC];
+    self.notificationNav = [[UINavigationController alloc] initWithRootViewController:notificationVC];
     
 }
 - (void)setMainTabbar

@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "BaseButton.h"
+#import "BaseViewController.h"
 typedef void (^FaBuSucceedBlock) (void);
-@interface PublishDynamicVC : UIViewController
+@interface PublishDynamicVC : BaseViewController
 @property (strong,nonatomic)UIScrollView *svMain;           //背景滚动式图
 @property (strong,nonatomic)UIView *viewBg;                 //上面的文本背景
 @property (strong,nonatomic)UIView *viewlin;                 //上面的线

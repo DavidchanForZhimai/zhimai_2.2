@@ -125,7 +125,7 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
     CGFloat _maximumLeftDrawerWidth;
     UIColor * _statusBarViewBackgroundColor;
 }
-
+@property(nonatomic,weak) UIViewController* currentShowVC;
 @property (nonatomic, assign, readwrite) MMDrawerSide openSide;
 
 @property (nonatomic, strong) UIView * childControllerContainerView;

@@ -7,14 +7,15 @@
 //
 
 #import "BaseViewController.h"
+
 #import "CoreArchive.h"
 #import "NotificationViewController.h"
-@interface BaseViewController ()
+@interface BaseViewController ()<UIGestureRecognizerDelegate>
 @property(nonatomic,strong)UILabel *v;//空状态
-@property(nonatomic,weak) UIViewController* currentShowVC;
 @end
 
 @implementation BaseViewController
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -24,10 +25,12 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:NO];
     self.view.backgroundColor = AppViewBGColor;
     self.navigationController.navigationBarHidden = YES;
-    
+    // 禁用 iOS7 返回手势
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    }
     
 }
-
 
 - (void)navViewTitle:(NSString *)title
 {

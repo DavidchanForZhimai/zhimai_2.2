@@ -298,7 +298,7 @@
         
         _time =[UILabel createLabelWithFrame:frame(10,0,frameWidth(cell)/2.0, frameHeight(cellBottom)) text:@""fontSize:24*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:cellBottom];
         
-        _showDetial =  [UILabel createLabelWithFrame:frame(frameWidth(cell) - 60,0,24*SpacedFonts*4, frameHeight(cellBottom)) text:@"查看详情"fontSize:24*SpacedFonts textColor:[UIColor colorWithRed:0.9686 green:0.4784 blue:0.2784 alpha:1.0]  textAlignment:NSTextAlignmentRight inView:cellBottom];
+        _showDetial =  [UILabel createLabelWithFrame:frame(frameWidth(cell) - 70,0,60, frameHeight(cellBottom)) text:@"查看详情"fontSize:24*SpacedFonts textColor:[UIColor colorWithRed:0.9686 green:0.4784 blue:0.2784 alpha:1.0]  textAlignment:NSTextAlignmentRight inView:cellBottom];
         
         
     }

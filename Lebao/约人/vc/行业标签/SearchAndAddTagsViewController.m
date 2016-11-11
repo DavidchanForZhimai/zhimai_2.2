@@ -55,6 +55,7 @@
         _bar.barStyle = UIBarStyleDefault;
         _bar.tintColor = LineBg;
         _bar.translucent = YES;
+        [_bar becomeFirstResponder];
         [_bar setBorder:LineBg width:0.5];
         [_bar setRadius:_bar.height/2.0];
         _bar.delegate = self;

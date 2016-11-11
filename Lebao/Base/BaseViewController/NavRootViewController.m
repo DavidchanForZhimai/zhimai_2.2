@@ -7,16 +7,16 @@
 //
 
 #import "NavRootViewController.h"
-
+#import "BaseViewController.h"
 @interface NavRootViewController ()<UIGestureRecognizerDelegate,UINavigationControllerDelegate>
- @property(nonatomic,weak) UIViewController* currentShowVC;
+ @property(nonatomic,weak) BaseViewController* currentShowVC;
 @end
 
 @implementation NavRootViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+//    self.interactivePopGestureRecognizer.delegate =(id)self;
     // Do any additional setup after loading the view.
 }
 -(id)initWithRootViewController:(UIViewController *)rootViewController
@@ -32,7 +32,7 @@
     if (navigationController.viewControllers.count == 1)
         self.currentShowVC = Nil;
     else
-        self.currentShowVC = viewController;
+        self.currentShowVC = (BaseViewController *)viewController;
 }
 -(BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer{
     if (gestureRecognizer == self.interactivePopGestureRecognizer) {

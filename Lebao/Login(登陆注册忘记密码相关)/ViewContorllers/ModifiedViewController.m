@@ -11,6 +11,7 @@
 #import "LoginViewController.h"
 #import "NSString+Password.h"
 #import "CoreArchive.h"
+#import "NSString+Extend.h"
 #define ChangepwdURL [NSString stringWithFormat:@"%@user/changepwd",HttpURL]
 @interface ModifiedViewController ()
 
@@ -76,8 +77,8 @@ typedef enum {
     
     Y += frameHeight(_oldPassWordView);
     Y +=10;
-    
-    UILabel *_oldPassWordLb =[UILabel createLabelWithFrame:frame(15, 0, 4*26*SpacedFonts, cellHeight) text:@"旧密码：" fontSize:26*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentLeft inView:_oldPassWordView];
+    NSString *text1=@"旧密码：";
+    UILabel *_oldPassWordLb =[UILabel createLabelWithFrame:frame(15, 0, [text1  sizeWithFont:[UIFont systemFontOfSize:26*SpacedFonts] maxSize:CGSizeMake(1000, cellHeight)].width, cellHeight) text:@"旧密码：" fontSize:26*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentLeft inView:_oldPassWordView];
     UILabel *line1 = allocAndInitWithFrame(UILabel, frame(CGRectGetMaxX(_oldPassWordLb.frame), 10, 0.5, frameHeight(_oldPassWordView) -20));
     line1.backgroundColor = LineBg;
     [_oldPassWordView addSubview:line1];
@@ -100,8 +101,8 @@ typedef enum {
     
     Y += frameHeight(_passWordView);
     Y +=10;
-    
-    UILabel *_PassWordLb =[UILabel createLabelWithFrame:frame(15, 0, 4*26*SpacedFonts, cellHeight) text:@"新密码：" fontSize:26*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentLeft inView:_passWordView];
+    NSString *text2 =@"新密码：";
+    UILabel *_PassWordLb =[UILabel createLabelWithFrame:frame(15, 0,  [text2  sizeWithFont:[UIFont systemFontOfSize:26*SpacedFonts] maxSize:CGSizeMake(1000, cellHeight)].width, cellHeight) text:@"新密码：" fontSize:26*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentLeft inView:_passWordView];
     UILabel *line2 = allocAndInitWithFrame(UILabel, frame(CGRectGetMaxX(_PassWordLb.frame), 10, 0.5, frameHeight(_passWordView) -20));
     line2.backgroundColor = LineBg;
     [_passWordView addSubview:line2];
@@ -125,7 +126,8 @@ typedef enum {
      Y += frameHeight(_surePassWordView);
     Y +=20;
     
-    UILabel *_surePassWordLb =[UILabel createLabelWithFrame:frame(15, 0, 6*26*SpacedFonts, cellHeight) text:@"确定新密码：" fontSize:26*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentLeft inView:_surePassWordView];
+    NSString *text3 =@"确定新密码：";
+    UILabel *_surePassWordLb =[UILabel createLabelWithFrame:frame(15, 0, [text3  sizeWithFont:[UIFont systemFontOfSize:26*SpacedFonts] maxSize:CGSizeMake(1000, cellHeight)].width, cellHeight) text:@"确定新密码：" fontSize:26*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentLeft inView:_surePassWordView];
     UILabel *line3 = allocAndInitWithFrame(UILabel, frame(CGRectGetMaxX(_surePassWordLb.frame), 10, 0.5, frameHeight(_surePassWordView) -20));
     line3.backgroundColor = LineBg;
     [_surePassWordView addSubview:line3];
