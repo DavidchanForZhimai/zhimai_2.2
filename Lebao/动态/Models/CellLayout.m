@@ -15,7 +15,7 @@
 #import "Gallop.h"
 #import "NSString+Extend.h"
 #import "Parameter.h"
-#define MAX_TEXT_HEIGHT 120.0f
+#define MAX_TEXT_HEIGHT 100.0f
 #define MAX_TEXT_AllHEIGHT 80.0f
 @implementation CellLayout
 
@@ -118,7 +118,7 @@
                 contentTextStorage.frame = CGRectMake(_avatarStorage.left,
                                                       contentTextStorage.top,
                                                       contentTextStorage.width,
-                                                      MAX_TEXT_AllHEIGHT);
+                                                      MAX_TEXT_HEIGHT);
                 LWTextStorage* openStorage = [[LWTextStorage alloc] init];
                 openStorage.font = Size(26.0);
                 openStorage.textColor = AppMainColor;
