@@ -10,10 +10,17 @@
 
 @implementation DWLable
 @synthesize verticalAlignment = verticalAlignment_;
+- (instancetype)init {
+    if (self = [super init]) {
+        _textInsets = UIEdgeInsetsZero;
+    }
+    return self;
+}
 
 -(id)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.verticalAlignment = VerticalAlignmentMiddle;
+        self.textInsets = UIEdgeInsetsZero;
     }
     return self;
 }
@@ -42,8 +49,10 @@
 
 -(void)drawTextInRect:(CGRect)requestedRect {
     CGRect actualRect = [self textRectForBounds:requestedRect limitedToNumberOfLines:self.numberOfLines];
-    [super drawTextInRect:actualRect];
+   
+    [super drawTextInRect:UIEdgeInsetsInsetRect(actualRect, _textInsets)];
 }
+
 
 
 

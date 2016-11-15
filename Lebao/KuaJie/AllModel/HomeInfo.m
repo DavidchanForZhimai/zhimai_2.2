@@ -115,7 +115,7 @@
         [parameters setValue:brokerid forKey:@"brokerid"];
     }
     
-    [[ToolManager shareInstance]showWithStatus];
+   
     [XLDataService postWithUrl:url param:parameters modelClass:nil responseBlock:^(id responseObject, NSError *error) {
         if ([[responseObject objectForKey:@"rtcode"] intValue]==1) {
             [[ToolManager shareInstance]dismiss];

@@ -9,8 +9,6 @@
 #import "StatusModel.h"
 
 @implementation StatusModel
-
-
 + (NSDictionary *)objectClassInArray{
     return @{@"datas" : [StatusDatas class]};
 }

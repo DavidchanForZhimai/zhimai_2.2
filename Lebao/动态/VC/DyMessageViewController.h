@@ -13,15 +13,19 @@
  数据模型
  */
 @interface DyMessageModel : BaseModal
-@property(nonatomic,strong)NSMutableArray *datas;
 @end
 
 @interface DyMessageData : BaseModal
 @property(nonatomic,copy)NSString *imgurl;
 @property(nonatomic,copy)NSString *realname;
 @property(nonatomic,copy)NSString *content;
+@property(nonatomic,copy)NSString *createtime;
+@property(nonatomic,copy)NSString *title_img;
+@property(nonatomic,copy)NSString *type;
+@property(nonatomic,copy)NSString *userid;
 @property(nonatomic,copy)NSString *title;
-@property(nonatomic,copy)NSString *fengmiam;
+@property(nonatomic,copy)NSString *ID;
+@property(nonatomic,copy)NSString *dynamicid;
 @end
 
 
@@ -52,6 +56,15 @@
  */
 
 @interface DyMessageCell : UITableViewCell
+@property(nonatomic,strong)UIImageView *userIcon;
+@property(nonatomic,strong)UILabel *userLabel;
+@property(nonatomic,strong)UILabel *userContent;
+@property(nonatomic,strong)UIImageView *userLike;
+@property(nonatomic,strong)UILabel *userTime;
+@property(nonatomic,strong)DWLable *userTitle;
+@property(nonatomic,strong)UIImageView *userImage;
 
-@property(nonatomic,strong)DyMessageLayout *layout;
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier cellHeight:(float)cellHeight cellWidth:(float)cellWidth;
+- (void)setModel:(DyMessageData *)data;
 @end

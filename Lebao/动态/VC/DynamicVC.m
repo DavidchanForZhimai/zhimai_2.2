@@ -102,7 +102,10 @@
 //动态数据加载
 -(void)getjjrJsonIsRefresh:(BOOL)isRefresh andIsLoadMoreData:(BOOL)isLoadMoreData andShouldClearData:(BOOL)shouldClearData
 {
-    
+    if (_jjrJsonArr.count==0) {
+        
+         [[ToolManager shareInstance]showWithStatus];
+    }
     [[HomeInfo shareInstance]getHomePageDT:jjrpageNumb brokerid:nil andcallBack:^(BOOL issucced, NSString* info, NSDictionary* jsonDic) {
 //        NSLog(@"jsonDic =%@",jsonDic);
         if (isRefresh) {

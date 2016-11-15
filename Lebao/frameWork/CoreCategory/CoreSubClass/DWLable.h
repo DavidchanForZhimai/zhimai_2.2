@@ -18,7 +18,7 @@ typedef enum
 {
 @private VerticalAlignment _verticalAlignment;
 }
-
+@property (nonatomic, assign) UIEdgeInsets textInsets; // 控制字体与控件边界的间隙
 @property (nonatomic) VerticalAlignment verticalAlignment;
 
 

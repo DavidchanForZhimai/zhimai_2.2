@@ -29,7 +29,7 @@
 
 + (DWLable *)createLabelWithFrame:(CGRect)frame text:(NSString *)text fontSize:(CGFloat)size textColor:(UIColor *)textColor textAlignment:(NSTextAlignment)textAlignment inView:(UIView *)view;
 {
-    UILabel *label = [[self alloc] initWithFrame:frame];
+    DWLable *label = [[DWLable alloc] initWithFrame:frame];
     label.backgroundColor = [UIColor clearColor];
     label.text = text;
     label.font = [UIFont systemFontOfSize:size];
@@ -41,7 +41,7 @@
 }
 + (DWLable *)CreateLineFrame:(CGRect)frame inView:(UIView *)view
 {
-    UILabel *line = allocAndInitWithFrame(UILabel, frame(frame.origin.x, frame.origin.y - 0.5, frame.size.width, 0.5));
+    DWLable *line = allocAndInitWithFrame(DWLable, frame(frame.origin.x, frame.origin.y - 0.5, frame.size.width, 0.5));
     line.backgroundColor = LineBg;
     [view addSubview:line];
    
@@ -57,4 +57,6 @@
 {
 return [content boundingRectWithSize:CGSizeMake(rowWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:font} context:nil].size;
 }
+
+
 @end
