@@ -66,18 +66,22 @@
 
 - (void)setHeadUrl:(NSString *)url headViewType:(GJGCCommonHeadViewType)headViewType
 {
+    NSString *placeImage = @"defaulthead";
+    if ([url isEqualToString:@"icon_me_custom"]) {
+        placeImage = @"icon_me_custom";
+    }
     switch (headViewType) {
         case GJGCCommonHeadViewTypePGGroup: {
-            [self.contentImageView setImage:GJCFQuickImage(@"defaulthead")];
+            [self.contentImageView setImage:GJCFQuickImage(placeImage)];
             break;
         }
         case GJGCCommonHeadViewTypeContact: {
-            [self.contentImageView setImage:GJCFQuickImage(@"defaulthead")];
+            [self.contentImageView setImage:GJCFQuickImage(placeImage)];
             break;
         }
             
         case GJGCCommonHeadViewTypePostContact: {
-            [self.contentImageView setImage:GJCFQuickImage(@"defaulthead")];
+            [self.contentImageView setImage:GJCFQuickImage(placeImage)];
             break;
         }
         default:

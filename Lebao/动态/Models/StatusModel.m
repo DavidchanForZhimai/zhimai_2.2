@@ -63,3 +63,7 @@
 }
 
 @end
+
+@implementation Message
+
+@end

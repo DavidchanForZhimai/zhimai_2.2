@@ -17,7 +17,7 @@ typedef NS_ENUM(NSUInteger,DTDataType) {
      DTDataTypeClue = 3,//线索类型
 };
 
-@class StatusDatas,StatusPic,StatusComment,StatusInfo,StatusLike,Typeinfo;
+@class StatusDatas,StatusPic,StatusComment,StatusInfo,StatusLike,Typeinfo,Message;
 @interface StatusModel : NSObject
 
 @property (nonatomic, copy) NSString *rtmsg;
@@ -31,6 +31,8 @@ typedef NS_ENUM(NSUInteger,DTDataType) {
 @property (nonatomic, assign) NSInteger rtcode;
 
 @property (nonatomic, assign) NSInteger page;
+@property (nonatomic, strong) Message *message;
+
 @end
 @interface StatusDatas : NSObject
 
@@ -152,5 +154,16 @@ typedef NS_ENUM(NSUInteger,DTDataType) {
 @property (nonatomic, assign) BOOL iscoop;
 
 @property (nonatomic, assign) BOOL isself;
+@end
+
+@interface Message : NSObject
+
+@property (nonatomic, assign) int count;
+
+@property (nonatomic, copy) NSString *imgurl;
+
+@property (nonatomic, copy) NSString *realname;
+
+
 @end
 

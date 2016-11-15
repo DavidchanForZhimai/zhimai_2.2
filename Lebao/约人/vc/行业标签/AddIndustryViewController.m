@@ -9,6 +9,7 @@
 #import "AddIndustryViewController.h"
 #import "DWTagsView.h"
 #import "XLDataService.h"
+#import "NSString+Extend.h"
 #define FocusIndustryURL [NSString stringWithFormat:@"%@user/focus-industry",HttpURL]
 #define SaveFocusIndustryURL [NSString stringWithFormat:@"%@user/save-focusindustry",HttpURL]
 
@@ -29,6 +30,10 @@
 @property(nonatomic,copy)NSMutableArray *classNewsTags;//新标签 类型
 @property(nonatomic,strong)UILabel *newsLb;//新标签
 @property(nonatomic,strong)BaseButton *finishBtn;//完成
+
+@property(nonatomic,strong)UIScrollView *bottomScrollView;//底层
+@property(nonatomic,strong)UILabel *message1Lab;//提醒字样
+@property(nonatomic,strong)UILabel *message2Lab;//提醒字样
 
 @property(nonatomic,strong)NSMutableArray *industry_label;
 @property(nonatomic,strong)NSMutableArray  *saveIndustry_label;
@@ -157,12 +162,43 @@
         [scrView addSubview:self.newsLb];
         [scrView addSubview:self.newsClassTagsView];
         [scrView addSubview:self.newsTagsView];
+        [scrView addSubview:self.message1Lab];
+        [scrView addSubview:self.message2Lab];
         [self.view addSubview:scrView];
         [self resetFrame];
         
     
 }
-#pragma mark getter
+
+-(UILabel *)message1Lab{
+    if (_message1Lab) {
+        return _message1Lab;
+    }
+    _message1Lab=[UILabel new];
+    _message1Lab.font=[UIFont systemFontOfSize:14];
+    _message1Lab.frame=CGRectMake(10, CGRectGetMaxY(_newsTagsView.frame) + 20, APPWIDTH -20, 17);
+    _message1Lab.numberOfLines = 0;
+    _message1Lab.text=@"关注行业说明";
+    return _message1Lab;
+}
+-(UILabel *)message2Lab{
+    if (_message2Lab) {
+        return _message2Lab;
+    }
+    _message2Lab=[UILabel new];
+    _message2Lab.font=[UIFont systemFontOfSize:13];
+    _message2Lab.textColor=[UIColor grayColor];
+    _message2Lab.frame=CGRectMake(0, CGRectGetMaxY(_message1Lab.frame), APPWIDTH, 17);
+    
+    _message2Lab.text=@"1.首页“可添加人脉”和“动态”的数据与个人所关注的行业有关,关注的行业越多,其显示的数据越多\n2.用户没有关注任何行业时,“可添加人脉”和“动态”里默认显示全部的行业数据";
+    _message2Lab.numberOfLines = 0;
+    
+    
+    return _message2Lab;
+    
+    
+}
+
 - (BaseButton *)finishBtn
 {
     if (_finishBtn) {
@@ -369,7 +405,10 @@
     
     _newsTagsView.frame = frame(10, CGRectGetMaxY(_newsClassTagsView.frame) +20 , APPWIDTH -20, [_newsTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
     
-    scrView.contentSize=CGSizeMake(0, CGRectGetMaxY(self.newsTagsView.frame));
+    _message1Lab.frame = CGRectMake(10, CGRectGetMaxY(_newsTagsView.frame) + 20, APPWIDTH-20, 17);
+    _message2Lab.frame=CGRectMake(10, CGRectGetMaxY(_message1Lab.frame) , APPWIDTH-20, [_message2Lab.text sizeWithFont:[UIFont systemFontOfSize:13] maxSize:CGSizeMake(APPWIDTH-20,1000)].height+10);
+
+    scrView.contentSize=CGSizeMake(0, CGRectGetMaxY(self.message2Lab.frame) + 10);
 }
 
 - (void)didReceiveMemoryWarning {

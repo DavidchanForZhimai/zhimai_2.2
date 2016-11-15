@@ -26,6 +26,8 @@
 #import "MyLQDetailVC.h"
 #import "XLDataService.h"
 #import "AuthenticationHomeViewController.h"
+#import "NSString+Extend.h"
+#import "DyMessageViewController.h"
 #define kToolBarH 44
 #define kTextFieldH 30
 #define xsTabTag  110
@@ -41,6 +43,8 @@
     UIButton  *_sendBtn;
     
     UIScrollView *_toolBarView;
+    
+    Message *messages;
 }
 @property (strong,nonatomic)NSMutableArray * jjrJsonArr;
 @property (strong,nonatomic)NSMutableArray * fakeDatasource;
@@ -53,6 +57,7 @@
 @property (strong,nonatomic)BaseButton  *selectedIndustryBg;
 @property (strong,nonatomic)NSString  *hyStr;
 @property (strong,nonatomic) BaseButton *selectedBtn;
+@property (nonatomic,strong) UIView *messageView;
 @end
 
 
@@ -61,6 +66,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+
     jjrpageNumb = 1;
     _jjrJsonArr = [[NSMutableArray alloc]init];
    
@@ -86,6 +92,7 @@
     [self addToolBar];
    
 }
+
 //点击屏幕失去相应
 - (void)toolBarViewRemove
 {
@@ -97,7 +104,7 @@
 {
     
     [[HomeInfo shareInstance]getHomePageDT:jjrpageNumb brokerid:nil andcallBack:^(BOOL issucced, NSString* info, NSDictionary* jsonDic) {
-        NSLog(@"jsonDic =%@",jsonDic);
+//        NSLog(@"jsonDic =%@",jsonDic);
         if (isRefresh) {
             [[ToolManager shareInstance] endHeaderWithRefreshing:_dtTab];
         }
@@ -112,7 +119,13 @@
             }
             
             StatusModel *model = [StatusModel mj_objectWithKeyValues:jsonDic];
+            if (jjrpageNumb==1) {
+            messages =model.message;
+            _dtTab.tableHeaderView = [self addJJRTopV];
+                
+            }
             [[ToolManager shareInstance]dismiss];
+            
             if (jjrpageNumb==1) {
                 
                 [[ToolManager shareInstance] moreDataStatus:_dtTab];
@@ -227,8 +240,7 @@
 #pragma mark----两个tableview写在这里
 -(void)addTheTab
 {
-   
-    
+
     _dtTab = [[UITableView alloc]initWithFrame:CGRectMake(0, NavigationBarHeight, APPWIDTH, APPHEIGHT - ( NavigationBarHeight)) style:UITableViewStyleGrouped];
     _dtTab.dataSource = self;
     _dtTab.delegate = self;
@@ -259,18 +271,18 @@
     topV.backgroundColor = [UIColor clearColor];
     
     UIImage *image = [UIImage imageNamed:@"dongtai_bianjie"];
-    BaseButton *topBtn= [[BaseButton alloc]initWithFrame:frame(10, 10, SCREEN_WIDTH-20, 35) setTitle:@"分享你的新鲜事" titleSize:26*SpacedFonts titleColor:LightBlackTitleColor backgroundImage:nil iconImage:image highlightImage:image setTitleOrgin:CGPointMake((35 -26*SpacedFonts)/2.0 , 10 -image.size.width) setImageOrgin:CGPointMake((35 -image.size.height)/2.0 , SCREEN_WIDTH -image.size.width - 30) inView:topV];
+    BaseButton *topBtn= [[BaseButton alloc]initWithFrame:frame(10, 10, SCREEN_WIDTH-20, 35) setTitle:@"分享我的服务和行业新鲜事" titleSize:26*SpacedFonts titleColor:LightBlackTitleColor backgroundImage:nil iconImage:image highlightImage:image setTitleOrgin:CGPointMake((35 -26*SpacedFonts)/2.0 , 10 -image.size.width) setImageOrgin:CGPointMake((35 -image.size.height)/2.0 , SCREEN_WIDTH -image.size.width - 30) inView:topV];
     topBtn.shouldAnmial = NO;
     topBtn.didClickBtnBlock = ^
     {
         [[ToolManager shareInstance] showWithStatus];
         NSMutableDictionary *param=[Parameter parameterWithSessicon];
         [param setObject:@"dynamic_add" forKey:@"type"];
-        NSLog(@"param===%@",param);
+//        NSLog(@"param===%@",param);
         [XLDataService putWithUrl:dynamicCheckedURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
             if(dataObj){
                 [[ToolManager shareInstance] dismiss];
-                NSLog(@"dataobj===%@",dataObj);
+//                NSLog(@"dataobj===%@",dataObj);
                 if ([dataObj[@"rtcode"] intValue]==1) {
                     
                     PublishDynamicVC *publishDynamicVC  =  allocAndInit(PublishDynamicVC);
@@ -297,14 +309,68 @@
                 
             }
         }];
-
-            };
+        
+    };
     topBtn.backgroundColor  = [UIColor whiteColor];
     
+    NSString *messsageText = @"1条新信息";
+    
+    float ViewH = 55;
+    NSLog(@"messages.count =%d",messages.count);
+    if (!messages.count) {
+        [_messageView removeFromSuperview];
+        _messageView =nil;
+        ViewH = 55;
+    }
+    else
+    {
+        if (messages&&messages.count) {
+            messsageText = [NSString stringWithFormat:@"%d条新信息",messages.count];
+            ViewH = 65 + 33*ScreenMultiple;
+            float W =  [messsageText sizeWithFont:[UIFont systemFontOfSize:12*ScreenMultiple] maxSize:CGSizeMake(APPWIDTH - 100*ScreenMultiple, 33*ScreenMultiple)].width + 50*ScreenMultiple;
+            
+            _messageView = [[UIView alloc]initWithFrame:CGRectMake((APPWIDTH - W)/2.0, 55, W, 33*ScreenMultiple)];
+            _messageView.backgroundColor = rgba(0, 0, 0, 0.4);
+            [_messageView setRadius:5.0];
+            [topV addSubview:_messageView];
+            
+            UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(6*ScreenMultiple, 4*ScreenMultiple, 24*ScreenMultiple,  24*ScreenMultiple)];
+            [imageView setRound];
+            imageView.tag = 8888;
+            
+            [[ToolManager shareInstance] imageView:imageView setImageWithURL:@"" placeholderType:0];
+            if (messages.imgurl) {
+                [[ToolManager shareInstance] imageView:imageView setImageWithURL:messages.imgurl placeholderType:0];
+            }
+            
+            [_messageView addSubview:imageView];
+            
+            UILabel *textLable= [UILabel createLabelWithFrame:CGRectMake(40*ScreenMultiple, 0, W - 50*ScreenMultiple, _messageView.height) text:messsageText fontSize:12*ScreenMultiple textColor:WhiteColor textAlignment:NSTextAlignmentLeft inView:_messageView];
+            textLable.tag = 888;
+            
+            
+            UITapGestureRecognizer *tap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(messageShowMore:)];
+            tap.numberOfTapsRequired = 1;
+            
+            [_messageView addGestureRecognizer:tap];
+        }
+        
+        
+        
+    }
+    
+    topV.frame = CGRectMake(topV.x, topV.y, topV.width, ViewH);
     return topV;
     
 }
-
+#pragma mark
+#pragma mark - 动态消息
+- (void)messageShowMore:(UITapGestureRecognizer *)sender
+{
+  
+    DyMessageViewController *message = [[DyMessageViewController alloc]init];
+    [self.navigationController pushViewController:message animated:YES];
+}
 /**
  *  此处查找页面跳转
  */
@@ -318,17 +384,12 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    if (tableView.tag == xsTabTag) {
-        
-        return 280;
-    }else
-    {
-        if (self.jjrJsonArr.count >= indexPath.row) {
-            CellLayout* layout = self.jjrJsonArr[indexPath.row];
-            return layout.cellHeight;
-        }
-        return 0;
+    if (self.jjrJsonArr.count >= indexPath.row) {
+        CellLayout* layout = self.jjrJsonArr[indexPath.row];
+        return layout.cellHeight;
     }
+    return 0;
+  
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -362,7 +423,6 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    if (tableView ==_dtTab) {
         CellLayout* cellLayout = self.jjrJsonArr[indexPath.row];
         DynamicDetailsViewController*dynamicDetailsViewController = allocAndInit(DynamicDetailsViewController);
         dynamicDetailsViewController.dynamicdID = [NSString stringWithFormat:@"%ld",cellLayout.statusModel.ID];
@@ -386,8 +446,7 @@
         };
         PushView(self, dynamicDetailsViewController);
         
-        
-    }
+    
     
 }
 //点击进入动态详情

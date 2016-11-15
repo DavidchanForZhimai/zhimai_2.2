@@ -48,6 +48,8 @@
     
     NSString *cooperate;
     
+    UILabel *jisuanZishu;//计算字数
+    
 }
 
 
@@ -163,19 +165,21 @@
     [self.svMain addGestureRecognizer:tap];
     [self.view addSubview:self.svMain];
     
-    self.viewBg = [[UIView alloc]initWithFrame:CGRectMake(0, 10, APPWIDTH, 130)];
+    self.viewBg = [[UIView alloc]initWithFrame:CGRectMake(0, 10, APPWIDTH, 160)];
     self.viewBg.backgroundColor = [UIColor whiteColor];
     [self.svMain addSubview:self.viewBg];
     
     self.tfView = [[UITextView alloc]initWithFrame:CGRectMake(10, 10, SCREEN_WIDTH-20, 130)];
     self.tfView.font = [UIFont systemFontOfSize:13];
-    self.tfView.text = @"请输入您想要分享的新鲜事(最多1000个字)";
+    self.tfView.text = @"请输入您想要分享的新鲜事(最多255个字)";
     self.tfView.textColor = [UIColor colorWithRed:0.741 green:0.741 blue:0.745 alpha:1.000];
     self.tfView.returnKeyType = UIReturnKeySend;
     self.tfView.delegate = self;
     
     [self.viewBg addSubview:self.tfView];
     
+    //计算字数
+    jisuanZishu = [UILabel createLabelWithFrame:CGRectMake(0, CGRectGetMaxY(self.tfView.frame), APPWIDTH - 20, 30) text:@"0/255" fontSize:12 textColor:LightBlackTitleColor textAlignment:NSTextAlignmentRight inView:self.viewBg];
     
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc]init];
     _collectionView = [[XWDragCellCollectionView alloc]initWithFrame:CGRectMake(0, MaxY(self.viewBg), WIDTH(self.view),(APPWIDTH-40)/3+20) collectionViewLayout:flowLayout];
@@ -234,8 +238,8 @@
 }
 -(void)rightAction
 {
-    if ([self.tfView.text isEqualToString:@"请输入您想要分享的新鲜事(最多1000个字)"]||self.tfView.text.length <1) {
-        HUDText(@"请输入您想要分享的新鲜事(最多1000个字)");
+    if ([self.tfView.text isEqualToString:@"请输入您想要分享的新鲜事(最多255个字)"]||self.tfView.text.length <1) {
+        HUDText(@"请输入您想要分享的新鲜事(最多255个字)");
         return;
     }else {
         
@@ -294,15 +298,16 @@
 -(void)textViewDidEndEditing:(UITextView *)textView
 {
     if (textView.text.length <1) {
-        textView.text = @"请输入您想要分享的新鲜事(最多1000个字)";
+        textView.text = @"请输入您想要分享的新鲜事(最多255个字)";
         textView.textColor = [UIColor colorWithRed:0.741 green:0.741 blue:0.745 alpha:1.000];
     }
 }
 -(void)textViewDidBeginEditing:(UITextView *)textView
 {
-    if ([textView.text isEqualToString: @"请输入您想要分享的新鲜事(最多1000个字)"]) {
+    if ([textView.text isEqualToString: @"请输入您想要分享的新鲜事(最多255个字)"]) {
         textView.text = @"";
         textView.textColor = [UIColor blackColor];
+        jisuanZishu.text = @"0/255";
     }
     
 }
@@ -312,13 +317,14 @@
 -(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     NSString *string = [textView.text stringByReplacingCharactersInRange:range withString:text];
-    if ([string length]==1000)
+    jisuanZishu.text = [NSString stringWithFormat:@"%ld/255",[string length]];
+    if ([string length]==255)
     {
         return NO;
     }
-    else if ([string length] >1000)
+    else if ([string length] >255)
     {
-        string = [string substringToIndex:1000];
+        string = [string substringToIndex:255];
         textView.text = string;
         
         return NO;
@@ -541,7 +547,7 @@
     else if (actionSheet.tag==1002) {
         if (buttonIndex!=0) {
             if (objTopic.count!=0) {
-                if ([_tfView.text isEqualToString: @"请输入您想要分享的新鲜事(最多1000个字)"]) {
+                if ([_tfView.text isEqualToString: @"请输入您想要分享的新鲜事(最多255个字)"]) {
                     _tfView.text =objTopic[buttonIndex-1];
                     _tfView.textColor=[UIColor blackColor];
                 }else {

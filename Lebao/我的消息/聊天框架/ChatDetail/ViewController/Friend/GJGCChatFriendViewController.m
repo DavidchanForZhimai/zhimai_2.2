@@ -184,7 +184,12 @@ GJCUCaptureViewControllerDelegate>
                     chatContentModel.sendStatus = GJGCChatFriendSendMessageStatusSuccess;
                     chatContentModel.isFromSelf = data.isself;
                     chatContentModel.talkType = self.taklInfo.talkType;
+                   
                     chatContentModel.headUrl = [[ToolManager shareInstance] urlAppend:data.imgurl];
+                    //客服专属头像
+                    if (self.type == MessageTypeCustomPage && !chatContentModel.isFromSelf) {
+                         chatContentModel.headUrl = @"icon_me_custom";
+                    }
                     chatContentModel.audioModel.remotePath = [[ToolManager shareInstance] urlAppend:data.audios];
                     
                     chatContentModel.audioModel.duration =data.audios_second;
@@ -740,10 +745,14 @@ GJCUCaptureViewControllerDelegate>
 
 - (void)chatCellDidTapOnHeadView:(GJGCChatBaseCell *)tapedCell
 {
+   
     NSIndexPath *tapIndexPath = [self.chatListTable indexPathForCell:tapedCell];
     MyDetialViewController *myDetailVC = [[MyDetialViewController alloc]init];
     GJGCChatFriendContentModel *contentmodel = (GJGCChatFriendContentModel *)[self.dataSourceManager contentModelAtIndex:tapIndexPath.row];
     myDetailVC.userID = contentmodel.userId;
+    if (!contentmodel.userId||[contentmodel.userId isEqualToString:@"0"]) {
+        return;
+    }
     [self.navigationController pushViewController:myDetailVC animated:YES];
     
     
