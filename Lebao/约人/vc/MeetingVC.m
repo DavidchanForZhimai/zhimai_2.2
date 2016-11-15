@@ -372,7 +372,7 @@
                     
                 }else if (modal.rtcode ==4002){
                     [[ToolManager shareInstance]dismiss];
-                    UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"去身份认证吗?" message:@"身份认证后才能约见他人哦" delegate:self cancelButtonTitle:nil otherButtonTitles:@"不去",@"走起", nil];
+                    UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"去身份认证吗?" message:modal.rtmsg delegate:self cancelButtonTitle:nil otherButtonTitles:@"不去",@"走起", nil];
                     alertView.tag=22221;
                     alertView.delegate=self;
                     [alertView show];
@@ -499,7 +499,7 @@
                 alertV.indexth=indexPath;
             }else if (modal.rtcode ==4002){
                 [[ToolManager shareInstance]dismiss];
-                UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"去身份认证吗?" message:@"身份认证后才能约见他人哦" delegate:self cancelButtonTitle:nil otherButtonTitles:@"不去",@"走起", nil];
+                UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"去身份认证吗?" message:modal.rtmsg delegate:self cancelButtonTitle:nil otherButtonTitles:@"不去",@"走起", nil];
                 alertView.tag=22221;
                 alertView.delegate=self;
                 [alertView show];

@@ -112,14 +112,7 @@
             _meetBtnRect = CGRectMake(APPWIDTH-70, 20, 60, 30);
         }
         if (messageBtn) {
-            //            if (model.relation==0) {
-            //                _messageBtnRect=CGRectMake(APPWIDTH-50, 20, 30, 30);
-            //            }else if (model.relation==1) {
-            //                _messageBtnRect = CGRectMake(APPWIDTH-70, 20, 60, 30);
-            //            }else if (model.relation==3) {
             _messageBtnRect = CGRectMake(APPWIDTH-70, 20, 60, 30);
-            //            }
-            
         }
         
         [self addStorage:_avatarStorage];

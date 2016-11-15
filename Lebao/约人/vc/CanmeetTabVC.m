@@ -329,7 +329,7 @@
             }
             else if ([dataObj[@"rtcode"] intValue]==4001){
                 [[ToolManager shareInstance]dismiss];
-                UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"去身份认证吗?" message:@"身份认证后才能添加人脉哦" delegate:self cancelButtonTitle:nil otherButtonTitles:@"不去",@"走起", nil];
+                UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"去身份认证吗?" message:dataObj[@"rtmsg"] delegate:self cancelButtonTitle:nil otherButtonTitles:@"不去",@"走起", nil];
                 alertView.tag=22221;
                 alertView.delegate=self;
                 [alertView show];

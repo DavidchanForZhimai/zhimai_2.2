@@ -78,7 +78,7 @@
     [XLDataService postWithUrl:AuthenURL param:[Parameter parameterWithSessicon] modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         if (dataObj) {
             _modal = [AuthenticationModal mj_objectWithKeyValues:dataObj];
-            //            NSLog(@"dataObj =%@",dataObj);
+                        NSLog(@"dataObj =%@",dataObj);
             if (_modal.rtcode ==1) {
                 _authenticationHomeView.userInteractionEnabled = YES;
                 [[ToolManager shareInstance] dismiss];
