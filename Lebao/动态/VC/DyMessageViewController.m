@@ -9,7 +9,7 @@
 #import "DyMessageViewController.h"
 #import "XLDataService.h"
 #import "NSString+Extend.h"
-#import "DWLable.h"
+#import "DynamicDetailsViewController.h"
 #define DynamicMessageURL [NSString stringWithFormat:@"%@dynamic/message",HttpURL]
 
 
@@ -63,14 +63,13 @@
         _userImage.hidden = YES;
         [self addSubview:_userImage];
         
-       
-        _userTitle = [DWLable createLabelWithFrame:_userImage.frame text:@"" fontSize:11 textColor:hexColor(bcbcbc) textAlignment:NSTextAlignmentLeft inView:self];
+        _userTitleView = [[UIView alloc]initWithFrame:_userImage.frame];
+        _userTitleView.backgroundColor = hexColor(eeeeee);
+        _userTitleView.hidden = YES;
+        [self addSubview:_userTitleView];
+        _userTitle = [DWLable createLabelWithFrame:CGRectMake(5, 5, _userTitleView.width - 10, _userTitleView.height - 10) text:@"" fontSize:11 textColor:hexColor(bcbcbc) textAlignment:NSTextAlignmentLeft inView:_userTitleView];
         _userTitle.numberOfLines = 0;
-        _userTitle.backgroundColor = hexColor(eeeeee);
-        _userTitle.hidden = YES;
-        _userTitle.verticalAlignment = 0;
-        _userTitle.textInsets      = UIEdgeInsetsMake(5.0f, 5.0f, 5.f, 5.0f); //
-        
+
         [UILabel CreateLineFrame:CGRectMake(0, cellHeight -0.5, APPWIDTH, 0.5) inView:self];
         
         
@@ -96,14 +95,14 @@
     }
     if (data.title_img.length>0) {
         
-        _userTitle.hidden = YES;
+        _userTitleView.hidden = YES;
         _userImage.hidden = NO;
         [[ToolManager shareInstance] imageView:_userImage setImageWithURL:data.title_img placeholderType:PlaceholderTypeOther];
         
     }
     else
     {
-        _userTitle.hidden = NO;
+        _userTitleView.hidden = NO;
         _userImage.hidden = YES;
         _userTitle.text = data.title;
     }
@@ -182,7 +181,7 @@
         if (isLoadMore) {
             [[ToolManager shareInstance]endFooterWithRefreshing:_dyMessageView];
         }
-        NSLog(@"dataObj =%@",dataObj);
+    
         if (dataObj) {
           
             DyMessageModel *model = [DyMessageModel mj_objectWithKeyValues:dataObj];
@@ -268,6 +267,10 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
+     DyMessageData *data =  _dyMessageArray[indexPath.row];
+     DynamicDetailsViewController *detail = [[DynamicDetailsViewController alloc]init];
+     detail.dynamicdID = data.dynamicid;
+     PushView(self, detail);
 }
 #pragma mark
 #pragma mark back 

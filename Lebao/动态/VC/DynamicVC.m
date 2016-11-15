@@ -370,8 +370,10 @@
 #pragma mark - 动态消息
 - (void)messageShowMore:(UITapGestureRecognizer *)sender
 {
-  
     DyMessageViewController *message = [[DyMessageViewController alloc]init];
+    //点击消失
+    messages.count=0;
+    _dtTab.tableHeaderView = [self addJJRTopV];
     [self.navigationController pushViewController:message animated:YES];
 }
 /**

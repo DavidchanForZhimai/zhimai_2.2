@@ -26,7 +26,7 @@
 #define kTextFieldH 30
 @interface DynamicDetailsViewController ()<UITableViewDelegate,UITableViewDataSource,TableViewCellDelegate,UIScrollViewDelegate,UITextFieldDelegate>
 {
-    UIScrollView * buttomScr;
+     UIScrollView * buttomScr;
      UIImageView *_toolBar;
      UITextField *_textField;
      UIButton  *_sendBtn;
@@ -51,14 +51,53 @@
     if (_jjrJsonArr.count>0) {
         CellLayout *layout =  _jjrJsonArr[0];
         [_jjrJsonArr replaceObjectAtIndex:0 withObject:[self layoutWithStatusModel:layout.statusModel index:0]];
+       
+    }
+    else
+    {
+        _jjrJsonArr = [[NSMutableArray alloc]init];
+        [self netWork];
     }
     
-    
     [self setButtomScr];
-
+    
     //评论
     [self addToolBar];
     
+}
+- (void)netWork
+{
+    if (_jjrJsonArr.count==0) {
+        [[ToolManager shareInstance] showWithStatus];
+    }
+    [[HomeInfo shareInstance] getHomePageDTdetailID:_dynamicdID  andcallBack:^(BOOL issucced, NSString *info, NSDictionary *jsonDic) {
+        
+        if (issucced) {
+            StatusDatas* statusDatas  = [StatusDatas mj_objectWithKeyValues:jsonDic[@"datas"]];
+            statusDatas.imgurl = [[ToolManager shareInstance] urlAppend:statusDatas.imgurl];
+            for (int i =0; i<statusDatas.pic.count;i++) {
+                StatusPic *pic = statusDatas.pic[i];
+                pic.imgurl = [[ToolManager shareInstance] urlAppend:pic.imgurl];
+                pic.abbre_imgurl = [[ToolManager shareInstance] urlAppend: pic.abbre_imgurl];
+                [statusDatas.pic replaceObjectAtIndex:i withObject:pic];
+                
+            }
+            for (int i =0; i<statusDatas.like.count;i++) {
+                StatusLike *like = statusDatas.like[i];
+                like.imgurl = [[ToolManager shareInstance] urlAppend:like.imgurl];
+                [statusDatas.like replaceObjectAtIndex:i withObject:like];
+            }
+
+            [_jjrJsonArr addObject:[self layoutWithStatusModel:statusDatas index:0]];
+            [_dtTab reloadData];
+        }
+        else
+        {
+          
+            [[ToolManager shareInstance] showInfoWithStatus:info];
+        }
+        
+    }];
 }
 /**
  *  最下层的scrollview

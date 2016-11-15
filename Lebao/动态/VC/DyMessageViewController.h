@@ -61,7 +61,8 @@
 @property(nonatomic,strong)UILabel *userContent;
 @property(nonatomic,strong)UIImageView *userLike;
 @property(nonatomic,strong)UILabel *userTime;
-@property(nonatomic,strong)DWLable *userTitle;
+@property(nonatomic,strong)UILabel *userTitle;
+@property(nonatomic,strong)UIView *userTitleView;
 @property(nonatomic,strong)UIImageView *userImage;
 
 

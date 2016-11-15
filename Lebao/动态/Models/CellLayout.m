@@ -437,7 +437,7 @@
                 lookMoreStorage.textColor = [UIColor colorWithRed:0.7765 green:0.7843 blue:0.7882 alpha:1.0];
                 
                 [lookMoreStorage lw_addLinkForWholeTextStorageWithData:[NSDictionary dictionaryWithObjectsAndKeys:@"查看更多",@"key",[NSString stringWithFormat:@"%ld", statusModel.ID],@"id", nil] linkColor:nil highLightColor:RGB(0, 0, 0, 0.15)];
-                lookMoreStorage.frame = CGRectMake(SCREEN_WIDTH - 70, self.cellHeight - 20,52, CGFLOAT_MAX);
+                lookMoreStorage.frame = CGRectMake(SCREEN_WIDTH - 70, self.cellHeight - 20,60, CGFLOAT_MAX);
                 [self addStorage:lookMoreStorage];
                 self.cellHeight +=10;
             }

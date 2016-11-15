@@ -20,7 +20,7 @@
 @class TableViewCell;
 
 @protocol TableViewCellDelegate <NSObject>
-
+@optional
 //点击图片
 - (void)tableViewCell:(TableViewCell *)cell didClickedImageWithCellLayout:(CellLayout *)layout
               atIndex:(NSInteger)index;
@@ -42,7 +42,7 @@
 //点击进入动态详情
 - (void)tableViewCell:(TableViewCell *)cell didClickedLikeButtonWithDTID:(NSString *)DTID atIndexPath:(NSIndexPath *)indexPath;
 
-@optional
+
 //更多按钮事件
 - (void)tableViewCell:(TableViewCell *)cell didClickedLikeButtonWithIsSelf:(BOOL)isSelf andDynamicID:(NSString *)andDynamicID atIndexPath:(NSIndexPath *)indexPath andIndex:(NSInteger)index;
 

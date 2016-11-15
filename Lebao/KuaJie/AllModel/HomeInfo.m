@@ -135,7 +135,6 @@
     NSMutableDictionary *parameters =  [Parameter parameterWithSessicon];
     [parameters setValue:ID forKey:@"id"];
     
-    [[ToolManager shareInstance]showWithStatus];
     [XLDataService postWithUrl:url param:parameters modelClass:nil responseBlock:^(id responseObject, NSError *error) {
         if ([[responseObject objectForKey:@"rtcode"] intValue]==1) {
             [[ToolManager shareInstance]dismiss];
