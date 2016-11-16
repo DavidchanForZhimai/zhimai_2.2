@@ -10,9 +10,6 @@
 #import "CoreArchive.h"
 #import "XLDataService.h"
 @interface HomeInfo ()
-
-@property AFHTTPRequestOperationManager *manager;
-
 @end
 @implementation HomeInfo
 + (HomeInfo*) shareInstance
@@ -30,8 +27,7 @@
     self = [super init];
     
     if (self != NULL) {
-        self.manager = [AFHTTPRequestOperationManager manager];
-        self.manager.requestSerializer.timeoutInterval = 15.0; // timeout for 5s;
+      
     }
     
     return self;

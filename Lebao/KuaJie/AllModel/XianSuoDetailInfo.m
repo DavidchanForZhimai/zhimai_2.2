@@ -10,9 +10,6 @@
 #import "XianSuoDetailInfo.h"
 #import "XLDataService.h"
 @interface XianSuoDetailInfo ()
-
-@property AFHTTPRequestOperationManager *manager;
-
 @end
 
 @implementation XianSuoDetailInfo
@@ -31,9 +28,7 @@
     self = [super init];
     
     if (self != NULL) {
-        self.manager = [AFHTTPRequestOperationManager manager];
-        self.manager.requestSerializer.timeoutInterval = 15.0; // timeout for 5s;
-    }
+        }
     
     return self;
 }

@@ -111,6 +111,7 @@
     
     OffsetY=0;
     
+    [self.yrTab registerClass:[MeettingTableViewCell class] forCellReuseIdentifier:@"MeettingTableViewCellID"];
     [self netWorkRefresh:NO andIsLoadMoreData:NO  isShouldClearData:NO];
     
     
@@ -431,14 +432,8 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    static NSString * cellID =@"MeettingTableViewCellID";
-    
-    MeettingTableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:cellID];
-    if (!cell) {
-        cell=[[MeettingTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-        cell.backgroundColor=[UIColor clearColor];
-        
-    }
+    MeettingTableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:@"MeettingTableViewCellID" forIndexPath:indexPath];
+
     MeetingCellLayout *layout=self.nearByManArr[indexPath.row];
     [cell setCellLayout:layout];
     [cell setIndexPath:indexPath];

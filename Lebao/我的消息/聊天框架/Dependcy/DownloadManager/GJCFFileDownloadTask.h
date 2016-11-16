@@ -6,7 +6,7 @@
 //  Copyright (c) 2014年 ZYProSoft. All rights reserved.
 //
 
-#import "AFHTTPRequestOperation.h"
+#import <AFNetworking.h>
 
 /* 下载任务的状态 */
 typedef NS_ENUM(NSUInteger, GJCFFileDownloadState) {

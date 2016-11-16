@@ -29,6 +29,7 @@
         [self.contentView.layer addSublayer:self.cellline];
         [self.contentView.layer addSublayer:self.line1];
         [self.contentView.layer addSublayer:self.line2];
+        self.backgroundColor=[UIColor clearColor];
         
     }
     return self;

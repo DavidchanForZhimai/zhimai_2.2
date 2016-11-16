@@ -992,15 +992,18 @@
     //增加判断是否发布过线索
     if ([[_xiansDic objectForKey:@"isAlert"] intValue]==1) {
         
-        [[ToolManager shareInstance] showAlertViewTitle:@"提示" contentText:[_xiansDic objectForKey:@"alertContent"] showAlertViewBlcok:^{
-            
-            if ([[_xiansDic objectForKey:@"isredirect"] intValue]==1) {
-                
-                PushView(self, allocAndInit(AuthenticationHomeViewController));
-            }
-            
-        }];
         
+        UIAlertController *alertControl = [UIAlertController alertControllerWithTitle:@"去身份认证吗?" message:[_xiansDic objectForKey:@"alertContent"] preferredStyle:UIAlertControllerStyleAlert];
+        // 2.实例化按钮:actionWithTitle
+        // 为防止block与控制器间循环引用，我们这里需用__weak来预防
+        [alertControl addAction:[UIAlertAction actionWithTitle:@"走起" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+            // 点击确定按钮的时候, 会调用这个block
+            PushView(self, allocAndInit(AuthenticationHomeViewController));
+            
+        }]];
+        
+        [alertControl addAction:[UIAlertAction actionWithTitle:@"不去" style:UIAlertActionStyleCancel handler:nil]];
+        [self presentViewController:alertControl animated:YES completion:nil];
         return;
     }
     

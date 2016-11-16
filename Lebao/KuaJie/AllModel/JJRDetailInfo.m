@@ -10,8 +10,6 @@
 #import "XLDataService.h"
 @interface JJRDetailInfo ()
 
-@property AFHTTPRequestOperationManager *manager;
-
 @end
 
 @implementation JJRDetailInfo
@@ -30,8 +28,7 @@
     self = [super init];
     
     if (self != NULL) {
-        self.manager = [AFHTTPRequestOperationManager manager];
-        self.manager.requestSerializer.timeoutInterval = 15.0; // timeout for 5s;
+       
     }
     
     return self;

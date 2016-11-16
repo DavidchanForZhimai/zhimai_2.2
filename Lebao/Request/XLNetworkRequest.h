@@ -76,7 +76,7 @@ typedef void (^progressBlock)(int64_t bytesWritten, int64_t totalBytesWritten, i
 /**
  文件上传，监听上传进度
  */
-+ (void)updateRequest:(NSString *)url params:(NSDictionary *)params fileConfig:(XLFileConfig *)fileConfig successAndProgress:(progressBlock)progressHandler complete:(responseBlock)completionHandler;
+//+ (void)updateRequest:(NSString *)url params:(NSDictionary *)params fileConfig:(XLFileConfig *)fileConfig successAndProgress:(progressBlock)progressHandler complete:(responseBlock)completionHandler;
 
 @end
 
