@@ -75,7 +75,6 @@
     
 }
 
-
 #pragma mark
 #pragma mark - buttonAction -
 - (void)buttonAction:(UIButton *)sender
@@ -86,21 +85,6 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-- (void)setTabbarIndex:(int)index
-{
-    _index = index;
-   _bottomView= [[BottomView alloc] initWithFrame:frame(0, APPHEIGHT - TabBarHeight, APPWIDTH, TabBarHeight) selectIndex:index clickCenterButton:^{
-        
-        [[ToolManager shareInstance] addReleseDctView:self];
-        
-    }];
-    _message = [[UIView alloc]initWithFrame:frame(2.57*APPWIDTH/4.0, 5, 8, 8)];
-    [_message setRound];
-    _message.backgroundColor = [UIColor clearColor];
-    [_bottomView addSubview:_message];
-    [self.view addSubview:_bottomView];
-    
 }
 
 - (void)isShowEmptyStatus:(BOOL)isShowEmptyStatus
@@ -113,30 +97,6 @@
     _v.hidden = !isShowEmptyStatus;
    
     
-    
-}
-#pragma mark
-#pragma mark- pushMessage
-- (void)pushMessage
-{
-    _message.backgroundColor = [UIColor redColor];
-}
-- (void)viewWillAppear:(BOOL)animated
-{
-    
-    [super viewWillAppear:animated];
-    if (_index ==2) {
-       _message.backgroundColor = [UIColor clearColor];
-    }
-  
-    
-}
-- (void)viewWillDisappear:(BOOL)animated
-{
-    if (_index!=2) {
-         _message.backgroundColor = [UIColor clearColor];
-    }
-    [super viewWillDisappear:animated];
     
 }
 /*

@@ -52,7 +52,7 @@ static PushManager *pushManager;
         //        NSLog(@"view =%@",view);
         if ([NSStringFromClass([view class]) isEqualToString:@"DiscoverHomePageViewController"]||[NSStringFromClass([view class]) isEqualToString:@"DynamicVC"]||[NSStringFromClass([view class]) isEqualToString:@"NotificationViewController"]||[NSStringFromClass([view class]) isEqualToString:@"MeetingVC"]) {
             BaseViewController *baseView = (BaseViewController *)view;
-            [baseView pushMessage];
+            baseView.tabBarController.tabBarItem.badgeValue = @"1";
         }
     }
     

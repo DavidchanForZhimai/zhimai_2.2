@@ -12,7 +12,6 @@
 #import "BaseButton.h"
 #import "UIButton+Extend.h"
 #import "UILabel+Extend.h"
-#import "BottomView.h"
 typedef enum {
     
     NavViewButtonActionNavLeftBtnTag = 0,
@@ -26,18 +25,13 @@ typedef enum {
 @property(nonatomic,strong)UIView *navigationBarView;
 @property(nonatomic, strong)UILabel *navTitle;
 @property(nonatomic,strong) BaseButton *homePageBtn;
-@property(nonatomic,strong) UIView    *message;
-@property(nonatomic,assign) int    index;
-@property(nonatomic, strong)BottomView  * bottomView;
 
-//推送来消息
-- (void)pushMessage;
+
 //导航栏
 - (void)navViewTitle:(NSString *)title;
 - (void)navViewTitleAndBackBtn:(NSString *)title;
 - (void)navViewTitleAndBackBtn:(NSString *)title rightBtn:(UIButton *)navRightBtn;
 - (void)navViewTitle:(NSString *)title leftBtn:(UIButton *)navLeftBtn rightBtn:(UIButton *)navRightBtn;
-//设置Tabbar
-- (void)setTabbarIndex:(int)index;
+
 - (void)isShowEmptyStatus:(BOOL)isShowEmptyStatus;
 @end

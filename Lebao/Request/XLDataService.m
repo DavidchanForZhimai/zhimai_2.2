@@ -19,7 +19,7 @@ static UIAlertView *letout;
 
 
 + (void)getWithUrl:(NSString *)url param:(id)param modelClass:(Class)modelClass responseBlock:(responseBlock)responseDataBlock {
-    [XLNetworkRequest getRequest:url params:param success:^(id responseObj) {
+    [XLNetworkRequest getRequest:[self URLEncodedString:url] params:param success:^(id responseObj) {
         
         BaseModal *model = [BaseModal mj_objectWithKeyValues:responseObj];
         //登录退出
@@ -51,7 +51,7 @@ static UIAlertView *letout;
 
 + (void)postWithUrl:(NSString *)url param:(id)param modelClass:(Class)modelClass responseBlock:(responseBlock)responseDataBlock {
     
-    [XLNetworkRequest postRequest:url params:param success:^(id responseObj) {
+    [XLNetworkRequest postRequest:[self URLEncodedString:url] params:param success:^(id responseObj) {
         
         BaseModal *model = [BaseModal mj_objectWithKeyValues:responseObj];
         
@@ -92,7 +92,7 @@ static UIAlertView *letout;
 
 + (void)putWithUrl:(NSString *)url param:(id)param modelClass:(Class)modelClass responseBlock:(responseBlock)responseDataBlock {
     
-    [XLNetworkRequest putRequest:url params:param success:^(id responseObj) {
+    [XLNetworkRequest putRequest:[self URLEncodedString:url] params:param success:^(id responseObj) {
         
         BaseModal *model = [BaseModal mj_objectWithKeyValues:responseObj];
         //登录退出
@@ -124,7 +124,7 @@ static UIAlertView *letout;
 
 + (void)deleteWithUrl:(NSString *)url param:(id)param modelClass:(Class)modelClass responseBlock:(responseBlock)responseDataBlock {
     
-    [XLNetworkRequest deleteRequest:url params:param success:^(id responseObj) {
+    [XLNetworkRequest deleteRequest:[self URLEncodedString:url] params:param success:^(id responseObj) {
         
         BaseModal *model = [BaseModal mj_objectWithKeyValues:responseObj];
         //登录退出
@@ -153,7 +153,14 @@ static UIAlertView *letout;
         responseDataBlock(nil, error);
     }];
 }
-
+//拼装NSURL前，将NSString地址编码
++ (NSString *)URLEncodedString:(NSString*)resource {
+//    CFStringRef url = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)resource, NULL, CFSTR("!*'();:@&=+$,/?%#[]"), kCFStringEncodingUTF8); // for some reason, releasing this is disasterous
+    NSString *result = [resource stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    //    [result autorelease];
+    
+    return result;
+}
 
 /**
  数组、字典转化为模型

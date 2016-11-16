@@ -104,7 +104,6 @@
     self.view.backgroundColor=AppViewBGColor;
     [self addTabView];
     [self addYrBtn];
-    [self setTabbarIndex:0];
     [self navViewTitle:@"约见"];
     _page = 1;
     _isopen=NO;
@@ -614,12 +613,12 @@
     
     
     if (scrollView.contentOffset.y>0&&scrollView.contentOffset.y-OffsetY>20&&(scrollView.contentSize.height-scrollView.height)>0)   {
-        if (self.bottomView.y==(APPHEIGHT-self.bottomView.height)) {
+        if (self.tabBarController.tabBar.y==(APPHEIGHT-self.tabBarController.tabBar.height)) {
             _yrTab.frame=CGRectMake(0,StatusBarHeight, APPWIDTH, APPHEIGHT-StatusBarHeight);
             [UIView animateWithDuration:0.5
                              animations:^{
                                  [self.navigationController setNavigationBarHidden:YES animated:YES];
-                                 self.bottomView.frame=CGRectMake(self.bottomView.x,APPHEIGHT, self.bottomView.width, self.bottomView.height);
+                                 self.tabBarController.tabBar.frame=CGRectMake(self.tabBarController.tabBar.x,APPHEIGHT, self.tabBarController.tabBar.width, self.tabBarController.tabBar.height);
                                  self.navigationBarView.frame=CGRectMake(self.navigationBarView.x, -self.navigationBarView.height, self.navigationBarView.width, self.navigationBarView.height);
                                  self.yrBtn.frame=CGRectMake(self.yrBtn.x, APPHEIGHT, self.yrBtn.width, self.yrBtn.height);
                              }completion:^(BOOL finished) {
@@ -630,12 +629,12 @@
     }
     else if (scrollView.contentOffset.y<(scrollView.contentSize.height-scrollView.height)&&scrollView.contentOffset.y-OffsetY<-20)
     {
-        if (self.bottomView.y==APPHEIGHT) {
+        if (self.tabBarController.tabBar.y==APPHEIGHT) {
             
             [UIView animateWithDuration:0.5
                              animations:^{
                                  [self.navigationController setNavigationBarHidden:YES animated:YES];
-                                 self.bottomView.frame=CGRectMake(self.bottomView.x,APPHEIGHT- self.bottomView.height, self.bottomView.width, self.bottomView.height);
+                                 self.tabBarController.tabBar.frame=CGRectMake(self.tabBarController.tabBar.x,APPHEIGHT- self.tabBarController.tabBar.height, self.tabBarController.tabBar.width, self.tabBarController.tabBar.height);
                                  self.navigationBarView.frame=CGRectMake(self.navigationBarView.x,0, self.navigationBarView.width, self.navigationBarView.height);
                                  self.yrBtn.frame=CGRectMake(self.yrBtn.x, APPHEIGHT-124, self.yrBtn.width, self.yrBtn.height);
                                  _yrTab.frame=CGRectMake(0, NavigationBarHeight, APPWIDTH, APPHEIGHT-( NavigationBarHeight + TabBarHeight));

@@ -74,7 +74,6 @@
     [self addTheTab];
     [self getjjrJsonIsRefresh:NO andIsLoadMoreData:NO andShouldClearData:NO];
     //评论
-    [self setTabbarIndex:1];
     [self navViewTitle:@"动态"];
     OffsetY=0;
     
@@ -955,12 +954,12 @@
 {
   
     if (scrollView.contentOffset.y>0&&scrollView.contentOffset.y-OffsetY>20&&(scrollView.contentSize.height-scrollView.height)>0)   {
-        if (self.bottomView.y==(APPHEIGHT-self.bottomView.height)) {
+        if (self.tabBarController.tabBar.y==(APPHEIGHT-self.tabBarController.tabBar.height)) {
             self.dtTab.frame=CGRectMake(0,StatusBarHeight, APPWIDTH, APPHEIGHT-StatusBarHeight);
             [UIView animateWithDuration:0.5
                              animations:^{
                                  [self.navigationController setNavigationBarHidden:YES animated:YES];
-                                 self.bottomView.frame=CGRectMake(self.bottomView.x,APPHEIGHT, self.bottomView.width, self.bottomView.height);
+                                 self.tabBarController.tabBar.frame=CGRectMake(self.tabBarController.tabBar.x,APPHEIGHT, self.tabBarController.tabBar.width, self.tabBarController.tabBar.height);
                                  self.navigationBarView.frame=CGRectMake(self.navigationBarView.x, -self.navigationBarView.height, self.navigationBarView.width, self.navigationBarView.height);
                              }completion:^(BOOL finished) {
                              }];
@@ -970,11 +969,11 @@
     }
     else if (scrollView.contentOffset.y<(scrollView.contentSize.height-scrollView.height)&&scrollView.contentOffset.y-OffsetY<-20)
     {
-        if (self.bottomView.y==APPHEIGHT) {
+        if (self.tabBarController.tabBar.y==APPHEIGHT) {
             [UIView animateWithDuration:0.5
                              animations:^{
                                  [self.navigationController setNavigationBarHidden:YES animated:YES];
-                                 self.bottomView.frame=CGRectMake(self.bottomView.x,APPHEIGHT- self.bottomView.height, self.bottomView.width, self.bottomView.height);
+                                 self.tabBarController.tabBar.frame=CGRectMake(self.tabBarController.tabBar.x,APPHEIGHT- self.tabBarController.tabBar.height, self.tabBarController.tabBar.width, self.tabBarController.tabBar.height);
                                  self.navigationBarView.frame=CGRectMake(self.navigationBarView.x,0, self.navigationBarView.width, self.navigationBarView.height);
                                  self.dtTab.frame=CGRectMake(0, NavigationBarHeight, APPWIDTH, APPHEIGHT-( NavigationBarHeight + TabBarHeight));
                              }completion:^(BOOL finished) {

@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "BaseTabBarViewController.h"
+#import "MPHomeViewController.h"
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 @property (strong, nonatomic) UIWindow *window;
-@property (strong, nonatomic) BaseTabBarViewController *mainTab;
+@property (strong, nonatomic) MPHomeViewController *mainTab;
 
 AppDelegate* getAppDelegate();
 @end

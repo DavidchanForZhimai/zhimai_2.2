@@ -51,7 +51,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self setTabbarIndex:2];
     _page = 1;
     connection_count=@"0";
     num=@"0";

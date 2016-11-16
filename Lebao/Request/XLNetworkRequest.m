@@ -229,8 +229,7 @@
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     // 请求超时设定
     manager.requestSerializer.timeoutInterval = 10;
-    manager.securityPolicy.allowInvalidCertificates = YES;
-    
+    //manager.securityPolicy.allowInvalidCertificates = YES;//SSL certificates
     return manager;
 }
 

@@ -59,10 +59,11 @@ static dispatch_once_t once;
             
             toolManager = allocAndInit(ToolManager);
             //配置SvPProgress
-            [SVProgressHUD setDefaultStyle:SVProgressHUDStyleDark];
-            [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeClear];
-            [SVProgressHUD setDefaultAnimationType:SVProgressHUDAnimationTypeNative];
             
+            [SVProgressHUD setDefaultStyle:SVProgressHUDStyleDark];
+            [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
+            [SVProgressHUD setDefaultAnimationType:SVProgressHUDAnimationTypeFlat];
+            [SVProgressHUD setMinimumDismissTimeInterval:1.0f];
         });
     }
     
@@ -339,7 +340,7 @@ static dispatch_once_t once;
         [getAppDelegate().window.rootViewController removeFromParentViewController];
     }
     //设置App底栏
-    getAppDelegate().mainTab = allocAndInit(BaseTabBarViewController);
+    getAppDelegate().mainTab = allocAndInit(MPHomeViewController);
     
     UINavigationController * rightSideNavController = [[UINavigationController alloc] initWithRootViewController:allocAndInit(MeViewController)];
     [rightSideNavController setRestorationIdentifier:@"MMExampleRightNavigationControllerRestorationKey"];
