@@ -282,7 +282,7 @@ typedef NS_ENUM(int,SwitchActionTag) {
         _redColor = LightBlackTitleColor;
     }
     
-    _redLb = [UILabel createLabelWithFrame:frame(10, 0, APPWIDTH/2.0, cellHeight) text:@"跨界红包设置" fontSize:28*SpacedFonts textColor:_redColor textAlignment:NSTextAlignmentLeft inView:_redView];
+    _redLb = [UILabel createLabelWithFrame:frame(10, 0, APPWIDTH/2.0, cellHeight) text:@"红包转发设置" fontSize:28*SpacedFonts textColor:_redColor textAlignment:NSTextAlignmentLeft inView:_redView];
     
     if (_data.isreward) {
         
@@ -318,7 +318,7 @@ typedef NS_ENUM(int,SwitchActionTag) {
     _redTextField.backgroundColor = WhiteColor;
     _redTextField.delegate = self;
 //    _redTextField.text = _data.amount;
-    UILabel *desc = [UILabel createLabelWithFrame:frame(0 ,CGRectGetMaxY(_redTextField.frame) + 10, frameWidth(_redViewBg), 0) text:@"跨界传播内容规范:\n1.标题不带有诱导分享的字眼，如转发就给红包、转发有现金等\n2.所发内容、产品、房源不含涉黄、涉暴、涉谣等信息\n3.鼓励发布有用的内容、真实的产品，内容中可以附带个人微名片\n4.所有带跨界传播设置的内容都需要知脉后台审核，审核通过后才可以发布到知脉首页中\n5.若内容被驳回，所扣红包金额全额退回到红包账户中" fontSize:24*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:_redViewBg];
+    UILabel *desc = [UILabel createLabelWithFrame:frame(0 ,CGRectGetMaxY(_redTextField.frame) + 10, frameWidth(_redViewBg), 0) text:@"红包转发内容规范：\n1、标题不含有诱导分享的字眼，如转发就给红包、转发有现金等\n2、所发内容不含涉黄、涉暴、涉谣等信息\n3、文章内容可以为自己产品的介绍，可以显示自己的微名片\n4、红包转发的文章需通过知脉后台审核，审核通过后才能显示在“发现-红包转发”\n5、若内容被驳回，所扣红包金额会全额退回到红包账户中" fontSize:24*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:_redViewBg];
     desc.numberOfLines = 0;
     CGSize size = [desc sizeWithMultiLineContent:desc.text rowWidth:frameWidth(desc) font:Size(24)];
     desc.frame = frame(frameX(desc), frameY(desc), frameWidth(desc), size.height);

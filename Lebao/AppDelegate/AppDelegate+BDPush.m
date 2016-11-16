@@ -8,18 +8,8 @@
 
 #import "AppDelegate+BDPush.h"
 #import "BPush.h"//推送
-#import "GJGCChatFriendViewController.h" //消息聊天
-#import "MeetingVC.h"
-#import "MyKuaJieVC.h"//我的跨界
-#import "CustomerServiceViewController.h"//我的客服
-#import "NotificationDetailViewController.h"//系统
-#import "NotificationViewController.h"
-#import "DXAlertView.h"
-#import "DiscoverHomePageViewController.h"
+#import "PushManager.h"//推送管理工具类
 #import "CoreArchive.h"
-#import "XIAlertView.h"
-
-#import "BHBPlaySoundTool.h"//推送声音
 #define K_API_KEY @"tN6GvEjtvS7y58YG9ek0UlU6"
 static BOOL isBackGroundActivateApplication;
 @implementation AppDelegate (BDPush)
@@ -40,7 +30,7 @@ static BOOL isBackGroundActivateApplication;
     
     // 在 App 启动时注册百度云推送服务，需要提供 Apikey
     
-    [BPush registerChannel:launchOptions apiKey:K_API_KEY pushMode:BPushModeProduction withFirstAction:@"打开" withSecondAction:@"回复" withCategory:@"test" useBehaviorTextInput:YES isDebug:YES];
+    [BPush registerChannel:launchOptions apiKey:K_API_KEY pushMode:BPushModeDevelopment withFirstAction:@"打开" withSecondAction:@"回复" withCategory:@"test" useBehaviorTextInput:YES isDebug:YES];
     
     // 禁用地理位置推送 需要再绑定接口前调用。
     
@@ -68,7 +58,7 @@ static BOOL isBackGroundActivateApplication;
     // 应用在前台，不跳转页面，让用户选择。
     if (application.applicationState == UIApplicationStateActive) {
         
-        [self notifacionApi:userInfo isAleat:YES];
+        [[PushManager shareInstace] pushData:userInfo andApplicationState:ApplicationStateActive];
 
     }
     //杀死状态下，直接跳转到跳转页面。
@@ -77,7 +67,7 @@ static BOOL isBackGroundActivateApplication;
     {
        
       
-        [self notifacionApi:userInfo isAleat:NO];
+         [[PushManager shareInstace] pushData:userInfo andApplicationState:ApplicationStateInactive];
         
         
     }
@@ -87,7 +77,7 @@ static BOOL isBackGroundActivateApplication;
         // 此处可以选择激活应用提前下载邮件图片等内容。
         isBackGroundActivateApplication = YES;
         
-         [self notifacionApi:userInfo isAleat:NO];
+         [[PushManager shareInstace] pushData:userInfo andApplicationState:ApplicationStateBackground];
        
     }
     
@@ -103,7 +93,7 @@ static BOOL isBackGroundActivateApplication;
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-   // NSLog(@"test:%@",deviceToken);
+    NSLog(@"didRegisterForRemoteNotificationsWithDeviceToken");
     [BPush registerDeviceToken:deviceToken];
     [BPush bindChannelWithCompleteHandler:^(id result, NSError *error) {
         
@@ -112,7 +102,7 @@ static BOOL isBackGroundActivateApplication;
             
             // 获取channel_id
             NSString *myChannel_id = [BPush getChannelId];
-            
+            NSLog(@"myChannel_id====%@",myChannel_id);
             [CoreArchive setStr:myChannel_id key:DeviceToken];
             
             [BPush setTag:@"Mytag" withCompleteHandler:^(id result, NSError *error) {
@@ -136,267 +126,6 @@ static BOOL isBackGroundActivateApplication;
     [BPush showLocalNotificationAtFront:notification identifierKey:nil];
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex==1) {
-        
-    }
-}
-- (void)notifacionApi:(NSDictionary *)notifacion isAleat:(BOOL)isAleat
-{
-//    NSLog(@"notifacion =%@",notifacion);
-    //应用在前台的提示声音
-    if (isAleat) {
-         [[BHBPlaySoundTool sharedPlaySoundTool] playWithSoundName:@"open"];
-    }
-   
-    
-    UINavigationController * nav = (UINavigationController *)self.mainTab.selectedViewController;
-    
-    //取到nav控制器当前显示的控制器
-    UIViewController * baseVC = (UIViewController *)nav.visibleViewController;
-    //当前四大tab之一
-    for (UIViewController *view in nav.viewControllers) {
-//        NSLog(@"view =%@",view);
-        if ([NSStringFromClass([view class]) isEqualToString:@"DiscoverHomePageViewController"]||[NSStringFromClass([view class]) isEqualToString:@"DynamicVC"]||[NSStringFromClass([view class]) isEqualToString:@"NotificationViewController"]||[NSStringFromClass([view class]) isEqualToString:@"MeetingVC"]) {
-            BaseViewController *baseView = (BaseViewController *)view;
-            [baseView pushMessage];
-        }
-    }
 
-    //刷新界面
-    if ([baseVC isKindOfClass:[NotificationViewController class]] ) {
-        
-        NotificationViewController *noti = (NotificationViewController *)baseVC;
-        noti.isRefresh = YES;
-        
-    }
-    //返回刷新
-    for (UIViewController *subVC in nav.viewControllers) {
-        if ([subVC isKindOfClass:[NotificationViewController class]]) {
-            NotificationViewController *noti = (NotificationViewController *)subVC;
-            noti.isRefresh = YES;
-        }
-        
-    }
-    
-    if ([notifacion[@"api"][@"goto"] isEqualToString:@"msg"]) {
-       
-        //如果是当前控制器是我的消息控制器的话，刷新数据即可
-        if([baseVC isKindOfClass:[GJGCChatFriendViewController class]])
-        {
-            GJGCChatFriendViewController *comm =(GJGCChatFriendViewController*)baseVC;
-            if ([notifacion[@"api"][@"bid"] intValue]==[comm.taklInfo.toId intValue]) {
-                
-                [comm reciverNotiWithData:notifacion[@"api"][@"chat"]];
-            }
-            else
-            {
-                if (isAleat) {
-            
-                 }
-                else
-                {
-                   
-                    GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
-                    talk.talkType = GJGCChatFriendTalkTypePrivate;
-                    talk.toId = notifacion[@"api"][@"bid"];
-                    talk.toUserName = notifacion[@"api"][@"chat"][@"realname"];
-                    
-                    GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
-                    privateChat.type = MessageTypeNormlPage;
-                    [comm.navigationController pushViewController:privateChat animated:YES];
-
-                }
-
-            }
-            return;
-        }
-        // 否则，跳转到我的消息
-        if (isAleat) {
-        }
-        else
-        {
-            [[ToolManager shareInstance].drawerController closeDrawerAnimated:YES completion:^(BOOL finished) {
-                GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
-                talk.talkType = GJGCChatFriendTalkTypePrivate;
-                talk.toId = notifacion[@"api"][@"bid"];
-                talk.toUserName = notifacion[@"api"][@"chat"][@"realname"];
-                
-                GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
-                privateChat.type = MessageTypeNormlPage;
-                [nav pushViewController:privateChat animated:YES];
-            }];
-        }
-        
-       
-    }
-    else if ([notifacion[@"api"][@"goto"] isEqualToString:@"demand"]||[notifacion[@"api"][@"goto"] isEqualToString:@"coop"])
-    {
-        
-        //如果是当前控制器是我的消息控制器的话，刷新数据即可
-        if([baseVC isKindOfClass:[MyKuaJieVC class]])
-        {
-            MyKuaJieVC * myKuaJieVC = (MyKuaJieVC *)baseVC;
-            if ([notifacion[@"api"][@"goto"] isEqualToString:@"demand"]) {
-                myKuaJieVC.isLinquVC = NO;
-            }
-            else
-            {
-                myKuaJieVC.isLinquVC = YES;
-            }
-            
-        }
-        else
-        {
-            if (isAleat) {
-                DXAlertView *alert = [[DXAlertView alloc] initWithTitle:@"收到一条消息" contentText:notifacion[@"aps"][@"alert"] leftButtonTitle:@"取消" rightButtonTitle:@"确定"];
-                alert.rightBlock = ^
-                {
-                    [[ToolManager shareInstance].drawerController closeDrawerAnimated:YES completion:^(BOOL finished) {
-                        MyKuaJieVC * myKuaJieVC = allocAndInit(MyKuaJieVC);
-                        if ([notifacion[@"api"][@"goto"] isEqualToString:@"demand"]) {
-                            myKuaJieVC.isLinquVC = NO;
-                        }
-                        else
-                        {
-                            myKuaJieVC.isLinquVC = YES;
-                        }
-                        
-                        [nav pushViewController:myKuaJieVC animated:YES];
-                    }];
-                };
-                [alert show];
-            }
-            else
-            {
-
-            
-            MyKuaJieVC * myKuaJieVC = allocAndInit(MyKuaJieVC);
-            if ([notifacion[@"api"][@"goto"] isEqualToString:@"demand"]) {
-                myKuaJieVC.isLinquVC = NO;
-            }
-            else
-            {
-                myKuaJieVC.isLinquVC = YES;
-            }
-
-            [nav pushViewController:myKuaJieVC animated:YES];
-            }
-        }
-        
-    }
-    else if ([notifacion[@"api"][@"goto"] isEqualToString:@"corps"]||[notifacion[@"api"][@"goto"] isEqualToString:@"system"])
-    {
-        //如果是当前控制器是我的消息控制器的话，刷新数据即可
-        if([baseVC isKindOfClass:[NotificationDetailViewController class]])
-        {
-             NotificationDetailViewController* notificationDetailViewController = (NotificationDetailViewController *)baseVC;
-            if ([notifacion[@"api"][@"goto"] isEqualToString:@"corps"]) {
-                notificationDetailViewController.isSystempagetype = NO;
-            }
-            else
-            {
-                notificationDetailViewController.isSystempagetype = YES;
-            }
-            
-        }
-        else
-        {
-            if (isAleat) {
-                DXAlertView *alert = [[DXAlertView alloc] initWithTitle:@"收到一条消息" contentText:notifacion[@"aps"][@"alert"] leftButtonTitle:@"取消" rightButtonTitle:@"确定"];
-                alert.rightBlock = ^
-                {
-                    [[ToolManager shareInstance].drawerController closeDrawerAnimated:YES completion:^(BOOL finished) {
-                         NotificationDetailViewController* notificationDetailViewController = allocAndInit(NotificationDetailViewController);
-                        if ([notifacion[@"api"][@"goto"] isEqualToString:@"corps"]) {
-                            notificationDetailViewController.isSystempagetype = NO;
-                        }
-                        else
-                        {
-                            notificationDetailViewController.isSystempagetype = YES;
-                        }
-                        
-                        [nav pushViewController:notificationDetailViewController animated:YES];
-                    }];
-                };
-                [alert show];
-            }
-            else
-            {
-            
-                NotificationDetailViewController* notificationDetailViewController = allocAndInit(NotificationDetailViewController);
-                
-                if ([notifacion[@"api"][@"goto"] isEqualToString:@"corps"]) {
-                    notificationDetailViewController.isSystempagetype = NO;
-                }
-                else
-                {
-                    notificationDetailViewController.isSystempagetype = YES;
-                }
-                
-                [nav pushViewController:notificationDetailViewController animated:YES];
-            }
-        }
- 
-        
-    }
-    else if ([notifacion[@"api"][@"goto"] isEqualToString:@"custom"])
-    {
-        //如果是当前控制器是我的消息控制器的话，刷新数据即可
-        if([baseVC isKindOfClass:[CustomerServiceViewController class]])
-        {
-             CustomerServiceViewController* customerServiceViewController = (CustomerServiceViewController *)baseVC;
-            customerServiceViewController.isRefresh = YES;
-        }
-        else
-        {
-            if (isAleat) {
-                DXAlertView *alert = [[DXAlertView alloc] initWithTitle:@"收到一条消息" contentText:notifacion[@"aps"][@"alert"] leftButtonTitle:@"取消" rightButtonTitle:@"确定"];
-                alert.rightBlock = ^
-                {
-                    [[ToolManager shareInstance].drawerController closeDrawerAnimated:YES completion:^(BOOL finished) {
-                        CustomerServiceViewController* customerServiceViewController = allocAndInit(CustomerServiceViewController);
-                    
-                        [nav pushViewController:customerServiceViewController animated:YES];
-                    }];
-                };
-                [alert show];
-            }
-            else
-            {
-                
-                CustomerServiceViewController* customerServiceViewController = allocAndInit(CustomerServiceViewController);
-        
-                [nav pushViewController:customerServiceViewController animated:YES];
-            }
-        }
-
-        
-    }
-    else if ([notifacion[@"api"][@"goto"] isEqualToString:@"meet"])
-    {
-        
-        [[XIAlertView alloc]jueJianSucceedView:nav data:notifacion];
-    }
-    else
-    {
-        //如果是当前控制器是我的消息控制器的话，刷新数据即可
-        if([baseVC isKindOfClass:[MeetingVC class]])
-        {
-           
-            
-        }
-        else
-        {
-             [[ToolManager shareInstance] LoginmianView];
-        }
-        
-        
-    }
-   
-  
-    
-}
 
 @end

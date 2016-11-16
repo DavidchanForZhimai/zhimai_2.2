@@ -18,7 +18,7 @@
 #import "CooperateView.h"
 #import "XLDataService.h"
 #define DynamicWriteURL [NSString stringWithFormat:@"%@dynamic/write",HttpURL]
-//红包文章/跨界传播 分享成功接口
+//红包文章/红包转发 分享成功接口
 //URL:appinterface/wxsuccess
 #define Wxsuccess [NSString stringWithFormat:@"%@share/success",HttpURL]
 @interface WetChatShareManager()<WXApiManagerDelegate>

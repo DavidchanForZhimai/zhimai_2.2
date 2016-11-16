@@ -67,7 +67,7 @@
         _userTitleView.backgroundColor = hexColor(eeeeee);
         _userTitleView.hidden = YES;
         [self addSubview:_userTitleView];
-        _userTitle = [DWLable createLabelWithFrame:CGRectMake(5, 5, _userTitleView.width - 10, _userTitleView.height - 10) text:@"" fontSize:11 textColor:hexColor(bcbcbc) textAlignment:NSTextAlignmentLeft inView:_userTitleView];
+        _userTitle = [DWLable createLabelWithFrame:CGRectMake(5, 5, _userTitleView.width - 10, _userTitleView.height - 10) text:@"" fontSize:11 textColor:hexColor(bcbcbc) textAlignment:NSTextAlignmentCenter inView:_userTitleView];
         _userTitle.numberOfLines = 0;
 
         [UILabel CreateLineFrame:CGRectMake(0, cellHeight -0.5, APPWIDTH, 0.5) inView:self];
@@ -93,6 +93,7 @@
         _userContent.text = data.content;
         
     }
+    
     if (data.title_img.length>0) {
         
         _userTitleView.hidden = YES;
@@ -174,6 +175,8 @@
         [[ToolManager shareInstance] showWithStatus];
     }
     [XLDataService postWithUrl:DynamicMessageURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+        
+        NSLog(@"dataObj =%@",dataObj);
         if (isRefresh) {
             [[ToolManager shareInstance] endHeaderWithRefreshing:_dyMessageView];
             
@@ -270,6 +273,7 @@
      DyMessageData *data =  _dyMessageArray[indexPath.row];
      DynamicDetailsViewController *detail = [[DynamicDetailsViewController alloc]init];
      detail.dynamicdID = data.dynamicid;
+    NSLog(@"data.image = %@",data.title_img);
      PushView(self, detail);
 }
 #pragma mark

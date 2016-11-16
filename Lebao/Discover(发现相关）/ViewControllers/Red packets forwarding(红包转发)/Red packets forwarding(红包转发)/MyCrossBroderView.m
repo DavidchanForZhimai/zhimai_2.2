@@ -307,11 +307,11 @@
         _redPaper.shouldAnmial = NO;
 
         
-        UIImage *_communicationImgs =[UIImage imageNamed:@"across_home_communication"];
-        CGSize size  =[[NSString stringWithFormat:@"(1234)"] sizeWithFont:Size(20) maxSize:CGSizeMake(0, _communicationImgs.size.height)];
-        
-        _communicationsBtn = [[BaseButton alloc]initWithFrame:frame(cellWidth - 25- size.width - _communicationImgs.size.width, frameY(_redPaper), 15 +size.width + _communicationImgs.size.width , _communicationImgs.size.height) setTitle:@"(20)" titleSize:20*SpacedFonts titleColor:LightBlackTitleColor backgroundImage:nil iconImage:_communicationImgs highlightImage:nil setTitleOrgin:CGPointMake(0, 17) setImageOrgin:CGPointMake(0, 10 ) inView:cell ];
-        _communicationsBtn.exclusiveTouch = YES;
+//        UIImage *_communicationImgs =[UIImage imageNamed:@"across_home_communication"];
+//        CGSize size  =[[NSString stringWithFormat:@"(1234)"] sizeWithFont:Size(20) maxSize:CGSizeMake(0, _communicationImgs.size.height)];
+//        
+//        _communicationsBtn = [[BaseButton alloc]initWithFrame:frame(cellWidth - 25- size.width - _communicationImgs.size.width, frameY(_redPaper), 15 +size.width + _communicationImgs.size.width , _communicationImgs.size.height) setTitle:@"(20)" titleSize:20*SpacedFonts titleColor:LightBlackTitleColor backgroundImage:nil iconImage:_communicationImgs highlightImage:nil setTitleOrgin:CGPointMake(0, 17) setImageOrgin:CGPointMake(0, 10 ) inView:cell ];
+//        _communicationsBtn.exclusiveTouch = YES;
 
         
         [UILabel CreateLineFrame:frame(0, frameHeight(cell) - 40, frameWidth(cell), 0.5) inView:cell];
@@ -377,11 +377,11 @@
         _redPaper.shouldAnmial = NO;
         
         
-        UIImage *_communicationImgs =[UIImage imageNamed:@"across_home_communication"];
-        CGSize size  =[[NSString stringWithFormat:@"(1234)"] sizeWithFont:Size(20) maxSize:CGSizeMake(0, _communicationImgs.size.height)];
-        
-        _communicationsBtn = [[BaseButton alloc]initWithFrame:frame(cellWidth - 25- size.width - _communicationImgs.size.width, frameY(_redPaper), 15 +size.width + _communicationImgs.size.width , _communicationImgs.size.height) setTitle:@"(20)" titleSize:20*SpacedFonts titleColor:LightBlackTitleColor backgroundImage:nil iconImage:_communicationImgs highlightImage:nil setTitleOrgin:CGPointMake(0, 17) setImageOrgin:CGPointMake(0, 10 ) inView:cell ];
-        _communicationsBtn.exclusiveTouch = YES;
+//        UIImage *_communicationImgs =[UIImage imageNamed:@"across_home_communication"];
+//        CGSize size  =[[NSString stringWithFormat:@"(1234)"] sizeWithFont:Size(20) maxSize:CGSizeMake(0, _communicationImgs.size.height)];
+//        
+//        _communicationsBtn = [[BaseButton alloc]initWithFrame:frame(cellWidth - 25- size.width - _communicationImgs.size.width, frameY(_redPaper), 15 +size.width + _communicationImgs.size.width , _communicationImgs.size.height) setTitle:@"(20)" titleSize:20*SpacedFonts titleColor:LightBlackTitleColor backgroundImage:nil iconImage:_communicationImgs highlightImage:nil setTitleOrgin:CGPointMake(0, 17) setImageOrgin:CGPointMake(0, 10 ) inView:cell ];
+//        _communicationsBtn.exclusiveTouch = YES;
         
         
         [UILabel CreateLineFrame:frame(0, frameHeight(cell) - 40, frameWidth(cell), 0.5) inView:cell];

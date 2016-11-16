@@ -11,7 +11,7 @@
 #define tabsTotal  2
 #define tabsHeight  40.0
 #import "NSString+Extend.h"
-#import "CrossBorderTransmissionViewController.h"//跨界传播详情
+#import "CrossBorderTransmissionViewController.h"//红包转发详情
 #import "MyProductDetailViewController.h"
 #import "WetChatShareManager.h"
 #import "GJGCChatFriendViewController.h"

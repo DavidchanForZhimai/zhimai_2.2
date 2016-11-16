@@ -222,7 +222,7 @@ typedef enum {
           [sendcaptchaParam setObject:_userNametext.text forKey:KuserName];
           [sendcaptchaParam setObject:[_passWordtext.text md5]   forKey:passWord];
           [sendcaptchaParam setObject:@"2" forKey:@"type"];
-//          NSLog(@"sendcaptchaParam =%@",sendcaptchaParam);
+          NSLog(@"sendcaptchaParam =%@",sendcaptchaParam);
           [XLDataService postWithUrl:LoginURL param:sendcaptchaParam modelClass:nil responseBlock:^(id dataObj, NSError *error) {
               if (error) {
                   
