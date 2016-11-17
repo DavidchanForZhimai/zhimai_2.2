@@ -63,6 +63,27 @@
 
 @implementation DynamicVC
 
+#pragma mark
+#pragma mark - 推送
+- (void)pushModel:(PushDataChat *)pushData
+{
+    if (!messages) {
+         messages = [[Message alloc]init];
+    }
+    messages.count = messages.count + 1;
+    messages.imgurl = pushData.imgurl;
+    _dtTab.tableHeaderView = [self addJJRTopV];
+    if ([pushData.type isEqualToString:@"like"]) {
+        
+        
+    }
+    else
+    {
+        
+    }
+    
+    
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -318,7 +339,6 @@
     NSString *messsageText = @"1条新信息";
     
     float ViewH = 55;
-    NSLog(@"messages.count =%d",messages.count);
     if (!messages.count) {
         [_messageView removeFromSuperview];
         _messageView =nil;

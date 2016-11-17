@@ -37,6 +37,22 @@
 //新增api
 @property(nonatomic,strong) PushDataChatPush *push;
 
+//动态
+@property(nonatomic,copy) NSString *type;
+@property(nonatomic,copy) NSString *sex;
+@property(nonatomic,copy) NSString *imgurl;
+
+@property(nonatomic,copy) NSString *userid;
+@property(nonatomic,copy) NSString *content;
+//动态
+@property(nonatomic,copy) NSString *ID;
+@property(nonatomic,copy) NSString *dynamicid;
+@property(nonatomic,copy) NSString *createtime;
+@property(nonatomic,copy) NSString *title;
+@property(nonatomic,copy) NSString *title_img;
+//动态点赞
+
+//动态评论
 @end
 
 @interface PushDataChatPush : NSObject
@@ -79,16 +95,6 @@
 //人脉拒绝
 
 
-//动态
-@property(nonatomic,copy) NSString *ID;
-@property(nonatomic,copy) NSString *dynamicid;
-@property(nonatomic,copy) NSString *createtime;
-@property(nonatomic,copy) NSString *title;
-@property(nonatomic,copy) NSString *title_img;
-//动态点赞
-
-//动态评论
-
 //认证
 @property(nonatomic,copy) NSString *tel;
 @property(nonatomic,copy) NSString *cardpic;
@@ -117,7 +123,7 @@ typedef void(^MsgCountSucceed)(int dynamicCount,int msgcount);
 /**
  推送管理类
  */
-@interface PushManager : NSObject
+@interface PushManager : NSObject<UIAlertViewDelegate>
 
 //单例模式
 + (PushManager *)shareInstace;

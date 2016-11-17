@@ -59,7 +59,12 @@
     NSString *url;
     
 }
-
+#pragma mark
+#pragma mark -推送
+- (void)pushModel:(PushDataChat *)pushData
+{
+    [self netWork];
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
