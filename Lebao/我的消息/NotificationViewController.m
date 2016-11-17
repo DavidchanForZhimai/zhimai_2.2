@@ -18,6 +18,7 @@
 #import "MyConnectionsVC.h"
 #import "ConnectionsRequestVC.h"
 #import "HeadLineVC.h"
+#import "AppDelegate.h"
 #define cellH  40
 #define MessageURL [NSString stringWithFormat:@"%@message/index",HttpURL]
 #define CloseMessageURL [NSString stringWithFormat:@"%@message/close-dialog",HttpURL]
@@ -298,6 +299,17 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
+    //设置消息未读数(动态消息未读数)
+    [[PushManager shareInstace] getMsgCountSucceed:^(int dynamicCount, int msgcount) {
+        
+        [getAppDelegate().mainTab.tabBar.items objectAtIndex:1].badgeValue = [NSString stringWithFormat:@"%i",dynamicCount];
+        [getAppDelegate().mainTab.tabBar.items objectAtIndex:2].badgeValue = [NSString stringWithFormat:@"%i",msgcount];
+        //应用图标数目
+        [UIApplication sharedApplication].applicationIconBadgeNumber = dynamicCount + msgcount;
+        
+    }];
+
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section==0&&indexPath.row==0) {
         NotificationDetailViewController *detail = allocAndInit(NotificationDetailViewController);

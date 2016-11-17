@@ -181,30 +181,30 @@ static void* __backgroundViewKey = &__backgroundViewKey;
     }
     return self;
 }
-- (void)jueJianSucceedView:(UINavigationController *)vc data:(NSDictionary *)data
+- (void)jueJianSucceedView:(UIViewController *)vc data:(PushDataModel *)model
 {
-    NSLog(@"data =%@",data);
+
     UIView *view  =[[UIView alloc]initWithFrame:frame(0, 0, APPWIDTH - 80 , 220)];
     view.backgroundColor = WhiteColor;
    
     UIImageView *leftImage = [[UIImageView alloc]initWithFrame:CGRectMake(view.width/10, 10, view.width/5, view.width/5)];
-    [[ToolManager shareInstance ] imageView:leftImage setImageWithURL:data[@"api"][@"chat"][@"invited_imgurl"] placeholderType:PlaceholderTypeUserHead];
+    [[ToolManager shareInstance ] imageView:leftImage setImageWithURL:model.api.chat.invited_imgurl  placeholderType:PlaceholderTypeUserHead];
    
     [leftImage setRound];
     [view addSubview:leftImage];
     
-    [UILabel createLabelWithFrame:CGRectMake(0, CGRectGetMaxY(leftImage.frame) + 3, 2*view.width/5, 12) text:data[@"api"][@"chat"][@"invited_realname"] fontSize:12.0 textColor:BlackTitleColor textAlignment:NSTextAlignmentCenter inView:view];
+    [UILabel createLabelWithFrame:CGRectMake(0, CGRectGetMaxY(leftImage.frame) + 3, 2*view.width/5, 12) text:model.api.chat.invited_realname fontSize:12.0 textColor:BlackTitleColor textAlignment:NSTextAlignmentCenter inView:view];
     
     UIImageView *centerImage = [[UIImageView alloc]initWithFrame:CGRectMake(2*view.width/5, 20, view.width/5, view.width/5)];
     centerImage.image = [UIImage imageNamed:@"hezuochenggong"];
     [view addSubview:centerImage];
     
     UIImageView *rightImage = [[UIImageView alloc]initWithFrame:CGRectMake(7*view.width/10, 10, view.width/5, view.width/5)];
-   [[ToolManager shareInstance ] imageView:rightImage setImageWithURL:data[@"api"][@"chat"][@"beinvited_imgurl"] placeholderType:PlaceholderTypeUserHead];
+   [[ToolManager shareInstance ] imageView:rightImage setImageWithURL:model.api.chat.beinvited_imgurl placeholderType:PlaceholderTypeUserHead];
     [rightImage setRound];
     [view addSubview:rightImage];
     
-    [UILabel createLabelWithFrame:CGRectMake(3*view.width/5, CGRectGetMaxY(leftImage.frame) + 3, 2*view.width/5, 12) text:data[@"api"][@"chat"][@"beinvited_realname"] fontSize:12.0 textColor:BlackTitleColor textAlignment:NSTextAlignmentCenter inView:view];
+    [UILabel createLabelWithFrame:CGRectMake(3*view.width/5, CGRectGetMaxY(leftImage.frame) + 3, 2*view.width/5, 12) text:model.api.chat.beinvited_realname fontSize:12.0 textColor:BlackTitleColor textAlignment:NSTextAlignmentCenter inView:view];
     
     [UILabel createLabelWithFrame:CGRectMake(0, CGRectGetMaxY(leftImage.frame) + 28, view.width, 15) text:@"恭喜您，约见成功！" fontSize:15.0 textColor:BlackTitleColor textAlignment:NSTextAlignmentCenter inView:view];
     
@@ -217,12 +217,12 @@ static void* __backgroundViewKey = &__backgroundViewKey;
         GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
         talk.talkType = GJGCChatFriendTalkTypePrivate;
   
-        talk.toId =[NSString stringWithFormat:@"%@", data[@"api"][@"chat"][@"beinvited_id"]];
-        talk.toUserName = data[@"api"][@"chat"][@"beinvited_realname"];
+        talk.toId =[NSString stringWithFormat:@"%@", model.api.chat.beinvited_id];
+        talk.toUserName = model.api.chat.beinvited_realname;
         
         GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
         privateChat.type = MessageTypeNormlPage;
-        [vc pushViewController:privateChat animated:YES];
+        [vc.navigationController pushViewController:privateChat animated:YES];
         
     };
     BaseButton *dianhua = [[BaseButton alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(duihua.frame), view.width, 40) setTitle:@"电话联系" titleSize:14 titleColor:AppMainColor textAlignment:NSTextAlignmentCenter backgroundColor:WhiteColor inView:view];
@@ -231,7 +231,7 @@ static void* __backgroundViewKey = &__backgroundViewKey;
     dianhua.didClickBtnBlock = ^
     {
         [alert dismiss];
-        NSString *str=[NSString stringWithFormat:@"tel://%@",data[@"api"][@"chat"][@"beinivted_tel"]];
+        NSString *str=[NSString stringWithFormat:@"tel://%@",model.api.chat.beinivted_tel];
         
         NSURL *url=[NSURL URLWithString:str];
         [[UIApplication sharedApplication]openURL:url];

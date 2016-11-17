@@ -36,7 +36,7 @@ typedef NS_ENUM(NSInteger, XICustomViewPresentationStyle) {
     MoveUp,
     MoveDown
 };
-
+#import "PushManager.h"
 @class XIAlertButtonItem;
 @interface XIAlertView : UIView
 @property(nonatomic, strong) UIColor *titleColor UI_APPEARANCE_SELECTOR;
@@ -46,7 +46,7 @@ typedef NS_ENUM(NSInteger, XICustomViewPresentationStyle) {
 
 - (instancetype)initWithTitle:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle;
 
-- (void)jueJianSucceedView:(UINavigationController *)vc data:(NSDictionary *)data;
+- (void)jueJianSucceedView:(UIViewController *)vc data:(PushDataModel *)model;
 
 - (instancetype)initWithCustomView:(UIView *)customView;
 - (instancetype)initWithCustomView:(UIView *)customView withPresentationStyle:(XICustomViewPresentationStyle)style;

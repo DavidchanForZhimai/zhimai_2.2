@@ -12,6 +12,8 @@
 #import "BaseButton.h"
 #import "UIButton+Extend.h"
 #import "UILabel+Extend.h"
+
+#import "PushManager.h"//推送工具类
 typedef enum {
     
     NavViewButtonActionNavLeftBtnTag = 0,
@@ -34,4 +36,7 @@ typedef enum {
 - (void)navViewTitle:(NSString *)title leftBtn:(UIButton *)navLeftBtn rightBtn:(UIButton *)navRightBtn;
 
 - (void)isShowEmptyStatus:(BOOL)isShowEmptyStatus;
+
+//推送(子类重写)
+- (void)pushModel:(PushDataChat *)pushData;
 @end

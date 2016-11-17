@@ -131,7 +131,7 @@ typedef enum{
     }
     [self.param setObject:zhifuType forKey:@"paytype"];
     if (_whatZfType==meetType) {
-        MeetingVC *iWantMeetVC =  allocAndInit(MeetingVC);
+        
         if (_audioData) {
             [[MP3PlayerManager shareInstance] uploadAudioWithType:@"mp3" audioData:_audioData  finishuploadBlock:^(BOOL succeed,id  audioDic)
              {
@@ -148,7 +148,7 @@ typedef enum{
                                      [[NSNotificationCenter defaultCenter]postNotificationName:@"KRefreshMeetingViewNotifation" object:@{@"userid":self.param[@"userid"],@"operation":@"meet"}];
                                      UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:nil message:@"请求已发出,请耐心等待对方答复" delegate:self cancelButtonTitle:@"确认" otherButtonTitles: nil];
                                      
-                                     PushView(self, iWantMeetVC);
+                                     [self.navigationController popToRootViewControllerAnimated:YES];
                                      
                                      [successAlertV show];
                                  }];
@@ -157,7 +157,8 @@ typedef enum{
                              }
                              [[NSNotificationCenter defaultCenter]postNotificationName:@"KRefreshMeetingViewNotifation" object:@{@"userid":self.param[@"userid"],@"operation":@"meet"}];
                              UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:nil message:@"请求已发出,请耐心等待对方答复" delegate:self cancelButtonTitle:@"确认" otherButtonTitles: nil];
-                             PushView(self, iWantMeetVC);
+                            
+                             [self.navigationController popToRootViewControllerAnimated:YES];
                              [successAlertV show];
                              
                          }
@@ -194,8 +195,7 @@ typedef enum{
                                 UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:nil message:@"请求已发出,请耐心等待对方答复" delegate:self cancelButtonTitle:@"确认" otherButtonTitles: nil];
                                 [[NSNotificationCenter defaultCenter]postNotificationName:@"KRefreshMeetingViewNotifation" object:@{@"userid":self.param[@"userid"],@"operation":@"meet"}];
                                 
-                                PushView(self, iWantMeetVC);
-                                [successAlertV show];
+                                [self.navigationController popToRootViewControllerAnimated:YES];                               [successAlertV show];
                             }];
                             return ;
                             
@@ -203,7 +203,7 @@ typedef enum{
                         
                         [[NSNotificationCenter defaultCenter]postNotificationName:@"KRefreshMeetingViewNotifation" object:@{@"userid":self.param[@"userid"],@"operation":@"meet"}];
                         UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:nil message:@"请求已发出,请耐心等待对方答复" delegate:self cancelButtonTitle:@"确认" otherButtonTitles: nil];
-                        PushView(self, iWantMeetVC);
+                        [self.navigationController popToRootViewControllerAnimated:YES];
                         [successAlertV show];
                         
                     }

@@ -1558,7 +1558,7 @@ GJCUCaptureViewControllerDelegate>
 
 - (void)reciverNotiWithData:(NSDictionary *)dic
 {
-    NSLog(@"dic ==%@",dic);
+    
     CommunityDataModal *data =[CommunityDataModal mj_objectWithKeyValues:dic];
    
     GJGCChatFriendContentModel *chatContentModel = [[GJGCChatFriendContentModel alloc]init];

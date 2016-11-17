@@ -99,6 +99,12 @@
     
     
 }
+#pragma mark
+#pragma mark推送(子类重写)
+- (void)pushModel:(PushDataChat *)pushData
+{
+    
+}
 /*
 #pragma mark - Navigation
 
