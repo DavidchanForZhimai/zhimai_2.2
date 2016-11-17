@@ -35,22 +35,16 @@
         
         
         
-        NSString *authen;
+        NSString *authen = @"";
         if ([model.authen isEqualToString:@"3"]) {
             authen = @"[iconprofilerenzhen]";
         }
-        else
-        {
-            authen = @"";
-        }
-        NSString *vip;
+        
+        NSString *vip=@"";
         if ([model.vip isEqualToString:@"1"]) {
             vip = @"[iconprofilevip]";
         }
-        else
-        {
-            vip = @"";
-        }
+        
         //名字模型 nameTextStorage
         LWTextStorage* nameTextStorage = [[LWTextStorage alloc] init];
         nameTextStorage.text = [NSString stringWithFormat:@"%@ %@ %@",model.realname,authen,vip];
@@ -64,9 +58,14 @@
         
         //职业
         LWTextStorage* industryTextStorage = [[LWTextStorage alloc] init];
-        
+        industryTextStorage.text=@"";
         if (model.position.length>0) {
-            if (model.position.length>10) {
+            if (model.position.length>5&&APPWIDTH<375) {
+                industryTextStorage.text=[model.position substringToIndex:5];
+                industryTextStorage.text=[industryTextStorage.text stringByAppendingString:@"...  "];
+                
+            }
+            else if (model.position.length>10) {
                 industryTextStorage.text=[model.position substringToIndex:10];
                 industryTextStorage.text=[industryTextStorage.text stringByAppendingString:@"...  "];
             }else{
@@ -74,9 +73,7 @@
             }
             
         }
-        else{
-            industryTextStorage.text=@"";
-        }
+
         if (model.workyears.length>0&&![model.workyears isEqualToString:@"0"]) {
             industryTextStorage.text=[NSString stringWithFormat:@"%@从业%@年",industryTextStorage.text,model.workyears];
         }

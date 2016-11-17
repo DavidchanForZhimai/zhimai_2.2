@@ -65,10 +65,16 @@
         LWTextStorage* industryTextStorage = [[LWTextStorage alloc] init];
         
         if (model.position.length>0) {
-            if (model.position.length>10) {
+            if (model.position.length>5&&APPWIDTH<375) {
+                industryTextStorage.text=[model.position substringToIndex:5];
+                industryTextStorage.text=[industryTextStorage.text stringByAppendingString:@"...  "];
+                
+            }
+            else if (model.position.length>10) {
                 industryTextStorage.text=[model.position substringToIndex:10];
                 industryTextStorage.text=[industryTextStorage.text stringByAppendingString:@"...  "];
-            }else{
+            }
+            else{
                 industryTextStorage.text =[NSString stringWithFormat:@"%@  ",model.position];
             }
         }
@@ -97,7 +103,8 @@
         addressStorage.font = Size(24.0);
         
         addressStorage.frame = CGRectMake(industryTextStorage.left, industryTextStorage.bottom + 8, industryTextStorage.width, CGFLOAT_MAX);
-        if ((![model.service isEqualToString:@""]&&model.service)||(![model.resource isEqualToString:@""]&&model.resource)) {
+        
+        if ((model.service.length==0)||(model.resource.length==0)) {
             if (addressStorage.text.length>0) {
                 _line1Rect  = CGRectMake(0, addressStorage.bottom + 10, APPWIDTH, 0.5);
             }else if (industryTextStorage.text.length>0){
@@ -106,11 +113,15 @@
             }else {
                 _line1Rect  = CGRectMake(0, _avatarStorage.bottom + 10, APPWIDTH, 0.5);
             }
+        }else{
+            _line1Rect  = CGRectMake(0, addressStorage.bottom + 10, APPWIDTH, 0.5);
         }
+        
         if(meetBtn){
             //约见按钮
             _meetBtnRect = CGRectMake(APPWIDTH-70, 20, 60, 30);
         }
+        
         if (messageBtn) {
             _messageBtnRect = CGRectMake(APPWIDTH-70, 20, 60, 30);
         }
@@ -126,141 +137,19 @@
             _agreeBtnRect=CGRectMake(APPWIDTH-60, 20, 50, 30);
         }
         
-        LWTextStorage *productTextStorage=[[LWTextStorage alloc]init];
-        float productLbStorageheight;
-        if (![model.service isEqualToString:@""]&&model.service) {
-            productTextStorage.text=@"产品服务";
-            productTextStorage.font=Size(26.0);
-            productTextStorage.frame=CGRectMake(_avatarStorage.left, _line1Rect.origin.y+10, [productTextStorage.text sizeWithFont:[UIFont systemFontOfSize:13] maxSize:CGSizeMake(APPWIDTH,13)].width+5, CGFLOAT_MAX);
-            productLbStorageheight = productTextStorage.bottom;
-            productTextStorage.textColor = [UIColor colorWithWhite:0.400 alpha:1.000];
-            
-            
-            
-            NSArray *productArr=[model.service componentsSeparatedByString:@"/"];
-            NSMutableString *productStr = allocAndInit(NSMutableString);
-            CGFloat height1=0;
-            CGFloat wid1=0;
-            for (int i=0; i<productArr.count; i++) {
-                if([productArr[i] length]==0){//去空格
-                    continue;
-                }else{
-                    NSString *trimedString = [productArr[i] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-                    if([trimedString length]==0){
-                        continue;
-                    }
-                }  //去空格
-                UIImage *img=[UIImage imageNamed:@"[biaoqian]"];
-                NSString *text = [NSString stringWithFormat:@"  %@   ",productArr[i]];
-                CGSize expectSize=[text sizeWithFont:Size(24) maxSize:CGSizeMake(1000,900)];
-                wid1 += (img.size.width + expectSize.width);
-                if (wid1>(SCREEN_WIDTH - (productTextStorage.right) - 10)||i==productArr.count-1) {//如果长度过长,换行
-                    if (i==productArr.count-1&&wid1<=(SCREEN_WIDTH - (productTextStorage.right) - 10)) {
-                        [productStr appendFormat:@"[biaoqian]  %@   ",productArr[i]];
-                    }
-                    LWTextStorage* productLbStorage = [[LWTextStorage alloc] init];
-                    productLbStorage.font = Size(24.0);
-                    productLbStorage.textColor = [UIColor colorWithWhite:0.400 alpha:1.000];
-                    productLbStorage.text = productStr;
-                    productLbStorage.frame = CGRectMake(productTextStorage.right + 10, productTextStorage.top+height1, SCREEN_WIDTH - (productTextStorage.right) - 20, CGFLOAT_MAX);
-                    [LWTextParser parseEmojiWithTextStorage:productLbStorage];
-                    [self addStorage:productLbStorage];
-                    productLbStorageheight = productLbStorage.bottom;
-                    height1+=(10+productTextStorage.height);
-                    productStr=allocAndInit(NSMutableString);
-                    
-                    if (i==productArr.count-1&&wid1>(SCREEN_WIDTH - (productTextStorage.right) - 10)) {
-                        LWTextStorage* productLbStorage = [[LWTextStorage alloc] init];
-                        productLbStorage.font = Size(24.0);
-                        productLbStorage.textColor = [UIColor colorWithWhite:0.400 alpha:1.000];
-                        productLbStorage.text = [NSString stringWithFormat:@"[biaoqian]  %@   ",productArr[i]];
-                        productLbStorage.frame = CGRectMake(productTextStorage.right + 10, productTextStorage.top+height1, SCREEN_WIDTH - (productTextStorage.right) - 20, CGFLOAT_MAX);
-                        [LWTextParser parseEmojiWithTextStorage:productLbStorage];
-                        [self addStorage:productLbStorage];
-                        productLbStorageheight = productLbStorage.bottom;
-                        
-                        
-                    }
-                    wid1 =(img.size.width + expectSize.width+10);
-                }
-                [productStr appendFormat:@"[biaoqian]  %@   ",productArr[i]];
-            }
-            [self addStorage:productTextStorage];
-        }else{
-            productTextStorage.frame=CGRectMake(_avatarStorage.left, _line1Rect.origin.y, [productTextStorage.text sizeWithFont:[UIFont systemFontOfSize:13] maxSize:CGSizeMake(APPWIDTH,13)].width+5, 0);
-            productLbStorageheight = productTextStorage.bottom;
-        }
+
         
-        
-        LWTextStorage *resourceTextStorage=[[LWTextStorage alloc]init];
-        float resourceTextStorageheight = resourceTextStorage.bottom;
-        if (![model.resource isEqualToString:@""]&&model.resource) {
-            resourceTextStorage.text=@"人脉资源";
-            resourceTextStorage.font=Size(26.0);
-            resourceTextStorage.frame=CGRectMake(_avatarStorage.left, productLbStorageheight + 10, [resourceTextStorage.text sizeWithFont:[UIFont systemFontOfSize:13] maxSize:CGSizeMake(APPWIDTH,13)].width+5, CGFLOAT_MAX);
-            resourceTextStorage.textColor = [UIColor colorWithWhite:0.400 alpha:1.000];
-            
-            
-            
-            NSArray *resourceArr=[model.resource componentsSeparatedByString:@"/"];
-            NSMutableString *resourceStr = allocAndInit(NSMutableString);
-            CGFloat height1=0;
-            CGFloat wid1=0;
-            for (int i=0; i<resourceArr.count; i++) {
-                if([resourceArr[i] length]==0){//去空格
-                    continue;
-                }else{
-                    NSString *trimedString = [resourceArr[i] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-                    if([trimedString length]==0){
-                        continue;
-                    }
-                }  //去空格
-                UIImage *img=[UIImage imageNamed:@"[biaoqian]"];
-                NSString *text = [NSString stringWithFormat:@"  %@   ",resourceArr[i]];
-                CGSize expectSize=[text sizeWithFont:Size(24) maxSize:CGSizeMake(1000,900)];
-                wid1 += (img.size.width + expectSize.width);
-                if (wid1>(SCREEN_WIDTH - (productTextStorage.right) - 10)||i==resourceArr.count-1) {//如果长度过长,换行
-                    if (i==resourceArr.count-1&&wid1<=(SCREEN_WIDTH - (resourceTextStorage.right) - 10)) {
-                        [resourceStr appendFormat:@"[biaoqian]  %@   ",resourceArr[i]];
-                    }
-                    LWTextStorage* resourceLbStorage = [[LWTextStorage alloc] init];
-                    resourceLbStorage.font = Size(24.0);
-                    resourceLbStorage.textColor = [UIColor colorWithWhite:0.400 alpha:1.000];
-                    resourceLbStorage.text = resourceStr;
-                    resourceLbStorage.frame = CGRectMake(resourceTextStorage.right + 10, resourceTextStorage.top+height1, SCREEN_WIDTH - (resourceTextStorage.right) - 20, CGFLOAT_MAX);
-                    [LWTextParser parseEmojiWithTextStorage:resourceLbStorage];
-                    [self addStorage:resourceLbStorage];
-                    resourceTextStorageheight = resourceLbStorage.bottom;
-                    
-                    height1+=(10+resourceTextStorage.height);
-                    resourceStr=allocAndInit(NSMutableString);
-                    if (i==resourceArr.count-1&&wid1>(SCREEN_WIDTH - (resourceTextStorage.right) - 10)) {
-                        LWTextStorage* resourceLbStorage = [[LWTextStorage alloc] init];
-                        resourceLbStorage.font = Size(24.0);
-                        resourceLbStorage.textColor = [UIColor colorWithWhite:0.400 alpha:1.000];
-                        resourceLbStorage.text = [NSString stringWithFormat:@"[biaoqian]  %@   ",resourceArr[i]];
-                        resourceLbStorage.frame = CGRectMake(resourceTextStorage.right + 10, resourceTextStorage.top+height1, SCREEN_WIDTH - (resourceTextStorage.right) - 20, CGFLOAT_MAX);
-                        [LWTextParser parseEmojiWithTextStorage:resourceLbStorage];
-                        [self addStorage:resourceLbStorage];
-                        resourceTextStorageheight = resourceLbStorage.bottom;
-                        
-                    }
-                    wid1 =(img.size.width + expectSize.width+10);
-                }
-                [resourceStr appendFormat:@"[biaoqian]  %@   ",resourceArr[i]];
-            }
-            [self addStorage:resourceTextStorage];
-            
-        }else
-        {
-            resourceTextStorage.frame=CGRectMake(_avatarStorage.left, productLbStorageheight, [resourceTextStorage.text sizeWithFont:[UIFont systemFontOfSize:13] maxSize:CGSizeMake(APPWIDTH,13)].width+5, 0);
-            resourceTextStorageheight = resourceTextStorage.bottom;
-        }
-        
+       float productLbStorageheight =[self addStorageWithStr:@"产品服务" andFrameX:_avatarStorage.left andFrameY:_line1Rect.origin.y+10 andTagStr:model.service];
+       float resourceTextStorageheight=[self addStorageWithStr:@"人脉资源" andFrameX:_avatarStorage.left andFrameY:productLbStorageheight+10 andTagStr:model.resource];
         
         
         if (isTime) {
-            _line2Rect  = CGRectMake(0, resourceTextStorageheight + 10, APPWIDTH, 0.5);
+
+            if ((model.service.length==0)&&(model.resource.length==0)) {
+                _line2Rect  = CGRectMake(0, addressStorage.bottom + 10, APPWIDTH, 0.5);;
+            }else{
+                _line2Rect  = CGRectMake(0, resourceTextStorageheight + 10, APPWIDTH, 0.5);
+            }
             float distance=[model.distance floatValue]/1000.00;
             LWTextStorage* distanceLab=[[LWTextStorage alloc]initWithFrame:CGRectMake(_avatarStorage.left,_line2Rect.origin.y+10, nameTextStorage.width, CGFLOAT_MAX)];
             distanceLab.text=[NSString stringWithFormat:@"%.2lfkm",distance];
@@ -277,7 +166,11 @@
             [self addStorage:timerLab];
         }
         if (reward) {
-            _line2Rect  = CGRectMake(0, resourceTextStorageheight + 10, APPWIDTH, 0.5);
+            if ((model.service.length==0)&&(model.resource.length==0)) {
+                _line2Rect  = CGRectMake(0, addressStorage.bottom + 10, APPWIDTH, 0.5);;
+            }else{
+                _line2Rect  = CGRectMake(0, resourceTextStorageheight + 10, APPWIDTH, 0.5);
+            }
             LWTextStorage *rewardStorage=[[LWTextStorage alloc]init];
             if([model.reward intValue]>0){
                 rewardStorage.text=[NSString stringWithFormat:@"人脉打赏    %@元",model.reward];
@@ -312,6 +205,72 @@
     return self;
     
 }
+-(float)addStorageWithStr:(NSString*)str andFrameX:(float)frameX andFrameY:(float)frameY andTagStr:(NSString*)tagStr{
+    LWTextStorage *productTextStorage=[[LWTextStorage alloc]init];
+    float productLbStorageheight;
+    if (![tagStr isEqualToString:@""]&&tagStr) {
+        productTextStorage.text=str;
+        productTextStorage.font=Size(26.0);
+        productTextStorage.frame=CGRectMake(frameX, frameY, [productTextStorage.text sizeWithFont:[UIFont systemFontOfSize:13] maxSize:CGSizeMake(APPWIDTH,13)].width+5, CGFLOAT_MAX);
+        productLbStorageheight = productTextStorage.bottom;
+        productTextStorage.textColor = [UIColor colorWithWhite:0.400 alpha:1.000];
+        
+        
+        
+        NSArray *productArr=[tagStr componentsSeparatedByString:@"/"];
+        NSMutableString *productStr = allocAndInit(NSMutableString);
+        CGFloat height1=0;
+        CGFloat wid1=0;
+        for (int i=0; i<productArr.count; i++) {
+            if([productArr[i] length]==0){//去空格
+                continue;
+            }else{
+                NSString *trimedString = [productArr[i] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                if([trimedString length]==0){
+                    continue;
+                }
+            }  //去空格
+            UIImage *img=[UIImage imageNamed:@"[biaoqian]"];
+            NSString *text = [NSString stringWithFormat:@"  %@   ",productArr[i]];
+            CGSize expectSize=[text sizeWithFont:Size(24) maxSize:CGSizeMake(1000,900)];
+            wid1 += (img.size.width + expectSize.width);
+            if (wid1>(SCREEN_WIDTH - (productTextStorage.right) - 10)||i==productArr.count-1) {//如果长度过长,换行
+                if (i==productArr.count-1&&wid1<=(SCREEN_WIDTH - (productTextStorage.right) - 10)) {
+                    [productStr appendFormat:@"[biaoqian]  %@   ",productArr[i]];
+                }
+                LWTextStorage* productLbStorage = [[LWTextStorage alloc] init];
+                productLbStorage.font = Size(24.0);
+                productLbStorage.textColor = [UIColor colorWithWhite:0.400 alpha:1.000];
+                productLbStorage.text = productStr;
+                productLbStorage.frame = CGRectMake(productTextStorage.right + 10, productTextStorage.top+height1, SCREEN_WIDTH - (productTextStorage.right) - 20, CGFLOAT_MAX);
+                [LWTextParser parseEmojiWithTextStorage:productLbStorage];
+                [self addStorage:productLbStorage];
+                productLbStorageheight = productLbStorage.bottom;
+                height1+=(10+productTextStorage.height);
+                productStr=allocAndInit(NSMutableString);
+                
+                if (i==productArr.count-1&&wid1>(SCREEN_WIDTH - (productTextStorage.right) - 10)) {
+                    LWTextStorage* productLbStorage = [[LWTextStorage alloc] init];
+                    productLbStorage.font = Size(24.0);
+                    productLbStorage.textColor = [UIColor colorWithWhite:0.400 alpha:1.000];
+                    productLbStorage.text = [NSString stringWithFormat:@"[biaoqian]  %@   ",productArr[i]];
+                    productLbStorage.frame = CGRectMake(productTextStorage.right + 10, productTextStorage.top+height1, SCREEN_WIDTH - (productTextStorage.right) - 20, CGFLOAT_MAX);
+                    [LWTextParser parseEmojiWithTextStorage:productLbStorage];
+                    [self addStorage:productLbStorage];
+                    productLbStorageheight = productLbStorage.bottom;
+                    
+                    
+                }
+                wid1 =(img.size.width + expectSize.width+10);
+            }
+            [productStr appendFormat:@"[biaoqian]  %@   ",productArr[i]];
+        }
+        [self addStorage:productTextStorage];
+    }else{
 
+        productLbStorageheight = _line1Rect.origin.y;
+    }
+    return productLbStorageheight;
+}
 
 @end

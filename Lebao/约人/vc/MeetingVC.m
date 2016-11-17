@@ -99,8 +99,6 @@
     [super viewDidLoad];
     //新版本提示
     [[ToolManager shareInstance]update];
-    
-    
     self.view.backgroundColor=AppViewBGColor;
     [self addTabView];
     [self addYrBtn];
@@ -110,7 +108,7 @@
     
     OffsetY=0;
     
-    [self.yrTab registerClass:[MeettingTableViewCell class] forCellReuseIdentifier:@"MeettingTableViewCellID"];
+
     [self netWorkRefresh:NO andIsLoadMoreData:NO  isShouldClearData:NO];
     
     
@@ -174,13 +172,13 @@
 - (void)netWorkRefresh:(BOOL)isRefresh andIsLoadMoreData:(BOOL)isMoreLoadMoreData isShouldClearData:(BOOL)isShouldClearData//加载数据
 {
     
-    [[LoCationManager shareInstance] creatLocationManager];
-    [LoCationManager shareInstance].callBackLocation = ^(CLLocationCoordinate2D location)
-    {
+//    [[LoCationManager shareInstance] creatLocationManager];
+//    [LoCationManager shareInstance].callBackLocation = ^(CLLocationCoordinate2D location)
+//    {
         //            测试用,要删掉
-//                    CLLocationCoordinate2D location;
-//                    location.latitude=24.491534;
-//                    location.longitude=118.180851;
+                    CLLocationCoordinate2D location;
+                    location.latitude=24.491534;
+                    location.longitude=118.180851;
         if (self.nearByManArr.count==0) {
             [[ToolManager shareInstance] showWithStatus];
         }
@@ -246,7 +244,7 @@
             
         }];
         
-    };
+//    };
     
 }
 
@@ -344,7 +342,7 @@
                         //                        NSLog(@"param====%@",param);
                         [XLDataService putWithUrl:MeetAppendURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
                             if (dataObj) {
-                                NSLog(@"dataobj=%@",dataObj);
+//                                NSLog(@"dataobj=%@",dataObj);
                                 MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
                                 if (model.rtcode ==1) {
                                     _isopen=YES;
@@ -400,11 +398,7 @@
         }];
         
     }
-    //    else{
-    //        sender.tag=1000;
-    //        [_yrBtn setBackgroundImage:[UIImage imageNamed:@"youkong"] forState:UIControlStateNormal];
-    //        [sender setEnabled:YES];
-    //    }
+
 }
 
 #pragma mark----tableview代理
@@ -431,8 +425,13 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    MeettingTableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:@"MeettingTableViewCellID" forIndexPath:indexPath];
 
+    static NSString* cellIdentifier = @"MeettingTableViewCellID";
+    MeettingTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (!cell) {
+        cell = [[MeettingTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+            
+    }
     MeetingCellLayout *layout=self.nearByManArr[indexPath.row];
     [cell setCellLayout:layout];
     [cell setIndexPath:indexPath];
@@ -455,8 +454,6 @@
     
     if (data.isSelf) {
         cell.meetingBtn.hidden=YES;
-        cell.meetingBtn.backgroundColor=AppViewBGColor;
-        cell.meetingBtn.userInteractionEnabled=NO;
     }else{
         cell.meetingBtn.hidden=NO;
     }
