@@ -342,6 +342,30 @@ static dispatch_once_t once;
     //设置App底栏
     getAppDelegate().mainTab = allocAndInit(MPHomeViewController);
     
+    //设置消息未读数(动态消息未读数)
+    [[PushManager shareInstace] getMsgCountSucceed:^(int dynamicCount, int msgcount) {
+        
+        if (dynamicCount>0) {
+             [getAppDelegate().mainTab.tabBar.items objectAtIndex:1].badgeValue = [NSString stringWithFormat:@"%i",dynamicCount];
+        }
+        else
+        {
+            [getAppDelegate().mainTab.tabBar.items objectAtIndex:1].badgeValue = nil;
+        }
+        if (msgcount>0) {
+            [getAppDelegate().mainTab.tabBar.items objectAtIndex:2].badgeValue = [NSString stringWithFormat:@"%i",msgcount];
+        }
+        else
+        {
+             [getAppDelegate().mainTab.tabBar.items objectAtIndex:2].badgeValue = nil;
+        }
+        
+        //应用图标数目
+        [UIApplication sharedApplication].applicationIconBadgeNumber = dynamicCount + msgcount;
+        
+    }];
+
+    
     UINavigationController * rightSideNavController = [[UINavigationController alloc] initWithRootViewController:allocAndInit(MeViewController)];
     [rightSideNavController setRestorationIdentifier:@"MMExampleRightNavigationControllerRestorationKey"];
     _drawerController = [[MMDrawerController alloc]
@@ -609,71 +633,6 @@ static dispatch_once_t once;
     
     [view.navigationController pushViewController:webContro animated:YES];
 }
-
-#pragma mark
-#pragma mark 定位
-//- (void)locationPositionBlock:(LocationPositionBlock)locationPositionBlock{
-//
-//    _locationPositionBlock = locationPositionBlock;
-//    // 判断定位操作是否被允许
-//    if([CLLocationManager locationServicesEnabled]) {
-//        //定位初始化
-//        _locationManager=[[CLLocationManager alloc] init];
-//        _locationManager.delegate=self;
-//        _locationManager.desiredAccuracy=kCLLocationAccuracyBest;
-//        _locationManager.distanceFilter=10;
-//        if (ios8x) {
-//            [_locationManager requestWhenInUseAuthorization];//使用程序其间允许访问位置数据（iOS8定位需要）
-//        }
-//        [_locationManager startUpdatingLocation];//开启定位
-//    }else {
-//        //提示用户无法进行定位操作
-//        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"提示" message:@"定位不成功 ,请确认开启定位" delegate:nil cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-//        [alertView show];
-//    }
-//    // 开始定位
-//    [_locationManager startUpdatingLocation];
-//}
-//#pragma mark - CLLocationManagerDelegate
-///**
-// *  只要定位到用户的位置，就会调用（调用频率特别高）
-// *  @param locations : 装着CLLocation对象
-// */
-//-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
-//{
-//    //此处locations存储了持续更新的位置坐标值，取最后一个值为最新位置，如果不想让其持续更新位置，则在此方法中获取到一个值之后让locationManager stopUpdatingLocation
-//    CLLocation *currentLocation = [locations lastObject];
-//    // 获取当前所在的城市名
-//    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
-//    //根据经纬度反向地理编译出地址信息
-//    [geocoder reverseGeocodeLocation:currentLocation completionHandler:^(NSArray *array, NSError *error)
-//     {
-//         if (array.count > 0)
-//         {
-//             CLPlacemark *placemark = [array objectAtIndex:0];
-//             //NSLog(@%@,placemark.name);//具体位置
-//             //获取城市
-//             NSString *city = placemark.locality;
-//             if (!city) {
-//                 //四大直辖市的城市信息无法通过locality获得，只能通过获取省份的方法来获得（如果city为空，则可知为直辖市）
-//                 city = placemark.administrativeArea;
-//             }
-//
-//             if (_locationPositionBlock) {
-//                 _locationPositionBlock(city);
-//             }
-//
-//             //系统会一直更新数据，直到选择停止更新，因为我们只需要获得一次经纬度即可，所以获取之后就停止更新
-//             [manager stopUpdatingLocation];
-//         }else if (error == nil && [array count] == 0)
-//         {
-//             NSLog(@"No results were returned.");
-//         }else if (error != nil)
-//         {
-//             NSLog(@"An error occurred = %@", error);
-//         }
-//     }];
-//}
 
 //新版本提示
 - (void)update {

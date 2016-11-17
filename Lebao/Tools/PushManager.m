@@ -26,6 +26,7 @@ NSString * const KApiSystemTypeConnectionRequest = @"connection-request";//人�
 NSString * const KApiSystemTypeRefuse = @"refuse";//人脉拒绝
 NSString * const KApiSystemTypeConnectionAgree = @"connection-agree"; //人脉同意
 
+#define KDynamicMsgcountURL [NSString stringWithFormat:@"%@message/count",HttpURL] //请求网络得到消息数目
 
 #import "PushManager.h"
 #import "BHBPlaySoundTool.h"//推送声音
@@ -39,7 +40,12 @@ NSString * const KApiSystemTypeConnectionAgree = @"connection-agree"; //人脉�
 #import "XIAlertView.h"
 #import "AppDelegate.h"
 #import <MJExtension.h>
+#import "XLDataService.h"
 
+#import "DynamicVC.h"
+#import "DynamicDetailsViewController.h"
+#import "OtherDynamicdViewController.h"
+#import "DyMessageViewController.h"
 @implementation PushDataModel
 
 @end
@@ -96,9 +102,38 @@ static PushManager *pushManager;
     
 }
 //得到消息数（动态，消息）
+
+
 - (void)getMsgCountSucceed:(MsgCountSucceed)succeed
 {
-    succeed(2,3);
+    //目前是重复3次请求（请求不成功情况下）
+    [self getMsgCountSucceed:succeed repeat:3];
+   
+}
+//网络请求不成功时候重复调用次数
+- (void)getMsgCountSucceed:(MsgCountSucceed)succeed repeat:(int)repeat
+{
+    if (repeat>1) {
+        
+        [XLDataService postWithUrl:KDynamicMsgcountURL param:[Parameter parameterWithSessicon] modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+            BaseModal *model = [BaseModal mj_objectWithKeyValues:dataObj];
+//            NSLog(@"error.code=%ld dataObj =%@",error.code,dataObj);
+            if (dataObj) {
+                if (model.rtcode ==1) {
+                    succeed([dataObj[@"dynamic_count"] intValue],[dataObj[@"message_count"]intValue]);
+                }
+            }
+            else
+            {
+                if (error.code ==-1001) {
+                    [self getMsgCountSucceed:succeed repeat:repeat - 1];
+                }
+            }
+    
+        }];
+        
+    }
+    
 }
 //推送数据
 - (void)pushData:(NSDictionary *)notifacion andApplicationState:(ApplicationState)applicationState
@@ -110,18 +145,71 @@ static PushManager *pushManager;
         [[BHBPlaySoundTool sharedPlaySoundTool] playWithSoundName:@"open"];
     }
     //设置消息未读数(动态消息未读数)
-    [self getMsgCountSucceed:^(int dynamicCount, int msgcount) {
+    [[PushManager shareInstace] getMsgCountSucceed:^(int dynamicCount, int msgcount) {
         
-        [getAppDelegate().mainTab.tabBar.items objectAtIndex:1].badgeValue = [NSString stringWithFormat:@"%i",dynamicCount];
-        [getAppDelegate().mainTab.tabBar.items objectAtIndex:2].badgeValue = [NSString stringWithFormat:@"%i",msgcount];
+        if (dynamicCount>0) {
+            [getAppDelegate().mainTab.tabBar.items objectAtIndex:1].badgeValue = [NSString stringWithFormat:@"%i",dynamicCount];
+        }
+        else
+        {
+            [getAppDelegate().mainTab.tabBar.items objectAtIndex:1].badgeValue = nil;
+        }
+        if (msgcount>0) {
+            [getAppDelegate().mainTab.tabBar.items objectAtIndex:2].badgeValue = [NSString stringWithFormat:@"%i",msgcount];
+        }
+        else
+        {
+            [getAppDelegate().mainTab.tabBar.items objectAtIndex:2].badgeValue = nil;
+        }
+        
         //应用图标数目
-       [UIApplication sharedApplication].applicationIconBadgeNumber = dynamicCount + msgcount;
+        [UIApplication sharedApplication].applicationIconBadgeNumber = dynamicCount + msgcount;
         
     }];
-   
+
     //取到nav控制器当前显示的控制器
     UINavigationController * nav = (UINavigationController *)getAppDelegate().mainTab.selectedViewController;
-    UIViewController * baseVC = (UIViewController *)nav.visibleViewController;
+    BaseViewController * baseVC = (BaseViewController *)nav.visibleViewController;
+    
+
+   //动态推送
+    NSLog(@"pushModel.api.type =%@",pushModel.api.type);
+    if ([pushModel.api.type isEqualToString:KApiTypeDynamic]) {
+    
+        if (applicationState ==ApplicationStateActive) {
+            NSLog(@"ApplicationStateActive");
+           //动态详情 他人动态 动态 动态消息
+            if ([baseVC isKindOfClass:[DynamicVC class]]||[baseVC isKindOfClass:[DyMessageViewController class]]||[baseVC isKindOfClass:[OtherDynamicdViewController class]]||[baseVC isKindOfClass:[DynamicDetailsViewController class]]) {
+                [baseVC pushModel:pushModel.api.chat];
+            }
+            
+        }
+        else if (applicationState == ApplicationStateInactive)
+        {
+            if ([baseVC.navigationController.viewControllers containsObject:(BaseViewController *)[DynamicVC class]]) {
+                BaseViewController *vc = baseVC.navigationController.viewControllers[0];
+                [vc pushModel:pushModel.api.chat];
+            }
+            else
+            {
+                [getAppDelegate().mainTab setSelectedIndex:1];
+            }
+            
+        }
+        else
+        {
+            [getAppDelegate().mainTab setSelectedIndex:1];
+        }
+    }
+    //消息（聊天，系统等）
+    else
+    {
+
+        
+        
+    }
+    
+    
     
     //刷新界面
     if ([baseVC isKindOfClass:[NotificationViewController class]] ) {
@@ -217,6 +305,11 @@ static PushManager *pushManager;
     }
     else if ([pushModel.api.type isEqualToString:KApiTypeCorps]||[pushModel.api.type isEqualToString:KApiTypeSystem])
     {
+        
+        
+        
+        
+        
         //如果是当前控制器是我的消息控制器的话，刷新数据即可
         if([baseVC isKindOfClass:[NotificationDetailViewController class]])
         {

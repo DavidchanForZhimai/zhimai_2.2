@@ -369,16 +369,11 @@
 #pragma mark - 动态消息
 - (void)messageShowMore:(UITapGestureRecognizer *)sender
 {
-    
-    //设置消息未读数(动态消息未读数)
-    [[PushManager shareInstace] getMsgCountSucceed:^(int dynamicCount, int msgcount) {
-        
-        [getAppDelegate().mainTab.tabBar.items objectAtIndex:1].badgeValue = [NSString stringWithFormat:@"%i",dynamicCount];
-        [getAppDelegate().mainTab.tabBar.items objectAtIndex:2].badgeValue = [NSString stringWithFormat:@"%i",msgcount];
+
+    [getAppDelegate().mainTab.tabBar.items objectAtIndex:1].badgeValue =nil;
         //应用图标数目
-        [UIApplication sharedApplication].applicationIconBadgeNumber = dynamicCount + msgcount;
-        
-    }];
+    [UIApplication sharedApplication].applicationIconBadgeNumber = [[getAppDelegate().mainTab.tabBar.items objectAtIndex:1].badgeValue intValue] + [[getAppDelegate().mainTab.tabBar.items objectAtIndex:2].badgeValue intValue];
+    
     //点击消失
     messages.count=0;
 

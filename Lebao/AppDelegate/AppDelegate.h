@@ -12,6 +12,6 @@
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) MPHomeViewController *mainTab;
 
-AppDelegate* getAppDelegate();
+ AppDelegate* getAppDelegate();
 @end
 

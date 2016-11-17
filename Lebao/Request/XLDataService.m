@@ -54,7 +54,6 @@ static UIAlertView *letout;
     [XLNetworkRequest postRequest:[self URLEncodedString:url] params:param success:^(id responseObj) {
         
         BaseModal *model = [BaseModal mj_objectWithKeyValues:responseObj];
-        
         //登录退出
         if (model.rtcode ==2) {
             responseDataBlock(responseObj, nil);
@@ -79,14 +78,14 @@ static UIAlertView *letout;
             else
             {
                  responseDataBlock(nil, nil);
-                [[ToolManager shareInstance] showInfoWithStatus:model.rtmsg];
+               
             }
             
         }
     } failure:^(NSError *error) {
         
         responseDataBlock(nil, nil);
-        [[ToolManager shareInstance] showInfoWithStatus];
+       
     }];
 }
 

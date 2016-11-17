@@ -109,7 +109,7 @@ typedef NS_ENUM(NSInteger,ApplicationState) {
     
     ApplicationStateActive, //应用在前台，不跳转页面，让用户选择。
     ApplicationStateInactive,//杀死状态下，直接跳转到跳转页面。
-    ApplicationStateBackground  //杀死状态下，直接跳转到跳转页面。
+    ApplicationStateBackground  //应用在后台。当后台设置aps字段里的
     
 };
 

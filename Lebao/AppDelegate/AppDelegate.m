@@ -10,7 +10,8 @@
 #import "AppDelegate+CoreNewFeature.h"
 #import "AppDelegate+WX.h"//微信
 #import "AppDelegate+BDPush.h"//百度推送
-
+#import <IQKeyboardManager.h>
+#import "SYSafeCategory.h"
 @interface AppDelegate ()
 
 @end
@@ -22,6 +23,12 @@
     
     //延迟进入
      [NSThread sleepForTimeInterval:1.0];
+    
+    //键盘统一收回处理
+    [self configureBoardManager];
+    
+    //统一处理一些为数组、集合等对nil插入会引起闪退
+    [SYSafeCategory callSafeCategory];
     
      UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
      self.window = window;
@@ -37,13 +44,20 @@
 
     return YES;
 }
+#pragma mark 键盘收回管理
+-(void)configureBoardManager
+{
+//    IQKeyboardManager *manager = [IQKeyboardManager sharedManager];
+//    manager.enable = YES;
+//    manager.shouldResignOnTouchOutside = YES;
+//    manager.shouldToolbarUsesTextFieldTintColor = YES;
+//    manager.keyboardDistanceFromTextField=0.0;
+//    manager.enableAutoToolbar = NO;
+}
 
 AppDelegate* getAppDelegate(){
     return (AppDelegate *)[[UIApplication sharedApplication]delegate];
 }
-
-
-
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.

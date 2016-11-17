@@ -593,6 +593,8 @@
 		636315B01D0EB93D009C1132 /* JingJiRenVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6363152C1D0EB93D009C1132 /* JingJiRenVC.xib */; };
 		637214081C84296100C6CB98 /* defaulthead_nv.png in Resources */ = {isa = PBXBuildFile; fileRef = 637214071C84296100C6CB98 /* defaulthead_nv.png */; };
 		6372140A1C84296600C6CB98 /* defaulthead.png in Resources */ = {isa = PBXBuildFile; fileRef = 637214091C84296600C6CB98 /* defaulthead.png */; };
+		6379CBAF1DDD8005002AF557 /* JRSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 6379CBAC1DDD8005002AF557 /* JRSwizzle.m */; };
+		6379CBB01DDD8005002AF557 /* SYSafeCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6379CBAE1DDD8005002AF557 /* SYSafeCategory.m */; };
 		637E72CF1CCE173300BA2EA1 /* images.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 637E72CE1CCE173300BA2EA1 /* images.bundle */; };
 		637EB1401C92AB8A0071EC05 /* GWLCustomPikerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 637EB13F1C92AB8A0071EC05 /* GWLCustomPikerView.m */; };
 		637EB1421C92AB9B0071EC05 /* Cities.plist in Resources */ = {isa = PBXBuildFile; fileRef = 637EB1411C92AB9B0071EC05 /* Cities.plist */; };
@@ -1973,6 +1975,10 @@
 		637214071C84296100C6CB98 /* defaulthead_nv.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaulthead_nv.png; sourceTree = "<group>"; };
 		637214091C84296600C6CB98 /* defaulthead.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaulthead.png; sourceTree = "<group>"; };
 		6379CBA91DDD3CEF002AF557 /* Lebao.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Lebao.entitlements; sourceTree = "<group>"; };
+		6379CBAB1DDD8005002AF557 /* JRSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JRSwizzle.h; sourceTree = "<group>"; };
+		6379CBAC1DDD8005002AF557 /* JRSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JRSwizzle.m; sourceTree = "<group>"; };
+		6379CBAD1DDD8005002AF557 /* SYSafeCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SYSafeCategory.h; sourceTree = "<group>"; };
+		6379CBAE1DDD8005002AF557 /* SYSafeCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SYSafeCategory.m; sourceTree = "<group>"; };
 		637E72CE1CCE173300BA2EA1 /* images.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = images.bundle; sourceTree = "<group>"; };
 		637EB13E1C92AB8A0071EC05 /* GWLCustomPikerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GWLCustomPikerView.h; sourceTree = "<group>"; };
 		637EB13F1C92AB8A0071EC05 /* GWLCustomPikerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GWLCustomPikerView.m; sourceTree = "<group>"; };
@@ -4233,6 +4239,7 @@
 		634AD6BE1C07EC540047C8D5 /* Vender */ = {
 			isa = PBXGroup;
 			children = (
+				6379CBAA1DDD8005002AF557 /* SySafeCategory */,
 				707CCA261D8F8D1D00E0E730 /* ZSSRichTextEditor */,
 				63ED826C1D251CC000DE3183 /* 百度推送 */,
 				631F2DCD1CF582E100273C78 /* WHC_BannerKit */,
@@ -4685,6 +4692,17 @@
 				636315411D0EB93D009C1132 /* MoreXSCell.xib */,
 			);
 			path = view;
+			sourceTree = "<group>";
+		};
+		6379CBAA1DDD8005002AF557 /* SySafeCategory */ = {
+			isa = PBXGroup;
+			children = (
+				6379CBAB1DDD8005002AF557 /* JRSwizzle.h */,
+				6379CBAC1DDD8005002AF557 /* JRSwizzle.m */,
+				6379CBAD1DDD8005002AF557 /* SYSafeCategory.h */,
+				6379CBAE1DDD8005002AF557 /* SYSafeCategory.m */,
+			);
+			path = SySafeCategory;
 			sourceTree = "<group>";
 		};
 		637EB13D1C92AB8A0071EC05 /* GWLCustomPiker */ = {
@@ -7549,6 +7567,7 @@
 				6333F0CF1D77F6E7001D0930 /* OtherDynamicdViewController.m in Sources */,
 				70796E801D6B02CC005B8441 /* TZPhotoPickerController.m in Sources */,
 				70796E961D6B0412005B8441 /* AppDelegate+WX.m in Sources */,
+				6379CBAF1DDD8005002AF557 /* JRSwizzle.m in Sources */,
 				63F0311C1C4E273200AAB82A /* CExpandHeader.m in Sources */,
 				638467981D08028700A80223 /* MyContentDetailViewController.m in Sources */,
 				638467931D0801C700A80223 /* MyCollectionDetailViewController.m in Sources */,
@@ -7743,6 +7762,7 @@
 				638467D41D08056A00A80223 /* SelectedCarResultView.m in Sources */,
 				63E56E851C48C5C800950E21 /* UIButton+BHBSetImage.m in Sources */,
 				707CCA551D8F8D1D00E0E730 /* ZSSBarButtonItem.m in Sources */,
+				6379CBB01DDD8005002AF557 /* SYSafeCategory.m in Sources */,
 				63302EBD1D921FA50019E9D6 /* MeetSucceedVC.m in Sources */,
 				63E56E7E1C48C5C800950E21 /* BHBCenterView.m in Sources */,
 				70796E7D1D6B02CC005B8441 /* TZAssetModel.m in Sources */,
