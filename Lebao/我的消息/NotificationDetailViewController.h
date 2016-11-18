@@ -20,6 +20,7 @@
 @property(nonatomic,assign) BOOL iscoop;
 @property(nonatomic,assign) BOOL isself;
 @property(nonatomic,copy) NSString *ID;
+@property(nonatomic,copy) NSString *type;
 @end
 
 @interface NotificationDetailViewController : BaseViewController

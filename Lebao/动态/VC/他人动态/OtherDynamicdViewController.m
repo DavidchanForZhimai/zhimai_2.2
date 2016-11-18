@@ -60,6 +60,49 @@
     [self addToolBar];
     
 }
+
+#pragma mark
+#pragma mark - 推送
+- (void)pushModel:(PushDataChat *)pushData
+{
+    
+    for (int i=0;i< _jjrJsonArr.count;i++) {
+        CellLayout* layout =_jjrJsonArr[i];
+        if (layout.statusModel.ID ==[pushData.dynamicid integerValue]) {
+            if ([pushData.type isEqualToString:@"like"]) {
+                
+                StatusLike *like = [StatusLike new];
+                like.imgurl = [[ToolManager shareInstance] urlAppend:pushData.imgurl];
+                like.brokerid = [pushData.userid integerValue];
+                like.sex = [pushData.sex integerValue];
+                [layout.statusModel.like addObject:like];
+                [_jjrJsonArr replaceObjectAtIndex:i withObject:[self layoutWithStatusModel:layout.statusModel index:i]];
+                [_dtTab reloadData];
+            }
+            else
+            {
+               
+                StatusComment *comment = [StatusComment new];
+                comment.me = NO;
+                StatusInfo *info = [StatusInfo new];
+                info.brokerid = [pushData.userid integerValue];
+                info.realname = pushData.realname;
+                info.rep_brokerid = [pushData.rep_brokerid integerValue];
+                info.rep_realname = pushData.rep_realname;
+                info.content = pushData.content;
+                comment.info = info;
+                [layout.statusModel.comment addObject:comment];
+                [_jjrJsonArr replaceObjectAtIndex:i withObject:[self layoutWithStatusModel:layout.statusModel index:i]];
+                [_dtTab reloadData];
+            }
+            
+        }
+        
+    }
+    
+    
+}
+
 /**
  *  最下层的scrollview
  */
@@ -403,9 +446,9 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [imgView removeFromSuperview];
     });
-    self.view.userInteractionEnabled = NO;
+   
     [[HomeInfo shareInstance ]dynamicIsLike:[NSString stringWithFormat:@"%li",layout.statusModel.ID] islike:layout.statusModel.islike andcallBack:^(BOOL issucced, NSString *info, NSDictionary *jsonDic) {
-        self.view.userInteractionEnabled = YES;
+        
         if (issucced == YES) {
             if (jsonDic[@"datas"]) {
                 

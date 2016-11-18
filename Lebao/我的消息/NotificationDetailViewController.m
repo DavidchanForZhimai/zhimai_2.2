@@ -47,21 +47,21 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Do any additional setup after loading the view.
-    [self navViewTitleAndBackBtn:@"系统消息"];
-    //     BaseButton *allreadBtn = [[BaseButton alloc]initWithFrame:CGRectMake(APPWIDTH - 70, StatusBarHeight, 60, NavigationBarHeight - 1) setTitle:@"全部已读" titleSize:14 titleColor:BlackTitleColor textAlignment:NSTextAlignmentRight backgroundColor:WhiteColor inView:self.view];
-    //
-    //    allreadBtn.didClickBtnBlock = ^
-    //    {
-    //        [XLDataService postWithUrl:SystemAllReadMessageURL param:[Parameter parameterWithSessicon] modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-    //
-    //
-    //        }];
-    //
-    //
-    //    };
-    
-    
+     // Do any additional setup after loading the view.
+     [self navViewTitleAndBackBtn:@"系统消息"];
+//     BaseButton *allreadBtn = [[BaseButton alloc]initWithFrame:CGRectMake(APPWIDTH - 70, StatusBarHeight, 60, NavigationBarHeight - 1) setTitle:@"全部已读" titleSize:14 titleColor:BlackTitleColor textAlignment:NSTextAlignmentRight backgroundColor:WhiteColor inView:self.view];
+//    
+//    allreadBtn.didClickBtnBlock = ^
+//    {
+//        [XLDataService postWithUrl:SystemAllReadMessageURL param:[Parameter parameterWithSessicon] modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+//            
+//            
+//        }];
+//
+//
+//    };
+  
+   
     [self addTableView];
     _page =1;
     [self netWork:NO isFooter:NO isShouldClear:NO];
@@ -78,7 +78,7 @@
 - (void)addTableView
 {
     _notificationDetailArray = allocAndInit(NSMutableArray);
-    
+ 
     _notificationDetailView = [[UITableView alloc]initWithFrame:frame(0, StatusBarHeight + NavigationBarHeight, frameWidth(self.view), APPHEIGHT -(StatusBarHeight + NavigationBarHeight) ) style:UITableViewStyleGrouped];
     _notificationDetailView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _notificationDetailView.backgroundColor = [UIColor clearColor];
@@ -108,7 +108,7 @@
         [[ToolManager shareInstance] showWithStatus];
     }
     [XLDataService postWithUrl:SystemMessageURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        
+      
         if (isRefresh) {
             [[ToolManager shareInstance]endHeaderWithRefreshing
              :_notificationDetailView];
@@ -147,7 +147,7 @@
                 }
                 else
                 {
-                    [self isShowEmptyStatus:NO];
+                     [self isShowEmptyStatus:NO];
                 }
                 
             }
@@ -186,10 +186,10 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+
     return cellH;
-    
-    
+  
+
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -200,13 +200,14 @@
         
     }
     
-    SystemMessageData *data =  _notificationDetailArray[indexPath.section];
+     SystemMessageData *data =  _notificationDetailArray[indexPath.section];
+   
     if (!_isSystempagetype&&data.ID&&![data.ID isEqualToString:@""]) {
         [cell setData:data showDetial:NO];
     }
     else
     {
-        [cell setData:data showDetial:YES];
+         [cell setData:data showDetial:YES];
     }
     
     
@@ -216,11 +217,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
+   
     if (!_isSystempagetype) {
         
-        SystemMessageData *data =  _notificationDetailArray[indexPath.section];
-        NSLog(@"data.ID =%@",data.ID);
+      SystemMessageData *data =  _notificationDetailArray[indexPath.section];
+         NSLog(@"data.ID =%@",data.ID);
         if (data.ID&&![data.ID isEqualToString:@""]) {
             if (data.iscoop) {
                 //跳转我的领取线索详情
@@ -261,20 +262,20 @@
 }
 
 /*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
 
 @end
 
 @implementation SystemMessageCell
 {
-    
+
     UILabel *_descripLb;
     UILabel *_time;
     UILabel *_showDetial;

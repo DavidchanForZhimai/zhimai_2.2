@@ -190,7 +190,7 @@ static PushManager *pushManager;
         if (applicationState ==ApplicationStateActive) {
             //动态详情 他人动态 动态 动态消息
             for (BaseViewController *vc in controllers) {
-                if ([vc isKindOfClass:[DynamicVC class]]||[nav.childViewControllers isKindOfClass:[DyMessageViewController class]]||[nav.childViewControllers isKindOfClass:[OtherDynamicdViewController class]]||[nav.childViewControllers isKindOfClass:[DynamicDetailsViewController class]] ) {
+                if ([vc isKindOfClass:[DynamicVC class]]||[vc isKindOfClass:[DyMessageViewController class]]||[vc isKindOfClass:[OtherDynamicdViewController class]]||[vc isKindOfClass:[DynamicDetailsViewController class]] ) {
                     [vc pushModel:pushModel.api.chat];
                 }
                 
@@ -354,7 +354,7 @@ static PushManager *pushManager;
                     }
                     
                 }
-                                
+                
                 
             }
             

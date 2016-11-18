@@ -133,6 +133,16 @@
     
 }
 #pragma mark
+#pragma mark - 推送
+- (void)pushModel:(PushDataChat *)pushData
+{
+    
+    DyMessageData *model =(DyMessageData *)pushData;
+    [_dyMessageArray insertObject:model atIndex:0];
+    [_dyMessageView reloadData];
+}
+
+#pragma mark
 #pragma mark - UI getter
 - (NSMutableArray *)dyMessageArray
 {

@@ -55,8 +55,8 @@
 //动态点赞
 
 //动态评论
-
-
+@property(nonatomic,copy) NSString *rep_realname;//被回复人姓名
+@property(nonatomic,copy) NSString *rep_brokerid;//被回复人id
 //约见
 @property(nonatomic,copy) NSString *remark;
 @property(nonatomic,copy) NSString *reward;
