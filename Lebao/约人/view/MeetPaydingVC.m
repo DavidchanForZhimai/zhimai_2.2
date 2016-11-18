@@ -225,11 +225,11 @@ typedef enum{
     }
     else if (_whatZfType==addConnections)
     { NSLog(@"self.param=%@",self.param);
-        [XLDataService putWithUrl:addConnectionsURL param:self.param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+        [XLDataService postWithUrl:addConnectionsURL param:self.param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
             if(dataObj){
                 
                 MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
-//                NSLog(@"dataObj=%@",dataObj);
+                NSLog(@"dataObj=%@",dataObj);
                 if (model.rtcode==1) {
                     
                     if (_moneyType==weixinzhifuType) {
@@ -248,15 +248,7 @@ typedef enum{
                     [self.navigationController popViewControllerAnimated:YES];
                    
                     
-                }else if (model.rtcode ==4005){
-                    [[ToolManager shareInstance]dismiss];
-                    
-                    UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"知脉君温馨提示" message:[NSString stringWithFormat:@"%@",model.rtmsg] delegate:self cancelButtonTitle:nil otherButtonTitles:@"再看看",@"马上开通", nil];
-                    alertView.tag=22223;
-                    alertView.delegate=self;
-                    [alertView show];
                 }
-                
                 else
                 {
                     [[ToolManager shareInstance] showAlertMessage:model.rtmsg];
