@@ -96,15 +96,15 @@
                 _time.shouldAnmial = NO;
                 
                 
-                UIImage *image =[UIImage imageNamed:@"exhibition_brose"];
-                CGSize sizebrowse = [time sizeWithContent:modal.datas.readnum font:[UIFont systemFontOfSize:22*SpacedFonts]];
+//                UIImage *image =[UIImage imageNamed:@"exhibition_brose"];
+//                CGSize sizebrowse = [time sizeWithContent:modal.datas.readnum font:[UIFont systemFontOfSize:22*SpacedFonts]];
+//                
+//                BaseButton* _browse = [[BaseButton alloc]initWithFrame:frame(CGRectGetMaxX(_time.frame) + 10, frameY(_time), image.size.width + 5 + sizebrowse.width, image.size.height)  setTitle:modal.datas.readnum titleSize:22*SpacedFonts titleColor:LightBlackTitleColor backgroundImage:nil iconImage:image highlightImage:nil setTitleOrgin:CGPointMake(1,5) setImageOrgin:CGPointMake(0,0)  inView:self];
+//                _browse.shouldAnmial = NO;
+//                
+//                [UILabel createLabelWithFrame:frame(CGRectGetMaxX(_browse.frame) + 20, frameY(_browse) - 2, 100, frameHeight(_browse)) text:[NSString stringWithFormat:@"来源：%@",modal.datas.author] fontSize:22*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:self];
                 
-                BaseButton* _browse = [[BaseButton alloc]initWithFrame:frame(CGRectGetMaxX(_time.frame) + 10, frameY(_time), image.size.width + 5 + sizebrowse.width, image.size.height)  setTitle:modal.datas.readnum titleSize:22*SpacedFonts titleColor:LightBlackTitleColor backgroundImage:nil iconImage:image highlightImage:nil setTitleOrgin:CGPointMake(1,5) setImageOrgin:CGPointMake(0,0)  inView:self];
-                _browse.shouldAnmial = NO;
-                
-                [UILabel createLabelWithFrame:frame(CGRectGetMaxX(_browse.frame) + 20, frameY(_browse) - 2, 100, frameHeight(_browse)) text:[NSString stringWithFormat:@"来源：%@",modal.datas.author] fontSize:22*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:self];
-                
-                float height =CGRectGetMaxY(_browse.frame)  +10 ;
+                float height =CGRectGetMaxY(_time.frame)  +10 ;
                 if (modal.datas.isaddress) {
                     
                     
@@ -159,7 +159,7 @@
                 }
                 else
                 {
-                    UILabel *line1 = allocAndInitWithFrame(UILabel, frame(10, CGRectGetMaxY(_browse.frame)  + 6, APPWIDTH - 20, 1.0));
+                    UILabel *line1 = allocAndInitWithFrame(UILabel, frame(10, CGRectGetMaxY(_time.frame)  + 6, APPWIDTH - 20, 1.0));
                     line1.backgroundColor = LineBg;
                     [self addSubview:line1];
                     

@@ -116,14 +116,14 @@
                 _time.shouldAnmial = NO;
                 
                 
-                UIImage *image =[UIImage imageNamed:@"exhibition_brose"];
-                CGSize sizebrowse = [time sizeWithContent:weakSelf.modal.datas.readcount font:[UIFont systemFontOfSize:22*SpacedFonts]];
-                
-                BaseButton* _browse = [[BaseButton alloc]initWithFrame:frame(CGRectGetMaxX(_time.frame) + 10, frameY(_time), image.size.width + 5 + sizebrowse.width, image.size.height)  setTitle:weakSelf.modal.datas.readcount titleSize:22*SpacedFonts titleColor:LightBlackTitleColor backgroundImage:nil iconImage:image highlightImage:nil setTitleOrgin:CGPointMake(1,5) setImageOrgin:CGPointMake(0,0)  inView:view];
-                _browse.shouldAnmial = NO;
+//                UIImage *image =[UIImage imageNamed:@"exhibition_brose"];
+//                CGSize sizebrowse = [time sizeWithContent:weakSelf.modal.datas.readcount font:[UIFont systemFontOfSize:22*SpacedFonts]];
+//                
+//                BaseButton* _browse = [[BaseButton alloc]initWithFrame:frame(CGRectGetMaxX(_time.frame) + 10, frameY(_time), image.size.width + 5 + sizebrowse.width, image.size.height)  setTitle:weakSelf.modal.datas.readcount titleSize:22*SpacedFonts titleColor:LightBlackTitleColor backgroundImage:nil iconImage:image highlightImage:nil setTitleOrgin:CGPointMake(1,5) setImageOrgin:CGPointMake(0,0)  inView:view];
+//                _browse.shouldAnmial = NO;
             
-                float height =CGRectGetMaxY(_browse.frame)  +10 ;
-                                    UILabel *line1 = allocAndInitWithFrame(UILabel, frame(10, CGRectGetMaxY(_browse.frame)  + 6, APPWIDTH - 20, 1.0));
+                float height =CGRectGetMaxY(_time.frame)  +10 ;
+                                    UILabel *line1 = allocAndInitWithFrame(UILabel, frame(10, CGRectGetMaxY(_time.frame)  + 6, APPWIDTH - 20, 1.0));
                     line1.backgroundColor = LineBg;
                     [view addSubview:line1];
             
