@@ -51,17 +51,16 @@
         _page =1;
         [self netWork:NO isFooter:NO isShouldClear:YES isNeedLoadView:NO];
     }
-    else
+    else if([pushData.type isEqualToString:@"connection-request"])
     {
-        _page =1;
-        [self netWork:NO isFooter:NO isShouldClear:YES isNeedLoadView:NO];
+        [self requestcountConnections];
     }
     
 }
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self requestcountConnections];
+    
    
     //设置消息未读数(动态消息未读数)
     [[PushManager shareInstace] getMsgCountSucceed:^(int dynamicCount, int msgcount) {
@@ -95,6 +94,8 @@
     connection_count=@"0";
     num=@"0";
     [self navView];
+    //人脉添加提示推送
+    [self requestcountConnections];
     [self netWork:NO isFooter:NO isShouldClear:YES isNeedLoadView:YES];
 }
 
@@ -120,10 +121,12 @@
     [[ToolManager shareInstance] scrollView:_notificationView footerWithRefreshingBlock:^{
         _page =_nowPage + 1;
         [self netWork:NO isFooter:YES isShouldClear:NO isNeedLoadView:NO];
+        
     }];
     [[ToolManager shareInstance] scrollView:_notificationView headerWithRefreshingBlock:^{
         _page =1;
         [self netWork:YES isFooter:NO isShouldClear:YES isNeedLoadView:NO];
+        [self requestcountConnections];
     }];
     
     [self.view addSubview:_notificationView];
@@ -137,6 +140,7 @@
 //    };
 
 }
+#pragma mark --- 人脉添加提示推送
 -(void)requestcountConnections
 {
     
@@ -172,7 +176,12 @@
         _headerView.shouldAnmial = NO;
         __weak typeof(self)weakself=self;
         _headerView.didClickBtnBlock=^{
-            PushView(weakself, allocAndInit(ConnectionsRequestVC));
+            ConnectionsRequestVC *vc =   allocAndInit(ConnectionsRequestVC);
+            vc.succeedBlock = ^
+            {
+                [weakself requestcountConnections];
+            };
+            PushView(weakself, vc);
         };
     }
     return _headerView;
@@ -332,12 +341,12 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-   
-
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section==0&&indexPath.row==0) {
         NotificationDetailViewController *detail = allocAndInit(NotificationDetailViewController);
         PushView(self, detail);
+        MeCell *cell  = [tableView cellForRowAtIndexPath:indexPath];
+        cell.message.hidden = YES;
 
     } if (indexPath.section==0&&indexPath.row==1) {
         HeadLineVC *detail = allocAndInit(HeadLineVC);

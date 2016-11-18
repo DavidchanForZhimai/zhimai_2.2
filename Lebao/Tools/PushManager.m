@@ -51,7 +51,9 @@ NSString * const KApiSystemTypeConnectionAgree = @"connection-agree"; //人脉�
 
 #import "AuthenticationHomeViewController.h"
 
-
+#import "WantMeetMeVC.h"
+#import "MeWantMeetVC.h"
+#import "ConnectionsRequestVC.h"
 @implementation PushDataModel
 
 @end
@@ -300,9 +302,27 @@ static PushManager *pushManager;
         //约见成功
         else if ([pushModel.api.type isEqualToString:KApiTypeMeet])
         {
-            [[ToolManager shareInstance].drawerController closeDrawerAnimated:YES completion:^(BOOL finished){
-                [[XIAlertView alloc]jueJianSucceedView:baseVC data:pushModel];
-            }];
+            if (applicationState==ApplicationStateActive) {
+                [[ToolManager shareInstance].drawerController closeDrawerAnimated:YES completion:^(BOOL finished){
+                    [[XIAlertView alloc]jueJianSucceedView:baseVC data:pushModel];
+                }];
+            }else{
+                for (int i=0;i<nav.viewControllers.count; i++) {
+                    if ([nav.viewControllers[i] isKindOfClass:[MeWantMeetVC class]]) {
+                        [nav.viewControllers[i] pushModel:pushModel.api.chat];
+                        [nav popToViewController:nav.viewControllers[i] animated:YES];
+                        return;
+                    }
+                    else if (i==nav.viewControllers.count-1) {
+                        MeWantMeetVC*meVC= allocAndInit(MeWantMeetVC);
+                        meVC.btnType=1;
+                        [nav pushViewController:meVC animated:YES];
+                        return;
+                    }
+                }
+
+            }
+ 
         }
         
         //系统消息
@@ -358,7 +378,133 @@ static PushManager *pushManager;
                 
             }
             
-            
+           
+                //约见请求
+               else if ([pushModel.api.chat.type isEqualToString:KApiSystemTypeInvitation]) {
+                    if (applicationState==ApplicationStateActive) {
+                        
+                        UIAlertController *alertControl = [UIAlertController alertControllerWithTitle:@"有人约你哦" message:[NSString  stringWithFormat:@"%@想约见您,去看看吗?",pushModel.api.chat.realname] preferredStyle:UIAlertControllerStyleAlert];
+                        [alertControl addAction:[UIAlertAction actionWithTitle:@"走起" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+                            //如果就在想约见我页面,直接刷新回到最上面
+                            if ([baseVC isKindOfClass:[WantMeetMeVC class]]) {
+                                [baseVC pushModel:pushModel.api.chat];
+                            }else{
+                                //如果不在想约见我页面,判断是否pop 或push
+                                [[ToolManager shareInstance].drawerController closeDrawerAnimated:YES completion:^(BOOL finished) {
+                                    
+                                for (int i=0;i<nav.viewControllers.count; i++) {
+                                    if ([nav.viewControllers[i] isKindOfClass:[WantMeetMeVC class]]) {
+                                        [nav.viewControllers[i] pushModel:pushModel.api.chat];
+                                        [nav popToViewController:nav.viewControllers[i] animated:YES];
+                                        return;
+                                    }
+                                    else if (i==nav.viewControllers.count-1) {
+                                        WantMeetMeVC* wantVC=allocAndInit(WantMeetMeVC);
+                                        [nav pushViewController:wantVC animated:YES];
+                                        return;
+                                    }
+                                }
+                                    }];
+                            }}]];
+                        
+                        [alertControl addAction:[UIAlertAction actionWithTitle:@"不去" style:UIAlertActionStyleCancel handler:nil]];
+                        [nav presentViewController:alertControl animated:YES completion:nil];
+                        return;
+                    }
+                    else{
+                        for (int i=0;i<nav.viewControllers.count; i++) {
+                            if ([nav.viewControllers[i] isKindOfClass:[WantMeetMeVC class]]) {
+                                [nav.viewControllers[i] pushModel:pushModel.api.chat];
+                                [nav popToViewController:nav.viewControllers[i] animated:YES];
+                                return;
+                            }
+                            else if (i==nav.viewControllers.count-1) {
+                                [nav pushViewController:allocAndInit(WantMeetMeVC) animated:YES];
+                                return;
+                            }
+                        }
+                    
+                    }
+                }
+                //约见拒绝
+                else if([pushModel.api.chat.type isEqualToString: KApiSystemTypeInvitationRefuse]){
+                    if (applicationState==ApplicationStateActive) {
+                    }
+                    //杀死状态
+                    else{
+                        for (int i=0;i<nav.viewControllers.count; i++) {
+                            if ([nav.viewControllers[i] isKindOfClass:[MeWantMeetVC class]]) {
+                                [nav.viewControllers[i] pushModel:pushModel.api.chat];
+                                [nav popToViewController:nav.viewControllers[i] animated:YES];
+                                
+                                return;
+                            }
+                            else if (i==nav.viewControllers.count-1) {
+                                MeWantMeetVC*meVC= allocAndInit(MeWantMeetVC);
+                                meVC.btnType=2;
+                                [nav pushViewController:meVC animated:YES];
+                                return;
+                            }
+                        }
+                        
+                    }
+                }
+                //人脉添加请求
+                else if([pushModel.api.chat.type isEqualToString: KApiSystemTypeConnectionRequest]){
+                    //前台
+                    if (applicationState==ApplicationStateActive) {
+                        for (BaseViewController *vc in controllers) {
+                            if ([vc isKindOfClass:[NotificationViewController class]]||[vc isKindOfClass:[NotificationDetailViewController class]]) {
+                                [vc pushModel:pushModel.api.chat];
+                                
+                            }
+                            
+                        }
+                    }
+                    else{
+                        for (int i=0;i<nav.viewControllers.count; i++) {
+                            if ([nav.viewControllers[i] isKindOfClass:[ConnectionsRequestVC class]]) {
+                                [nav.viewControllers[i] pushModel:pushModel.api.chat];
+                                [nav popToViewController:nav.viewControllers[i] animated:YES];
+                                return;
+                            }
+                            else if (i==nav.viewControllers.count-1) {
+                                [nav pushViewController:allocAndInit(ConnectionsRequestVC) animated:YES];
+                                return;
+                            }
+                        }
+                    }
+                }
+                //人脉添加同意
+                else if([pushModel.api.chat.type isEqualToString: KApiSystemTypeConnectionAgree]){
+                    //前台
+                    if (applicationState==ApplicationStateActive) {
+                    }
+                    //杀死状态和后台
+                    else if(applicationState!=ApplicationStateActive){
+                        GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
+                        talk.talkType = GJGCChatFriendTalkTypePrivate;
+                        talk.toId = pushModel.api.chat.userid;
+                        talk.toUserName = pushModel.api.chat.realname;
+                        GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
+                        privateChat.type = MessageTypeNormlPage;
+                        [nav pushViewController:privateChat animated:YES];
+                    }
+                    
+                }
+                //人脉添加拒绝
+                else if([pushModel.api.chat.type isEqualToString: KApiSystemTypeRefuse]){
+                    //前台
+                    if (applicationState==ApplicationStateActive) {
+                    }
+                    else{
+                        [nav popToRootViewControllerAnimated:NO];
+                        [getAppDelegate().mainTab setSelectedIndex:0];
+                    }
+                    
+                }
+                
+
             
         }
         
@@ -410,6 +556,10 @@ static PushManager *pushManager;
         }
         
     }
+    
+    
+   
+
     
 }
 #pragma mark

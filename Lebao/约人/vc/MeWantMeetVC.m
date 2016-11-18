@@ -75,8 +75,14 @@
 
     [self setButtomScr];
     [self addTheBtnView];
-    
-    [self netWorkRefresh:NO andIsLoadMoreData:NO isShouldClearData:NO withState:_state andTabView:_oprationTab andArr:self.oprationArr andPage:_oprationPage];
+    if (self.btnType==1) {
+        [self agreeBtn:self.agreeBtn];
+    }
+   else if (self.btnType==2) {
+        [self refuseBtn:self.refuseBtn];
+    }else {
+        [self netWorkRefresh:NO andIsLoadMoreData:NO isShouldClearData:NO withState:_state andTabView:_oprationTab andArr:self.oprationArr andPage:_oprationPage];
+    }
 }
 /**
  *  最下层的scrollview
@@ -587,6 +593,24 @@
         [[MP3PlayerManager shareInstance] pausePlayer];
         [btn setImage:[UIImage imageNamed:@"meet_yuyin"] forState:UIControlStateNormal];
         
+    }
+
+}
+-(void)pushModel:(PushDataChat *)pushData{
+
+    if ([pushData.type isEqualToString:@"'invitation_refuse"]) {
+        [self refuseBtn:self.refuseBtn];
+        
+        if (_refuseArr!=nil) {
+            _refusePage=1;
+        [self netWorkRefresh:YES andIsLoadMoreData:NO isShouldClearData:YES withState:_state andTabView:_refuseTab andArr:self.refuseArr andPage:_refusePage];
+        }
+    }else{
+        [self agreeBtn:self.agreeBtn];
+        if (_agreeArr!=nil) {
+            _agreePage=1;
+            [self netWorkRefresh:YES andIsLoadMoreData:NO isShouldClearData:YES withState:_state andTabView:_agreeTab andArr:self.agreeArr andPage:_agreePage];
+        }
     }
 
 }

@@ -8,6 +8,7 @@
 
 #import "BaseViewController.h"
 
+typedef void(^ConnectionsRequestBlcok)();
 @interface ConnectionsRequestVC : BaseViewController
-
+@property(nonatomic,copy)ConnectionsRequestBlcok succeedBlock;
 @end

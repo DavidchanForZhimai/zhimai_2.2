@@ -69,7 +69,7 @@
     _agreePage=1;
     _oprationPage=1;
     _state=@"10";
-   
+    
     [self setButtomScr];
     [self addTheBtnView];
     
@@ -332,7 +332,7 @@
         [self netWorkRefresh:NO andIsLoadMoreData:NO isShouldClearData:NO withState:_state andTabView:_refuseTab andArr:self.refuseArr andPage:_refusePage];
         
     }
-   
+    
     
 }
 #pragma mark----tableview代理和资源方法
@@ -439,7 +439,7 @@
                 [self refuseBtn:_refuseBtn];
             }
         }
-     }];
+    }];
     
 }
 #pragma mark 拒绝和同意按钮点击事件
@@ -449,11 +449,11 @@
             clickRow = [NSIndexPath indexPathForRow:i inSection:0];
         }
     }
-
-   UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"同意约见后,您将获得%@元约见打赏",layout.model.reward] delegate:self cancelButtonTitle:nil otherButtonTitles:@"拒绝",@"同意", nil];
+    
+    UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"同意约见后,您将获得%@元约见打赏",layout.model.reward] delegate:self cancelButtonTitle:nil otherButtonTitles:@"拒绝",@"同意", nil];
     alertView.tag=10000;
     [alertView show];
-   
+    
     
 }
 #pragma mark 约见电话点击事件
@@ -462,7 +462,7 @@
     clickRow=indexPath;
     WantMeetLayout *layout=self.agreeArr[indexPath.row];
     
-if (layout.model.tel&&layout.model.tel!=nil) {
+    if (layout.model.tel&&layout.model.tel!=nil) {
         UIAlertView *alertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"是否要拨打电话 %@",layout.model.tel] delegate:self cancelButtonTitle:nil otherButtonTitles:@"取消",@"确定", nil];
         alertV.tag=10001;
         [alertV show];
@@ -482,19 +482,19 @@ if (layout.model.tel&&layout.model.tel!=nil) {
     GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
     privateChat.type = MessageTypeNormlPage;
     [self.navigationController pushViewController:privateChat animated:YES];
-
+    
 }
 #pragma mark 语音按钮点击事件
 -(void)tableViewCellDidSeleteAudioBtn:(UIButton *)btn layout:(WantMeetLayout *)layout andIndexPath:(NSIndexPath *)indexPath
 {
     //    _url = @"http://pic.lmlm.cn/record/201607/22/146915727469518.mp3";
-//    for (int i =0; i<self.oprationArr.count; i++) {
-//        if ([layout isEqual:(WantMeetLayout*)self.oprationArr[i]]) {
-//            clickRow = [NSIndexPath indexPathForRow:i inSection:0];
-//        }
-//    }
-   NSString *_url=[NSString stringWithFormat:@"%@%@",ImageURLS,layout.model.audio];
-
+    //    for (int i =0; i<self.oprationArr.count; i++) {
+    //        if ([layout isEqual:(WantMeetLayout*)self.oprationArr[i]]) {
+    //            clickRow = [NSIndexPath indexPathForRow:i inSection:0];
+    //        }
+    //    }
+    NSString *_url=[NSString stringWithFormat:@"%@%@",ImageURLS,layout.model.audio];
+    
     NSArray *pathArrays = [_url componentsSeparatedByString:@"/"];
     NSString *topath;
     if (pathArrays.count>0) {
@@ -504,7 +504,7 @@ if (layout.model.tel&&layout.model.tel!=nil) {
         [[MP3PlayerManager shareInstance] stopPlayer];
         [[MP3PlayerManager shareInstance] downLoadAudioWithUrl:_url  finishDownLoadBloak:^(BOOL succeed) {
             if (succeed) {
-
+                
                 btn.tag=1111;
                 [btn setImage:[UIImage imageNamed:@"meet_yuyindianbo"] forState:UIControlStateNormal];
                 [[MP3PlayerManager shareInstance] audioPlayerWithURl:topath];
@@ -512,8 +512,8 @@ if (layout.model.tel&&layout.model.tel!=nil) {
                 {
                     if (succeed) {
                         btn.tag=1110;
-
-                         [btn setImage:[UIImage imageNamed:@"meet_yuyin"] forState:UIControlStateNormal];
+                        
+                        [btn setImage:[UIImage imageNamed:@"meet_yuyin"] forState:UIControlStateNormal];
                     }
                     
                 };
@@ -526,9 +526,9 @@ if (layout.model.tel&&layout.model.tel!=nil) {
         btn.tag=1110;
         [[MP3PlayerManager shareInstance] pausePlayer];
         [btn setImage:[UIImage imageNamed:@"meet_yuyin"] forState:UIControlStateNormal];
-
+        
     }
-
+    
 }
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -542,9 +542,9 @@ if (layout.model.tel&&layout.model.tel!=nil) {
             
             NSURL *url=[NSURL URLWithString:str];
             [[UIApplication sharedApplication]openURL:url];
-
+            
         }
-
+        
     }
     if (alertView.tag==10000) {
         WantMeetLayout *layout=self.oprationArr[clickRow.row];
@@ -582,9 +582,19 @@ if (layout.model.tel&&layout.model.tel!=nil) {
                 
             }
         }];
-
+        
     }
     
+}
+-(void)pushModel:(PushDataChat *)pushData
+{
+    
+    [self oprationBtn:self.oprationBtn];
+    _state=@"10";
+    if (_oprationArr!=nil) {
+        _oprationPage=1;
+    [self netWorkRefresh:YES andIsLoadMoreData:NO isShouldClearData:YES withState:_state andTabView:_oprationTab andArr:self.oprationArr andPage:_oprationPage];
+    }
 }
 #pragma mark - MeettingTableViewCellDelegate 头像按钮点击
 -(void)tableViewCellDidSeleteHeadImg:(LWImageStorage *)imageStoragen layout:(WantMeetLayout *)layout

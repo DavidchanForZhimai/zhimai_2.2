@@ -9,5 +9,5 @@
 #import "BaseViewController.h"
 
 @interface WantMeetMeVC : BaseViewController
-
+@property(nonatomic,assign)int btnType;
 @end

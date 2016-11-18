@@ -79,8 +79,6 @@
     [XLDataService putWithUrl:requestcountConnectionsURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         
         if (isRefresh) {
-            
-            
             [[ToolManager shareInstance] endHeaderWithRefreshing:_yrTab];
         }
         if (isMoreLoadMoreData) {
@@ -251,11 +249,16 @@
             
             if (model.rtcode==1) {
                 [[ToolManager shareInstance] dismiss];
+                if (_succeedBlock) {
+                    _succeedBlock();
+                }
+                
                 if(btn.tag==2222){
                     UIAlertView *success=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"您已拒绝%@的人脉添加请求",telMessData.realname] delegate:nil cancelButtonTitle:@"继续操作" otherButtonTitles: nil];
                     [self.nearByManArr removeObjectAtIndex:clickRow.row];
                     [self.yrTab deleteRowsAtIndexPaths:[NSArray arrayWithObjects:clickRow, nil] withRowAnimation:UITableViewRowAnimationRight];
                     [success show];
+                    
 
                 }else if (btn.tag==2221){
                     UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"您已同意%@的人脉添加请求",telMessData.realname] delegate:self cancelButtonTitle:nil otherButtonTitles:@"对话",@"继续操作", nil];
@@ -300,6 +303,10 @@
         }else if(buttonIndex==2){
         }
    
+}
+-(void)pushModel:(PushDataChat *)pushData{
+    _page=1;
+    [self netWorkRefresh:YES andIsLoadMoreData:NO isShouldClearData:YES];
 }
 #pragma mark - MeettingTableViewCellDelegate 头像按钮点击
 -(void)tableViewCellDidSeleteHeadImg:(LWImageStorage *)imageStoragen layout:(MeetingCellLayout *)layout

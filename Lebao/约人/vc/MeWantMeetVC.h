@@ -10,4 +10,7 @@
 
 @interface MeWantMeetVC : BaseViewController
 
+@property(nonatomic,assign)int btnType;
+
 @end
+
