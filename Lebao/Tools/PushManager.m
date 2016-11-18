@@ -77,15 +77,6 @@ NSString * const KApiSystemTypeConnectionAgree = @"connection-agree"; //人脉�
 }
 @end
 
-@implementation PushDataChatPush
-
-+ (NSDictionary *)mj_replacedKeyFromPropertyName
-{
-    return @{@"ID" : @"id",
-             };
-}
-
-@end
 
 
 static PushManager *pushManager;

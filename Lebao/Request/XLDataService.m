@@ -77,7 +77,7 @@ static UIAlertView *letout;
             }
             else
             {
-                 responseDataBlock(nil, nil);
+                 responseDataBlock(dataObj, nil);
                
             }
             

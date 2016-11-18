@@ -11,7 +11,7 @@
 /**
   推送数据模型类
 */
-@class PushDataApi,PushDataAps,PushDataChat,PushDataChatPush;
+@class PushDataApi,PushDataAps,PushDataChat;
 @interface PushDataModel : NSObject
 
 @property(nonatomic,strong) PushDataApi *api;
@@ -25,38 +25,6 @@
 @end
 
 @interface PushDataChat : NSObject
-//约见成功
-@property(nonatomic,copy) NSString *invited_imgurl;
-@property(nonatomic,copy) NSString *invited_realname;
-@property(nonatomic,copy) NSString *beinvited_imgurl;
-@property(nonatomic,copy) NSString *beinvited_realname;
-@property(nonatomic,copy) NSString *beinvited_id;
-@property(nonatomic,copy) NSString *beinivted_tel;
-//聊天
-@property(nonatomic,strong)NSString*realname;
-//新增api
-@property(nonatomic,strong) PushDataChatPush *push;
-
-//动态
-@property(nonatomic,copy) NSString *type;
-@property(nonatomic,copy) NSString *sex;
-@property(nonatomic,copy) NSString *imgurl;
-
-@property(nonatomic,copy) NSString *userid;
-@property(nonatomic,copy) NSString *content;
-//动态
-@property(nonatomic,copy) NSString *ID;
-@property(nonatomic,copy) NSString *dynamicid;
-@property(nonatomic,copy) NSString *createtime;
-@property(nonatomic,copy) NSString *title;
-@property(nonatomic,copy) NSString *title_img;
-//动态点赞
-
-//动态评论
-@end
-
-@interface PushDataChatPush : NSObject
-
 @property(nonatomic,copy) NSString *type;
 @property(nonatomic,copy) NSString *realname;
 @property(nonatomic,copy) NSString *sex;
@@ -68,6 +36,26 @@
 @property(nonatomic,copy) NSString *vip;
 @property(nonatomic,copy) NSString *userid;
 @property(nonatomic,copy) NSString *content;
+
+//约见成功
+@property(nonatomic,copy) NSString *invited_imgurl;
+@property(nonatomic,copy) NSString *invited_realname;
+@property(nonatomic,copy) NSString *beinvited_imgurl;
+@property(nonatomic,copy) NSString *beinvited_realname;
+@property(nonatomic,copy) NSString *beinvited_id;
+@property(nonatomic,copy) NSString *beinivted_tel;
+//聊天
+
+//动态
+@property(nonatomic,copy) NSString *ID;
+@property(nonatomic,copy) NSString *dynamicid;
+@property(nonatomic,copy) NSString *createtime;
+@property(nonatomic,copy) NSString *title;
+@property(nonatomic,copy) NSString *title_img;
+//动态点赞
+
+//动态评论
+
 
 //约见
 @property(nonatomic,copy) NSString *remark;
@@ -83,7 +71,6 @@
 
 //约见拒绝
 @property(nonatomic,copy) NSString *invitation_id;
-@property(nonatomic,copy) NSString *beinvited_id;
 @property(nonatomic,copy) NSString *beinvited_sex;
 
 //人脉添加
@@ -101,9 +88,8 @@
 //认证驳回
 
 //认证通过
-
-
 @end
+
 
 
 @interface PushDataAps : NSObject
