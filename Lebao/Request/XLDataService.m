@@ -69,10 +69,9 @@ static UIAlertView *letout;
         }
         else
         {
-            
+            dataObj = [self modelTransformationWithResponseObj:responseObj modelClass:modelClass];
             if (model.rtcode ==1) {
-                
-                dataObj = [self modelTransformationWithResponseObj:responseObj modelClass:modelClass];
+
                 responseDataBlock(dataObj, nil);
             }
             else

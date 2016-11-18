@@ -197,7 +197,7 @@ static PushManager *pushManager;
             }
             
         }
-        else if (applicationState == ApplicationStateBackground)
+        else
         {
             
             [[ToolManager shareInstance].drawerController closeDrawerAnimated:YES completion:^(BOOL finished) {
@@ -215,18 +215,15 @@ static PushManager *pushManager;
                 }
                 
                 if (!isVC) {
+                    [baseVC pushModel:pushModel.api.chat];
                     [baseVC.navigationController popToRootViewControllerAnimated:NO];
                     [getAppDelegate().mainTab setSelectedIndex:1];
                 }
             }];
-            
-            
         }
-        else
-        {
-            [baseVC.navigationController popViewControllerAnimated:NO];
-            [getAppDelegate().mainTab setSelectedIndex:1];
-        }
+        
+            
+       
     }
     else
     {
@@ -257,7 +254,7 @@ static PushManager *pushManager;
                 }
                 
             }
-            else if (applicationState ==ApplicationStateBackground) {
+            else {
                 
                 [[ToolManager shareInstance].drawerController closeDrawerAnimated:YES completion:^(BOOL finished) {
                     BOOL isVC =NO;
@@ -297,22 +294,6 @@ static PushManager *pushManager;
                     }
                     
                 }];
-            }
-            else
-            {
-                
-                [[ToolManager shareInstance].drawerController closeDrawerAnimated:YES completion:^(BOOL finished) {
-                    GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
-                    talk.talkType = GJGCChatFriendTalkTypePrivate;
-                    talk.toId = pushModel.api.bid;
-                    talk.toUserName = pushModel.api.chat.realname;
-                    
-                    GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
-                    privateChat.type = MessageTypeNormlPage;
-                    [nav pushViewController:privateChat animated:YES];
-                }];
-                
-                
             }
             
         }
@@ -355,7 +336,7 @@ static PushManager *pushManager;
                     }
                     
                 }
-                else if (applicationState == ApplicationStateBackground)
+                else
                 {
                     if ([baseVC.navigationController.viewControllers containsObject:(BaseViewController *)[AuthenticationHomeViewController class]]) {
                         for (BaseViewController *vc in baseVC.navigationController.viewControllers) {
@@ -373,12 +354,7 @@ static PushManager *pushManager;
                     }
                     
                 }
-                else
-                {
-                    AuthenticationHomeViewController *vc = [[AuthenticationHomeViewController alloc]init];
-                    [baseVC.navigationController pushViewController:vc animated:NO];
-                }
-                
+                                
                 
             }
             
