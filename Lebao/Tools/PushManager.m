@@ -143,7 +143,7 @@ static PushManager *pushManager;
 //推送数据
 - (void)pushData:(NSDictionary *)notifacion andApplicationState:(ApplicationState)applicationState
 {
-    NSLog(@"notifacion =%@",notifacion);
+    //    NSLog(@"notifacion =%@",notifacion);
     pushModel = [PushDataModel mj_objectWithKeyValues:notifacion];
     //应用在前台的提示声音
     if (applicationState ==ApplicationStateActive) {
@@ -175,31 +175,51 @@ static PushManager *pushManager;
     //取到nav控制器当前显示的控制器
     UINavigationController * nav = (UINavigationController *)getAppDelegate().mainTab.selectedViewController;
     baseVC = (BaseViewController *)nav.visibleViewController;
-    
+    //得到当前所有控制器
+    NSMutableArray *controllers  = [NSMutableArray new];
+    for (UINavigationController * nav in getAppDelegate().mainTab.viewControllers) {
+        for (BaseViewController *vc in nav.childViewControllers)
+        {
+            [controllers addObject:vc];
+        }
+    }
     
     //动态推送
-    NSLog(@"pushModel.api.type =%@",pushModel.api.type);
+    //    NSLog(@"pushModel.api.type =%@",pushModel.api.type);
     if ([pushModel.api.type isEqualToString:KApiTypeDynamic]) {
-        
         if (applicationState ==ApplicationStateActive) {
             //动态详情 他人动态 动态 动态消息
-            if ([baseVC isKindOfClass:[DynamicVC class]]||[baseVC isKindOfClass:[DyMessageViewController class]]||[baseVC isKindOfClass:[OtherDynamicdViewController class]]||[baseVC isKindOfClass:[DynamicDetailsViewController class]]) {
-                [baseVC pushModel:pushModel.api.chat];
+            for (BaseViewController *vc in controllers) {
+                if ([vc isKindOfClass:[DynamicVC class]]||[nav.childViewControllers isKindOfClass:[DyMessageViewController class]]||[nav.childViewControllers isKindOfClass:[OtherDynamicdViewController class]]||[nav.childViewControllers isKindOfClass:[DynamicDetailsViewController class]] ) {
+                    [vc pushModel:pushModel.api.chat];
+                }
+                
             }
             
         }
-        else if (applicationState == ApplicationStateInactive)
+        else if (applicationState == ApplicationStateBackground)
         {
             
-            if ([baseVC.navigationController.viewControllers containsObject:(BaseViewController *)[DynamicVC class]]) {
-                BaseViewController *vc = baseVC.navigationController.viewControllers[0];
-                [vc pushModel:pushModel.api.chat];
-            }
-            else
-            {
-                [baseVC.navigationController popViewControllerAnimated:NO];
-                [getAppDelegate().mainTab setSelectedIndex:1];
-            }
+            [[ToolManager shareInstance].drawerController closeDrawerAnimated:YES completion:^(BOOL finished) {
+                //动态详情 他人动态 动态 动态消息
+                BOOL isVC =NO;
+                for (BaseViewController *vc in controllers) {
+                    if ([vc isKindOfClass:[DynamicVC class]]||[vc isKindOfClass:[DyMessageViewController class]]||[vc isKindOfClass:[DynamicDetailsViewController class]]||[vc isKindOfClass:[OtherDynamicdViewController class]] ) {
+                        isVC = YES;
+                        [vc pushModel:pushModel.api.chat];
+                        [baseVC.navigationController popToRootViewControllerAnimated:NO];
+                        [getAppDelegate().mainTab setSelectedIndex:1];
+                        
+                    }
+                    
+                }
+                
+                if (!isVC) {
+                    [baseVC.navigationController popToRootViewControllerAnimated:NO];
+                    [getAppDelegate().mainTab setSelectedIndex:1];
+                }
+            }];
+            
             
         }
         else
@@ -208,37 +228,80 @@ static PushManager *pushManager;
             [getAppDelegate().mainTab setSelectedIndex:1];
         }
     }
-    
-    //聊天
-    else if ([pushModel.api.type isEqualToString:KApiTypeMsg]) {
-        
-        //刷新界面
-        if ([baseVC isKindOfClass:[NotificationViewController class]] ) {
-            
-            NotificationViewController *noti = (NotificationViewController *)baseVC;
-            noti.isRefresh = YES;
-            
-        }
-        //返回刷新
-        for (UIViewController *subVC in nav.viewControllers) {
-            if ([subVC isKindOfClass:[NotificationViewController class]]) {
-                NotificationViewController *noti = (NotificationViewController *)subVC;
-                noti.isRefresh = YES;
+    else
+    {
+        //刷新消息界面
+        if (applicationState ==ApplicationStateActive) {
+            for (BaseViewController *vc in controllers) {
+                if ([vc isKindOfClass:[NotificationViewController class]]||[vc isKindOfClass:[NotificationDetailViewController class]]) {
+                    [vc pushModel:pushModel.api.chat];
+                    
+                }
+                
             }
             
         }
-        
-        //如果是当前控制器是我的消息控制器的话，刷新数据即可
-        if([baseVC isKindOfClass:[GJGCChatFriendViewController class]])
-        {
-            GJGCChatFriendViewController *comm =(GJGCChatFriendViewController*)baseVC;
-            if ([pushModel.api.bid intValue]==[comm.taklInfo.toId intValue]) {
+        //聊天
+        if ([pushModel.api.type isEqualToString:KApiTypeMsg]) {
+            pushModel.api.chat.type = @"msg";
+            if (applicationState ==ApplicationStateActive) {
+                for (BaseViewController *vc in controllers) {
+                    if ([vc isKindOfClass:[GJGCChatFriendViewController class]]) {
+                        GJGCChatFriendViewController *vvc =(GJGCChatFriendViewController *)vc;
+                        if ([vvc.taklInfo.toId isEqualToString:pushModel.api.bid]) {
+                            [vvc reciverNotiWithData:notifacion[@"api"][@"chat"]];
+                        }
+                        
+                    }
+                    
+                }
                 
-                [comm reciverNotiWithData:notifacion[@"api"][@"chat"]];
+            }
+            else if (applicationState ==ApplicationStateBackground) {
+                
+                [[ToolManager shareInstance].drawerController closeDrawerAnimated:YES completion:^(BOOL finished) {
+                    BOOL isVC =NO;
+                    for (BaseViewController *vc in controllers) {
+                        if ([vc isKindOfClass:[GJGCChatFriendViewController class]]) {
+                            isVC = YES;
+                            GJGCChatFriendViewController *vvc =(GJGCChatFriendViewController *)vc;
+                            if ([vvc.taklInfo.toId isEqualToString:pushModel.api.bid]) {
+                                [vvc reciverNotiWithData:notifacion[@"api"][@"chat"]];
+                                
+                            }
+                            else
+                            {
+                                isVC = NO;
+                            }
+                            
+                            
+                            if ([nav.childViewControllers containsObject:vc]) {
+                                [nav popToViewController:vc animated:NO];
+                            }
+                            else
+                            {
+                                [nav pushViewController:vc animated:NO];
+                            }
+                        }
+                        
+                    }
+                    if (!isVC) {
+                        
+                        GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
+                        talk.talkType = GJGCChatFriendTalkTypePrivate;
+                        talk.toId = pushModel.api.bid;
+                        talk.toUserName = pushModel.api.chat.realname;
+                        GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
+                        privateChat.type = MessageTypeNormlPage;
+                        [nav pushViewController:privateChat animated:YES];
+                    }
+                    
+                }];
             }
             else
             {
-                if (applicationState !=ApplicationStateActive) {
+                
+                [[ToolManager shareInstance].drawerController closeDrawerAnimated:YES completion:^(BOOL finished) {
                     GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
                     talk.talkType = GJGCChatFriendTalkTypePrivate;
                     talk.toId = pushModel.api.bid;
@@ -246,100 +309,67 @@ static PushManager *pushManager;
                     
                     GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
                     privateChat.type = MessageTypeNormlPage;
-                    [comm.navigationController pushViewController:privateChat animated:YES];
-                }
+                    [nav pushViewController:privateChat animated:YES];
+                }];
                 
                 
             }
-            return;
+            
         }
-        // 否则，跳转到我的消息
-        if (applicationState !=ApplicationStateActive) {
-            [[ToolManager shareInstance].drawerController closeDrawerAnimated:YES completion:^(BOOL finished) {
-                GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
-                talk.talkType = GJGCChatFriendTalkTypePrivate;
-                talk.toId = pushModel.api.bid;
-                talk.toUserName = pushModel.api.chat.realname;
-                
-                GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
-                privateChat.type = MessageTypeNormlPage;
-                [nav pushViewController:privateChat animated:YES];
+        //约见成功
+        else if ([pushModel.api.type isEqualToString:KApiTypeMeet])
+        {
+            [[ToolManager shareInstance].drawerController closeDrawerAnimated:YES completion:^(BOOL finished){
+                [[XIAlertView alloc]jueJianSucceedView:baseVC data:pushModel];
             }];
-            
         }
         
-    }
-    //约见成功
-    else if ([pushModel.api.type isEqualToString:KApiTypeMeet])
-    {
-        
-        [[XIAlertView alloc]jueJianSucceedView:baseVC data:pushModel];
-    }
-    
-    //系统消息
-    else if ([pushModel.api.type isEqualToString:KApiTypeSystem]) {
-        
-        //刷新界面
-        if ([baseVC isKindOfClass:[NotificationViewController class]] ) {
+        //系统消息
+        else if ([pushModel.api.type isEqualToString:KApiTypeSystem]) {
             
-            NotificationViewController *noti = (NotificationViewController *)baseVC;
-            noti.isRefresh = YES;
-            
-        }
-        //返回刷新
-        for (UIViewController *subVC in nav.viewControllers) {
-            if ([subVC isKindOfClass:[NotificationViewController class]]) {
-                NotificationViewController *noti = (NotificationViewController *)subVC;
-                noti.isRefresh = YES;
-            }
-            
-        }
-        
-        //认证成功
-        if ([pushModel.api.chat.type isEqualToString:KApiTypeSystemAuthen_pass]) {
-            if (applicationState ==ApplicationStateInactive) {
-                if ([baseVC.navigationController.viewControllers containsObject:(BaseViewController *)[DynamicVC class]]||[baseVC isKindOfClass:[DynamicVC class]]) {
-                    BaseViewController *vc = baseVC.navigationController.viewControllers[0];
-                    [vc pushModel:pushModel.api.chat];
-                }
-                else
+            //认证成功
+            if ([pushModel.api.chat.type isEqualToString:KApiTypeSystemAuthen_pass]) {
+                
+                if (applicationState == ApplicationStateBackground)
                 {
                     [baseVC.navigationController popViewControllerAnimated:NO];
                     [getAppDelegate().mainTab setSelectedIndex:0];
                 }
-            }
-            else if (applicationState == ApplicationStateBackground)
-            {
-                [baseVC.navigationController popViewControllerAnimated:NO];
-                [getAppDelegate().mainTab setSelectedIndex:0];
-            }
-            
-            
-        }
-        //认证失败
-        else if ([pushModel.api.chat.type isEqualToString:KApiTypeSystemAuthenReject]) {
-            
-            if (applicationState ==ApplicationStateActive) {
-                //认证失败
-                if ([baseVC isKindOfClass:[AuthenticationHomeViewController class]]) {
-                    [baseVC pushModel:pushModel.api.chat];
-                }
-                //弹窗
-                else
-                {
-                    UIAlertView *renzenV = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:pushModel.api.chat.content delegate:self cancelButtonTitle:@"知道了" otherButtonTitles:@"再去认证", nil];
-                    renzenV.tag =888;
-                    [renzenV show];
-                }
+                
                 
             }
-            else if (applicationState == ApplicationStateInactive)
-            {
-                if ([baseVC.navigationController.viewControllers containsObject:(BaseViewController *)[AuthenticationHomeViewController class]]) {
-                    for (BaseViewController *vc in baseVC.navigationController.viewControllers) {
-                        if ([vc isKindOfClass:[AuthenticationHomeViewController class]]) {
-                            [vc pushModel:pushModel.api.chat];
+            //认证失败
+            else if ([pushModel.api.chat.type isEqualToString:KApiTypeSystemAuthenReject]) {
+                
+                if (applicationState ==ApplicationStateActive) {
+                    //认证失败
+                    if ([baseVC isKindOfClass:[AuthenticationHomeViewController class]]) {
+                        [baseVC pushModel:pushModel.api.chat];
+                    }
+                    //弹窗
+                    else
+                    {
+                        UIAlertView *renzenV = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:pushModel.api.chat.content delegate:self cancelButtonTitle:@"知道了" otherButtonTitles:@"再去认证", nil];
+                        renzenV.tag =888;
+                        [renzenV show];
+                    }
+                    
+                }
+                else if (applicationState == ApplicationStateBackground)
+                {
+                    if ([baseVC.navigationController.viewControllers containsObject:(BaseViewController *)[AuthenticationHomeViewController class]]) {
+                        for (BaseViewController *vc in baseVC.navigationController.viewControllers) {
+                            if ([vc isKindOfClass:[AuthenticationHomeViewController class]]) {
+                                [vc pushModel:pushModel.api.chat];
+                            }
                         }
+                        
+                    }
+                    else
+                    {
+                        AuthenticationHomeViewController *vc = [[AuthenticationHomeViewController alloc]init];
+                        [baseVC.navigationController pushViewController:vc animated:NO];
+                        
                     }
                     
                 }
@@ -347,46 +377,25 @@ static PushManager *pushManager;
                 {
                     AuthenticationHomeViewController *vc = [[AuthenticationHomeViewController alloc]init];
                     [baseVC.navigationController pushViewController:vc animated:NO];
-                    
                 }
                 
+                
             }
-            else
-            {
-                AuthenticationHomeViewController *vc = [[AuthenticationHomeViewController alloc]init];
-                [baseVC.navigationController pushViewController:vc animated:NO];
-            }
+            
             
             
         }
         
         
-        
-    }
-    
-    
-    //跨界
-    else if ([pushModel.api.type isEqualToString:KApiTypeCorps]||[pushModel.api.type isEqualToString:KApiTypeCoop])
-    {
-        
-        //如果是当前控制器是我的消息控制器的话，刷新数据即可
-        if([baseVC isKindOfClass:[MyKuaJieVC class]])
+        //跨界
+        else if ([pushModel.api.type isEqualToString:KApiTypeCorps]||[pushModel.api.type isEqualToString:KApiTypeCoop])
         {
-            MyKuaJieVC * myKuaJieVC = (MyKuaJieVC *)baseVC;
-            if ([pushModel.api.type isEqualToString:KApiTypeCorps]) {
-                myKuaJieVC.isLinquVC = NO;
-            }
-            else
-            {
-                myKuaJieVC.isLinquVC = YES;
-            }
             
-        }
-        else
-        {
-            if (applicationState !=ApplicationStateActive) {
-                MyKuaJieVC * myKuaJieVC = allocAndInit(MyKuaJieVC);
-                if ([pushModel.api.type isEqualToString:KApiTypeDemand]) {
+            //如果是当前控制器是我的消息控制器的话，刷新数据即可
+            if([baseVC isKindOfClass:[MyKuaJieVC class]])
+            {
+                MyKuaJieVC * myKuaJieVC = (MyKuaJieVC *)baseVC;
+                if ([pushModel.api.type isEqualToString:KApiTypeCorps]) {
                     myKuaJieVC.isLinquVC = NO;
                 }
                 else
@@ -394,51 +403,37 @@ static PushManager *pushManager;
                     myKuaJieVC.isLinquVC = YES;
                 }
                 
-                [nav pushViewController:myKuaJieVC animated:YES];
+            }
+            else
+            {
+                if (applicationState !=ApplicationStateActive) {
+                    MyKuaJieVC * myKuaJieVC = allocAndInit(MyKuaJieVC);
+                    if ([pushModel.api.type isEqualToString:KApiTypeDemand]) {
+                        myKuaJieVC.isLinquVC = NO;
+                    }
+                    else
+                    {
+                        myKuaJieVC.isLinquVC = YES;
+                    }
+                    
+                    [nav pushViewController:myKuaJieVC animated:YES];
+                }
+            }
+            
+        }
+        else if ([pushModel.api.type isEqualToString:KApiTypeCorps])
+        {
+            
+            if (applicationState !=ApplicationStateActive) {
+                
+                NotificationDetailViewController* notificationDetailViewController = allocAndInit(NotificationDetailViewController);
+                
+                [notificationDetailViewController pushModel:pushModel.api.chat];
+                [nav pushViewController:notificationDetailViewController animated:YES];
             }
         }
         
     }
-    //    else if ([pushModel.api.type isEqualToString:KApiTypeCorps]||[pushModel.api.type isEqualToString:KApiTypeSystem])
-    //    {
-    //
-    //
-    //
-    //
-    //
-    //        //如果是当前控制器是我的消息控制器的话，刷新数据即可
-    //        if([baseVC isKindOfClass:[NotificationDetailViewController class]])
-    //        {
-    //            NotificationDetailViewController* notificationDetailViewController = (NotificationDetailViewController *)baseVC;
-    //            if ([pushModel.api.type isEqualToString:KApiTypeCorps]) {
-    //                notificationDetailViewController.isSystempagetype = NO;
-    //            }
-    //            else
-    //            {
-    //                notificationDetailViewController.isSystempagetype = YES;
-    //            }
-    //
-    //        }
-    //        else
-    //        {
-    //            if (applicationState !=ApplicationStateActive) {
-    //
-    //                NotificationDetailViewController* notificationDetailViewController = allocAndInit(NotificationDetailViewController);
-    //
-    //                if ([pushModel.api.type isEqualToString:KApiTypeCorps]) {
-    //                    notificationDetailViewController.isSystempagetype = NO;
-    //                }
-    //                else
-    //                {
-    //                    notificationDetailViewController.isSystempagetype = YES;
-    //                }
-    //
-    //                [nav pushViewController:notificationDetailViewController animated:YES];
-    //            }
-    //        }
-    //
-    //
-    //    }
     
 }
 #pragma mark
@@ -456,8 +451,10 @@ static PushManager *pushManager;
         }
         else
         {
-            AuthenticationHomeViewController *vc = [[AuthenticationHomeViewController alloc]init];
-            [baseVC.navigationController pushViewController:vc animated:NO];
+            [[ToolManager shareInstance].drawerController closeDrawerAnimated:YES completion:^(BOOL finished) {
+                AuthenticationHomeViewController *vc = [[AuthenticationHomeViewController alloc]init];
+                [baseVC.navigationController pushViewController:vc animated:NO];
+            }];
             
         }
         

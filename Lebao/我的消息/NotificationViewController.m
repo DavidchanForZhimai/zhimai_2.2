@@ -41,12 +41,28 @@
 {
     NotificationModal *modal;
 }
+#pragma mark
+#pragma mark - 推送
+-(void)pushModel:(PushDataChat *)pushData
+{
+    
+    if ([pushData.type isEqualToString:@"msg"]) {
+        
+        _page =1;
+        [self netWork:NO isFooter:NO isShouldClear:YES isNeedLoadView:NO];
+    }
+    else
+    {
+        _page =1;
+        [self netWork:NO isFooter:NO isShouldClear:YES isNeedLoadView:NO];
+    }
+    
+}
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self requestcountConnections];
-    [self netWork:NO isFooter:NO isShouldClear:YES];
-    
+   
     //设置消息未读数(动态消息未读数)
     [[PushManager shareInstace] getMsgCountSucceed:^(int dynamicCount, int msgcount) {
         
@@ -79,15 +95,9 @@
     connection_count=@"0";
     num=@"0";
     [self navView];
-    
+    [self netWork:NO isFooter:NO isShouldClear:YES isNeedLoadView:YES];
 }
-- (void)setIsRefresh:(BOOL)isRefresh
-{
-    if (isRefresh) {
-        _page =1;
-        [self netWork:YES isFooter:NO isShouldClear:YES];
-    }
-}
+
 #pragma mark - Navi_View
 - (void)navView
 {
@@ -109,11 +119,11 @@
 
     [[ToolManager shareInstance] scrollView:_notificationView footerWithRefreshingBlock:^{
         _page =_nowPage + 1;
-        [self netWork:NO isFooter:YES isShouldClear:NO];
+        [self netWork:NO isFooter:YES isShouldClear:NO isNeedLoadView:NO];
     }];
     [[ToolManager shareInstance] scrollView:_notificationView headerWithRefreshingBlock:^{
         _page =1;
-        [self netWork:YES isFooter:NO isShouldClear:YES];
+        [self netWork:YES isFooter:NO isShouldClear:YES isNeedLoadView:NO];
     }];
     
     [self.view addSubview:_notificationView];
@@ -169,13 +179,12 @@
 }
 #pragma mark
 #pragma mark - netWork-
-- (void)netWork:(BOOL)isRefresh isFooter:(BOOL)isFooter isShouldClear:(BOOL)isShouldClear
+- (void)netWork:(BOOL)isRefresh isFooter:(BOOL)isFooter isShouldClear:(BOOL)isShouldClear isNeedLoadView:(BOOL)isNeedLoadView
 {
     
     NSMutableDictionary *param = [Parameter parameterWithSessicon];
     [param setObject:@(_page) forKey:@"page"];
-    
-    if (_secondNotificationArray.count==0) {
+    if (isNeedLoadView&&_secondNotificationArray.count==0) {
         [[ToolManager shareInstance] showWithStatus];
     }
     [XLDataService postWithUrl:MessageURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
@@ -328,7 +337,6 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section==0&&indexPath.row==0) {
         NotificationDetailViewController *detail = allocAndInit(NotificationDetailViewController);
-        detail.isSystempagetype =YES;
         PushView(self, detail);
 
     } if (indexPath.section==0&&indexPath.row==1) {

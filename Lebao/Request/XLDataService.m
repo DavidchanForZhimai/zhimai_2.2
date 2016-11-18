@@ -84,7 +84,7 @@ static UIAlertView *letout;
         }
     } failure:^(NSError *error) {
         
-        responseDataBlock(nil, nil);
+        responseDataBlock(dataObj, nil);
        
     }];
 }

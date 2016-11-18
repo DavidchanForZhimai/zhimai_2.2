@@ -1554,11 +1554,11 @@ GJCUCaptureViewControllerDelegate>
    
  
 }
-#pragma mark 接受消息
-
+#pragma mark
+#pragma mark - 推送
 - (void)reciverNotiWithData:(NSDictionary *)dic
 {
-    
+    NSLog(@"vvcvvcvvc，dic =%@",dic);
     CommunityDataModal *data =[CommunityDataModal mj_objectWithKeyValues:dic];
    
     GJGCChatFriendContentModel *chatContentModel = [[GJGCChatFriendContentModel alloc]init];

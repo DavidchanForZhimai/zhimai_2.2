@@ -57,6 +57,7 @@ static BOOL isBackGroundActivateApplication;
     NSLog(@"********** iOS7.0之后 background **********");
     // 应用在前台，不跳转页面，让用户选择。
     if (application.applicationState == UIApplicationStateActive) {
+        NSLog(@"前台");
         
         [[PushManager shareInstace] pushData:userInfo andApplicationState:ApplicationStateActive];
 
@@ -66,7 +67,7 @@ static BOOL isBackGroundActivateApplication;
     if (application.applicationState == UIApplicationStateInactive && !isBackGroundActivateApplication)
     {
        
-      
+         NSLog(@"杀死状态下");
          [[PushManager shareInstace] pushData:userInfo andApplicationState:ApplicationStateInactive];
         
         
@@ -75,6 +76,7 @@ static BOOL isBackGroundActivateApplication;
     if (application.applicationState == UIApplicationStateBackground) {
 //        NSLog(@"background is Activated Application ");
         // 此处可以选择激活应用提前下载邮件图片等内容。
+         NSLog(@"应用在后台");
         isBackGroundActivateApplication = YES;
         
          [[PushManager shareInstace] pushData:userInfo andApplicationState:ApplicationStateBackground];
