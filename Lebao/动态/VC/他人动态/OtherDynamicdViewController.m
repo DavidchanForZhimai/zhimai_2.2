@@ -218,7 +218,9 @@
 }
 -(void)getjjrJson
 {
-    
+    if (_jjrJsonArr.count==0) {
+        [[ToolManager shareInstance] showWithStatus];
+    }
     [[HomeInfo shareInstance]getHomePageDT:jjrpageNumb brokerid:_dynamicdID andcallBack:^(BOOL issucced, NSString* info, NSDictionary* jsonDic) {
     
         if (issucced == YES) {

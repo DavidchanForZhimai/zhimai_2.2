@@ -591,8 +591,8 @@
 		635B176C1D9924CF00C6B5E9 /* AddConnectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 635B176B1D9924CF00C6B5E9 /* AddConnectionView.m */; };
 		635D8EF51C116519006076D1 /* ViewPagerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 635D8EF41C116519006076D1 /* ViewPagerController.m */; };
 		636315B01D0EB93D009C1132 /* JingJiRenVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6363152C1D0EB93D009C1132 /* JingJiRenVC.xib */; };
-		637214081C84296100C6CB98 /* defaulthead_nv.png in Resources */ = {isa = PBXBuildFile; fileRef = 637214071C84296100C6CB98 /* defaulthead_nv.png */; };
-		6372140A1C84296600C6CB98 /* defaulthead.png in Resources */ = {isa = PBXBuildFile; fileRef = 637214091C84296600C6CB98 /* defaulthead.png */; };
+		63651D401DDEDF75003A704A /* defaulthead_nv.png in Resources */ = {isa = PBXBuildFile; fileRef = 63651D3E1DDEDF75003A704A /* defaulthead_nv.png */; };
+		63651D411DDEDF75003A704A /* defaulthead.png in Resources */ = {isa = PBXBuildFile; fileRef = 63651D3F1DDEDF75003A704A /* defaulthead.png */; };
 		6379CBAF1DDD8005002AF557 /* JRSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 6379CBAC1DDD8005002AF557 /* JRSwizzle.m */; };
 		6379CBB01DDD8005002AF557 /* SYSafeCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 6379CBAE1DDD8005002AF557 /* SYSafeCategory.m */; };
 		637E72CF1CCE173300BA2EA1 /* images.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 637E72CE1CCE173300BA2EA1 /* images.bundle */; };
@@ -1972,8 +1972,8 @@
 		6363153F1D0EB93D009C1132 /* MoreXSCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoreXSCell.h; sourceTree = "<group>"; };
 		636315401D0EB93D009C1132 /* MoreXSCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoreXSCell.m; sourceTree = "<group>"; };
 		636315411D0EB93D009C1132 /* MoreXSCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MoreXSCell.xib; sourceTree = "<group>"; };
-		637214071C84296100C6CB98 /* defaulthead_nv.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaulthead_nv.png; sourceTree = "<group>"; };
-		637214091C84296600C6CB98 /* defaulthead.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaulthead.png; sourceTree = "<group>"; };
+		63651D3E1DDEDF75003A704A /* defaulthead_nv.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaulthead_nv.png; sourceTree = "<group>"; };
+		63651D3F1DDEDF75003A704A /* defaulthead.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaulthead.png; sourceTree = "<group>"; };
 		6379CBA91DDD3CEF002AF557 /* Lebao.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Lebao.entitlements; sourceTree = "<group>"; };
 		6379CBAB1DDD8005002AF557 /* JRSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JRSwizzle.h; sourceTree = "<group>"; };
 		6379CBAC1DDD8005002AF557 /* JRSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JRSwizzle.m; sourceTree = "<group>"; };
@@ -4193,6 +4193,8 @@
 		634AD6BC1C07EC540047C8D5 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				63651D3E1DDEDF75003A704A /* defaulthead_nv.png */,
+				63651D3F1DDEDF75003A704A /* defaulthead.png */,
 				63237D421D8F790B00F4ED60 /* 消息 */,
 				708CA3C31D88EE36005392F5 /* 约见 */,
 				63E9A56C1D4EEE9F008704CB /* 动态 */,
@@ -4478,8 +4480,6 @@
 				6303EEBD1CE5724600BEC470 /* icon_widelyspreaddetail_share@2x.png */,
 				6303EEBE1CE5724600BEC470 /* icon_widelyspreaddetail_share@3x.png */,
 				63EF3B601C58948C00BEEC59 /* mycontent */,
-				637214071C84296100C6CB98 /* defaulthead_nv.png */,
-				637214091C84296600C6CB98 /* defaulthead.png */,
 				63C661A91D06B88E0047DA10 /* icon_red_packets_forwarding@3x.png */,
 				63C661AA1D06B88E0047DA10 /* icon_red_packets_forwarding@2x.png */,
 				63EF4AEF1C7AFB3200A8D6F0 /* exhibition_clueNum@2x.png */,
@@ -7026,6 +7026,7 @@
 				63302FB11D921FA50019E9D6 /* 092[菜刀]@2x.png in Resources */,
 				63340B3C1CFBE3490010A596 /* kuajie@3x.png in Resources */,
 				63302F801D921FA50019E9D6 /* 039[糗大了]@2x.png in Resources */,
+				63651D401DDEDF75003A704A /* defaulthead_nv.png in Resources */,
 				63346E7D1CE4375B007BC875 /* icon_back@3x.png in Resources */,
 				63302FC51D921FA50019E9D6 /* 删除@3x.png in Resources */,
 				63237CF31D8E472300F4ED60 /* icon_discover_wodewnzhang@3x.png in Resources */,
@@ -7279,7 +7280,6 @@
 				63302F871D921FA50019E9D6 /* 046[奋斗]@2x.png in Resources */,
 				63346E4F1CE42985007BC875 /* transboundary_normal@3x.png in Resources */,
 				63302FA51D921FA50019E9D6 /* 076[便便]@2x.png in Resources */,
-				6372140A1C84296600C6CB98 /* defaulthead.png in Resources */,
 				63237CF41D8E472300F4ED60 /* icon_discover_xiansuo@2x.png in Resources */,
 				63302F941D921FA50019E9D6 /* 059[瓢虫]@2x.png in Resources */,
 				63237D3E1D8E827B00F4ED60 /* [iconprofilevipweikaitong]@2x.png in Resources */,
@@ -7400,7 +7400,6 @@
 				63EF3B7B1C5895E700BEEC59 /* icon_exhibition_mycontent_delete_nomal@2x.png in Resources */,
 				70ED0A871D75662C00F4565A /* gengduo@2x.png in Resources */,
 				63340B561CFBE3490010A596 /* yilinqe@3x.png in Resources */,
-				637214081C84296100C6CB98 /* defaulthead_nv.png in Resources */,
 				63E57C6D1CBF2DD700645852 /* comboDownArrow@2x.png in Resources */,
 				63302F881D921FA50019E9D6 /* 047[猪头]@2x.png in Resources */,
 				63237D0E1D8E710B00F4ED60 /* icon_me_renzheng@3x.png in Resources */,
@@ -7408,6 +7407,7 @@
 				63237CC41D8E2C4700F4ED60 /* icon_bar_selected_message@3x.png in Resources */,
 				63340B351CFBE3490010A596 /* guanztada@2x.png in Resources */,
 				707CCA491D8F8D1D00E0E730 /* ZSSimage.png in Resources */,
+				63651D411DDEDF75003A704A /* defaulthead.png in Resources */,
 				63302F9E1D921FA50019E9D6 /* 069[转圈]@2x.png in Resources */,
 				70796E681D6B02CC005B8441 /* icon_find_phone_del@3x.png in Resources */,
 				63EF4AF91C7AFB3200A8D6F0 /* exhibition_redPaper@2x.png in Resources */,
