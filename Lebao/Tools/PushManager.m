@@ -350,7 +350,7 @@ static PushManager *pushManager;
                     //弹窗
                     else
                     {
-                        UIAlertView *renzenV = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:pushModel.api.chat.content delegate:self cancelButtonTitle:@"知道了" otherButtonTitles:@"再去认证", nil];
+                        UIAlertView *renzenV = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:pushModel.api.chat.content delegate:self cancelButtonTitle:nil otherButtonTitles:@"知道了",@"再去认证", nil];
                         renzenV.tag =888;
                         [renzenV show];
                     }
