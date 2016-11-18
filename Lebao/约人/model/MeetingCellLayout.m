@@ -27,7 +27,13 @@
         _avatarStorage.placeholder = [UIImage imageNamed:@"defaulthead"];
         if ([model.imgurl isEqualToString:ImageURLS]) {
             
-            _avatarStorage.contents = [UIImage imageNamed:@"defaulthead"];
+            if (model.sex==2) {
+                _avatarStorage.contents = [UIImage imageNamed:@"defaulthead_nv"];
+            }
+            else
+            {
+                _avatarStorage.contents = [UIImage imageNamed:@"defaulthead"];
+            }
             
         }
         _avatarStorage.cornerRadius = _avatarStorage.width/2.0;

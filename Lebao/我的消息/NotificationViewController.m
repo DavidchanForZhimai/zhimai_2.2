@@ -55,6 +55,11 @@
     {
         [self requestcountConnections];
     }
+    else
+    {
+        _page =1;
+        [self netWork:NO isFooter:NO isShouldClear:YES isNeedLoadView:NO];
+    }
     
 }
 -(void)viewWillAppear:(BOOL)animated

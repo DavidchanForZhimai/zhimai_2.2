@@ -227,10 +227,11 @@ static PushManager *pushManager;
             
        
     }
+    
     else
     {
         //刷新消息界面
-        if (applicationState ==ApplicationStateActive) {
+      
             for (BaseViewController *vc in controllers) {
                 if ([vc isKindOfClass:[NotificationViewController class]]||[vc isKindOfClass:[NotificationDetailViewController class]]) {
                     [vc pushModel:pushModel.api.chat];
@@ -238,8 +239,7 @@ static PushManager *pushManager;
                 }
                 
             }
-            
-        }
+        
         //聊天
         if ([pushModel.api.type isEqualToString:KApiTypeMsg]) {
             pushModel.api.chat.type = @"msg";
