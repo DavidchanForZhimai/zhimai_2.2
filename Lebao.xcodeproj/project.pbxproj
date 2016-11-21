@@ -176,6 +176,8 @@
 		632E935A1D2A644500C15956 /* icon_dicover_me_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 632E93581D2A644500C15956 /* icon_dicover_me_selected@2x.png */; };
 		632E935B1D2A644500C15956 /* icon_dicover_me_selected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 632E93591D2A644500C15956 /* icon_dicover_me_selected@3x.png */; };
 		632EFAF61D90DAE500C8D47A /* FriendImpressionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 632EFAF51D90DAE500C8D47A /* FriendImpressionViewController.m */; };
+		632FC6401DE2F73800008B18 /* [icondinwei]@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 632FC63E1DE2F73800008B18 /* [icondinwei]@2x.png */; };
+		632FC6411DE2F73800008B18 /* [icondinwei]@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 632FC63F1DE2F73800008B18 /* [icondinwei]@3x.png */; };
 		63302EB51D921FA50019E9D6 /* ClueCommunityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63302C6D1D921FA50019E9D6 /* ClueCommunityViewController.m */; };
 		63302EB71D921FA50019E9D6 /* CustomerServiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63302C711D921FA50019E9D6 /* CustomerServiceViewController.m */; };
 		63302EB81D921FA50019E9D6 /* NotificationDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63302C731D921FA50019E9D6 /* NotificationDetailViewController.m */; };
@@ -1324,6 +1326,8 @@
 		632E93591D2A644500C15956 /* icon_dicover_me_selected@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_dicover_me_selected@3x.png"; sourceTree = "<group>"; };
 		632EFAF41D90DAE500C8D47A /* FriendImpressionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendImpressionViewController.h; sourceTree = "<group>"; };
 		632EFAF51D90DAE500C8D47A /* FriendImpressionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendImpressionViewController.m; sourceTree = "<group>"; };
+		632FC63E1DE2F73800008B18 /* [icondinwei]@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "[icondinwei]@2x.png"; sourceTree = "<group>"; };
+		632FC63F1DE2F73800008B18 /* [icondinwei]@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "[icondinwei]@3x.png"; sourceTree = "<group>"; };
 		63302C6C1D921FA50019E9D6 /* ClueCommunityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClueCommunityViewController.h; sourceTree = "<group>"; };
 		63302C6D1D921FA50019E9D6 /* ClueCommunityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClueCommunityViewController.m; sourceTree = "<group>"; };
 		63302C701D921FA50019E9D6 /* CustomerServiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomerServiceViewController.h; sourceTree = "<group>"; };
@@ -4542,6 +4546,8 @@
 		63543D7C1C15758B005966C1 /* Me */ = {
 			isa = PBXGroup;
 			children = (
+				632FC63E1DE2F73800008B18 /* [icondinwei]@2x.png */,
+				632FC63F1DE2F73800008B18 /* [icondinwei]@3x.png */,
 				6310B21F1D9D0D8500ABD5D9 /* 好友印象 */,
 				63237D561D8F8C1A00F4ED60 /* 身份认证 */,
 				63237D211D8E7D4800F4ED60 /* 我的详情 */,
@@ -7024,6 +7030,7 @@
 				63302FB11D921FA50019E9D6 /* 092[菜刀]@2x.png in Resources */,
 				63340B3C1CFBE3490010A596 /* kuajie@3x.png in Resources */,
 				63302F801D921FA50019E9D6 /* 039[糗大了]@2x.png in Resources */,
+				632FC6411DE2F73800008B18 /* [icondinwei]@3x.png in Resources */,
 				63651D401DDEDF75003A704A /* defaulthead_nv.png in Resources */,
 				63346E7D1CE4375B007BC875 /* icon_back@3x.png in Resources */,
 				63302FC51D921FA50019E9D6 /* 删除@3x.png in Resources */,
@@ -7142,6 +7149,7 @@
 				63237D3F1D8E827B00F4ED60 /* [iconprofilevipweikaitong]@3x.png in Resources */,
 				63346E4B1CE42985007BC875 /* find_normal@3x.png in Resources */,
 				63F2DFEB1CFD1D1C008BB5B9 /* discover_clue_selected@2x.png in Resources */,
+				632FC6401DE2F73800008B18 /* [icondinwei]@2x.png in Resources */,
 				63302FB21D921FA50019E9D6 /* 093[拳头]@2x.png in Resources */,
 				63302F661D921FA50019E9D6 /* 014[抓狂]@2x.png in Resources */,
 				63302F781D921FA50019E9D6 /* 031[阴险]@2x.png in Resources */,

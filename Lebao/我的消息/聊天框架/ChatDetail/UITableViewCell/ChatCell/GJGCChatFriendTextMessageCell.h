@@ -12,7 +12,6 @@
 @interface GJGCChatFriendTextMessageCell : GJGCChatFriendBaseCell
 
 @property (nonatomic,strong)GJCFCoreTextContentView *contentLabel;
-
 @property (nonatomic,assign)CGFloat contentInnerMargin;
 
 @end

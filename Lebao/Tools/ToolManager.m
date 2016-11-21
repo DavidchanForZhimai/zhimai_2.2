@@ -87,7 +87,7 @@ static dispatch_once_t once;
 - (void)imageView:(id)imageView setImageWithURL:(NSString *)imageURL placeholderType:(PlaceholderType)placeholderType
 {
     //头像设置圆形
-    if (placeholderType ==PlaceholderTypeUserHead) {
+    if (placeholderType ==PlaceholderTypeUserHead||placeholderType ==PlaceholderTypeUserHeadNv) {
         
         [imageView setRound];
         

@@ -154,6 +154,12 @@
     
     GJGCChatFriendContentModel *chatContentModel = (GJGCChatFriendContentModel *)contentModel;
     self.isFromSelf = chatContentModel.isFromSelf;
+//    if (self.isFromSelf) {
+//        chatContentModel.originTextMessage = [NSString stringWithFormat:@"%@ ",chatContentModel.originTextMessage];
+//    }else
+//    {
+//        chatContentModel.originTextMessage = [NSString stringWithFormat:@" %@",chatContentModel.originTextMessage];
+//    }
     self.contentCopyString = chatContentModel.originTextMessage;
     
     
@@ -196,28 +202,18 @@
             
         }
         
-        //字自己显示白色
-
-        if (self.isFromSelf) {
-            GJCFCoreTextAttributedStringStyle *stringStyle = [[GJCFCoreTextAttributedStringStyle alloc]init];
-            stringStyle.foregroundColor = WhiteColor;
-            
-            NSMutableAttributedString *attriString = [[NSMutableAttributedString alloc]initWithAttributedString:attributedString];
-            [attriString addAttributes:[stringStyle foregroundColorAttributedDictionary] range:GJCFStringRange(attributedString.string)];
-            self.contentLabel.contentAttributedString = attriString ;
-            
-            
-        }else
-        {
-            GJCFCoreTextAttributedStringStyle *stringStyle = [[GJCFCoreTextAttributedStringStyle alloc]init];
-            stringStyle.foregroundColor = BlackTitleColor;
-            
-            NSMutableAttributedString *attriString = [[NSMutableAttributedString alloc]initWithAttributedString:attributedString];
-            [attriString addAttributes:[stringStyle foregroundColorAttributedDictionary] range:GJCFStringRange(attributedString.string)];
-            self.contentLabel.contentAttributedString = attriString ;
-
-        }
-     
+        //字自己显示白
+        
+//        UIColor *color  = BlackTitleColor;
+//        if (chatContentModel.isFromSelf) {
+//            color = WhiteColor;
+//            
+//        }
+//        
+//        [attributedString addAttribute:(__bridge id)kCTForegroundColorAttributeName value:color range:NSMakeRange(0, attributedString.string.length)];
+        self.contentLabel.contentAttributedString = attributedString;
+       
+        
         NSArray *phoneArray = [parseDict objectForKey:@"phone"];
         NSArray *urlArray = [parseDict objectForKey:@"url"];
         
@@ -255,6 +251,7 @@
        
 
     }
+    
     
     /* 图片缓存渲染 */
     if (renderCacheImage) {

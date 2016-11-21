@@ -23,6 +23,7 @@
 #import "EvaluateVC.h"
 #import "VIPPrivilegeVC.h"
 #import "AuthenticationHomeViewController.h"
+#import "NSString+Extend.h"
 #define TagHeight 22
 #define MininumTagWidth (APPWIDTH - 120)/5.0
 #define MaxinumTagWidth (APPWIDTH - 20)
@@ -48,7 +49,7 @@
 @property(nonatomic,strong)NSString *vip;
 @property(nonatomic,strong)NSString *want_count;
 @property(nonatomic,assign)int  workyears;
-
+@property(nonatomic,copy) NSString  *area;
 @property(assign)BOOL isme;
 @end
 @implementation HeaderModel
@@ -92,6 +93,20 @@
         nameTextStorage.textColor = BlackTitleColor;
         nameTextStorage.frame = CGRectMake(0, 65, SCREEN_WIDTH , CGFLOAT_MAX);
         nameTextStorage.textAlignment = NSTextAlignmentCenter;
+        //城市
+        LWTextStorage* city = [[LWTextStorage alloc] init];
+        NSArray *array = [model.area componentsSeparatedByString:@"-"];
+        NSString *area = model.area;
+        if (array.count>1) {
+            area =array[1];
+        }
+        city.text = [NSString stringWithFormat:@"[icondinwei]  %@",area];
+        city.font = Size(24.0);
+
+        city.textColor = LightBlackTitleColor;
+        city.frame = CGRectMake( APPWIDTH - ([area sizeWithFont: city.font maxSize:CGSizeMake(100, CGFLOAT_MAX)].width + 30),15,[city.text sizeWithFont: city.font maxSize:CGSizeMake(100, CGFLOAT_MAX)].width + 20, CGFLOAT_MAX);
+        [LWTextParser parseEmojiWithTextStorage:city];
+        
         //行业
         LWTextStorage* industryTextStorage = [[LWTextStorage alloc] init];
         if (model.address.length>0) {
@@ -132,6 +147,7 @@
 //        [self addStorage:_avatarStorage];
         [self addStorage:nameTextStorage];
         [self addStorage:industryTextStorage];
+        [self addStorage:city];
         self.height  = [self suggestHeightWithBottomMargin:60.0];
     }
     return self;
@@ -167,6 +183,8 @@
 @property(nonatomic,assign)BOOL islookMore;
 
 @property(nonatomic,strong)HeaderModel *model;
+
+
 @end
 
 @implementation MyDetialViewController
@@ -382,7 +400,6 @@
     
     _userView = [[LWAsyncDisplayView alloc]initWithFrame:frame(0, 10, APPWIDTH, self.headerViewLayout.height - 60)];
     _userView.userInteractionEnabled = YES;
-    
     [_userView addSubview:self.userIcon];
     
     return _userView;
@@ -392,6 +409,7 @@
 {
     if (!_userIcon) {
         _userIcon = [[UIImageView alloc]initWithFrame:CGRectMake((APPWIDTH - 44)/2.0, 13, 44, 44)];
+        _userIcon.layer.masksToBounds = YES;
         _userIcon.userInteractionEnabled = YES;
         UITapGestureRecognizer *tap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(imageViewTap:)];
         tap.numberOfTapsRequired = 1;
@@ -931,7 +949,7 @@
    
     [[ToolManager shareInstance] showWithStatus];
     [XLDataService putWithUrl:detailManURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-//        NSLog(@"dataObj =%@",dataObj);
+        NSLog(@"dataObj =%@",dataObj);
         if (dataObj) {
             headerModel = [HeaderModel mj_objectWithKeyValues:dataObj[@"data"]];
             if ([dataObj[@"rtcode"] integerValue]==1) {

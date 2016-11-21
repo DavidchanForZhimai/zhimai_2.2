@@ -188,7 +188,7 @@
 #pragma mark
 - (void)userIconTap
 {
-    NSLog(@"userIconTap");
+    
     [[ToolManager shareInstance].drawerController closeDrawerAnimated:YES completion:^(BOOL finished) {
         UITabBarController *tabBar = (UITabBarController *)[ToolManager shareInstance].drawerController.centerViewController;
         UINavigationController *nav =(UINavigationController *)tabBar.viewControllers[getAppDelegate().mainTab.selectedIndex];
