@@ -1974,7 +1974,6 @@
 		636315411D0EB93D009C1132 /* MoreXSCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MoreXSCell.xib; sourceTree = "<group>"; };
 		63651D3E1DDEDF75003A704A /* defaulthead_nv.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaulthead_nv.png; sourceTree = "<group>"; };
 		63651D3F1DDEDF75003A704A /* defaulthead.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaulthead.png; sourceTree = "<group>"; };
-		6379CBA91DDD3CEF002AF557 /* Lebao.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Lebao.entitlements; sourceTree = "<group>"; };
 		6379CBAB1DDD8005002AF557 /* JRSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JRSwizzle.h; sourceTree = "<group>"; };
 		6379CBAC1DDD8005002AF557 /* JRSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JRSwizzle.m; sourceTree = "<group>"; };
 		6379CBAD1DDD8005002AF557 /* SYSafeCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SYSafeCategory.h; sourceTree = "<group>"; };
@@ -5362,7 +5361,6 @@
 		63E00B671C07194C0097EDF5 /* Lebao */ = {
 			isa = PBXGroup;
 			children = (
-				6379CBA91DDD3CEF002AF557 /* Lebao.entitlements */,
 				70E66F371DAB791F00B7539F /* KuaJie */,
 				63302C6A1D921FA50019E9D6 /* 我的消息 */,
 				63B59A581D07B3BE0097B8F3 /* Login(登陆注册忘记密码相关) */,
@@ -6777,7 +6775,7 @@
 								enabled = 1;
 							};
 							com.apple.Push = {
-								enabled = 1;
+								enabled = 0;
 							};
 						};
 					};
@@ -7484,7 +7482,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run \'pod install\' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -8052,7 +8050,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "04e5d3c9-2dd3-46fc-8d0a-e20a258e7a35";
+				PROVISIONING_PROFILE = "b699b6e6-5342-4f8b-b5ad-ee2bc980365d";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -8093,7 +8091,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "04e5d3c9-2dd3-46fc-8d0a-e20a258e7a35";
+				PROVISIONING_PROFILE = "b699b6e6-5342-4f8b-b5ad-ee2bc980365d";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;

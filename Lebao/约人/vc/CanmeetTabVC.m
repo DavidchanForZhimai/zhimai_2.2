@@ -273,7 +273,7 @@
     if(!cell){
         cell=[[MeettingTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MtCell"];
         cell.backgroundColor=[UIColor clearColor];
-        NSLog(@"cell===%@",cell);
+        
     }
     MeetingCellLayout *layout=self.allMeetArr[indexPath.row];
     [cell setCellLayout:layout];

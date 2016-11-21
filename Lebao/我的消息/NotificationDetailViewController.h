@@ -8,6 +8,7 @@
 
 #import "BaseViewController.h"
 #import "BaseModal.h"
+typedef void(^ConnectionsRequestBlcok)();
 @interface SystemMessageModal :BaseModal
 
 @end
@@ -21,10 +22,17 @@
 @property(nonatomic,assign) BOOL isself;
 @property(nonatomic,copy) NSString *ID;
 @property(nonatomic,copy) NSString *type;
+@property(nonatomic,copy) NSString *transitions;//判断该跳转的页面
+@property(nonatomic,copy) NSString *islook;//判断能否跳转页面
+@property(nonatomic,copy) NSString *senderid;//senderid 为chat 时聊天对象id
+@property(nonatomic,copy) NSString *senderrealname;//senderrealname 为chat 聊天对象姓名
+
+
 @end
 
 @interface NotificationDetailViewController : BaseViewController
 @property(nonatomic,assign)BOOL isSystempagetype;
+@property(nonatomic,copy)ConnectionsRequestBlcok succeedBlock;
 @end
 
 

@@ -202,7 +202,7 @@
         [[ToolManager shareInstance] showWithStatus];
     }
     [XLDataService postWithUrl:MessageURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-//        NSLog(@"%@",dataObj);
+        NSLog(@"%@",dataObj);
         if (isRefresh) {
             [[ToolManager shareInstance]endHeaderWithRefreshing
              :_notificationView];
@@ -215,6 +215,7 @@
           
             modal=[NotificationModal mj_objectWithKeyValues:dataObj];
             if (modal.rtcode ==1) {
+                
                 _nowPage = modal.page;
                 if (_nowPage ==1) {
                     [[ToolManager shareInstance] moreDataStatus:_notificationView];
@@ -314,7 +315,13 @@
         
         }
        else if (indexPath.row==1) {
-            cell.message.hidden = YES;
+           NSInteger headlineId=[[[NSUserDefaults standardUserDefaults]objectForKey:@"HEADLINEID"] integerValue];
+           if (headlineId==modal.headline) {
+               cell.message.hidden = YES;
+           }else{
+               cell.message.hidden = NO;
+           };
+           
         }
        else if (indexPath.row==2) {
            cell.lab.text=[NSString stringWithFormat:@"%@个",connection_count];
@@ -349,6 +356,11 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section==0&&indexPath.row==0) {
         NotificationDetailViewController *detail = allocAndInit(NotificationDetailViewController);
+        detail.succeedBlock = ^
+        {
+    
+            [self requestcountConnections];
+        };
         PushView(self, detail);
         MeCell *cell  = [tableView cellForRowAtIndexPath:indexPath];
         cell.message.hidden = YES;

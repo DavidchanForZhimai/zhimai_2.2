@@ -140,7 +140,7 @@
         }
         
         if (dataObj) {
-//                NSLog(@"meetObj====%@",dataObj);
+                NSLog(@"meetObj====%@",dataObj);
             newsModel *modal = [newsModel mj_objectWithKeyValues:dataObj];
            
             if (_page ==1) {
@@ -150,6 +150,7 @@
                 [[ToolManager shareInstance] noMoreDataStatus:headLineTab];
             }
             if (modal.rtcode ==1) {
+                [[NSUserDefaults standardUserDefaults]setObject:@(modal.datas[0].datasId) forKey:@"HEADLINEID"];
                 [[ToolManager shareInstance] dismiss];
                 if (isShouldClearData) {
                     [self.headLineArr removeAllObjects];

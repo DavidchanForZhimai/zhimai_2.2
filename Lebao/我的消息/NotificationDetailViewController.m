@@ -12,6 +12,9 @@
 #import "MyLQDetailVC.h"
 #import "MyXSDetailVC.h"
 #import "XianSuoDetailVC.h"
+#import "WantMeetMeVC.h"
+#import "ConnectionsRequestVC.h"
+#import "GJGCChatFriendViewController.h"
 #define cellH 94
 #define SystemMessageURL [NSString stringWithFormat:@"%@message/system",HttpURL]
 #define SystemAllReadMessageURL [NSString stringWithFormat:@"%@message/allread",HttpURL]
@@ -118,7 +121,7 @@
         }
         
         if (dataObj) {
-            
+            NSLog(@"dataobj===%@",dataObj);
             SystemMessageModal *modal=[SystemMessageModal mj_objectWithKeyValues:dataObj];
             if (modal.rtcode ==1) {
                 _nowPage = modal.page;
@@ -202,7 +205,7 @@
     
      SystemMessageData *data =  _notificationDetailArray[indexPath.section];
    
-    if (!_isSystempagetype&&data.ID&&![data.ID isEqualToString:@""]) {
+    if ((!_isSystempagetype&&data.ID&&![data.ID isEqualToString:@""])) {
         [cell setData:data showDetial:NO];
     }
     else
@@ -210,6 +213,9 @@
          [cell setData:data showDetial:YES];
     }
     
+    if (![data.islook isEqualToString:@""]&&data.islook) {
+        [cell setData:data showDetial:NO];
+    }
     
     return cell;
     
@@ -217,11 +223,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-   
+    SystemMessageData *data =  _notificationDetailArray[indexPath.section];
     if (!_isSystempagetype) {
         
-      SystemMessageData *data =  _notificationDetailArray[indexPath.section];
-         NSLog(@"data.ID =%@",data.ID);
+     
+//         NSLog(@"data.ID =%@",data.ID);
         if (data.ID&&![data.ID isEqualToString:@""]) {
             if (data.iscoop) {
                 //跳转我的领取线索详情
@@ -243,6 +249,30 @@
             [self.navigationController pushViewController:xiansuoV animated:YES];
         }
         
+    }
+    if (data.islook) {
+        if ([data.transitions isEqualToString:@"meet_invited_me"]) {//meet_invited_me ：跳到想约见我的
+            PushView(self, allocAndInit(WantMeetMeVC));
+        }else if([data.transitions isEqualToString:@"connection_request"]){//connection_request : 跳到加人脉请求
+            
+            ConnectionsRequestVC *vc =  allocAndInit(ConnectionsRequestVC);
+            vc.succeedBlock = ^
+            {
+          
+                if (_succeedBlock) {
+                    _succeedBlock();
+                }
+            };
+            PushView(self,vc);
+        }else if([data.transitions isEqualToString:@"chat"]){//chat ：跳到聊天
+            GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
+            talk.talkType = GJGCChatFriendTalkTypePrivate;
+            talk.toId = data.senderid;
+            talk.toUserName = data.senderrealname;
+            GJGCChatFriendViewController *privateChat = [[GJGCChatFriendViewController alloc]initWithTalkInfo:talk];
+            privateChat.type = MessageTypeNormlPage;
+            [self.navigationController pushViewController:privateChat animated:YES];
+        }
     }
 }
 #pragma mark
