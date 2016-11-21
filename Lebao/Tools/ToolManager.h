@@ -34,6 +34,7 @@ typedef NS_ENUM(NSUInteger,PlaceholderType) {
     PlaceholderTypeImageUnProcessing = 2,
     PlaceholderTypeOther =3,
     PlaceholderTypeImageProcessing = PlaceholderTypeOther,
+    PlaceholderTypeUserHeadNv
 };
 
 typedef void (^RefreshComponentRefreshingBlock)();/** 进入刷新状态的回调 */

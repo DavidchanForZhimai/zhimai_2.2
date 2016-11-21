@@ -28,6 +28,7 @@
 #define MaxinumTagWidth (APPWIDTH - 20)
 
 @interface HeaderModel : NSObject
+@property(nonatomic,assign)int sex;
 @property(nonatomic,strong)NSString *authen;
 @property(nonatomic,strong)NSString *connection_count;
 @property(nonatomic,strong)NSString *dynamic_count;
@@ -440,7 +441,12 @@
     _headerViewLayout = headerViewLayout;
     self.userView.layout = headerViewLayout;
     
-    [[ToolManager shareInstance] imageView:self.userIcon setImageWithURL:headerModel.imgurl placeholderType:PlaceholderTypeUserHead];
+    //判断男女
+    PlaceholderType placeholder = PlaceholderTypeUserHead;
+    if (headerModel.sex==2) {
+        placeholder = PlaceholderTypeUserHeadNv;
+    }
+    [[ToolManager shareInstance] imageView:self.userIcon setImageWithURL:headerModel.imgurl placeholderType:placeholder];
     
 }
 

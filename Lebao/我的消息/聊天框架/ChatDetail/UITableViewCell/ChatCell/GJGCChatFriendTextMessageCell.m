@@ -38,6 +38,7 @@
         self.contentLabel.contentBaseWidth = self.contentLabel.gjcf_width;
         self.contentLabel.contentBaseHeight = self.contentLabel.gjcf_height;
         self.contentLabel.userInteractionEnabled = YES;
+       
         [self.bubbleBackImageView addSubview:self.contentLabel];
         
         self.textRenderCacheImageView = [[UIImageView alloc]initWithFrame:self.contentLabel.frame];
@@ -155,12 +156,14 @@
     self.isFromSelf = chatContentModel.isFromSelf;
     self.contentCopyString = chatContentModel.originTextMessage;
     
+    
     NSDictionary *parseDict = GJCFNSCacheGetValue(chatContentModel.originTextMessage);
     if (!parseDict) {
         parseDict = [GJGCChatContentEmojiParser parseContent:chatContentModel.originTextMessage];
     }
-    NSAttributedString *attributedString = [parseDict objectForKey:@"contentString"];
-
+    NSMutableAttributedString *attributedString = [parseDict objectForKey:@"contentString"];
+    
+    
     /*是否需要图片渲染缓存*/
     BOOL needRenderCache = [[parseDict objectForKey:@"needRenderCache"] boolValue];
     NSString *renderCacheKey = [NSString stringWithFormat:@"%@_renderCache",chatContentModel.originTextMessage];
@@ -193,8 +196,28 @@
             
         }
         
-        self.contentLabel.contentAttributedString = attributedString;
-        
+        //字自己显示白色
+
+        if (self.isFromSelf) {
+            GJCFCoreTextAttributedStringStyle *stringStyle = [[GJCFCoreTextAttributedStringStyle alloc]init];
+            stringStyle.foregroundColor = WhiteColor;
+            
+            NSMutableAttributedString *attriString = [[NSMutableAttributedString alloc]initWithAttributedString:attributedString];
+            [attriString addAttributes:[stringStyle foregroundColorAttributedDictionary] range:GJCFStringRange(attributedString.string)];
+            self.contentLabel.contentAttributedString = attriString ;
+            
+            
+        }else
+        {
+            GJCFCoreTextAttributedStringStyle *stringStyle = [[GJCFCoreTextAttributedStringStyle alloc]init];
+            stringStyle.foregroundColor = BlackTitleColor;
+            
+            NSMutableAttributedString *attriString = [[NSMutableAttributedString alloc]initWithAttributedString:attributedString];
+            [attriString addAttributes:[stringStyle foregroundColorAttributedDictionary] range:GJCFStringRange(attributedString.string)];
+            self.contentLabel.contentAttributedString = attriString ;
+
+        }
+     
         NSArray *phoneArray = [parseDict objectForKey:@"phone"];
         NSArray *urlArray = [parseDict objectForKey:@"url"];
         
@@ -228,6 +251,9 @@
                 
             });
         }
+        
+       
+
     }
     
     /* 图片缓存渲染 */
@@ -264,7 +290,9 @@
         self.contentLabel.gjcf_centerY = self.bubbleBackImageView.gjcf_height/2;
         
     }
-
+    
+    
+    
 }
 
 @end

@@ -124,13 +124,13 @@
         
         CGRect stateRect = [[item objectAtIndex:1] CGRectValue];
         UIColor *strokeColor = [item objectAtIndex:0];
-        
         CGContextAddRect(context, stateRect);
         CGContextSetFillColorWithColor(context, strokeColor.CGColor);
         CGContextFillRect(context, stateRect);
         CGContextFillPath(context);
     }
 
+    
     /* 设置ctFrame,只有在内容变化了之后才需要更新这个ctframe,这样可以提高效率,没有contentAttributedString 就不绘制了 */
     if (self.ctFrame && self.isNeedUpdateCTFrame ) {
         self.ctFrame = nil;

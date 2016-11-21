@@ -107,6 +107,11 @@ static dispatch_once_t once;
                 image.contentMode = UIViewContentModeScaleAspectFill;
                 
                 break;
+            case PlaceholderTypeUserHeadNv:
+                placeholderImage = [UIImage imageNamed:@"defaulthead_nv"];
+                image.contentMode = UIViewContentModeScaleAspectFill;
+                
+                break;
             case PlaceholderTypeOther:
                 placeholderImage =[UIImage imageNamed:@"icon_placeholder"];
                 image.contentMode = UIViewContentModeScaleAspectFill;

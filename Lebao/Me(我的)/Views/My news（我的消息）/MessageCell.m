@@ -27,13 +27,12 @@
         
         self.backgroundColor =[UIColor clearColor];
         _userIcon = allocAndInitWithFrame(UIImageView, frame(10, (cellHeight - 33)/2.0, 33, 33));
-        [_userIcon setRadius:3];
         [self addSubview:_userIcon];
         
         _userName = [UILabel createLabelWithFrame:frame(CGRectGetMaxX(_userIcon.frame) + 10,11, cellWidth - CGRectGetMaxX(_userIcon.frame)  -100,24*SpacedFonts) text:@""fontSize:24*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentLeft inView:self];
         
         _message = [UILabel createLabelWithFrame:frame(CGRectGetMaxX(_userIcon.frame) - 8, frameY(_userIcon) - 4, 12, 12) text:@"1" fontSize:16*SpacedFonts textColor:WhiteColor textAlignment:NSTextAlignmentCenter inView:self];
-        [_message setRound];
+      
         _message.backgroundColor = [UIColor colorWithRed:0.8627 green:0.098 blue:0.1333 alpha:1.0];
         
         _descripLb =[UILabel createLabelWithFrame:frame(frameX(_userName),CGRectGetMaxY(_userName.frame) +10,cellWidth -frameX(_userName) - 10, 20*SpacedFonts) text:@""fontSize:20*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:self];
@@ -50,9 +49,17 @@
 }
 - (void)setData:(NotificationData *)modal
 {
-    if (modal.imgurl) {
+    
+    if (![modal.imgurl isEqualToString:@"AppIconLogo"]) {
         [[ToolManager shareInstance] imageView:_userIcon setImageWithURL:modal.imgurl placeholderType:PlaceholderTypeUserHead];
+        [_userIcon setRound];
     }
+    else
+    {
+        self.userIcon.image = [UIImage imageNamed:@"AppIconLogo"];
+        [self.userIcon setRadius:1];
+    }
+   
     _userName.text = modal.realname;
     _descripLb.text = modal.content;
     _time.text = [modal.createtime timeformatString:@"yyyy-MM-dd"];

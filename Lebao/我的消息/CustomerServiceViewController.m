@@ -113,6 +113,7 @@
                     data.senderid = @"0";
                     data.realname = @"客服";
                     data.content = @"为您解决问题";
+                    data.imgurl = @"AppIconLogo";
                   [_customerServiceArray addObject:data];
                 }
                 
@@ -170,10 +171,9 @@
     NotificationData *data=  _customerServiceArray[indexPath.row];
     cell.message.hidden = ![data.num boolValue];
     cell.message.text =data.num;
-  
-    [cell setData:data];
    
-    cell.userIcon.image = [UIImage imageNamed:@"icon_me_custom"];
+    data.imgurl = @"AppIconLogo";
+    [cell setData:data];
     
     return cell;
     

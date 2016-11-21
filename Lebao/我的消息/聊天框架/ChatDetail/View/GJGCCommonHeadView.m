@@ -67,21 +67,28 @@
 - (void)setHeadUrl:(NSString *)url headViewType:(GJGCCommonHeadViewType)headViewType
 {
     NSString *placeImage = @"defaulthead";
+//    int radius = self.bounds.size.width/2;
     if ([url isEqualToString:@"icon_me_custom"]) {
-        placeImage = @"icon_me_custom";
+        placeImage = @"AppIconLogo";
+//        radius= 1.0;
     }
+//    self.contentImageView.layer.cornerRadius = radius;
+
     switch (headViewType) {
         case GJGCCommonHeadViewTypePGGroup: {
             [self.contentImageView setImage:GJCFQuickImage(placeImage)];
+            
             break;
         }
         case GJGCCommonHeadViewTypeContact: {
             [self.contentImageView setImage:GJCFQuickImage(placeImage)];
+            
             break;
         }
             
         case GJGCCommonHeadViewTypePostContact: {
             [self.contentImageView setImage:GJCFQuickImage(placeImage)];
+            
             break;
         }
         default:
