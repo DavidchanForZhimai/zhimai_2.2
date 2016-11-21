@@ -12,7 +12,7 @@
 #import "NSString+Extend.h"
 #import "MyDetialViewController.h"
 #import "MP3PlayerManager.h"
-
+#import "NSString+IsEomji.h"
 #define CommentlistURL [NSString stringWithFormat:@"%@demand/commentlist",HttpURL]
 #define CommentURL [NSString stringWithFormat:@"%@demand/comment",HttpURL]
 #define kToolBarH 44
@@ -370,6 +370,13 @@ typedef NS_ENUM(NSUInteger,ButtonActionTag) {
 #pragma mark - buttonAction -
 - (void)buttonAction:(UIButton *)sender
 {
+    BOOL flag=[NSString isContainsTwoEmoji:_textField.text];
+    if (flag)
+    {
+        [[ToolManager shareInstance]showAlertMessage:@"请先删除表情再发表评论"];
+        return;
+    }
+
     if (sender.tag ==NavViewButtonActionNavLeftBtnTag ) {
         PopView(self);
     }

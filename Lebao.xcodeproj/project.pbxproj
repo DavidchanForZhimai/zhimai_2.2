@@ -1024,6 +1024,7 @@
 		70CB3E661DAE3ED8004927B9 /* hezuochenggong@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 70CB3E641DAE3ED8004927B9 /* hezuochenggong@3x.png */; };
 		70CD1DF11D8292FC001FC873 /* WantMeetMeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 70CD1DF01D8292FC001FC873 /* WantMeetMeVC.m */; };
 		70CD1DF71D82A56C001FC873 /* MeettingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 70CD1DF61D82A56C001FC873 /* MeettingTableViewCell.m */; };
+		70DC49EF1DE2D5A800319241 /* NSString+IsEomji.m in Sources */ = {isa = PBXBuildFile; fileRef = 70DC49EE1DE2D5A800319241 /* NSString+IsEomji.m */; };
 		70E66F361DAB3C7700B7539F /* VipPrivilegeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 70E66F351DAB3C7700B7539F /* VipPrivilegeCell.m */; };
 		70E66FA21DAB791F00B7539F /* HomeInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 70E66F3A1DAB791F00B7539F /* HomeInfo.m */; };
 		70E66FA31DAB791F00B7539F /* JJRDetailInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 70E66F3C1DAB791F00B7539F /* JJRDetailInfo.m */; };
@@ -2648,6 +2649,8 @@
 		70CD1DF21D829E21001FC873 /* MeetingCellLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeetingCellLayout.h; sourceTree = "<group>"; };
 		70CD1DF51D82A56C001FC873 /* MeettingTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeettingTableViewCell.h; sourceTree = "<group>"; };
 		70CD1DF61D82A56C001FC873 /* MeettingTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeettingTableViewCell.m; sourceTree = "<group>"; };
+		70DC49ED1DE2D5A800319241 /* NSString+IsEomji.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+IsEomji.h"; sourceTree = "<group>"; };
+		70DC49EE1DE2D5A800319241 /* NSString+IsEomji.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+IsEomji.m"; sourceTree = "<group>"; };
 		70E66F341DAB3C7700B7539F /* VipPrivilegeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VipPrivilegeCell.h; sourceTree = "<group>"; };
 		70E66F351DAB3C7700B7539F /* VipPrivilegeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VipPrivilegeCell.m; sourceTree = "<group>"; };
 		70E66F391DAB791F00B7539F /* HomeInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeInfo.h; sourceTree = "<group>"; };
@@ -6118,6 +6121,8 @@
 				70796E221D6B02CC005B8441 /* PublishDynamicVC.h */,
 				70796E231D6B02CC005B8441 /* PublishDynamicVC.m */,
 				70796E241D6B02CC005B8441 /* 添加图片 */,
+				70DC49ED1DE2D5A800319241 /* NSString+IsEomji.h */,
+				70DC49EE1DE2D5A800319241 /* NSString+IsEomji.m */,
 			);
 			path = "发布动态";
 			sourceTree = "<group>";
@@ -7633,6 +7638,7 @@
 				638468001D080CCD00A80223 /* ExhibitionIndustryModel.m in Sources */,
 				70E66FC01DAB791F00B7539F /* ChineseToPinyinResource.m in Sources */,
 				63302F2F1D921FA50019E9D6 /* GJCFDateUitil.m in Sources */,
+				70DC49EF1DE2D5A800319241 /* NSString+IsEomji.m in Sources */,
 				70848AB21D6FE5DC007B811E /* MeetHeadV.m in Sources */,
 				70848AAF1D6FE15D007B811E /* MeetingModel.m in Sources */,
 				63302EC21D921FA50019E9D6 /* GJGCChatBaseCell.m in Sources */,

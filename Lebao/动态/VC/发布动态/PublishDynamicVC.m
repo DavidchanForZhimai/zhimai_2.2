@@ -17,6 +17,7 @@
 #import "Parameter.h"
 #import "LWImageBrowser.h"
 #import "CooperateView.h"
+#import "NSString+IsEomji.h"
 #import <AVFoundation/AVFoundation.h>
 #define PADDING 10
 #define kScreenHeight [UIScreen mainScreen].bounds.size.height
@@ -236,11 +237,19 @@
 {
     
     [self.navigationController popViewControllerAnimated:YES];
+    NSLog(@"text===%@",self.tfView.text);
     
 }
 
 -(void)rightAction
 {
+    BOOL flag=[NSString isContainsTwoEmoji:_tfView.text];
+        if (flag)
+        {
+            [[ToolManager shareInstance]showAlertMessage:@"请先删除表情再发布"];
+            return;
+        }
+
     if ([self.tfView.text isEqualToString:@"分享我的服务和行业新鲜事(最多255个字)"]||self.tfView.text.length <1) {
         HUDText(@"分享我的服务和行业新鲜事(最多255个字)");
         return;
@@ -664,7 +673,20 @@
     }
     return YES;
 }
-
+//判断表情
+//-(void)textViewDidChange:(UITextView *)textView
+//{
+//    
+//    BOOL flag=[NSString isContainsTwoEmoji:textView.text];
+//    
+//    if (textView == _tfView) {
+//        
+//        if (flag)
+//        {
+//            _tfView.text = [textView.text substringToIndex:textView.text.length -2];
+//        }
+//    }
+//}
 /*
  #pragma mark - Navigation
  
