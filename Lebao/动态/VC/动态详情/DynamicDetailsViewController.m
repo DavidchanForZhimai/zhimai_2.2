@@ -22,6 +22,7 @@
 #import "XianSuoDetailVC.h"
 #import "MyXSDetailVC.h"
 #import "MyLQDetailVC.h"
+#import "NSString+IsEomji.h"
 #define kToolBarH 44
 #define kTextFieldH 30
 @interface DynamicDetailsViewController ()<UITableViewDelegate,UITableViewDataSource,TableViewCellDelegate,UIScrollViewDelegate,UITextFieldDelegate>
@@ -326,7 +327,12 @@
         [imgView removeFromSuperview];
     });
     
-    
+    BOOL flag=[NSString isContainsTwoEmoji:_textField.text];
+    if (flag)
+    {
+        [[ToolManager shareInstance]showAlertMessage:@"请先删除表情再发布"];
+        return;
+    }
     if (_textField.text.length==0) {
         
         [[ToolManager shareInstance] showInfoWithStatus:@"输入必须大于一个字符"];

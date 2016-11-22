@@ -1329,6 +1329,7 @@
 		632EFAF51D90DAE500C8D47A /* FriendImpressionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendImpressionViewController.m; sourceTree = "<group>"; };
 		632FC63E1DE2F73800008B18 /* [icondinwei]@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "[icondinwei]@2x.png"; sourceTree = "<group>"; };
 		632FC63F1DE2F73800008B18 /* [icondinwei]@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "[icondinwei]@3x.png"; sourceTree = "<group>"; };
+		632FC6421DE300C000008B18 /* Lebao.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Lebao.entitlements; sourceTree = "<group>"; };
 		63302C6C1D921FA50019E9D6 /* ClueCommunityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClueCommunityViewController.h; sourceTree = "<group>"; };
 		63302C6D1D921FA50019E9D6 /* ClueCommunityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClueCommunityViewController.m; sourceTree = "<group>"; };
 		63302C701D921FA50019E9D6 /* CustomerServiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomerServiceViewController.h; sourceTree = "<group>"; };
@@ -5370,6 +5371,7 @@
 		63E00B671C07194C0097EDF5 /* Lebao */ = {
 			isa = PBXGroup;
 			children = (
+				632FC6421DE300C000008B18 /* Lebao.entitlements */,
 				70E66F371DAB791F00B7539F /* KuaJie */,
 				63302C6A1D921FA50019E9D6 /* 我的消息 */,
 				63B59A581D07B3BE0097B8F3 /* Login(登陆注册忘记密码相关) */,
@@ -6786,7 +6788,7 @@
 								enabled = 1;
 							};
 							com.apple.Push = {
-								enabled = 0;
+								enabled = 1;
 							};
 						};
 					};

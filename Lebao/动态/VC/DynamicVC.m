@@ -28,6 +28,7 @@
 #import "AuthenticationHomeViewController.h"
 #import "NSString+Extend.h"
 #import "DyMessageViewController.h"
+#import "NSString+IsEomji.h"
 #define kToolBarH 44
 #define kTextFieldH 30
 #define xsTabTag  110
@@ -578,6 +579,12 @@
         [imgView removeFromSuperview];
     });
     
+    BOOL flag=[NSString isContainsTwoEmoji:_textField.text];
+    if (flag)
+    {
+        [[ToolManager shareInstance]showAlertMessage:@"请先删除表情再发布"];
+        return;
+    }
     if (_textField.text.length==0) {
         
         [[ToolManager shareInstance] showInfoWithStatus:@"输入必须大于一个字符"];

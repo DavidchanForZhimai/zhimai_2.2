@@ -99,6 +99,10 @@
         NSString *area = model.area;
         if (array.count>1) {
             area =array[1];
+            
+        }
+        if (area.length>6) {
+            area = [area substringWithRange:NSMakeRange(0, 6)];
         }
         city.text = [NSString stringWithFormat:@"[icondinwei]  %@",area];
         city.font = Size(24.0);
