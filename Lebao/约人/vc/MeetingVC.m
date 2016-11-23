@@ -172,12 +172,12 @@
 - (void)netWorkRefresh:(BOOL)isRefresh andIsLoadMoreData:(BOOL)isMoreLoadMoreData isShouldClearData:(BOOL)isShouldClearData//加载数据
 {
     
-    [[LoCationManager shareInstance] creatLocationManager:self callBackLocation:^(CLLocationCoordinate2D location) {
+//    [[LoCationManager shareInstance] creatLocationManager:self callBackLocation:^(CLLocationCoordinate2D location) {
         //            测试用,要删掉
-        //                    CLLocationCoordinate2D location;
-        //                    location.latitude=24.491534;
-        //                    location.longitude=118.180851;
-      
+                            CLLocationCoordinate2D location;
+                            location.latitude=24.491534;
+                            location.longitude=118.180851;
+    
         if (location.latitude<=0&&location.longitude<=0) {
             if (isRefresh) {
                 
@@ -253,7 +253,7 @@
             
         }];
         
-    }];
+//    }];
 }
 
 -(void)addYrBtn
@@ -342,6 +342,10 @@
                 MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
                 if (modal.rtcode ==1) {
                     [[LoCationManager shareInstance] creatLocationManager:self callBackLocation:^(CLLocationCoordinate2D location) {
+                        if (location.latitude<=0&&location.longitude<=0) {
+                            return ;
+                        }
+                        
                         NSMutableDictionary *param = [Parameter parameterWithSessicon];
                         [param setObject:[NSString stringWithFormat:@"%.6f",location.latitude] forKey:@"latitude"];
                         [param setObject:[NSString stringWithFormat:@"%.6f",location.longitude] forKey:@"longitude"];
