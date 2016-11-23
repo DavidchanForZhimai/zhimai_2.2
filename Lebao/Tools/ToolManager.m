@@ -279,7 +279,9 @@ static dispatch_once_t once;
     AVAuthorizationStatus status = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
     
     if (status == AVAuthorizationStatusDenied || status == AVAuthorizationStatusRestricted) {
-        [[[UIAlertView alloc] initWithTitle:@"无法打开相机" message:@"请在“设置-隐私-相机”选项中允许访问你的相机" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil] show];
+       UIAlertView *alertV= [[UIAlertView alloc] initWithTitle:@"无法打开相机" message:@"请在“设置-隐私-相机”选项中允许访问你的相机" delegate:self cancelButtonTitle:nil otherButtonTitles:@"取消",@"设置",nil];
+        alertV.tag=222;
+        [alertV show];
         return NO;
         
     } else {
@@ -295,7 +297,10 @@ static dispatch_once_t once;
         ALAuthorizationStatus status = [ALAssetsLibrary authorizationStatus];
         
         if (status == ALAuthorizationStatusDenied || ALAuthorizationStatusRestricted) {
-            [[[UIAlertView alloc] initWithTitle:@"无法打开照片" message:@"请在“设置-隐私-照片”选项中允许访问你的照片" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil] show];
+            UIAlertView *alertV= [[UIAlertView alloc] initWithTitle:@"无法打开照片" message:@"请在“设置-隐私-照片”选项中允许访问你的照片" delegate:self cancelButtonTitle:nil otherButtonTitles:@"取消",@"设置",nil];
+            alertV.tag=333;
+            [alertV show];
+
             return NO;
             
         } else {
@@ -693,6 +698,23 @@ static dispatch_once_t once;
     if (alertView.tag ==888) {
         if (buttonIndex ==1) {
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:_updataUrl]];
+        }
+    }if (alertView.tag ==222) {
+        if (buttonIndex ==1) {
+            NSURL *url = [NSURL URLWithString:@"prefs:root=Privacy&path=CAMERA"];
+            if ([[UIApplication sharedApplication] canOpenURL:url])
+            {
+                [[UIApplication sharedApplication] openURL:url];
+            }
+            
+        }
+    }if (alertView.tag ==333) {
+        if (buttonIndex ==1) {
+            NSURL *url = [NSURL URLWithString:@"prefs:root=Privacy&path=PHOTOS"];
+            if ([[UIApplication sharedApplication] canOpenURL:url])
+            {
+                [[UIApplication sharedApplication] openURL:url];
+            }
         }
     }
 }

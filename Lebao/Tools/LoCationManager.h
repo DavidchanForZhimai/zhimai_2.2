@@ -17,7 +17,7 @@ typedef void (^CallBackLocationCityName)(NSString * cityName);
 
 @property (nonatomic,strong)CLLocationManager *locationMNG;
 +(LoCationManager *)shareInstance;
-
--(void)creatLocationManager;
+-(void)creatLocationManager:(UIViewController *)vc;
+-(void)creatLocationManager:(UIViewController *)vc callBackLocation:(CallBackLocation)callBackLocation;
 
 @end

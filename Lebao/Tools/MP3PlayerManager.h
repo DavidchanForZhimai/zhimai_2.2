@@ -13,7 +13,7 @@ typedef void (^PlayFinishBlock)(BOOL succeed);
 typedef void (^FinishBlock)(BOOL succeed);
 typedef void (^FinishuploadBlock)(BOOL succeed,id  audioDic);
 typedef void (^FinishDownloadBlock)(BOOL succeed);
-@interface MP3PlayerManager : NSObject<AVAudioRecorderDelegate,AVAudioPlayerDelegate>
+@interface MP3PlayerManager : NSObject<AVAudioRecorderDelegate,AVAudioPlayerDelegate,UIAlertViewDelegate>
 
 @property (nonatomic,strong) AVAudioRecorder *audioRecorder;//音频录音机
 @property (nonatomic,strong) AVAudioPlayer *audioPlayer;//播放器

@@ -25,38 +25,51 @@ static LoCationManager *locationManager;
     return locationManager;
     
 }
-
--(void)creatLocationManager
+-(void)creatLocationManager:(UIViewController *)vc
 {
-   
     _locationMNG=[[CLLocationManager alloc]init];
     if (iOS8) {
-
-    if ([CLLocationManager authorizationStatus]!=kCLAuthorizationStatusAuthorizedWhenInUse) {
-        //授权,在使用app的时候开启定位服务
-        [_locationMNG requestWhenInUseAuthorization];
-    }
-    
+        
+        if ([CLLocationManager authorizationStatus]!=kCLAuthorizationStatusAuthorizedWhenInUse) {
+            //授权,在使用app的时候开启定位服务
+            [_locationMNG requestWhenInUseAuthorization];
+        }
+        
         if ([CLLocationManager locationServicesEnabled]&&[CLLocationManager authorizationStatus]!= kCLAuthorizationStatusDenied) {
-//        NSLog(@"![CLLocationManager locationServicesEnabled]=%d",[CLLocationManager locationServicesEnabled]);
-    }else{
-        [[ToolManager shareInstance] showAlertViewTitle:@"温馨提示" contentText:@"请到设置-隐私-定位-开启知脉定位" showAlertViewBlcok:^{
+            //        NSLog(@"![CLLocationManager locationServicesEnabled]=%d",[CLLocationManager locationServicesEnabled]);
+        }else{
+            
             if (_callBackLocation) {
                 _callBackLocation(coordinate2D);
             }
-        }];
-        return;
-    }
+            UIAlertController *alertV=[UIAlertController alertControllerWithTitle:@"开启知脉定位才能约到人哦" message:@"设置-隐私-定位服务-允许知脉使用定位" preferredStyle:UIAlertControllerStyleAlert];
+            [alertV addAction:[UIAlertAction actionWithTitle:@"设置" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
 
-    //设置定位的精度
-    _locationMNG.desiredAccuracy=kCLLocationAccuracyBest;
-     //设置定位更新的最小距离(米)
-    _locationMNG.distanceFilter=100.0f;
-   
+                NSURL *url = [NSURL URLWithString:@"prefs:root=LOCATION_SERVICES"];
+                if ([[UIApplication sharedApplication] canOpenURL:url])
+                {
+                    [[UIApplication sharedApplication] openURL:url];
+                }
+            }]];
+            [alertV addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+            [vc presentViewController:alertV animated:YES completion:nil];
+            return;
+        }
+        
+        //设置定位的精度
+        _locationMNG.desiredAccuracy=kCLLocationAccuracyBest;
+        //设置定位更新的最小距离(米)
+        _locationMNG.distanceFilter=100.0f;
+        
     }
     
-     _locationMNG.delegate = self;
+    _locationMNG.delegate = self;
     [_locationMNG startUpdatingLocation];
+}
+-(void)creatLocationManager:(UIViewController *)vc callBackLocation:(CallBackLocation)callBackLocation
+{
+    _callBackLocation = callBackLocation;
+    [self creatLocationManager:vc];
 }
 
 

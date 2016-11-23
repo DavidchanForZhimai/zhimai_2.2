@@ -172,13 +172,22 @@
 - (void)netWorkRefresh:(BOOL)isRefresh andIsLoadMoreData:(BOOL)isMoreLoadMoreData isShouldClearData:(BOOL)isShouldClearData//加载数据
 {
     
-    [[LoCationManager shareInstance] creatLocationManager];
-    [LoCationManager shareInstance].callBackLocation = ^(CLLocationCoordinate2D location)
-    {
+    [[LoCationManager shareInstance] creatLocationManager:self callBackLocation:^(CLLocationCoordinate2D location) {
         //            测试用,要删掉
-//                    CLLocationCoordinate2D location;
-//                    location.latitude=24.491534;
-//                    location.longitude=118.180851;
+        //                    CLLocationCoordinate2D location;
+        //                    location.latitude=24.491534;
+        //                    location.longitude=118.180851;
+      
+        if (location.latitude<=0&&location.longitude<=0) {
+            if (isRefresh) {
+                
+                [[ToolManager shareInstance] endHeaderWithRefreshing:_yrTab];
+            }
+            if (isMoreLoadMoreData) {
+                [[ToolManager shareInstance] endFooterWithRefreshing:_yrTab];
+            }
+            return ;
+        }
         if (self.nearByManArr.count==0) {
             [[ToolManager shareInstance] showWithStatus];
         }
@@ -244,8 +253,7 @@
             
         }];
         
-    };
-    
+    }];
 }
 
 -(void)addYrBtn
@@ -333,16 +341,14 @@
                 //                                NSLog(@"meetObj====%@",dataObj);
                 MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
                 if (modal.rtcode ==1) {
-                    [[LoCationManager shareInstance] creatLocationManager];
-                    [LoCationManager shareInstance].callBackLocation = ^(CLLocationCoordinate2D location)
-                    {
+                    [[LoCationManager shareInstance] creatLocationManager:self callBackLocation:^(CLLocationCoordinate2D location) {
                         NSMutableDictionary *param = [Parameter parameterWithSessicon];
                         [param setObject:[NSString stringWithFormat:@"%.6f",location.latitude] forKey:@"latitude"];
                         [param setObject:[NSString stringWithFormat:@"%.6f",location.longitude] forKey:@"longitude"];
                         //                        NSLog(@"param====%@",param);
                         [XLDataService putWithUrl:MeetAppendURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
                             if (dataObj) {
-//                                NSLog(@"dataobj=%@",dataObj);
+                                //                                NSLog(@"dataobj=%@",dataObj);
                                 MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
                                 if (model.rtcode ==1) {
                                     _isopen=YES;
@@ -366,7 +372,8 @@
                                 [_yrBtn setBackgroundImage:[UIImage imageNamed:@"youkong"] forState:UIControlStateNormal];
                             }
                         }];
-                    };
+                    }];
+                    
                     
                 }else if (modal.rtcode ==4002){
                     [[ToolManager shareInstance]dismiss];

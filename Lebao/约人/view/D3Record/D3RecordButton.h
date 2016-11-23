@@ -20,7 +20,7 @@
 - (void)dragEnter;
 @end
 
-@interface D3RecordButton : UIButton<Mp3RecorderDelegate>{
+@interface D3RecordButton : UIButton<Mp3RecorderDelegate,UIAlertViewDelegate>{
     int maxTime;
     Mp3Recorder *mp3;
     NSString *title;

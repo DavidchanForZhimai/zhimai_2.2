@@ -118,8 +118,7 @@
     _locationCity=[NSMutableArray arrayWithObject:_locationDic];
     [_dataArray addObject:_locationCity];
 
-    [[LoCationManager shareInstance] creatLocationManager];
-    
+    [[LoCationManager shareInstance] creatLocationManager:self];
     [LoCationManager shareInstance].callBackLocationCityName = ^(NSString * cityName)
     {
        NSMutableDictionary *_locationDic =allocAndInit(NSMutableDictionary);

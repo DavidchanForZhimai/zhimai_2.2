@@ -21,7 +21,7 @@ typedef void (^GJGCChatInputTextViewDidBecomeFirstResponseBlock) (GJGCChatInputT
 
 #define GJGCChatInputTextViewContentChangeNoti @"GJGCChatInputTextViewContentChangeNoti"
 
-@interface GJGCChatInputTextView : UIView
+@interface GJGCChatInputTextView : UIView<UIAlertViewDelegate>
 
 /**
  *  准备录音的标题

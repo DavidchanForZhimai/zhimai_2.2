@@ -570,7 +570,11 @@
            
             if (!granted) {
                 
-                [[[UIAlertView alloc] initWithTitle:@"无法录音" message:@"请在“设置-隐私-麦克风”选项中允许访问你的麦克风" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil] show];
+                UIAlertView *alertV= [[UIAlertView alloc] initWithTitle:@"无法打开照片" message:@"请在“请在“设置-隐私-麦克风”选项中允许知脉访问您的麦克风" delegate:self cancelButtonTitle:nil otherButtonTitles:@"取消",@"设置",nil];
+                alertV.tag=333;
+                [alertV show];
+                return ;
+
             }
             
             isPermission = granted;
@@ -815,5 +819,16 @@
     }
     self.responseBlock = firstResponseBlock;
 }
-
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag ==333) {
+        if (buttonIndex ==1) {
+            NSURL *url = [NSURL URLWithString:@"prefs:root=Privacy&path=MICROPHONE"];
+            if ([[UIApplication sharedApplication] canOpenURL:url])
+            {
+                [[UIApplication sharedApplication] openURL:url];
+            }
+        }
+    }
+}
 @end
