@@ -57,13 +57,13 @@ typedef enum{
     
     __weak MyCollectionDetailViewController *weakself =self;
     _articleDetailView = [[MyArticleDetailView alloc]initWithFrame:frame(0, NavigationBarHeight + StatusBarHeight + 10, APPWIDTH, APPHEIGHT - (60 + NavigationBarHeight + StatusBarHeight)) postWithUrl:CollectionURL param:parame];
-    _articleDetailView.modalBlock = ^(MyArticleDetailModal *modal)
-    {
-        weakself.modal = modal;
-        [weakself addBotoomView:weakself];
-    };
-    _articleDetailView.isEdit = NO;
-    _articleDetailView.ishasNextPage = NO;
+//    _articleDetailView.modalBlock = ^(MyArticleDetailModal *modal)
+//    {
+//        weakself.modal = modal;
+//        [weakself addBotoomView:weakself];
+//    };
+//    _articleDetailView.isEdit = NO;
+//    _articleDetailView.ishasNextPage = NO;
     [self.view addSubview:_articleDetailView];
     
 }
@@ -108,10 +108,7 @@ typedef enum{
     if (sender.tag ==NavViewButtonActionNavLeftBtnTag ) {
         PopView(self);
     }
-    else if (sender.tag ==ButtonActionTagAdd)
-    {
-        [[ToolManager shareInstance] addReleseDctView:self];
-    }
+   
     
 }
 - (void)didReceiveMemoryWarning {

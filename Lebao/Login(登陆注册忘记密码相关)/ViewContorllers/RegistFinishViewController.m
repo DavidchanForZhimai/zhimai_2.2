@@ -78,9 +78,9 @@
         if (_invCode.length>0) {
             [sendcaptchaParam setObject:_invCode forKey:@"recommend"];
         }
-        NSLog(@"sendcaptchaParam =%@",sendcaptchaParam);
+//        NSLog(@"sendcaptchaParam =%@",sendcaptchaParam);
         [XLDataService postWithUrl:signmemberURL param:sendcaptchaParam modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-            DDLog(@"dataObj =%@",dataObj);
+//            DDLog(@"dataObj =%@",dataObj);
         
             if (error) {
                 
@@ -189,10 +189,10 @@
     vocational = allocAndInitWithFrame(UITextField, frame(textFieldX, bH+100, frameWidth(self.view) - 2*textFieldX, cellHeight -bH ));
     
     vocational.clearButtonMode = UITextFieldViewModeWhileEditing;
-    vocational.placeholder = @"请输入职业";
+    vocational.placeholder = @"请输入职位";
     vocational.font = [UIFont systemFontOfSize:26.0*SpacedFonts];
     vocational.textColor =BlackTitleColor;
-    vocational.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入职业" attributes:@{NSForegroundColorAttributeName: LightBlackTitleColor}];
+    vocational.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入职位" attributes:@{NSForegroundColorAttributeName: LightBlackTitleColor}];
     [mainScrollView addSubview:vocational];
     
     UIImage *vocationalImage =[UIImage imageNamed:@"icon_zhiwei"];

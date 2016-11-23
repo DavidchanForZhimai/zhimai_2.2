@@ -31,7 +31,6 @@ NSString * const KApiSystemTypeConnectionAgree = @"connection-agree"; //人脉�
 #define KDynamicMsgcountURL [NSString stringWithFormat:@"%@message/count",HttpURL] //请求网络得到消息数目
 
 #import "PushManager.h"
-#import "BHBPlaySoundTool.h"//推送声音
 #import "GJGCChatFriendViewController.h" //消息聊天
 #import "MeetingVC.h"
 #import "MyKuaJieVC.h"//我的跨界
@@ -147,10 +146,7 @@ static PushManager *pushManager;
 {
     //    NSLog(@"notifacion =%@",notifacion);
     pushModel = [PushDataModel mj_objectWithKeyValues:notifacion];
-    //应用在前台的提示声音
-    if (applicationState ==ApplicationStateActive) {
-        [[BHBPlaySoundTool sharedPlaySoundTool] playWithSoundName:@"open"];
-    }
+    
     //设置消息未读数(动态消息未读数)
     [[PushManager shareInstace] getMsgCountSucceed:^(int dynamicCount, int msgcount) {
         

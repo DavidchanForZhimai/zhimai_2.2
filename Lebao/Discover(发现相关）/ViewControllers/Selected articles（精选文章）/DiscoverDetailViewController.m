@@ -45,26 +45,6 @@
 {
     
     NSString *title = @"详情";
-//    switch (_tag) {
-//        case 0:
-//            title =@"保险详情";
-//            break;
-//        case 1:
-//            title =@"金融详情";
-//            break;
-//        case 2:
-//            title =@"房产详情";
-//            break;
-//        case 3:
-//            title =@"原创详情";
-//            break;
-//            
-//        default:
-//            break;
-//    }
-//    if (_Nav_title) {
-//        title =  _Nav_title;
-//    }
     [self navViewTitleAndBackBtn:title];
     
     
@@ -86,7 +66,7 @@
     [XLDataService postWithUrl:ArticlelibURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         [[ToolManager shareInstance] dismiss];
         
-        NSLog(@"data =%@",dataObj);
+//        NSLog(@"data =%@",dataObj);
         weakSelf.webView = allocAndInitWithFrame(IMYWebView, CGRectZero);
         weakSelf.webView.backgroundColor = WhiteColor;
         weakSelf.webView.delegate = self;
@@ -100,28 +80,22 @@
     
              [self twoBtn:weakSelf];
             
-                UILabel * _descrip= [UILabel createLabelWithFrame:frame(10, 5, APPWIDTH - 20, 30) text:@"" fontSize:26*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentLeft inView:view];
+                UILabel * _descrip= [UILabel createLabelWithFrame:frame(10, 5, APPWIDTH - 20, 30) text:@"" fontSize:30*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentLeft inView:view];
                 _descrip.numberOfLines = 0;
                 _descrip.text = weakSelf.modal.datas.title;
                 
-                CGSize size = [_descrip sizeWithContent:_descrip.text font:[UIFont systemFontOfSize:26*SpacedFonts]];
+                CGSize size = [_descrip sizeWithContent:_descrip.text font:[UIFont systemFontOfSize:30*SpacedFonts]];
                 _descrip.frame = frame( 10, 5, APPWIDTH - 20, size.height);
-                UIImage *imagetime =[UIImage imageNamed:@"exhibition_time"];
+
                 UILabel *time =allocAndInit(UILabel);
                 CGSize sizeTime = [time sizeWithContent:@"2015 - 12 - 31" font:[UIFont systemFontOfSize:22*SpacedFonts]];
                 
                 NSString *times =weakSelf.modal.datas.createtime;
 //                NSLog(@"times =%@",times);
-                BaseButton* _time = [[BaseButton alloc]initWithFrame:frame(frameX(_descrip), size.height + 15 , imagetime.size.width + 5 + sizeTime.width, imagetime.size.height-2)  setTitle:[times timeformatString:@"yyyy-MM-dd"]titleSize:22*SpacedFonts titleColor:LightBlackTitleColor backgroundImage:nil iconImage:imagetime highlightImage:nil setTitleOrgin:CGPointMake(0,5) setImageOrgin:CGPointMake(0,0)  inView:view];
+                BaseButton* _time = [[BaseButton alloc]initWithFrame:frame(frameX(_descrip), size.height + 15 ,  5 + sizeTime.width,sizeTime.height )  setTitle:[times timeformatString:@"yyyy-MM-dd"]titleSize:22*SpacedFonts titleColor:LightBlackTitleColor backgroundImage:nil iconImage:nil highlightImage:nil setTitleOrgin:CGPointMake(0,0) setImageOrgin:CGPointMake(0,0)  inView:view];
                 _time.shouldAnmial = NO;
                 
-                
-//                UIImage *image =[UIImage imageNamed:@"exhibition_brose"];
-//                CGSize sizebrowse = [time sizeWithContent:weakSelf.modal.datas.readcount font:[UIFont systemFontOfSize:22*SpacedFonts]];
-//                
-//                BaseButton* _browse = [[BaseButton alloc]initWithFrame:frame(CGRectGetMaxX(_time.frame) + 10, frameY(_time), image.size.width + 5 + sizebrowse.width, image.size.height)  setTitle:weakSelf.modal.datas.readcount titleSize:22*SpacedFonts titleColor:LightBlackTitleColor backgroundImage:nil iconImage:image highlightImage:nil setTitleOrgin:CGPointMake(1,5) setImageOrgin:CGPointMake(0,0)  inView:view];
-//                _browse.shouldAnmial = NO;
-            
+
                 float height =CGRectGetMaxY(_time.frame)  +10 ;
                                     UILabel *line1 = allocAndInitWithFrame(UILabel, frame(10, CGRectGetMaxY(_time.frame)  + 6, APPWIDTH - 20, 1.0));
                     line1.backgroundColor = LineBg;

@@ -9,7 +9,5 @@
 #import "BaseViewController.h"
 
 @interface AlreadysentproductViewController : BaseViewController
-@property(nonatomic,assign)BOOL isArticle;
-
 @property(nonatomic,assign)BOOL ispopToRoot;
 @end

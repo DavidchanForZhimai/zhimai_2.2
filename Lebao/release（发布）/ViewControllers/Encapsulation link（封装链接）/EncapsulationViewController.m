@@ -550,7 +550,6 @@ typedef NS_ENUM(int,SwitchActionTag) {
                     [[ToolManager shareInstance] dismiss];
              
                     AlreadysentproductViewController *article  = allocAndInit(AlreadysentproductViewController);
-                    article.isArticle = YES;
                     article.ispopToRoot = YES;
                     PushView(weakSelf, article);
                     

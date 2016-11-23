@@ -20,7 +20,7 @@
 #import "DynamicDetailsViewController.h"//动态详情
 #import "CoreArchive.h"
 #import "ViewController.h"
-#import "MyProductDetailViewController.h"//文章阅读
+#import "MyContentDetailViewController.h"//文章阅读
 #import "XianSuoDetailVC.h"
 #import "MyXSDetailVC.h"
 #import "MyLQDetailVC.h"
@@ -931,7 +931,7 @@
 - (void)tableViewCell:(TableViewCell *)cell didClickedLikeButtonWithArticleID:(NSString *)articleID atIndexPath:(NSIndexPath *)indexPath
 {
     CellLayout *layout =_jjrJsonArr[indexPath.row];
-    MyProductDetailViewController *detail = allocAndInit(MyProductDetailViewController);
+    MyContentDetailViewController *detail = allocAndInit(MyContentDetailViewController);
     detail.shareImage =cell.webSiteimg.image;
     detail.ID = articleID;
     detail.uid =[NSString stringWithFormat:@"%ld",layout.statusModel.ID];

@@ -186,7 +186,7 @@
     }
     [XLDataService postWithUrl:DynamicMessageURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         
-        NSLog(@"dataObj =%@",dataObj);
+//        NSLog(@"dataObj =%@",dataObj);
         if (isRefresh) {
             [[ToolManager shareInstance] endHeaderWithRefreshing:_dyMessageView];
             

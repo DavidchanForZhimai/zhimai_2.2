@@ -115,18 +115,35 @@
 /***  点击文本链接 ***/
 - (void)lwAsyncDisplayView:(LWAsyncDisplayView *)asyncDisplayView didCilickedTextStorage:(LWTextStorage *)textStorage linkdata:(id)data {
     //    NSLog(@"tag:%ld",textStorage.tag);//这里可以通过判断Tag来执行相应的回调。
+    if ([data isKindOfClass:[NSString class]]&&[data isEqualToString:@"*WholeText*"]) {
+        
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"复制" message:@"确定复制正文？" preferredStyle:UIAlertControllerStyleAlert];
+        [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+            UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+            [pasteboard setString:self.cellLayout.statusModel.content];
+            
+        }]];
+        [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+
+            
+        }]];
+         [self.delegate presentViewController:alertController animated:YES completion:nil];
+        return;
+    }
     if ([self.delegate respondsToSelector:@selector(tableViewCell:cellLayout: atIndexPath: didClickedLinkWithData:)] &&
         [self.delegate conformsToProtocol:@protocol(TableViewCellDelegate)]) {
         [self.delegate tableViewCell:self cellLayout:self.cellLayout  atIndexPath:_indexPath didClickedLinkWithData:data];
     }
 }
 
+
 /***  点击菜单按钮  ***/
 - (void)didClickedMenuButton:(LWImageStorage *)imageStorage {
     UIActionSheet *sheet;
     if (self.cellLayout.statusModel.me) {
         
-        sheet = [[UIActionSheet alloc]initWithTitle:@"操作" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"删除",@"分享", nil];
+        sheet = [[UIActionSheet alloc]initWithTitle:@"操作" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"删除",@"分享",@"复制", nil];
         sheet.tag =88;
         [sheet showInView:self];
         
@@ -134,7 +151,7 @@
     else
     {
         
-        sheet = [[UIActionSheet alloc]initWithTitle:@"操作" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"举报",@"分享", nil];
+        sheet = [[UIActionSheet alloc]initWithTitle:@"操作" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"分享",@"复制", nil];
         sheet.tag =888;
         [sheet showInView:self];
         
@@ -182,12 +199,25 @@
             [[WetChatShareManager shareInstance] dynamicShareTo:_cellLayout.statusModel.sharetitle desc:_cellLayout.statusModel.content image:image shareurl:_cellLayout.statusModel.shareurl ];
             
         }
+         else if (buttonIndex==2)
+         {
+             UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+             [pasteboard setString:self.cellLayout.statusModel.content];
+             [[ToolManager shareInstance] showAlertMessage:@"已复制"];
+         }
         
     }
     else
     {
         if (buttonIndex==1)
         {
+            UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+            [pasteboard setString:self.cellLayout.statusModel.content];
+            [[ToolManager shareInstance] showAlertMessage:@"已复制"];
+        }
+        else if(buttonIndex==0)
+        {
+        
             //分享
             //获取最后一张图片的模型
             UIImage *image = [UIImage imageNamed:@"wx-logo.jpg"];
@@ -199,9 +229,9 @@
                 else
                 {
                     if (![_cellLayout.statusModel.imgurl isEqualToString:ImageURLS]) {
-                    image = _avatarImage.imageView.image;
-                }
-
+                        image = _avatarImage.imageView.image;
+                    }
+                    
                     
                 }
             }
@@ -214,15 +244,9 @@
             }
             
             [[WetChatShareManager shareInstance] dynamicShareTo:_cellLayout.statusModel.sharetitle desc:_cellLayout.statusModel.content image:image shareurl:_cellLayout.statusModel.shareurl ];
-            
-            return;
-        }
-        else if(buttonIndex==0)
-        {
-            [[ToolManager shareInstance] showAlertMessage:@"举报成功"];
+        
         }
         
-        //            [self.delegate tableViewCell:self didClickedLikeButtonWithIsSelf:self.cellLayout.statusModel.me andDynamicID:[NSString stringWithFormat:@"%ld",self.cellLayout.statusModel.ID] atIndexPath:_indexPath andIndex:buttonIndex];
     }
     
     

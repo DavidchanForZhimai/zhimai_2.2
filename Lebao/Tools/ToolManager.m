@@ -17,13 +17,6 @@
 #import <MJRefresh.h>
 #import "DWWebViewController.h"
 #import <CoreLocation/CoreLocation.h>//定位
-#import "BHBPopView.h"//弹出
-#import "FabuKuaJieVC.h"//发布跨界
-#import "ReleaseDocumentsPackagetViewController.h"//封装链接
-#import "EditArticlesViewController.h"//发布文
-#import "ReleaseProductViewController.h"//发布产品
-#import "TheSecondaryHouseViewController.h"//二手房源
-#import "TheSecondCarHomeViewController.h"//二手车缘
 #import "DWActionSheetView.h"//选择照片
 #import "DXAlertView.h"//提示
 #import "UIDevice+Extend.h"
@@ -160,74 +153,7 @@ static dispatch_once_t once;
     }
     
 }
-#pragma mark
-#pragma mark 加号视图
 
-- (void)addReleseDctView:(UIViewController *)view
-{
-    
-    //  添加popview
-    [BHBPopView showToView:[UIApplication sharedApplication].keyWindow  andImages:@[@"iconfont-fabukuajie",@"iconfont-chanpin",@"iconfont-lianjie",@"iconfont-wenzhang"] andTitles:@[@"发布线索",[NSString stringWithFormat:@"发布%@",[CoreArchive strForKey:Industry]],@"封装链接",@"发布文章"] andSelectBlock:^(BHBItem *item, NSInteger index) {
-        
-        switch (index) {
-            case 0:
-                
-                [view.navigationController pushViewController:allocAndInit(FabuKuaJieVC) animated:NO];
-                break;
-            case 1:
-            {
-                IndustryCode code=  [Parameter industryCode:[CoreArchive strForKey:Industry]];
-                if (code ==IndustryCodeother) {
-                    ReleaseProductViewController *release =  allocAndInit(ReleaseProductViewController);
-                    ReleaseProduct *data = allocAndInit(ReleaseProduct);
-                    data.content = @"";
-                    data.isAddress = YES ;
-                    data.isgetclue = YES;
-                    data.iscollect = NO;
-                    data.amount = @"0.00";
-                    release.data = data;
-                    [view.navigationController pushViewController:release animated:NO];
-                }
-                else if (code ==IndustryCodeproperty)
-                {
-                    [view.navigationController pushViewController:allocAndInit(TheSecondaryHouseViewController) animated:NO];
-                }
-                else if (code ==IndustryCodecar)
-                {
-                    [view.navigationController pushViewController:allocAndInit(TheSecondCarHomeViewController) animated:NO];
-                }
-                
-                break;
-            }
-                
-            case 2:
-                [view.navigationController pushViewController:allocAndInit(ReleaseDocumentsPackagetViewController) animated:NO];
-                
-                break;
-            case 3:
-            {
-                EditArticlesViewController *release =allocAndInit(EditArticlesViewController);
-                EditArticlesData *data = allocAndInit(EditArticlesData);
-                data.content = @"";
-                data.isAddress = YES ;
-                data.isgetclue = YES;
-                data.isRanking = YES;
-                data.amount = @"0.00";
-                data.isReleseArticle =YES;
-                release.data = data;
-                
-                [view.navigationController pushViewController:release animated:NO];
-            }
-                break;
-                
-                
-            default:
-                break;
-        }
-        
-    }];
-    
-}
 #pragma mark
 #pragma mark 选择相机
 - (void)seleteImageFormSystem:(UIViewController *)view seleteImageFormSystemBlcok:(SeleteImageFormSystemBlcok )block

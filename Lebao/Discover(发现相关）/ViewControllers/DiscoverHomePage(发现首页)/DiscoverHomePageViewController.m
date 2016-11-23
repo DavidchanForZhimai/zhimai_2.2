@@ -88,7 +88,6 @@
         else if ([vcStr isEqualToString: @"AlreadysentproductViewController"])
         {
             AlreadysentproductViewController *article =allocAndInit(AlreadysentproductViewController);
-            article.isArticle = YES;
             [self.navigationController pushViewController:article animated:YES];
         }
         

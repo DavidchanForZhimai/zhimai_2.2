@@ -12,7 +12,6 @@
 #import "GJGCChatFriendViewController.h"
 #import "CrossBorderTransmissionViewController.h"
 #import "WetChatShareManager.h"
-#import "MyProductDetailViewController.h"
 #import "MyCrossBroderViewController.h"
 #import "CoreArchive.h"
 #define RID  @"rid"
@@ -213,56 +212,7 @@
             crossBorderTransmissionViewController.uid = data.uid;
             PushView(self, crossBorderTransmissionViewController);
         }
-        else if([data.industry isEqualToString:@"insurance"]||[data.industry isEqualToString:@"finance"]||[data.industry isEqualToString:@"other"])
-        {
-            MyProductDetailViewController *detail = allocAndInit(MyProductDetailViewController);
-            detail.shareImage =cell.icon.image;
-            detail.ID = [NSString stringWithFormat:@"%i",(int)data.ID];
-            detail.uid =data.uid;
-            detail.isNoEdit = YES;
-            detail.imageurl = data.imgurl;
-            PushView(self, detail);
             
-        }
-        //这是房产的产品
-        else if([data.industry isEqualToString:@"property"])
-        {
-            //            __weak ExhibitionIndustryViewController *weakSelf = self;
-            BaseButton *share = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 50, StatusBarHeight, 50, NavigationBarHeight) backgroundImage:nil iconImage:[UIImage imageNamed:@"icon_widelyspreaddetail_share"] highlightImage:nil inView:self.view];
-            
-            share.didClickBtnBlock = ^
-            {
-                
-                
-                [[WetChatShareManager shareInstance] shareToWeixinApp:data.title desc:@"" image:cell.icon.image  shareID:[NSString stringWithFormat:@"%i",(int)data.ID] isWxShareSucceedShouldNotice:YES isAuthen:data.isgetclue];
-                
-                
-            };
-            
-            [[ToolManager shareInstance] loadWebViewWithUrl:[NSString stringWithFormat:@"%@show/estate?acid=%@",HttpURL,[NSString stringWithFormat:@"%i",(int)data.ID]] title:@"产品详情" pushView:self rightBtn:share];
-            
-        }
-        
-        //这是车行的产品
-        else if([data.industry isEqualToString:@"car"])
-        {
-            
-            //            __weak ExhibitionIndustryViewController *weakSelf = self;
-            BaseButton *share = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 50, StatusBarHeight, 50, NavigationBarHeight) backgroundImage:nil iconImage:[UIImage imageNamed:@"icon_widelyspreaddetail_share"] highlightImage:nil inView:self.view];
-            
-            share.didClickBtnBlock = ^
-            {
-                
-                
-                [[WetChatShareManager shareInstance] shareToWeixinApp:data.title desc:@"" image:cell.icon.image  shareID:[NSString stringWithFormat:@"%i",(int)data.ID] isWxShareSucceedShouldNotice:YES isAuthen:data.isgetclue];
-                
-                
-            };
-            
-            [[ToolManager shareInstance] loadWebViewWithUrl:[NSString stringWithFormat:@"%@show/car?acid=%@",HttpURL,[NSString stringWithFormat:@"%i",(int)data.ID]] title:@"产品详情" pushView:self rightBtn:share];
-            
-        }
-    
 }
 
 - (void)didReceiveMemoryWarning {

@@ -11,11 +11,8 @@
 #import "XLDataService.h"
 #import "WetChatShareManager.h"//分享
 
-#import "MyProductDetailViewController.h"
-#import "TheSecondaryHouseViewController.h"
-#import "TheSecondCarHomeViewController.h"
 #define Readdetail [NSString stringWithFormat:@"%@release/detail",HttpURL]
-@interface MyContentDetailViewController ()<UIActionSheetDelegate>
+@interface MyContentDetailViewController ()
 @property(nonatomic,strong)MyArticleDetailModal *modal;
 @property(nonatomic,strong)BaseButton *next;
 @property(nonatomic,strong)UIImageView *imageView;
@@ -45,29 +42,25 @@ typedef enum{
     [parame setObject:_ID forKey:@"acid"];
     [self addMainView:parame];
     
+    
 }
 #pragma mark - Navi_View
 - (void)navView
 {
   
-//    UIButton *rightBtn =[UIButton createButtonWithfFrame:frame(APPWIDTH - 50, StatusBarHeight, 50, NavigationBarHeight) title:nil backgroundImage:nil iconImage:[UIImage imageNamed:@"icon_exhibition_mycontent_add"] highlightImage:nil tag:ButtonActionTagAdd];
-//        [rightBtn addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self navViewTitleAndBackBtn:@"详情"];
+     __weak MyContentDetailViewController *weakSelf =self;
+    BaseButton *share = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 40, StatusBarHeight, 40, NavigationBarHeight) backgroundImage:nil iconImage:[UIImage imageNamed:@"icon_widelyspreaddetail_share"] highlightImage:nil inView:self.view];
     
-//        [self navViewTitleAndBackBtn:@"文章详情" rightBtn:rightBtn];
-    [self navViewTitleAndBackBtn:_nav_title];
+    share.didClickBtnBlock = ^{
+        
+        [[WetChatShareManager shareInstance] shareToWeixinAndLocalApp:weakSelf.modal.datas.title desc:@"" image:weakSelf.shareImage  shareID:weakSelf.modal.datas.ID isWxShareSucceedShouldNotice:NO isAuthen:weakSelf.modal.datas.isgetclue InView:weakSelf];
+    };
     
-
-}
-- (void)addMainView:(NSMutableDictionary *)parame
-{
+    BaseButton *edit = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 80, StatusBarHeight, 40, NavigationBarHeight) backgroundImage:nil iconImage:[UIImage imageNamed:@"icon_widelyspreaddetail_edit"] highlightImage:nil inView:self.view];
     
-    __weak MyContentDetailViewController *weakSelf =self;
-    
-    articleDetailView = [[MyArticleDetailView alloc]initWithFrame:frame(0, NavigationBarHeight + StatusBarHeight + 10, APPWIDTH, APPHEIGHT - (60 + NavigationBarHeight + StatusBarHeight)) postWithUrl:Readdetail param:parame];
-    articleDetailView.ishasNextPage = NO;
-    articleDetailView.editBlock = ^(MyArticleDetailModal *modal)
-    {
-     
+    edit.didClickBtnBlock = ^{
+        
         EditArticlesViewController *edit =allocAndInit(EditArticlesViewController);
         EditArticlesData *data = allocAndInit(EditArticlesData);
         data.content = weakSelf.modal.datas.content;
@@ -90,134 +83,21 @@ typedef enum{
         data.product_actype = weakSelf.modal.datas.product_actype;
         data.product_industry = weakSelf.modal.datas.product_industry;
         edit.data = data;
-     
+        
         PushView(weakSelf, edit);
     };
-    articleDetailView.modalBlock = ^(MyArticleDetailModal *modal)
-    {
-         weakSelf.modal =modal;
-        [weakSelf addBotoomView:weakSelf];
-    };
-    articleDetailView.enterDetailBlock = ^(UIViewController *view)
-    {
-         [weakSelf.navigationController pushViewController:view animated:YES];
-    };
-   
-    articleDetailView.isEdit = !_isNoEdit;
-    [self.view addSubview:articleDetailView];
+
+    edit.hidden = _isNoEdit;
+    
+
 }
-- (void)addBotoomView:(MyContentDetailViewController *)weakSelf
+- (void)addMainView:(NSMutableDictionary *)parame
 {
-  
-    if (weakSelf.modal.datas.productid &&[weakSelf.modal.datas.productid intValue]>0) {
-        UIView *_botoomView = allocAndInitWithFrame(UIView, frame(0, APPHEIGHT - 50, APPWIDTH, 50));
-        _botoomView.backgroundColor = hexColorAlpha(575757, 1);
-        [_botoomView setBorder:LineBg width:0.5];
-        [self.view addSubview:_botoomView];
-        
-        _imageView = allocAndInitWithFrame(UIImageView, frame(10, 10, 50, 30));
-        [[ToolManager shareInstance] imageView:_imageView setImageWithURL:weakSelf.modal.datas.product_imgurl placeholderType:PlaceholderTypeImageProcessing];
-        [_botoomView addSubview:_imageView];
-        
-        UILabel *title =  [UILabel createLabelWithFrame:frame(CGRectGetMaxX(_imageView.frame) + 5, 0, frameWidth(_botoomView) - CGRectGetMaxX(_imageView.frame) -70, frameHeight(_botoomView)) text:weakSelf.modal.datas.product_title fontSize:24*SpacedFonts textColor:WhiteColor textAlignment:NSTextAlignmentLeft inView:_botoomView];
-        title.numberOfLines = 0;
-        
-        weakSelf.next = [[BaseButton alloc]initWithFrame:frame(frameWidth(_botoomView) - 60, 10, 50, 30) setTitle:@"查看" titleSize:24*SpacedFonts titleColor:WhiteColor textAlignment:NSTextAlignmentCenter backgroundColor:AppMainColor inView:_botoomView];
-        [weakSelf.next setRadius:8];
-        
-        weakSelf.next.didClickBtnBlock = ^{
-            
-        if([self.modal.datas.product_industry isEqualToString:@"insurance"]||[self.modal.datas.product_industry isEqualToString:@"finance"]||[self.modal.datas.product_industry isEqualToString:@"other"])
-            {
-                MyProductDetailViewController *detail = allocAndInit(MyProductDetailViewController);
-                detail.shareImage = _imageView.image;
-                detail.ID =self.modal.datas.productid;
-                detail.uid =self.modal.datas.product_uid;
-                detail.imageurl = self.modal.datas.product_imgurl;
-                PushView(self, detail);
-                
-            }
-            //这是房产的产品
-            else if([self.modal.datas.product_industry isEqualToString:@"property"])
-            {
-                
-                BaseButton *rightBtn = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 50, StatusBarHeight, 50, NavigationBarHeight) setTitle:@"选项" titleSize:28*SpacedFonts titleColor:BlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:[UIColor clearColor] inView:nil];
-                rightBtn.didClickBtnBlock = ^
-                {
-                    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"编辑",@"分享", nil];
-                    actionSheet.tag =1;
-                    [actionSheet showInView:self.view];
-                    
-                    
-                };
-                
-                [[ToolManager shareInstance] loadWebViewWithUrl:[NSString stringWithFormat:@"%@show/estate?acid=%@",HttpURL,self.modal.datas.productid] title:@"产品详情" pushView:self rightBtn:rightBtn];
-                
-            }
-            
-            //这是车行的产品
-            else if([self.modal.datas.product_industry isEqualToString:@"car"])
-            {
-                
-                BaseButton *rightBtn = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 50, StatusBarHeight, 50, NavigationBarHeight) setTitle:@"选项" titleSize:28*SpacedFonts titleColor:BlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:[UIColor clearColor] inView:nil];
-                rightBtn.didClickBtnBlock = ^
-                {
-                    
-                    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"编辑",@"分享", nil];
-                    actionSheet.tag =2;
-                    [actionSheet showInView:self.view];
-                    
-                    
-                };
-                
-                [[ToolManager shareInstance] loadWebViewWithUrl:[NSString stringWithFormat:@"%@show/car?acid=%@",HttpURL,self.modal.datas.productid] title:@"产品详情" pushView:self rightBtn:rightBtn];
-                
-            }
-
-        };
-    }
-    else
-    {
-        articleDetailView.frame = frame(frameX(articleDetailView), frameY(articleDetailView), frameWidth(articleDetailView),APPHEIGHT - ( NavigationBarHeight + StatusBarHeight) );
-    }
     
 
-    
-    BaseButton *share = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 50, StatusBarHeight, 50, NavigationBarHeight) backgroundImage:nil iconImage:[UIImage imageNamed:@"icon_widelyspreaddetail_share"] highlightImage:nil inView:self.view];
-    
-    share.didClickBtnBlock = ^{
-   
-     [[WetChatShareManager shareInstance] shareToWeixinAndLocalApp:weakSelf.modal.datas.title desc:@"" image:weakSelf.shareImage  shareID:weakSelf.modal.datas.ID isWxShareSucceedShouldNotice:NO isAuthen:weakSelf.modal.datas.isgetclue InView:self];
-    };
+    articleDetailView = [[MyArticleDetailView alloc]initWithFrame:frame(0, NavigationBarHeight + StatusBarHeight + 10, APPWIDTH, APPHEIGHT - (NavigationBarHeight + StatusBarHeight)) postWithUrl:Readdetail param:parame];
 
-}
-- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    
-    if (buttonIndex == 0) {
-        
-        if (actionSheet.tag ==1) {
-            TheSecondaryHouseViewController *theSecondaryHouseViewController =  allocAndInit(TheSecondaryHouseViewController);
-            theSecondaryHouseViewController.isEdit = YES;
-            theSecondaryHouseViewController.acid = self.modal.datas.productid;
-            theSecondaryHouseViewController.uid = self.modal.datas.product_uid;
-            PushView(self, theSecondaryHouseViewController);
-        }
-        else
-        {
-            TheSecondCarHomeViewController *theSecondCarHomeViewController =  allocAndInit(TheSecondCarHomeViewController);
-            theSecondCarHomeViewController.isEdit = YES;
-            theSecondCarHomeViewController.acid = self.modal.datas.productid;
-            theSecondCarHomeViewController.uid = self.modal.datas.product_uid;
-            PushView(self, theSecondCarHomeViewController);
-        }
-        
-        
-    }else if (buttonIndex == 1) {
-        
-  
-        [[WetChatShareManager shareInstance] shareToWeixinApp: self.modal.datas.product_title desc:@"" image:_imageView.image  shareID: self.modal.datas.productid isWxShareSucceedShouldNotice:NO isAuthen: self.modal.datas.product_isgetclue];
-    }
-    
+    [self.view addSubview:articleDetailView];
 }
 
 #pragma mark
@@ -227,10 +107,7 @@ typedef enum{
     if (sender.tag ==NavViewButtonActionNavLeftBtnTag ) {
         PopView(self);
     }
-    else if (sender.tag ==ButtonActionTagAdd)
-    {
-        [[ToolManager shareInstance] addReleseDctView:self];
-    }
+  
     
 }
 

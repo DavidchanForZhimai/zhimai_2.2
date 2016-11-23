@@ -540,7 +540,7 @@ typedef NS_ENUM(int,SwitchActionTag) {
         }
         [[ToolManager shareInstance] showWithStatus:@"保存中..."];
         __weak EditArticlesViewController *weakSelf =self;
-        NSLog(@"parameter = %@",parameter);
+//        NSLog(@"parameter = %@",parameter);
         [XLDataService postWithUrl:MyreleaseURL param:parameter modelClass:nil responseBlock:^(id dataObj, NSError *error) {
                        
             if (dataObj) {
@@ -549,7 +549,6 @@ typedef NS_ENUM(int,SwitchActionTag) {
                     
                     if (_data.isReleseArticle) {
                         AlreadysentproductViewController *article  = allocAndInit(AlreadysentproductViewController);
-                        article.isArticle = YES;
                         article.ispopToRoot = YES;
                         PushView(weakSelf, article);
                     }

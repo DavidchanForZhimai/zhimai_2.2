@@ -36,6 +36,7 @@
 {
     
    [self navViewTitleAndBackBtn:@"热门阅读"];
+    
    
    
 }
@@ -43,20 +44,20 @@
 {
 
     articleDetailView = [[MyArticleDetailView alloc]initWithFrame:frame(0, NavigationBarHeight + StatusBarHeight + 10, APPWIDTH, APPHEIGHT - ( NavigationBarHeight + StatusBarHeight)) postWithUrl:ReaddetailURL param:parame];
-    articleDetailView.isEdit = NO;
-    articleDetailView.isNextAcid = YES;
-    articleDetailView.ishasNextPage  = NO;
-    __weak WidelySpreadDetailViewController *weakSelf = self;
-    articleDetailView.modalBlock = ^(MyArticleDetailModal *modal)
-    {
-         weakSelf.modal = modal;
-        [weakSelf twoBtn:weakSelf];
-        
-    };
-    articleDetailView.enterDetailBlock = ^(UIViewController *view)
-    {
-        [weakSelf.navigationController pushViewController:view animated:YES];
-    };
+//    articleDetailView.isEdit = NO;
+//    articleDetailView.isNextAcid = YES;
+//    articleDetailView.ishasNextPage  = NO;
+//    __weak WidelySpreadDetailViewController *weakSelf = self;
+//    articleDetailView.modalBlock = ^(MyArticleDetailModal *modal)
+//    {
+//         weakSelf.modal = modal;
+//        [weakSelf twoBtn:weakSelf];
+//        
+//    };
+//    articleDetailView.enterDetailBlock = ^(UIViewController *view)
+//    {
+//        [weakSelf.navigationController pushViewController:view animated:YES];
+//    };
     [self.view addSubview:articleDetailView];
 }
 #pragma mark

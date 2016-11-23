@@ -10,9 +10,6 @@
 #import "MyContentsArticleCell.h"
 #import "XLDataService.h"
 #import "MyContentDetailViewController.h"
-#import "MyProductDetailViewController.h"
-#import "TheSecondaryHouseViewController.h"
-#import "TheSecondCarHomeViewController.h"
 #import "WetChatShareManager.h"
 #import "CooperateView.h"//发布分享文章
 
@@ -20,15 +17,12 @@
 //路径
 #define ReadrouteURL [NSString stringWithFormat:@"%@release/readroute",HttpURL]
 
-#define ProductURL [NSString stringWithFormat:@"%@product/index",HttpURL]
-#define ProductDelURL [NSString stringWithFormat:@"%@product/del",HttpURL]
-
 #define ArticleURL [NSString stringWithFormat:@"%@release/list",HttpURL]
 #define ArticleDelURL [NSString stringWithFormat:@"%@release/del",HttpURL]
 
 #define DynamicWriteURL [NSString stringWithFormat:@"%@dynamic/write",HttpURL]
 #define cellH 114
-@interface AlreadysentproductViewController ()<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate>
+@interface AlreadysentproductViewController ()<UITableViewDataSource,UITableViewDelegate>
 
 @end
 
@@ -44,14 +38,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    if (_isArticle) {
-        [self navViewTitleAndBackBtn:@"已发文章"];
-    }
-    else
-    {
-       [self navViewTitleAndBackBtn:@"已发产品"];
-    }
-    
+    [self navViewTitleAndBackBtn:@"已发文章"];
     _page =1;
     [self addTableView];
     [self netWork:NO isFooter:NO isShouldClear:NO];
@@ -64,7 +51,7 @@
         PopRootView(self);
     }
     else
-    PopView(self);
+        PopView(self);
 }
 #pragma mark
 #pragma mark - addTableView -
@@ -107,15 +94,8 @@
     if (_productArray.count==0) {
         [[ToolManager shareInstance] showWithStatus];
     }
-    NSString *url;
-    if (_isArticle) {
-        url = ArticleURL;
-    }
-    else
-    {
-        url = ProductURL;
-    }
-    [XLDataService postWithUrl:url param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+    
+    [XLDataService postWithUrl:ArticleURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         [[ToolManager shareInstance] dismiss];
         //        NSLog(@"data =%@",dataObj);
         if (isRefresh) {
@@ -130,24 +110,24 @@
             if (isShouldClear) {
                 [_productArray removeAllObjects];
             }
-                MyContentModal *modal = [MyContentModal mj_objectWithKeyValues:dataObj];
-                if (modal.allpage <= _page) {
-                    [[ToolManager shareInstance] noMoreDataStatus:_productView];
-                }
-                if (modal.rtcode) {
+            MyContentModal *modal = [MyContentModal mj_objectWithKeyValues:dataObj];
+            if (modal.allpage <= _page) {
+                [[ToolManager shareInstance] noMoreDataStatus:_productView];
+            }
+            if (modal.rtcode) {
+                
+                for (MyContentDataModal *data in modal.datas) {
                     
-                    for (MyContentDataModal *data in modal.datas) {
-                        
-                        [_productArray addObject:data];
-                    }
-                    
-                    
-                }
-                else
-                {
-                    [[ToolManager shareInstance] showInfoWithStatus:modal.rtmsg];
+                    [_productArray addObject:data];
                 }
                 
+                
+            }
+            else
+            {
+                [[ToolManager shareInstance] showInfoWithStatus:modal.rtmsg];
+            }
+            
             
             if (_productArray.count==0) {
                 [self isShowEmptyStatus:YES];
@@ -213,7 +193,7 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-  
+    
     static NSString *cellID =@"MyContentsArticleCell";
     MyContentsArticleCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
     if (!cell) {
@@ -227,45 +207,36 @@
         
         if (type == EditDeleType) {
             NSMutableDictionary *parame = [Parameter parameterWithSessicon];
-                [parame setObject:modal.ID forKey:@"acid"];
-                NSString *url;
-                if (_isArticle) {
-                    url = ArticleDelURL;
-                }
-                else
-                {
-                    url = ProductDelURL;
-                }
-                
-                [XLDataService postWithUrl:url param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-                    //                NSLog(@"data =%@",dataObj);
-                    if (dataObj) {
-                        if ([dataObj[@"rtcode"] integerValue] ==1) {
-                            NSMutableArray *array = _productArray;
-                            for (int i = 0; i<array.count; i++) {
-                                MyContentDataModal *modalData = array[i];
-                                if ([modalData.ID isEqualToString:modal.ID]) {
-                                    
-                                    [_productArray removeObjectAtIndex:i];
-                                    [_productView reloadData];
-                                }
+            [parame setObject:modal.ID forKey:@"acid"];
+            [XLDataService postWithUrl:ArticleDelURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+                //                NSLog(@"data =%@",dataObj);
+                if (dataObj) {
+                    if ([dataObj[@"rtcode"] integerValue] ==1) {
+                        NSMutableArray *array = _productArray;
+                        for (int i = 0; i<array.count; i++) {
+                            MyContentDataModal *modalData = array[i];
+                            if ([modalData.ID isEqualToString:modal.ID]) {
+                                
+                                [_productArray removeObjectAtIndex:i];
+                                [_productView reloadData];
                             }
-                            
                         }
-                        else
-                        {
-                            [[ToolManager shareInstance] showInfoWithStatus:dataObj[@"rtmsg"]];
-                        }
+                        
                     }
                     else
                     {
-                        [[ToolManager shareInstance] showInfoWithStatus];
+                        [[ToolManager shareInstance] showInfoWithStatus:dataObj[@"rtmsg"]];
                     }
-                    
-                    
-                }];
+                }
+                else
+                {
+                    [[ToolManager shareInstance] showInfoWithStatus];
+                }
                 
-         
+                
+            }];
+            
+            
         }
         else
         {
@@ -357,9 +328,9 @@
             }
             
         }];
- 
+        
     }];
-   
+    
     
     return cell;
 }
@@ -368,105 +339,16 @@
 {
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-     __weak AlreadysentproductViewController *weakSelf = self;
-        _cell = [tableView cellForRowAtIndexPath:indexPath];
-        _modal = _productArray[indexPath.section];
-    if (_isArticle) {
-        MyContentDetailViewController *detail = allocAndInit(MyContentDetailViewController);
-        detail.shareImage = _cell.icon.image;
-        detail.ID =_modal.ID;
-        detail.uid =_modal.uid;
-        detail.imageurl = _modal.imgurl;
-        detail.nav_title = _modal.title;
-        PushView(self, detail);
-    }
-    else
-    {
-        if ([_modal.actype isEqualToString:@"article"]) {
-            MyContentDetailViewController *detail = allocAndInit(MyContentDetailViewController);
-            detail.shareImage = _cell.icon.image;
-            detail.ID =_modal.ID;
-            detail.uid =_modal.uid;
-            detail.imageurl = _modal.imgurl;
-            PushView(self, detail);
-        }
-        else if([_modal.industry isEqualToString:@"insurance"]||[_modal.industry isEqualToString:@"finance"]||[_modal.industry isEqualToString:@"other"])
-        {
-            MyProductDetailViewController *detail = allocAndInit(MyProductDetailViewController);
-            detail.shareImage = _cell.icon.image;
-            detail.ID =_modal.ID;
-            detail.uid =_modal.uid;
-            detail.imageurl = _modal.imgurl;
-            PushView(self, detail);
-            
-        }
-        //这是房产的产品
-        else if([_modal.industry isEqualToString:@"property"])
-        {
-           
-            BaseButton *rightBtn = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 50, StatusBarHeight, 50, NavigationBarHeight) setTitle:@"选项" titleSize:28*SpacedFonts titleColor:BlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:[UIColor clearColor] inView:nil];
-            rightBtn.didClickBtnBlock = ^
-            {
-                UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:weakSelf cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"编辑",@"分享", nil];
-                actionSheet.tag =1;
-                [actionSheet showInView:self.view];
-                
-                
-            };
-            
-            [[ToolManager shareInstance] loadWebViewWithUrl:[NSString stringWithFormat:@"%@show/estate?acid=%@",HttpURL,_modal.ID] title:@"产品详情" pushView:self rightBtn:rightBtn];
-            
-            
-            
-        }
-        
-        //这是车行的产品
-        else if([_modal.industry isEqualToString:@"car"])
-        {
-            
-            BaseButton *rightBtn = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 50, StatusBarHeight, 50, NavigationBarHeight) setTitle:@"选项" titleSize:28*SpacedFonts titleColor:BlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:[UIColor clearColor] inView:nil];
-            rightBtn.didClickBtnBlock = ^
-            {
-                
-                UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:weakSelf cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"编辑",@"分享", nil];
-                actionSheet.tag =2;
-                [actionSheet showInView:self.view];
-                
-                
-            };
-            
-            [[ToolManager shareInstance] loadWebViewWithUrl:[NSString stringWithFormat:@"%@show/car?acid=%@",HttpURL,_modal.ID] title:@"Ta的服务" pushView:self rightBtn:rightBtn];
-            
-        }
-        
-    }
-}
-- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    _cell = [tableView cellForRowAtIndexPath:indexPath];
+    _modal = _productArray[indexPath.section];
     
-    
-    if (buttonIndex == 0) {
-        
-        if (actionSheet.tag ==1) {
-            TheSecondaryHouseViewController *theSecondaryHouseViewController =  allocAndInit(TheSecondaryHouseViewController);
-            theSecondaryHouseViewController.isEdit = YES;
-            theSecondaryHouseViewController.acid = _modal.ID;
-            theSecondaryHouseViewController.uid = _modal.uid;
-            PushView(self, theSecondaryHouseViewController);
-        }
-        else
-        {
-            TheSecondCarHomeViewController *theSecondCarHomeViewController =  allocAndInit(TheSecondCarHomeViewController);
-            theSecondCarHomeViewController.isEdit = YES;
-            theSecondCarHomeViewController.acid = _modal.ID;
-            theSecondCarHomeViewController.uid = _modal.uid;
-            PushView(self, theSecondCarHomeViewController);
-        }
-        
-        
-    }else if (buttonIndex == 1) {
-        
-        [[WetChatShareManager shareInstance] shareToWeixinApp:_modal.title desc:@"" image:_cell.icon.image  shareID:_modal.ID isWxShareSucceedShouldNotice:NO isAuthen:_modal.isgetclue];
-    }
+    MyContentDetailViewController *detail = allocAndInit(MyContentDetailViewController);
+    detail.shareImage = _cell.icon.image;
+    detail.ID =_modal.ID;
+    detail.uid =_modal.uid;
+    detail.imageurl = _modal.imgurl;
+    detail.nav_title = _modal.title;
+    PushView(self, detail);
     
 }
 
@@ -476,13 +358,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

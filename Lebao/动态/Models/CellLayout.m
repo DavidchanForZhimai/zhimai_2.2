@@ -110,7 +110,8 @@
                 contentTextStorageY = CGRectGetMaxY(_avatarPosition) + 10;
             }
             contentTextStorage.frame = CGRectMake(_avatarStorage.left, contentTextStorageY, SCREEN_WIDTH - 2*_avatarStorage.left, CGFLOAT_MAX);
-         
+            
+//            [contentTextStorage lw_addLinkForWholeTextStorageWithData:@"*WholeText*" linkColor:contentTextStorage.textColor highLightColor:RGB(0, 0, 0, 0.15f)];
             
             CGFloat contentBottom = contentTextStorage.bottom;
             //折叠的条件,文字高度超过MAX_TEXT_HEIGHT则折叠
@@ -574,6 +575,7 @@
             
             contentTextStorage.frame = CGRectMake(_avatarStorage.left, contentTextStorageY , SCREEN_WIDTH - 2*_avatarStorage.left, CGFLOAT_MAX);
             
+//            [contentTextStorage lw_addLinkForWholeTextStorageWithData:@"*WholeText*" linkColor:contentTextStorage.textColor highLightColor:RGB(0, 0, 0, 0.15f)];
             //折叠文字
             LWTextStorage* closeStorage = [[LWTextStorage alloc] init];
             closeStorage.font = Size(26.0);

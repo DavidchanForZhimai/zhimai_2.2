@@ -9,6 +9,7 @@
 #import "CrossBorderTransmissionViewController.h"
 #import "MyArticleDetailView.h"
 #import "WetChatShareManager.h"//分享
+#import "EditArticlesViewController.h"
 //首页传播最广详情
 #define ReaddetailURL [NSString stringWithFormat:@"%@release/detail",HttpURL]
 @interface CrossBorderTransmissionViewController ()
@@ -38,6 +39,13 @@
 {
     
     [self navViewTitleAndBackBtn:_nav_title];
+     __weak CrossBorderTransmissionViewController *weakSelf = self;
+    BaseButton *share = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 40, StatusBarHeight, 40, NavigationBarHeight) backgroundImage:nil iconImage:[UIImage imageNamed:@"icon_widelyspreaddetail_share"] highlightImage:nil inView:self.view];
+    
+    share.didClickBtnBlock = ^{
+        
+        [[WetChatShareManager shareInstance] shareToWeixinAndLocalApp:weakSelf.modal.datas.title desc:@"" image:weakSelf.shareImage  shareID:weakSelf.modal.datas.ID isWxShareSucceedShouldNotice:NO isAuthen:weakSelf.modal.datas.isgetclue InView:weakSelf];
+    };
     
     
 }
@@ -45,31 +53,8 @@
 {
     
     articleDetailView = [[MyArticleDetailView alloc]initWithFrame:frame(0, NavigationBarHeight + StatusBarHeight + 10, APPWIDTH, APPHEIGHT - ( NavigationBarHeight + StatusBarHeight)) postWithUrl:ReaddetailURL param:parame];
-    articleDetailView.isEdit = NO;
-    articleDetailView.isNextAcid = YES;
-    articleDetailView.ishasNextPage  = NO;
-    __weak CrossBorderTransmissionViewController *weakSelf = self;
-    articleDetailView.modalBlock = ^(MyArticleDetailModal *modal)
-    {
-        weakSelf.modal = modal;
-        [weakSelf twoBtn:weakSelf];
-        
-    };
+  
     [self.view addSubview:articleDetailView];
-}
-#pragma mark
-#pragma mark -
-- (void)twoBtn:(CrossBorderTransmissionViewController *)weakSelf
-{
-    BaseButton *share = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 50, StatusBarHeight, 50, NavigationBarHeight) backgroundImage:nil iconImage:[UIImage imageNamed:@"icon_widelyspreaddetail_share"] highlightImage:nil inView:self.view];
-    share.didClickBtnBlock = ^
-    {
-       
-     [[WetChatShareManager shareInstance] shareToWeixinApp:weakSelf.modal.datas.title desc:@"" image:weakSelf.shareImage  shareID:weakSelf.modal.datas.ID isWxShareSucceedShouldNotice:weakSelf.modal.datas.isreward isAuthen:weakSelf.modal.datas.isgetclue];
-            
-    };
-        
-    
 }
 #pragma mark
 #pragma mark - buttonAction -

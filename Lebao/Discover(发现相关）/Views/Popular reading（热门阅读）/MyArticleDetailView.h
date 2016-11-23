@@ -19,16 +19,8 @@ typedef void (^EnterDetailBlock) (UIViewController * viewContoller);
     MyArticleDetailModal *modal;
 }
 @property(nonatomic,strong)IMYWebView *webView;
-@property(nonatomic,assign)BOOL isEdit;
-@property(nonatomic,assign)BOOL isNextAcid;
-@property(nonatomic,assign)BOOL ishasNextPage; //default Yes
 @property(nonatomic,strong)NSString *postWithUrl;
 @property(nonatomic,strong)NSMutableDictionary *param;
-@property(nonatomic,copy)EditBlock editBlock;
-@property(nonatomic,copy)ContributionBlock contributionBlock;
-@property(nonatomic,copy)ModalBlock modalBlock;
-
-@property(nonatomic,copy)EnterDetailBlock enterDetailBlock;
 - (instancetype)initWithFrame:(CGRect)frame postWithUrl:(NSString*)postWithUrl param:(NSMutableDictionary*)param ;
 
 @end
