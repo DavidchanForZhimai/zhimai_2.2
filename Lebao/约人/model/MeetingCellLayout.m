@@ -110,18 +110,14 @@
         
         addressStorage.frame = CGRectMake(industryTextStorage.left, industryTextStorage.bottom + 8, industryTextStorage.width, CGFLOAT_MAX);
         
-        if ((model.service.length==0)||(model.resource.length==0)) {
-            if (addressStorage.text.length>0) {
-                _line1Rect  = CGRectMake(0, addressStorage.bottom + 10, APPWIDTH, 0.5);
-            }else if (industryTextStorage.text.length>0){
-                addressStorage.frame = CGRectMake(industryTextStorage.left, industryTextStorage.bottom, industryTextStorage.width, 0);
-                _line1Rect  = CGRectMake(0, industryTextStorage.bottom + 10, APPWIDTH, 0.5);
-            }else {
-                _line1Rect  = CGRectMake(0, _avatarStorage.bottom + 10, APPWIDTH, 0.5);
-            }
-        }else{
+        if (model.address.length>0&&industryTextStorage.text.length>0) {
             _line1Rect  = CGRectMake(0, addressStorage.bottom + 10, APPWIDTH, 0.5);
         }
+        if ((model.address.length==0)||(industryTextStorage.text.length==0)){
+            
+            _line1Rect  = CGRectMake(0, _avatarStorage.bottom + 10, APPWIDTH, 0.5);
+        }
+
         
         if(meetBtn){
             //约见按钮
@@ -147,7 +143,7 @@
         
        float productLbStorageheight =[self addStorageWithStr:@"产品服务" andFrameX:_avatarStorage.left andFrameY:_line1Rect.origin.y+10 andTagStr:model.service];
        float resourceTextStorageheight=[self addStorageWithStr:@"人脉资源" andFrameX:_avatarStorage.left andFrameY:productLbStorageheight+10 andTagStr:model.resource];
-        
+
         
         if (isTime) {
 
@@ -173,7 +169,7 @@
         }
         if (reward) {
             if ((model.service.length==0)&&(model.resource.length==0)) {
-                _line2Rect  = CGRectMake(0, addressStorage.bottom + 10, APPWIDTH, 0.5);;
+                _line2Rect  = CGRectMake(0, addressStorage.bottom + 10, APPWIDTH, 0.5);
             }else{
                 _line2Rect  = CGRectMake(0, resourceTextStorageheight + 10, APPWIDTH, 0.5);
             }
@@ -200,6 +196,9 @@
             
                     }
         
+        if (!isTime&&!reward&&model.service.length==0&&model.resource.length==0) {
+            _line1Rect=CGRectMake(0, addressStorage.bottom, 0, 0);
+        }
         
         self.cellHeight = [self suggestHeightWithBottomMargin:20];
         self.cellMarginsRect = frame(0, self.cellHeight - 10, APPWIDTH, 10);
@@ -273,8 +272,14 @@
         }
         [self addStorage:productTextStorage];
     }else{
-
-        productLbStorageheight = _line1Rect.origin.y;
+        
+        if (_model.service==tagStr) {
+            productLbStorageheight = _line1Rect.origin.y;
+        }else if (_model.resource==tagStr){
+            productLbStorageheight = frameY-10;
+        }else{
+            productLbStorageheight = frameY;
+        }
     }
     return productLbStorageheight;
 }

@@ -101,12 +101,14 @@
         addressStorage.textColor = [UIColor colorWithRed:0.549 green:0.5569 blue:0.5608 alpha:1.0];
         addressStorage.font = Size(24.0);
         addressStorage.frame = CGRectMake(industryTextStorage.left, industryTextStorage.bottom + 8, industryTextStorage.width, CGFLOAT_MAX);
-        if (addressStorage.text.length>0) {
+        
+        if (model.address.length>0&&industryTextStorage.text.length>0) {
             _line1Rect  = CGRectMake(0, addressStorage.bottom + 10, APPWIDTH, 0.5);
-        }else{
+        }
+        if ((model.address.length==0)||(industryTextStorage.text.length==0)){
+            
             _line1Rect  = CGRectMake(0, _avatarStorage.bottom + 10, APPWIDTH, 0.5);
         }
-        
         if (meetBtn) {
             //约见按钮
             _meetBtnRect = CGRectMake(APPWIDTH-70, 20, 60, 30);
