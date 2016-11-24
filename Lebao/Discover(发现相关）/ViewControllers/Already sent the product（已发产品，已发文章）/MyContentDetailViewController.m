@@ -53,8 +53,13 @@ typedef enum{
     BaseButton *share = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 40, StatusBarHeight, 40, NavigationBarHeight) backgroundImage:nil iconImage:[UIImage imageNamed:@"icon_widelyspreaddetail_share"] highlightImage:nil inView:self.view];
     
     share.didClickBtnBlock = ^{
-        
+        if (_isNoEdit) {
+            [[WetChatShareManager shareInstance] shareToWeixinApp:weakSelf.modal.datas.title desc:@"" image:weakSelf.shareImage  shareID:weakSelf.modal.datas.ID isWxShareSucceedShouldNotice:weakSelf.modal.datas.isreward isAuthen:weakSelf.modal.datas.isgetclue];
+        }
+        else
+        {
         [[WetChatShareManager shareInstance] shareToWeixinAndLocalApp:weakSelf.modal.datas.title desc:@"" image:weakSelf.shareImage  shareID:weakSelf.modal.datas.ID isWxShareSucceedShouldNotice:NO isAuthen:weakSelf.modal.datas.isgetclue InView:weakSelf];
+        }
     };
     
     BaseButton *edit = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 80, StatusBarHeight, 40, NavigationBarHeight) backgroundImage:nil iconImage:[UIImage imageNamed:@"icon_widelyspreaddetail_edit"] highlightImage:nil inView:self.view];
@@ -94,8 +99,9 @@ typedef enum{
 - (void)addMainView:(NSMutableDictionary *)parame
 {
     
-
-    articleDetailView = [[MyArticleDetailView alloc]initWithFrame:frame(0, NavigationBarHeight + StatusBarHeight + 10, APPWIDTH, APPHEIGHT - (NavigationBarHeight + StatusBarHeight)) postWithUrl:Readdetail param:parame];
+    articleDetailView = [[MyArticleDetailView alloc]initWithFrame:frame(0, NavigationBarHeight + StatusBarHeight + 10, APPWIDTH, APPHEIGHT - (NavigationBarHeight + StatusBarHeight)) postWithUrl:Readdetail param:parame modalBlcok:^(MyArticleDetailModal *modal) {
+        _modal = modal;
+    }];
 
     [self.view addSubview:articleDetailView];
 }

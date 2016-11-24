@@ -19,12 +19,13 @@
 @end
 @implementation MyArticleDetailView
 
-- (instancetype)initWithFrame:(CGRect)frame postWithUrl:(NSString*)postWithUrl param:(NSMutableDictionary*)param
+- (instancetype)initWithFrame:(CGRect)frame postWithUrl:(NSString*)postWithUrl param:(NSMutableDictionary*)param modalBlcok:(ModalBlock)modalBlcok
 {
     if (self =[super initWithFrame:frame]) {
         self.backgroundColor =[UIColor  whiteColor];
         _postWithUrl = postWithUrl;
         _param = param;
+        _modalBlcok = modalBlcok;
         [self addMainView:_param];
     }
     return self;
@@ -39,11 +40,13 @@
     //    NSLog(@"parame =%@ _postWithUrl=%@",parame,_postWithUrl);
     [[ToolManager shareInstance] showWithStatus];
     [XLDataService postWithUrl:_postWithUrl param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        NSLog(@"data =%@",dataObj);
+//        NSLog(@"data =%@",dataObj);
         if (dataObj) {
-            [[ToolManager shareInstance] dismiss];
+          
             modal = [MyArticleDetailModal mj_objectWithKeyValues:dataObj];
-            
+            if (_modalBlcok) {
+                _modalBlcok(modal);
+            }
             weakSelf.webView = allocAndInitWithFrame(IMYWebView, CGRectZero);
             weakSelf.webView.backgroundColor = WhiteColor;
             weakSelf.webView.delegate = self;
@@ -131,7 +134,7 @@
                     
                 }
                 
-                weakSelf.webView.frame= frame(5, height, APPWIDTH -10, 0);
+                weakSelf.webView.frame= frame(5, height, APPWIDTH -10, APPHEIGHT - height);
                 
                 [weakSelf.webView loadHTMLString:modal.datas.content baseURL:nil];
                 
@@ -155,9 +158,15 @@
     
 }
 #pragma mark - UIWebview delegete
+#pragma mark - UIWebview delegete
 
+- (void)webView:(IMYWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    [[ToolManager shareInstance] showAlertMessage:error.description];
+}
 - (void)webViewDidFinishLoad:(IMYWebView *)webView
 {
+      [[ToolManager shareInstance] dismiss];
     [self webViewFitToScale:webView];
     
     [webView evaluateJavaScript:@"document.body.scrollHeight" completionHandler:^(id objc, NSError * error) {

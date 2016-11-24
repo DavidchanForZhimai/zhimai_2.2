@@ -64,8 +64,6 @@
     [[ToolManager shareInstance] showWithStatus];
 //    NSLog(@"parame =%@",parame);
     [XLDataService postWithUrl:ArticlelibURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        [[ToolManager shareInstance] dismiss];
-        
 //        NSLog(@"data =%@",dataObj);
         weakSelf.webView = allocAndInitWithFrame(IMYWebView, CGRectZero);
         weakSelf.webView.backgroundColor = WhiteColor;
@@ -101,7 +99,7 @@
                     line1.backgroundColor = LineBg;
                     [view addSubview:line1];
             
-                weakSelf.webView.frame= frame(5, height, APPWIDTH -10, 0);
+                weakSelf.webView.frame= frame(5, height, APPWIDTH -10, APPHEIGHT - height);
                 
                 
                 [weakSelf.webView loadHTMLString:weakSelf.modal.datas.content baseURL:nil];
@@ -126,8 +124,13 @@
 }
 #pragma mark - UIWebview delegete
 
+- (void)webView:(IMYWebView *)webView didFailLoadWithError:(NSError *)error
+{
+     [[ToolManager shareInstance] showAlertMessage:error.description];
+}
 - (void)webViewDidFinishLoad:(IMYWebView *)webView
 {
+    [[ToolManager shareInstance] dismiss];
     [self webViewFitToScale:webView];
     [webView evaluateJavaScript:@"document.body.offsetHeight" completionHandler:^(id objc, NSError * error) {
 

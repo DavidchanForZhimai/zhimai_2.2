@@ -56,7 +56,9 @@ typedef enum{
 {
     
     __weak MyCollectionDetailViewController *weakself =self;
-    _articleDetailView = [[MyArticleDetailView alloc]initWithFrame:frame(0, NavigationBarHeight + StatusBarHeight + 10, APPWIDTH, APPHEIGHT - (60 + NavigationBarHeight + StatusBarHeight)) postWithUrl:CollectionURL param:parame];
+    _articleDetailView = [[MyArticleDetailView alloc]initWithFrame:frame(0, NavigationBarHeight + StatusBarHeight + 10, APPWIDTH, APPHEIGHT - (60 + NavigationBarHeight + StatusBarHeight)) postWithUrl:CollectionURL param:parame modalBlcok:^(MyArticleDetailModal *modal) {
+        _modal =modal;
+    }];
 //    _articleDetailView.modalBlock = ^(MyArticleDetailModal *modal)
 //    {
 //        weakself.modal = modal;

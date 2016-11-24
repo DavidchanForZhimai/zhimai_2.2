@@ -43,7 +43,9 @@
 - (void)addMainView:(NSMutableDictionary *)parame
 {
 
-    articleDetailView = [[MyArticleDetailView alloc]initWithFrame:frame(0, NavigationBarHeight + StatusBarHeight + 10, APPWIDTH, APPHEIGHT - ( NavigationBarHeight + StatusBarHeight)) postWithUrl:ReaddetailURL param:parame];
+    articleDetailView = [[MyArticleDetailView alloc]initWithFrame:frame(0, NavigationBarHeight + StatusBarHeight + 10, APPWIDTH, APPHEIGHT - ( NavigationBarHeight + StatusBarHeight)) postWithUrl:ReaddetailURL param:parame modalBlcok:^(MyArticleDetailModal *modal) {
+        _modal = modal;
+    }];
 //    articleDetailView.isEdit = NO;
 //    articleDetailView.isNextAcid = YES;
 //    articleDetailView.ishasNextPage  = NO;
