@@ -286,6 +286,7 @@
                     [upLoadphotos addObject:images];
                     
                     if (upLoadphotos.count==self.phonelist.count) {
+                       
                         [[HomeInfo shareInstance] adddynamic:self.tfView.text cooperation_benefit:cooperate imgs:[upLoadphotos mj_JSONString] andcallBack:^(BOOL issucced, NSString *info, NSDictionary *jsonDic) {
                             
                             if (issucced) {
@@ -517,6 +518,10 @@
     alertV.titleStr = @"合作利益描述";
     alertV.sureblock = ^(CooperateView *customAlertView,NSString *logFieldText)
     {
+        if ([logFieldText isEqualToString:@"如果你展示的是自己的产品,可以将合作利益描述的更详细"]) {
+            
+            return ;
+        }
         cooperate = logFieldText;
     };
 
