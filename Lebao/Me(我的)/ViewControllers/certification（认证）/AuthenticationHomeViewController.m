@@ -272,7 +272,7 @@
 {
     if (_modal.datas.authen ==1||_modal.datas.authen==9) {
         [[ToolManager shareInstance] seleteImageFormSystem:self seleteImageFormSystemBlcok:^(UIImage *image) {
-            [[ToolManager shareInstance] showWithStatus:@"上传中"];
+           
             [[UpLoadImageManager shareInstance] upLoadImageType:@"authen" image:image imageBlock:^(UpLoadImageModal * upLoadImageModal) {
                 [[ToolManager shareInstance] dismiss];
                 _upload.enabled = YES;

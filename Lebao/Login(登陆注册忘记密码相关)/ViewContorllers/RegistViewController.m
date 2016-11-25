@@ -188,7 +188,9 @@ typedef enum {
 #pragma mark - M80 Delegate
 - (void)m80AttributedLabel:(M80AttributedLabel *)label clickedOnLink:(id)linkData
 {
-//    NSLog(@"linkData=%@",linkData);
+    NSLog(@"%@",[NSString stringWithFormat:@"%@default/agreement",HttpURL]);
+    [[ToolManager shareInstance] loadWebViewWithUrl:[NSString stringWithFormat:@"%@default/agreement",HttpURL] title:@"用户注册协议" pushView:self rightBtn:nil];
+   
 }
 #pragma mark
 #pragma mark - buttonAction -

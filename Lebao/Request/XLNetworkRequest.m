@@ -177,7 +177,7 @@
     }
      progress:^(NSProgress *downloadProgress)
      {
-         
+//         NSLog(@"downloadProgress =%lld  %lld",downloadProgress.totalUnitCount,downloadProgress.completedUnitCount);
          
      }success:^(NSURLSessionDataTask *task, id _Nullable responseObject) {
          
@@ -229,7 +229,7 @@
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     // 请求超时设定
     manager.requestSerializer.timeoutInterval = 10;
-    //manager.securityPolicy.allowInvalidCertificates = YES;//SSL certificates
+
     return manager;
 }
 

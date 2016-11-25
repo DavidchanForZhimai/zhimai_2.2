@@ -9,6 +9,7 @@
 #import "WithdrawalViewController.h"
 #import "WetChatAuthenManager.h"
 #import "XLDataService.h"
+#import "NSString+Extend.h"
 //////// 特殊字符的限制输入，价格金额的有效性判断
 #define myDotNumbers     @"0123456789.\n"
 #define myNumbers          @"0123456789\n"
@@ -59,6 +60,7 @@ typedef enum {
     [[ToolManager shareInstance] showWithStatus];
     [XLDataService postWithUrl:CashURL param:[Parameter parameterWithSessicon] modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         if (dataObj) {
+            NSLog(@"dataObj  %@",dataObj);
             if ([dataObj[@"rtcode"] integerValue]==1) {
                 [[ToolManager shareInstance] dismiss];
                 
@@ -96,8 +98,8 @@ typedef enum {
                 UILabel *cash =  [UILabel createLabelWithFrame:frame(0, CGRectGetMaxY(_rechargeView.frame) + 10, frameWidth(_mainScrollView) -14*ScreenMultiple, 26*SpacedFonts) text:[NSString stringWithFormat:@"本次最高可提现%@元(微信官方收取0.6％的提现手续费)",dataObj[@"amount"]] fontSize:26*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentRight inView:_mainScrollView];
                 
                 NSMutableAttributedString *string = [[NSMutableAttributedString alloc]initWithString:cash.text];
-                [string addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:[cash.text rangeOfString:dataObj[@"amount"]]];
-                [string addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:[cash.text rangeOfString:@"(微信官方收取0.6％的提现手续费)"]];
+                [string addAttribute:NSForegroundColorAttributeName value:AppMainColor range:[cash.text rangeOfString:dataObj[@"amount"]]];
+                [string addAttribute:NSForegroundColorAttributeName value:AppMainColor range:[cash.text rangeOfString:@"(微信官方收取0.6％的提现手续费)"]];
                 [string addAttribute:NSFontAttributeName value:Size(20) range:[cash.text rangeOfString:@"(微信官方收取0.6％的提现手续费)"]];
                 cash.attributedText = string;
                 
@@ -107,9 +109,47 @@ typedef enum {
                 _rechargeBtn.layer.cornerRadius = 8.0;
                 _rechargeBtn.titleLabel.font = Size(28);
                 [_rechargeBtn addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
-                if (CGRectGetMaxY(_rechargeBtn.frame) + 10 >frameHeight(_mainScrollView)) {
+                
+                UILabel *tishi =  [UILabel createLabelWithFrame:frame(frameX(_rechargeTextView), CGRectGetMaxY(_rechargeBtn.frame) + 30, frameWidth(_rechargeTextView), 40) text:@"" fontSize:24*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:_mainScrollView];
+                tishi.numberOfLines = 0;
+                if (isAuthen) {
                     
-                    _mainScrollView.frame = frame(frameX(_mainScrollView), frameY(_mainScrollView), frameWidth(_mainScrollView), CGRectGetMaxY(_rechargeBtn.frame) + 10);
+                    tishi.text = [NSString stringWithFormat:@"提示:\n请确保微信昵称“%@”的实名认证信息（姓名）与知脉帐号的认证姓名（%@）一致，否则提现会失败。如提现失败，请联系知脉客服。",dataObj[@"nickname"],dataObj[@"realname"]];
+                    
+                    NSMutableAttributedString *tishistring = [[NSMutableAttributedString alloc]initWithString:tishi.text];
+                     [tishistring addAttribute:NSForegroundColorAttributeName value:AppMainColor range:[tishi.text rangeOfString:@"姓名"]];
+                    [tishistring addAttribute:NSForegroundColorAttributeName value:AppMainColor range:[tishi.text rangeOfString:dataObj[@"nickname"]]];
+                    [tishistring addAttribute:NSForegroundColorAttributeName value:AppMainColor range:[tishi.text rangeOfString:dataObj[@"realname"]]];
+                    [tishistring addAttribute:NSFontAttributeName value:Size(30) range:[tishi.text rangeOfString:@"提示:"]];
+                    [tishistring addAttribute:NSForegroundColorAttributeName value:BlackTitleColor range:[tishi.text rangeOfString:@"提示:"]];
+                    
+                    NSMutableParagraphStyle * paragraphStyle1 = [[NSMutableParagraphStyle alloc] init];
+                    [paragraphStyle1 setLineSpacing:5];
+                    [tishistring addAttribute:NSParagraphStyleAttributeName value:paragraphStyle1 range:NSMakeRange(0, [tishi.text length])];
+                    
+                    tishi.attributedText = tishistring;
+                }
+                else
+                {
+                    tishi.text = [NSString stringWithFormat:@"提示:\n1、第一次提现后自动绑定微信帐号\n2、第一次提现时，请确保您手机所登陆微信的实名认证信息（姓名）与知脉帐号的认证姓名（%@）一致，否则提现会失败。如提现失败，请联系知脉客服。",dataObj[@"realname"]];
+                    
+                    NSMutableAttributedString *tishistring = [[NSMutableAttributedString alloc]initWithString:tishi.text];
+                    [tishistring addAttribute:NSForegroundColorAttributeName value:AppMainColor range:[tishi.text rangeOfString:@"姓名"]];
+                    [tishistring addAttribute:NSForegroundColorAttributeName value:AppMainColor range:[tishi.text rangeOfString:@"第一次提现后自动绑定微信帐号"]];
+                    [tishistring addAttribute:NSForegroundColorAttributeName value:AppMainColor range:[tishi.text rangeOfString:dataObj[@"realname"]]];
+                    [tishistring addAttribute:NSFontAttributeName value:Size(30) range:[tishi.text rangeOfString:@"提示:"]];
+                    [tishistring addAttribute:NSForegroundColorAttributeName value:BlackTitleColor range:[tishi.text rangeOfString:@"提示:"]];
+                    NSMutableParagraphStyle * paragraphStyle1 = [[NSMutableParagraphStyle alloc] init];
+                    [paragraphStyle1 setLineSpacing:5];
+                    [tishistring addAttribute:NSParagraphStyleAttributeName value:paragraphStyle1 range:NSMakeRange(0, [tishi.text length])];
+                    tishi.attributedText = tishistring;
+                }
+               
+                tishi.frame = CGRectMake(tishi.x, tishi.y, tishi.width, [tishi.text sizeWithFont:Size(40) maxSize:CGSizeMake(tishi.width, 1000)].height);
+                
+                if (CGRectGetMaxY(tishi.frame) + 10 >frameHeight(_mainScrollView)) {
+                    
+                    _mainScrollView.frame = frame(frameX(_mainScrollView), frameY(_mainScrollView), frameWidth(_mainScrollView), CGRectGetMaxY(tishi.frame) + 10);
                 }
 
             }

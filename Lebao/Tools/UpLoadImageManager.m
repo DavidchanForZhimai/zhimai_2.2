@@ -32,44 +32,87 @@ static dispatch_once_t once;
 {
     
     XLFileConfig *fileConfig = allocAndInit(XLFileConfig);
-    UIImage *newImage = [image imageByScalingAndCroppingForSize:CGSizeMake(image.size.width, image.size.height)];
-    NSData *imageData = UIImageJPEGRepresentation(newImage,0.00001);
-    fileConfig.fileData = imageData;
-    fileConfig.name = @"imageFile";
-    fileConfig.fileName =@"test.jpg";
-    fileConfig.mimeType =@"image/jpg";
-    NSMutableDictionary *parameter = [Parameter parameterWithSessicon];
-    [parameter setObject:type forKey:Type];
-    [parameter setObject:@"imageFile" forKey:@"name"];
     
-    [XLNetworkRequest updateRequest:UploadImagesURL params:parameter fileConfig:fileConfig success:^(id responseObj) {
-//        NSLog(@"responseObj =%@ parameter= %@",responseObj,parameter);
-        if (responseObj) {
-            UpLoadImageModal *upLoadImageModal = [UpLoadImageModal mj_objectWithKeyValues:responseObj];
-            if (upLoadImageModal.rtcode ==1) {
-                
-                
-                imageBlock(upLoadImageModal);
-               
+    BOOL isWB = YES;
+    float bili=1.0;
+    if (image.size.width<image.size.height) {
+        isWB = NO;
+    }
+    
+    if ([type isEqualToString:@"head"]||[type isEqualToString:@"property"]) {
+        
+        if (isWB&&image.size.width>2000) {
+            bili = 2000/image.size.width;
+        }
+        if (!isWB&&image.size.height>2000) {
+            bili = 2000/image.size.height;
+        }
+    }
+    else if ([type isEqualToString:@"authen"]) {
+        
+        if (isWB&&image.size.width>480) {
+            bili = 480/image.size.width;
+        }
+        if (!isWB&&image.size.height>480) {
+            bili = 480/image.size.height;
+        }
+
+    }
+    else
+    {
+        if (isWB&&image.size.width>1000) {
+            bili = 1000/image.size.width;
+        }
+        if (!isWB&&image.size.height>1000) {
+            bili = 1000/image.size.height;
+        }
+
+    }
+    
+
+    UIImage *newImage = [image imageByScalingAndCroppingForSize:CGSizeMake(bili*image.size.width, bili*image.size.height)];
+//    NSLog(@"image.size =%@",NSStringFromCGSize(newImage.size));
+    NSData *imageData = UIImageJPEGRepresentation(newImage,0.3);
+    if (imageData) {
+        fileConfig.fileData = imageData;
+        fileConfig.name = @"imageFile";
+        fileConfig.fileName =@"test.jpg";
+        fileConfig.mimeType =@"image/jpg";
+        NSMutableDictionary *parameter = [Parameter parameterWithSessicon];
+        [parameter setObject:type forKey:Type];
+        [parameter setObject:@"imageFile" forKey:@"name"];
+        [[ToolManager shareInstance] showWithStatus:@"上传中..."];
+        [XLNetworkRequest updateRequest:UploadImagesURL params:parameter fileConfig:fileConfig success:^(id responseObj) {
+            if (responseObj) {
+                UpLoadImageModal *upLoadImageModal = [UpLoadImageModal mj_objectWithKeyValues:responseObj];
+                if (upLoadImageModal.rtcode ==1) {
+                    [[ToolManager shareInstance] showSuccessWithStatus:@"上传成功"];
+                    imageBlock(upLoadImageModal);
+                    
+                }
+                else
+                {
+                    [[ToolManager shareInstance] showInfoWithStatus:upLoadImageModal.rtmsg];
+                }
                 
             }
             else
             {
-                [[ToolManager shareInstance] showInfoWithStatus:upLoadImageModal.rtmsg];
+                [[ToolManager shareInstance] showInfoWithStatus];
             }
-
-        }
-        else
-        {
+            
+            
+        } failure:^(NSError *error) {
+            
             [[ToolManager shareInstance] showInfoWithStatus];
-        }
-        
-        
-    } failure:^(NSError *error) {
-        
-        [[ToolManager shareInstance] showInfoWithStatus];
-    }];
-}
+        }];
+
+    }
+    else
+    {
+        [[ToolManager shareInstance] showAlertMessage:@"无效的图片，重试！"];
+    }
+    }
 @end
 
 @implementation UpLoadImageModal
