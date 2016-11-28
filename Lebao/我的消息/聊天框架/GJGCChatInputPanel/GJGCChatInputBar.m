@@ -16,6 +16,8 @@
 
 @property (nonatomic,strong)GJGCChatInputBarItem *openPanelBarItem;//暂时不要
 
+
+
 @property (nonatomic,strong)GJGCChatInputTextView *inputTextView;
 
 @property (nonatomic,copy)GJGCChatInputBarDidChangeActionBlock changeActionBlock;
@@ -100,8 +102,9 @@
             self.recordAudioBarItem.gjcf_centerY = self.barHeight/2;
         }
         
-         [self addSubview:self.recordAudioBarItem];
-       
+        [self addSubview:self.recordAudioBarItem];
+        
+        GJCFWeakSelf weakSelf = self;
         [self.recordAudioBarItem configStateChangeEventBlock:^(GJGCChatInputBarItem *item, BOOL changeToState) {
             
             [weakSelf barItem:item changeToState:changeToState];
@@ -127,39 +130,24 @@
             return canUse;
         }];
         
-        //    /* 展开面板按钮 */
-        //    UIImage *extendIcon = GJCFQuickImage(@"聊天-icon-选择照片帖子");
-        //    self.openPanelBarItem = [[GJGCChatInputBarItem alloc]initWithSelectedIcon:keybordIcon withNormalIcon:extendIcon];
-        //    if (GJCFSystemiPhone6Plus) {
-        //        self.openPanelBarItem.frame = CGRectMake(0, 8,35, 35);
-        //    }else{
-        //        self.openPanelBarItem.frame = CGRectMake(0, 0,35, 35);
-        //        self.openPanelBarItem.gjcf_centerY = self.barHeight/2;
-        //    }
-        //    [self addSubview:self.openPanelBarItem];
-        //    self.openPanelBarItem.gjcf_right = GJCFSystemScreenWidth - self.itemToBarMargin;
-        //
-        //    [self.openPanelBarItem configStateChangeEventBlock:^(GJGCChatInputBarItem *item, BOOL changeToState) {
-        //        [weakSelf barItem:item changeToState:changeToState];
-        //    }];
-        //    self.sendButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        //        if (GJCFSystemiPhone6Plus) {
-        //            self.sendButton.frame = CGRectMake(0, 10.5,35, 30);
-        //        }else{
-        //            self.sendButton.frame = CGRectMake(0, 2.5,35, 30);
-        //            self.sendButton.gjcf_centerY = self.barHeight/2;
-        //        }
-        //    self.sendButton.layer.masksToBounds = YES;
-        //     self.sendButton.layer.cornerRadius = 5.0;
-        //    self.sendButton.titleLabel.font = [UIFont systemFontOfSize:12.0];
-        //    [self.sendButton setTitle:@"发送" forState:UIControlStateNormal];
-        //    [self.sendButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        //    [self.sendButton setBackgroundColor:AppMainColor];
-        //    self.sendButton.gjcf_right = GJCFSystemScreenWidth - self.itemToBarMargin;
-        //    [self addSubview:self.sendButton];
+        /* 展开面板按钮 */
+        UIImage *extendIcon = GJCFQuickImage(@"聊天-icon-选择照片帖子");
+        self.openPanelBarItem = [[GJGCChatInputBarItem alloc]initWithSelectedIcon:keybordIcon withNormalIcon:extendIcon];
+        if (GJCFSystemiPhone6Plus) {
+            self.openPanelBarItem.frame = CGRectMake(0, 8,35, 35);
+        }else{
+            self.openPanelBarItem.frame = CGRectMake(0, 0,35, 35);
+            self.openPanelBarItem.gjcf_centerY = self.barHeight/2;
+        }
+        [self addSubview:self.openPanelBarItem];
+        self.openPanelBarItem.gjcf_right = GJCFSystemScreenWidth - self.itemToBarMargin;
+        
+        [self.openPanelBarItem configStateChangeEventBlock:^(GJGCChatInputBarItem *item, BOOL changeToState) {
+            [weakSelf barItem:item changeToState:changeToState];
+        }];
         
         /* 输入文本 */
-        self.inputTextView = [[GJGCChatInputTextView alloc]initWithFrame:CGRectMake(self.recordAudioBarItem.gjcf_right + self.itemMargin ,0,GJCFSystemScreenWidth - 35 * 2 - self.itemToBarMargin - self.itemMargin * 3 , 32)];
+        self.inputTextView = [[GJGCChatInputTextView alloc]initWithFrame:CGRectMake(self.recordAudioBarItem.gjcf_right + self.itemMargin ,0,GJCFSystemScreenWidth - 35 * 3 - 2*self.itemToBarMargin - self.itemMargin * 3 , 32)];
         [self addSubview:self.inputTextView];
         [self.inputTextView setRecordAudioBackgroundImage:GJCFQuickImage(@"输入框-灰色")];
         [self.inputTextView setInputTextBackgroundImage:GJCFQuickImage(@"输入框-白色")];

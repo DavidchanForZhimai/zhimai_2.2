@@ -7,7 +7,6 @@
 //
 
 #import "GJGCChatFriendImageMessageCell.h"
-
 @interface GJGCChatFriendImageMessageCell ()
 
 @end
@@ -99,6 +98,8 @@
     self.isFromSelf = chatContentModel.isFromSelf;
     self.imgUrl = nil;
     
+    /* 重设图片大小 */
+    CGSize theContentSize = CGSizeMake(80, 140);
     if (!GJCFStringIsNull(chatContentModel.imageMessageUrl)) {
         
         [self resetStateWithPrepareSize:(CGSize){160,160}];
@@ -109,9 +110,7 @@
             
             NSString *localCachePath = [[GJCFCachePathManager shareManager] mainImageCacheFilePathForUrl:[NSString stringWithFormat:@"%@-thumb",chatContentModel.imageMessageUrl]];
             self.contentImageView.image = GJCFQuickImageByFilePath(localCachePath);
-            
-            /* 重设图片大小 */
-            CGSize theContentSize = CGSizeMake(100, 234);
+        
             self.contentSize = theContentSize;
             self.contentImageView.gjcf_size = theContentSize;
             
@@ -126,7 +125,7 @@
             self.contentSize = CGSizeMake(80, 140);
             [self resetStateWithPrepareSize:thumbNoScaleSize];
             
-            NSString *thumbImageUrl = @"";
+            NSString *thumbImageUrl =@"";
             
             if ([[GJCFCachePathManager shareManager]mainImageCacheFileIsExistForUrl:thumbImageUrl]) {
                 
@@ -139,6 +138,14 @@
                 /* 重设图片大小 */
                 self.contentImageView.gjcf_size = thumbNoScaleSize;
                 
+            }
+            else
+            {
+                [[ToolManager shareInstance] imageView:self.contentImageView setImageWithURL:self.imgUrl placeholderType:PlaceholderTypeImageProcessing];
+                
+                /* 重设图片大小 */
+                self.contentSize = theContentSize;
+                self.contentImageView.gjcf_size = theContentSize;
             }
             
         }
@@ -180,8 +187,8 @@
  *
  *
  */
-- (void)reCutImageUrl
-{
+//- (void)reCutImageUrl
+//{
 //    CGSize imgRealSize = [self.imgUrl gjim_getimageUrlSize];
 //    CGFloat smallWidth = 160;
 //    CGFloat smallHeight = imgRealSize.height * 160 / imgRealSize.width;
@@ -194,8 +201,8 @@
 //        smallWidth = imgRealSize.width * 160 / imgRealSize.height;
 //        self.imgUrl = [self.imgUrl gjim_restructImageUrlWithSize:CGSizeMake(smallWidth, smallHeight)];
 //    }
-    
-}
+//    
+//}
 
 #pragma mark - 长按事件
 

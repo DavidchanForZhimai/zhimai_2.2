@@ -24,7 +24,8 @@
 #import "GJGCWebViewController.h"
 #import "GJCFAssetsPickerViewController.h"
 
-#import "MP3PlayerManager.h"
+#import "MP3PlayerManager.h"//上传音频
+#import "UpLoadImageManager.h"//上传图片
 
 //交流列表
 #define CommunicatelistURL [NSString stringWithFormat:@"%@message/chat",HttpURL]
@@ -190,11 +191,18 @@ GJCUCaptureViewControllerDelegate>
                     if (self.type == MessageTypeCustomPage && !chatContentModel.isFromSelf) {
                          chatContentModel.headUrl = @"icon_me_custom";
                     }
-                    chatContentModel.audioModel.remotePath = [[ToolManager shareInstance] urlAppend:data.audios];
+                    chatContentModel.audioModel.remotePath = [[ToolManager shareInstance] urlAppend:data.attachment];
                     
                     chatContentModel.audioModel.duration =data.audios_second;
                     chatContentModel.audioDuration = [GJGCChatFriendCellStyle formateAudioDuration:GJCFStringFromInt(chatContentModel.audioModel.duration)];
+                    
+                    //图片消息
+                    chatContentModel.imageMessageUrl = [[ToolManager shareInstance] urlAppend:data.attachment];
+                    
                     [self.dataSourceManager mockSendAnMesssage:chatContentModel];
+                    
+                    
+                    
                      if (i==modal.datas.count-1) {
                          [self.dataSourceManager resortAllChatContentBySendTime];
                         
@@ -680,7 +688,14 @@ GJCUCaptureViewControllerDelegate>
         GJGCChatFriendContentModel *itemModel = (GJGCChatFriendContentModel *)[self.dataSourceManager contentModelAtIndex:i];
         if (itemModel.contentType == GJGCChatFriendContentTypeImage) {
             
-            [imageUrls addObject:itemModel.imageMessageUrl];
+            if ([itemModel.imageMessageUrl hasPrefix:@"local_file_"]) {
+                
+                [imageUrls addObject:itemModel.imageMessageUrl];
+            }
+            else
+            {
+            [imageUrls addObject:[self bigImageUrl:itemModel.imageMessageUrl]];
+            }
             
             if ([itemModel.imageMessageUrl isEqualToString:contentModel.imageMessageUrl]) {
                 
@@ -690,11 +705,30 @@ GJCUCaptureViewControllerDelegate>
         }
         
     }
-    
+    NSLog(@"imageUrlsssdfsdfsdfddfdsfd =%@",imageUrls);
     /* 进入大图浏览模式 */
     GJCUImageBrowserNavigationViewController *imageBrowser = [[GJCUImageBrowserNavigationViewController alloc]initWithImageUrls:imageUrls];
     imageBrowser.pageIndex = currentImageIndex;
     [self presentViewController:imageBrowser animated:YES completion:nil];
+}
+#pragma mark
+#pragma mark 图片url处理
+- (NSString *)bigImageUrl:(NSString *)str
+{
+    NSString *url;
+    
+    NSArray *strs = [str componentsSeparatedByString:@"/"];
+    NSMutableArray *urls= [NSMutableArray arrayWithArray:strs];
+    NSMutableString *replaceStr =[NSMutableString stringWithString:strs[strs.count - 1]] ;
+    if ([replaceStr hasPrefix:@"s"]) {
+        ;
+        [replaceStr deleteCharactersInRange:NSMakeRange(0, 1)];
+        [urls replaceObjectAtIndex:strs.count - 1 withObject:replaceStr];
+    }
+    
+    url = [[ToolManager shareInstance] urlAppend:[urls componentsJoinedByString:@"/"]];
+    
+    return url;
 }
 
 - (void)textMessageCellDidTapOnPhoneNumber:(GJGCChatBaseCell *)tapedCell withPhoneNumber:(NSString *)phoneNumber
@@ -1448,11 +1482,12 @@ GJCUCaptureViewControllerDelegate>
         chatContentModel.originImageHeight = originHeight;
         chatContentModel.imageLocalCachePath = originPath;
         chatContentModel.thumbImageCachePath = thumbPath;
+        chatContentModel.imageMessageUrl = originPath;
         chatContentModel.toId = self.taklInfo.toId;
         chatContentModel.toUserName = self.taklInfo.toUserName;
         chatContentModel.isFromSelf = YES;
         chatContentModel.talkType = self.taklInfo.talkType;
-        
+        chatContentModel.localMsgId = GJCFDateToString([NSDate date]);
         /* 从talkInfo中绑定更多信息给待发送内容 */
         [self setSendChatContentModelWithTalkInfo:chatContentModel];
         
@@ -1505,7 +1540,7 @@ GJCUCaptureViewControllerDelegate>
         [param setObject:@((int)contentModel.audioModel.duration) forKey:@"audios_second"];
         
          [[MP3PlayerManager shareInstance] uploadAudioWithType:@"mp3" audioData:[NSData dataWithContentsOfFile:contentModel.audioModel.tempEncodeFilePath] finishuploadBlock:^(BOOL succeed, id audioDic) {
-            [param setObject:audioDic[@"audiourl"] forKey:@"audios"];
+            [param setObject:audioDic[@"audiourl"] forKey:@"attachment"];
              [XLDataService postWithUrl:CommunicateURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
                  [self dealData:dataObj andContentModel:contentModel ];
              }];
@@ -1513,6 +1548,18 @@ GJCUCaptureViewControllerDelegate>
         
         
         
+    }
+    else if (contentModel.contentType==GJGCChatFriendContentTypeImage)
+    {
+        [param setObject:@"图片消息" forKey:@"content"];
+        [param setObject:@(GJGCChatFriendContentTypeImage) forKey:@"msgtype"];
+        [[UpLoadImageManager shareInstance] upLoadImageType:@"message" image:[UIImage imageWithData:GJCFFileRead([[GJCFCachePathManager shareManager]mainImageCacheFilePath:contentModel.imageLocalCachePath])] imageBlock:^(UpLoadImageModal *upLoadImageModal) {
+        
+            [param setObject:upLoadImageModal.abbr_imgurl forKey:@"attachment"];
+            [XLDataService postWithUrl:CommunicateURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+                [self dealData:dataObj andContentModel:contentModel ];
+            }];
+        }];
     }
     
 
@@ -1524,8 +1571,9 @@ GJCUCaptureViewControllerDelegate>
      NSInteger index = [self.dataSourceManager getContentModelIndexByLocalMsgId:contentModel.localMsgId];
     
     if (dataObj) {
+        NSLog(@"dataObj =%@",dataObj);
         if ([dataObj[@"rtcode"] intValue] ==1) {
-          CommunityDataModal *data =[CommunityDataModal mj_objectWithKeyValues:dataObj[@"datas"]];
+            CommunityDataModal *data =[CommunityDataModal mj_objectWithKeyValues:dataObj[@"datas"]];
             contentModel.sendStatus = GJGCChatFriendSendMessageStatusSuccess;
             contentModel.sendTime = [data.createtime longLongValue];
             contentModel.headUrl =[[ToolManager shareInstance] urlAppend:data.imgurl];
@@ -1536,7 +1584,6 @@ GJCUCaptureViewControllerDelegate>
         else
         {
             contentModel.sendStatus = GJGCChatFriendSendMessageStatusFaild;
-            
             [[ToolManager shareInstance] showInfoWithStatus:dataObj[@"rtmsg"]];
         }
         
@@ -1558,7 +1605,7 @@ GJCUCaptureViewControllerDelegate>
 #pragma mark - 推送
 - (void)reciverNotiWithData:(NSDictionary *)dic
 {
-    NSLog(@"vvcvvcvvc，dic =%@",dic);
+
     CommunityDataModal *data =[CommunityDataModal mj_objectWithKeyValues:dic];
    
     GJGCChatFriendContentModel *chatContentModel = [[GJGCChatFriendContentModel alloc]init];
@@ -1581,11 +1628,12 @@ GJCUCaptureViewControllerDelegate>
     chatContentModel.talkType = self.taklInfo.talkType;
     chatContentModel.headUrl = [[ToolManager shareInstance] urlAppend:data.imgurl];
     chatContentModel.audioModel.duration = 0;
-    chatContentModel.audioModel.remotePath = [[ToolManager shareInstance] urlAppend:data.audios];
+    chatContentModel.audioModel.remotePath = [[ToolManager shareInstance] urlAppend:data.attachment];
     chatContentModel.isRead = NO;
     chatContentModel.audioModel.duration =data.audios_second;
     chatContentModel.audioDuration = [GJGCChatFriendCellStyle formateAudioDuration:GJCFStringFromInt(chatContentModel.audioModel.duration)];
-    
+    //图片
+    chatContentModel.imageMessageUrl =[[ToolManager shareInstance] urlAppend:data.attachment];
     
     [self.dataSourceManager mockSendAnMesssage:chatContentModel];
    
@@ -1680,9 +1728,7 @@ GJCUCaptureViewControllerDelegate>
     NSData *imageData = UIImageJPEGRepresentation(originImage, 0.8);
     
     BOOL saveOriginResult = GJCFFileWrite(imageData, filePath);
-    
-    NSLog(@"saveOriginResult:%d",saveOriginResult);
-    
+
     return @{@"file":fileName,@"path":filePath};
 }
 

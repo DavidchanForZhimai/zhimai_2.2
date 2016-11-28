@@ -8,7 +8,7 @@
 
 #import "GJCUImageBrowserNavigationViewController.h"
 #import "GJCFUitils.h"
-
+#import "UIImage+Color.h"
 @interface GJCUImageBrowserNavigationViewController ()
 
 @property (nonatomic,strong)GJCUImageBrowserViewController *imageBrowserController;
@@ -269,11 +269,8 @@
         [self.navigationBar setBackgroundImage:customNavigationBarBack forBarMetrics:UIBarMetricsDefault];
         
     }else{
-        
-        NSString *bunldePath = GJCFMainBundlePath(@"GJCUImageBrowserResourceBundle.bundle");
-        NSString *bundleImagePath = GJCFBundlePath(bunldePath,@"GjImageBrowser_Navigation_bar_back.png");
-        UIImage *navImage = GJCFQuickImageByFilePath(bundleImagePath);
-        
+
+        UIImage *navImage =[UIImage imageFromContextWithColor:AppMainColor];
         [self.navigationBar setBackgroundImage:GJCFImageStrecth(navImage, 3, 3) forBarMetrics:UIBarMetricsDefault];
         
     }

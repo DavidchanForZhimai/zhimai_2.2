@@ -11,7 +11,7 @@
 #import "GJCFPhotosViewController.h"
 #import "GJCFAssetsPickerConstans.h"
 #import "GJCFUitils.h"
-
+#import "UIImage+Color.h"
 @interface GJCFAssetsPreviewController ()<UIPageViewControllerDataSource,UIPageViewControllerDelegate,GJCFAssetsPickerPreviewItemViewControllerDataSource>
 
 @property (nonatomic,strong)UIButton *finishDoneBtn;
@@ -88,11 +88,11 @@
     
     //navigationBar 背景
     if (defaultStyle.sysPreviewNavigationBarDes.backgroundColor) {
-        UIImage *colorImage = [GJCFAssetsPickerConstans imageForColor:defaultStyle.sysPhotoNavigationBarDes.backgroundColor withSize:CGSizeMake(self.view.frame.size.width,64)];
+        UIImage *colorImage = [GJCFAssetsPickerConstans imageForColor:WhiteColor withSize:CGSizeMake(self.view.frame.size.width,64)];
         [self.navigationController.navigationBar setBackgroundImage:colorImage forBarMetrics:UIBarMetricsDefault];
     }
     if (defaultStyle.sysPreviewNavigationBarDes.backgroundImage) {
-        [self.navigationController.navigationBar setBackgroundImage:defaultStyle.sysPreviewNavigationBarDes.backgroundImage forBarMetrics:UIBarMetricsDefault];
+        [self.navigationController.navigationBar setBackgroundImage:[UIImage imageFromContextWithColor:WhiteColor] forBarMetrics:UIBarMetricsDefault];
     }
     
     //标题
@@ -217,7 +217,7 @@
 - (void)updateFinishDoneBtnTitle
 {
     GJCFAssetsPickerStyle *defaultStyle = [self defaultStyle];
-    NSString *newTitle = [NSString stringWithFormat:@"%@(%d)",defaultStyle.sysFinishDoneBtDes.normalStateTitle,[self totalSelectedAssets].count];
+    NSString *newTitle = [NSString stringWithFormat:@"%@(%ld)",defaultStyle.sysFinishDoneBtDes.normalStateTitle,[self totalSelectedAssets].count];
     
     [self.finishDoneBtn setTitle:newTitle forState:UIControlStateNormal];
 }
@@ -254,7 +254,7 @@
 - (void)setTitleIndex:(NSInteger)index
 {
     NSInteger count = self.assets.count;
-    self.title      = [NSString stringWithFormat:@"%d / %d", index, count];
+    self.title      = [NSString stringWithFormat:@"%ld / %ld", index, count];
     
     //标题
     UILabel *titleLabel = [[UILabel alloc]init];

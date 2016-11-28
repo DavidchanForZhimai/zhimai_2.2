@@ -51,6 +51,7 @@
 
 @property (nonatomic,strong)NSString *imageLocalCachePath;
 
+
 @property (nonatomic,strong)NSString *thumbImageCachePath;
 
 @property (nonatomic,assign)NSInteger originImageWidth;

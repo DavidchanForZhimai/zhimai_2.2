@@ -280,7 +280,7 @@
             upLoadphotos = [[NSMutableArray alloc]init];
             for (UIImage *image in self.phonelist) {
                 
-                [[UpLoadImageManager shareInstance] upLoadImageType:@"property" image:image imageBlock:^(UpLoadImageModal *upLoadImageModal) {
+                [[UpLoadImageManager shareInstance] upLoadImageType:@"dynamic" image:image imageBlock:^(UpLoadImageModal *upLoadImageModal) {
                     
                     NSArray *images = [NSArray arrayWithObjects:upLoadImageModal.imgurl,upLoadImageModal.abbr_imgurl, nil];
                     [upLoadphotos addObject:images];

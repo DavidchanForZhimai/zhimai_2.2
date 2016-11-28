@@ -87,7 +87,7 @@ typedef enum {
                 [_rechargeView addSubview:_rechargeTextView];
                 
                 _rechargeTextField = allocAndInitWithFrame(UITextField, frame(10, 0, frameWidth(_rechargeTextView) - 20, frameHeight(_rechargeTextView)));
-                _rechargeTextField.placeholder = @"请输入提现金额";
+                _rechargeTextField.placeholder = @"请输入本次提现金额（最低5元，最高1000元）";
                 _rechargeTextField.delegate =self;
                 _rechargeTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
                 _rechargeTextField.textColor = BlackTitleColor;
@@ -95,7 +95,7 @@ typedef enum {
 //                _rechargeTextField.keyboardType =UIKeyboardTypeNumberPad;
                 [_rechargeTextView addSubview:_rechargeTextField];
                 
-                UILabel *cash =  [UILabel createLabelWithFrame:frame(0, CGRectGetMaxY(_rechargeView.frame) + 10, frameWidth(_mainScrollView) -14*ScreenMultiple, 26*SpacedFonts) text:[NSString stringWithFormat:@"本次最高可提现%@元(微信官方收取0.6％的提现手续费)",dataObj[@"amount"]] fontSize:26*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentRight inView:_mainScrollView];
+                UILabel *cash =  [UILabel createLabelWithFrame:frame(0, CGRectGetMaxY(_rechargeView.frame) + 10, frameWidth(_mainScrollView) -14*ScreenMultiple, 26*SpacedFonts) text:[NSString stringWithFormat:@"可提现账户余额%@元(微信官方收取0.6％的提现手续费)",dataObj[@"amount"]] fontSize:26*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentRight inView:_mainScrollView];
                 
                 NSMutableAttributedString *string = [[NSMutableAttributedString alloc]initWithString:cash.text];
                 [string addAttribute:NSForegroundColorAttributeName value:AppMainColor range:[cash.text rangeOfString:dataObj[@"amount"]]];

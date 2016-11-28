@@ -81,6 +81,8 @@
             NSString *workyear =@"";
             NSString *position = @"";
             NSString *huanhang = @"\n";
+            NSString *hangyeHeightStr= @"行业\n行业";
+            float hangyeHeight = [hangyeHeightStr sizeWithFont:Size(24.0) maxSize:CGSizeMake(nameTextStorage.width, 1000)].height;
             
             if (statusModel.position.length>0) {
                 position = [NSString stringWithFormat:@"%@  ",statusModel.position];
@@ -93,11 +95,13 @@
             }
             if ([workyear isEqualToString:@""]&&[position isEqualToString:@""]) {
                 huanhang= @"";
+                NSString *hangyeHeightStr= @"行业";
+                hangyeHeight = [hangyeHeightStr sizeWithFont:Size(24.0) maxSize:CGSizeMake(nameTextStorage.width, 1000)].height;
             }
             industryTextStorage.text = [NSString stringWithFormat:@"%@%@%@%@",position,workyear,huanhang,com];
             industryTextStorage.textColor = [UIColor colorWithRed:0.549 green:0.5569 blue:0.5608 alpha:1.0];
             industryTextStorage.font = Size(24.0);
-            industryTextStorage.frame = CGRectMake(nameTextStorage.left, nameTextStorage.bottom + 8, nameTextStorage.width, CGFLOAT_MAX);
+            industryTextStorage.frame = CGRectMake(nameTextStorage.left, nameTextStorage.bottom + 8, nameTextStorage.width, hangyeHeight + 5);
             
             //正文内容模型 contentTextStorage
             LWTextStorage* contentTextStorage = [[LWTextStorage alloc] init];
@@ -542,6 +546,8 @@
             NSString *workyear =@"";
             NSString *position = @"";
             NSString *huanhang = @"\n";
+            NSString *hangyeHeightStr= @"行业\n行业";
+            float hangyeHeight = [hangyeHeightStr sizeWithFont:Size(24.0) maxSize:CGSizeMake(nameTextStorage.width, 1000)].height;
             
             if (statusModel.position.length>0) {
                 position = [NSString stringWithFormat:@"%@  ",statusModel.position];
@@ -554,13 +560,13 @@
             }
             if ([workyear isEqualToString:@""]&&[position isEqualToString:@""]) {
                 huanhang= @"";
+                NSString *hangyeHeightStr= @"行业";
+                hangyeHeight = [hangyeHeightStr sizeWithFont:Size(24.0) maxSize:CGSizeMake(nameTextStorage.width, 1000)].height;
             }
             industryTextStorage.text = [NSString stringWithFormat:@"%@%@%@%@",position,workyear,huanhang,com];
-            
-            
             industryTextStorage.textColor = [UIColor colorWithRed:0.549 green:0.5569 blue:0.5608 alpha:1.0];
             industryTextStorage.font = Size(24.0);
-            industryTextStorage.frame = CGRectMake(nameTextStorage.left, nameTextStorage.bottom + 8, nameTextStorage.width, CGFLOAT_MAX);
+            industryTextStorage.frame = CGRectMake(nameTextStorage.left, nameTextStorage.bottom + 8, nameTextStorage.width, hangyeHeight + 5);
             
             //正文内容模型 contentTextStorage
             LWTextStorage* contentTextStorage = [[LWTextStorage alloc] init];

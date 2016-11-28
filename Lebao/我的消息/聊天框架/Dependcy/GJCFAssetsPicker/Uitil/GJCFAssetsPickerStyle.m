@@ -7,18 +7,18 @@
 //
 
 #import "GJCFAssetsPickerStyle.h"
-
+#import "UIImage+Color.h"
 
 @implementation GJCFAssetsPickerStyle
 
 #pragma mark - 系统用到的一些配置
 + (UIColor *)sysButtonTitleNormalColor
 {
-    return [UIColor colorWithRed:81/255.0 green:189/255.0 blue:3/255.0 alpha:1.0];
+    return AppMainColor;
 }
 + (UIColor *)sysButtonTitleHighlightColor
 {
-    return [UIColor colorWithRed:81/255.0 green:189/255.0 blue:3/255.0 alpha:1.0];
+    return AppMainColor;
 }
 
 + (UIFont *)sysButtonFont
@@ -33,7 +33,7 @@
 
 + (UIImage *)sysNavigationBarBack
 {
-    return [[GJCFAssetsPickerStyle bundleImage:@"GjAssetsPicker_Navigation_bar_back.png"]stretchableImageWithLeftCapWidth:1 topCapHeight:1];
+    return [[UIImage imageFromContextWithColor:AppMainColor]stretchableImageWithLeftCapWidth:1 topCapHeight:1];
 }
 
 + (GJCFAssetsPickerStyle*)defaultStyle

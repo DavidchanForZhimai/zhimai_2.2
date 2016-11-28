@@ -511,6 +511,14 @@
 		635101481C0FED45002CFE4A /* UIButtonTextWrap.m in Sources */ = {isa = PBXBuildFile; fileRef = 635101471C0FED45002CFE4A /* UIButtonTextWrap.m */; };
 		63543DB71C157CAD005966C1 /* option@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63543DB51C157CAD005966C1 /* option@2x.png */; };
 		63543DB81C157CAD005966C1 /* option@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63543DB61C157CAD005966C1 /* option@3x.png */; };
+		63598EA31DEC09CE00D8461B /* 聊天键盘-icon-拍照-点击@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63598E9B1DEC09CE00D8461B /* 聊天键盘-icon-拍照-点击@2x.png */; };
+		63598EA41DEC09CE00D8461B /* 聊天键盘-icon-拍照-点击@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63598E9C1DEC09CE00D8461B /* 聊天键盘-icon-拍照-点击@3x.png */; };
+		63598EA51DEC09CE00D8461B /* 聊天键盘-icon-拍照@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63598E9D1DEC09CE00D8461B /* 聊天键盘-icon-拍照@2x.png */; };
+		63598EA61DEC09CE00D8461B /* 聊天键盘-icon-拍照@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63598E9E1DEC09CE00D8461B /* 聊天键盘-icon-拍照@3x.png */; };
+		63598EA71DEC09CE00D8461B /* 聊天键盘-icon-选择照片-点击@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63598E9F1DEC09CE00D8461B /* 聊天键盘-icon-选择照片-点击@2x.png */; };
+		63598EA81DEC09CE00D8461B /* 聊天键盘-icon-选择照片-点击@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63598EA01DEC09CE00D8461B /* 聊天键盘-icon-选择照片-点击@3x.png */; };
+		63598EA91DEC09CE00D8461B /* 聊天键盘-icon-选择照片@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63598EA11DEC09CE00D8461B /* 聊天键盘-icon-选择照片@2x.png */; };
+		63598EAA1DEC09CE00D8461B /* 聊天键盘-icon-选择照片@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63598EA21DEC09CE00D8461B /* 聊天键盘-icon-选择照片@3x.png */; };
 		635B176C1D9924CF00C6B5E9 /* AddConnectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 635B176B1D9924CF00C6B5E9 /* AddConnectionView.m */; };
 		635D8EF51C116519006076D1 /* ViewPagerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 635D8EF41C116519006076D1 /* ViewPagerController.m */; };
 		63629FB31DE5A16A00CF3675 /* icon_widelyspreaddetail_edit@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63629FB11DE5A16A00CF3675 /* icon_widelyspreaddetail_edit@2x.png */; };
@@ -1776,6 +1784,14 @@
 		635101471C0FED45002CFE4A /* UIButtonTextWrap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIButtonTextWrap.m; sourceTree = "<group>"; };
 		63543DB51C157CAD005966C1 /* option@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "option@2x.png"; sourceTree = "<group>"; };
 		63543DB61C157CAD005966C1 /* option@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "option@3x.png"; sourceTree = "<group>"; };
+		63598E9B1DEC09CE00D8461B /* 聊天键盘-icon-拍照-点击@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "聊天键盘-icon-拍照-点击@2x.png"; sourceTree = "<group>"; };
+		63598E9C1DEC09CE00D8461B /* 聊天键盘-icon-拍照-点击@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "聊天键盘-icon-拍照-点击@3x.png"; sourceTree = "<group>"; };
+		63598E9D1DEC09CE00D8461B /* 聊天键盘-icon-拍照@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "聊天键盘-icon-拍照@2x.png"; sourceTree = "<group>"; };
+		63598E9E1DEC09CE00D8461B /* 聊天键盘-icon-拍照@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "聊天键盘-icon-拍照@3x.png"; sourceTree = "<group>"; };
+		63598E9F1DEC09CE00D8461B /* 聊天键盘-icon-选择照片-点击@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "聊天键盘-icon-选择照片-点击@2x.png"; sourceTree = "<group>"; };
+		63598EA01DEC09CE00D8461B /* 聊天键盘-icon-选择照片-点击@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "聊天键盘-icon-选择照片-点击@3x.png"; sourceTree = "<group>"; };
+		63598EA11DEC09CE00D8461B /* 聊天键盘-icon-选择照片@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "聊天键盘-icon-选择照片@2x.png"; sourceTree = "<group>"; };
+		63598EA21DEC09CE00D8461B /* 聊天键盘-icon-选择照片@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "聊天键盘-icon-选择照片@3x.png"; sourceTree = "<group>"; };
 		635B176A1D9924CF00C6B5E9 /* AddConnectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddConnectionView.h; sourceTree = "<group>"; };
 		635B176B1D9924CF00C6B5E9 /* AddConnectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddConnectionView.m; sourceTree = "<group>"; };
 		635D8EF31C116519006076D1 /* ViewPagerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewPagerController.h; sourceTree = "<group>"; };
@@ -3674,6 +3690,14 @@
 				63302E8F1D921FA50019E9D6 /* GifIcon */,
 				63302E901D921FA50019E9D6 /* 大表情-bg-预览-居中@2x.png */,
 				63302E911D921FA50019E9D6 /* 大表情-bg-预览@2x.png */,
+				63598E9B1DEC09CE00D8461B /* 聊天键盘-icon-拍照-点击@2x.png */,
+				63598E9C1DEC09CE00D8461B /* 聊天键盘-icon-拍照-点击@3x.png */,
+				63598E9D1DEC09CE00D8461B /* 聊天键盘-icon-拍照@2x.png */,
+				63598E9E1DEC09CE00D8461B /* 聊天键盘-icon-拍照@3x.png */,
+				63598E9F1DEC09CE00D8461B /* 聊天键盘-icon-选择照片-点击@2x.png */,
+				63598EA01DEC09CE00D8461B /* 聊天键盘-icon-选择照片-点击@3x.png */,
+				63598EA11DEC09CE00D8461B /* 聊天键盘-icon-选择照片@2x.png */,
+				63598EA21DEC09CE00D8461B /* 聊天键盘-icon-选择照片@3x.png */,
 				63302E921D921FA50019E9D6 /* 聊天-icon-文字键盘@2x.png */,
 				63302E931D921FA50019E9D6 /* 聊天-icon-语音-绿@2x.png */,
 				63302E941D921FA50019E9D6 /* 聊天-icon-语音1-绿@2x.png */,
@@ -6551,6 +6575,7 @@
 				63302F901D921FA50019E9D6 /* 055[心碎]@2x.png in Resources */,
 				63340B3A1CFBE3490010A596 /* iconfont-fanhui@3x.png in Resources */,
 				70796E891D6B02CC005B8441 /* xiangpian@3x.png in Resources */,
+				63598EA81DEC09CE00D8461B /* 聊天键盘-icon-选择照片-点击@3x.png in Resources */,
 				63237D4C1D8F791C00F4ED60 /* icon_message_xitongxiaoxi@2x.png in Resources */,
 				63340BFD1CFC10C70010A596 /* exhibition_up@2x.png in Resources */,
 				70796E6A1D6B02CC005B8441 /* icon_find_phone_tianjia2@3x.png in Resources */,
@@ -6616,6 +6641,7 @@
 				63C8BF3E1C745C1100F3745C /* AppIconLogo@3x.png in Resources */,
 				63302FAC1D921FA50019E9D6 /* 083[冷汗]@2x.png in Resources */,
 				70796E7A1D6B02CC005B8441 /* TZAlbumCell.xib in Resources */,
+				63598EA71DEC09CE00D8461B /* 聊天键盘-icon-选择照片-点击@2x.png in Resources */,
 				63302F8F1D921FA50019E9D6 /* 054[爱心]@2x.png in Resources */,
 				70E0F74E1DE586EE003B0F67 /* yuying@2x.png in Resources */,
 				63237D401D8E827B00F4ED60 /* [iconprofileweirenzhen]@2x.png in Resources */,
@@ -6657,6 +6683,7 @@
 				63302FC21D921FA50019E9D6 /* emoji.plist in Resources */,
 				70796E6D1D6B02CC005B8441 /* MMVideoPreviewPlay@2x.png in Resources */,
 				70E0F7321DE586EE003B0F67 /* youkong@2x.png in Resources */,
+				63598EA61DEC09CE00D8461B /* 聊天键盘-icon-拍照@3x.png in Resources */,
 				63237D5C1D8F8C1A00F4ED60 /* addition@3x.png in Resources */,
 				63302FA71D921FA50019E9D6 /* 078[跳跳]@2x.png in Resources */,
 				63302F6E1D921FA50019E9D6 /* 021[委屈]@2x.png in Resources */,
@@ -6716,6 +6743,7 @@
 				707CCAA51D8F977400E0E730 /* mic_4.png in Resources */,
 				63302F721D921FA50019E9D6 /* 025[疑问]@2x.png in Resources */,
 				63346E7C1CE4375B007BC875 /* icon_back@2x.png in Resources */,
+				63598EAA1DEC09CE00D8461B /* 聊天键盘-icon-选择照片@3x.png in Resources */,
 				63340B5A1CFBE3490010A596 /* yuanxing@3x.png in Resources */,
 				631C3F9C1C97BB65003C67E6 /* icon_ me_invitefriends.png in Resources */,
 				70E0F7461DE586EE003B0F67 /* wancheng@2x.png in Resources */,
@@ -6753,6 +6781,7 @@
 				632CAD521CB5F6490083FF1E /* xuanzheweixuanzhong@3x.png in Resources */,
 				7070E8771DB77C5F007793AF /* icon_weixin@2x.png in Resources */,
 				6310B2231D9D0D9C00ABD5D9 /* icon_me_weixin@2x.png in Resources */,
+				63598EA91DEC09CE00D8461B /* 聊天键盘-icon-选择照片@2x.png in Resources */,
 				70E0F7511DE586EE003B0F67 /* zanting@3x.png in Resources */,
 				6310B2371D9D1C0900ABD5D9 /* icon_friend_qiupingjia@3x.png in Resources */,
 				63302F621D921FA50019E9D6 /* 010[傲慢]@2x.png in Resources */,
@@ -6781,6 +6810,7 @@
 				70E0F7221DE586EE003B0F67 /* icon_bar_message@2x.png in Resources */,
 				63237D411D8E827B00F4ED60 /* [iconprofileweirenzhen]@3x.png in Resources */,
 				63302FBE1D921FA50019E9D6 /* 105[跳跳]@2x.png in Resources */,
+				63598EA31DEC09CE00D8461B /* 聊天键盘-icon-拍照-点击@2x.png in Resources */,
 				63F8C57F1CFE8D7B00E35E94 /* icon_exhibition_mycontent_clue@3x.png in Resources */,
 				70E0F74C1DE586EE003B0F67 /* yuying2@2x.png in Resources */,
 				63237D5E1D8F8C1A00F4ED60 /* icon_me_mingpian@3x.png in Resources */,
@@ -6806,6 +6836,7 @@
 				63629FB31DE5A16A00CF3675 /* icon_widelyspreaddetail_edit@2x.png in Resources */,
 				63302F961D921FA50019E9D6 /* 061[OK]@2x.png in Resources */,
 				63237D5D1D8F8C1A00F4ED60 /* icon_me_mingpian@2x.png in Resources */,
+				63598EA51DEC09CE00D8461B /* 聊天键盘-icon-拍照@2x.png in Resources */,
 				70E0F7111DE586EE003B0F67 /* icon_discover_hongbao@3x.png in Resources */,
 				630E78751CC60683000E96A9 /* appIcon_logo@3x.png in Resources */,
 				70796E711D6B02CC005B8441 /* photo_def_previewVc@2x.png in Resources */,
@@ -6898,6 +6929,7 @@
 				7070E8791DB77C5F007793AF /* icon_zhimai@2x.png in Resources */,
 				70796E861D6B02CC005B8441 /* wancheng@2x.png in Resources */,
 				63E00B751C07194D0097EDF5 /* Assets.xcassets in Resources */,
+				63598EA41DEC09CE00D8461B /* 聊天键盘-icon-拍照-点击@3x.png in Resources */,
 				63302FB61D921FA50019E9D6 /* 097[飞吻]@2x.png in Resources */,
 				707CCAB51D8FDCF300E0E730 /* meet_yuyindianbo@3x.png in Resources */,
 				70E0F7381DE586EE003B0F67 /* bofang@2x.png in Resources */,

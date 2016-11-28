@@ -20,8 +20,8 @@
 @property(nonatomic,assign)int sex;
 @property(nonatomic,strong)NSString *brokerid;
 @property(nonatomic,strong)NSString *realname;
-@property(nonatomic,strong)NSString *audios;
 @property(nonatomic,assign)int msgtype;
 @property(nonatomic,strong)NSString * msgId;
 @property(nonatomic,assign)NSTimeInterval audios_second;
+@property(nonatomic,strong)NSString *attachment;//文件url
 @end

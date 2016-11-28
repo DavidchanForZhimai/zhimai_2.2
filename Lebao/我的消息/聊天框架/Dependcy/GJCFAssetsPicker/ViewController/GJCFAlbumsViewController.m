@@ -154,7 +154,7 @@
     
     //navigationBar 背景
     if (defaultStyle.sysAlbumsNavigationBarDes.backgroundColor) {
-        UIImage *colorImage = [GJCFAssetsPickerConstans imageForColor:defaultStyle.sysPhotoNavigationBarDes.backgroundColor withSize:CGSizeMake(self.view.frame.size.width,64)];
+        UIImage *colorImage = [GJCFAssetsPickerConstans imageForColor:AppMainColor withSize:CGSizeMake(self.view.frame.size.width,64)];
         [self.navigationController.navigationBar setBackgroundImage:colorImage forBarMetrics:UIBarMetricsDefault];
     }
     if (defaultStyle.sysPhotoNavigationBarDes.backgroundImage) {

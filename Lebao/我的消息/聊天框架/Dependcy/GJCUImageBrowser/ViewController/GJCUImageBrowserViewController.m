@@ -13,6 +13,7 @@
 #import "GJCFFileDownloadManager.h"
 #import "UIView+GJCFViewFrameUitil.h"
 #import "GJCFCachePathManager.h"
+#import "UIImage+Color.h"
 
 #define GJCU_NOTIFICATION_TOAST_NAME @"GJGC_NOTIFICATION_TOAST_NAME"
 
@@ -177,7 +178,6 @@
     NSString *bunldePath = GJCFMainBundlePath(@"GJCUImageBrowserResourceBundle.bundle");
     NSString *bundleImagePath = GJCFBundlePath(bunldePath,@"标题栏-icon-下载.png");
     UIImage *navImage = GJCFQuickImageByFilePath(bundleImagePath);
-    
     [saveButton setBackgroundImage:navImage forState:UIControlStateNormal];
     [saveButton addTarget:self action:@selector(savePhotoAction) forControlEvents:UIControlEventTouchUpInside];
     
@@ -267,10 +267,7 @@
             
         }else{
             
-            NSString *bunldePath = GJCFMainBundlePath(@"GJCUImageBrowserResourceBundle.bundle");
-            NSString *bundleImagePath = GJCFBundlePath(bunldePath,@"GjImageBrowser_Navigation_bar_back.png");
-            UIImage *navImage = GJCFQuickImageByFilePath(bundleImagePath);
-            
+            UIImage *navImage = [UIImage imageFromContextWithColor:AppMainColor];
             [self.navigationController.navigationBar setBackgroundImage:GJCFImageStrecth(navImage, 3, 3) forBarMetrics:UIBarMetricsDefault];
             
         }
