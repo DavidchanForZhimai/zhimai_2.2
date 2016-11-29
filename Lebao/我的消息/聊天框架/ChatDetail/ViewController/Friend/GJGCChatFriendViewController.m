@@ -956,6 +956,7 @@ GJCUCaptureViewControllerDelegate>
 #pragma mark - 图片下载
 - (void)downloadImageFile:(GJGCChatContentBaseModel *)contentModel forIndexPath:(NSIndexPath *)indexPath
 {
+
     GJGCChatFriendContentModel *imageContentModel = (GJGCChatFriendContentModel *)[self.dataSourceManager contentModelAtIndex:indexPath.row];
     
     //gif 表情下载
@@ -981,8 +982,8 @@ GJCUCaptureViewControllerDelegate>
             return;
         }
         
-        CGSize imageSize = CGSizeMake(80, 140);
-        CGSize thumbSize = [GJGCImageResizeHelper getCutImageSizeWithScreenScale:imageSize maxSize:CGSizeMake(160, 160)];
+//        CGSize imageSize = CGSizeMake(80, 140);
+//        CGSize thumbSize = [GJGCImageResizeHelper getCutImageSizeWithScreenScale:imageSize maxSize:CGSizeMake(160, 160)];
         NSString *thumbImageUrl = @"";
         
         if (![[GJCFCachePathManager shareManager] mainImageCacheFileIsExistForUrl:thumbImageUrl] && !GJCFStringIsNull(thumbImageUrl)) {

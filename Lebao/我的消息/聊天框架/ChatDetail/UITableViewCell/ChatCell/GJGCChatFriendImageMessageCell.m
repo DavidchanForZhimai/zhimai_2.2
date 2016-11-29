@@ -7,6 +7,7 @@
 //
 
 #import "GJGCChatFriendImageMessageCell.h"
+#import <UIImageView+WebCache.h>
 @interface GJGCChatFriendImageMessageCell ()
 
 @end
@@ -21,7 +22,10 @@
         
         self.contentImageView = [[UIImageView alloc]init];
         self.contentImageView.image = GJCFImageStrecth([UIImage imageNamed:@"IM聊天页-占位图-BG.png"], 2, 2);
-        self.contentImageView.gjcf_size = (CGSize){160,160};
+        self.contentImageView.gjcf_size = (CGSize){80,140};
+        [self.contentImageView setRadius:2.0f];
+        self.contentImageView.contentMode = UIViewContentModeScaleAspectFit;
+        self.contentImageView.clipsToBounds = YES;
         self.contentImageView.userInteractionEnabled = YES;
         UITapGestureRecognizer *tapR = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapOnContentImageView)];
         tapR.numberOfTapsRequired = 1;
@@ -37,7 +41,7 @@
         self.progressView.frame = self.contentImageView.bounds;
         self.progressView.hidden = YES;
         [self.contentImageView addSubview:self.progressView];
-            
+        
     }
     return self;
 }
@@ -99,31 +103,44 @@
     self.imgUrl = nil;
     
     /* 重设图片大小 */
-    CGSize theContentSize = CGSizeMake(80, 140);
+    CGSize theContentSize = CGSizeMake(80, 140);//默认
     if (!GJCFStringIsNull(chatContentModel.imageMessageUrl)) {
         
-        [self resetStateWithPrepareSize:(CGSize){160,160}];
-
+        
         if ([chatContentModel.imageMessageUrl hasPrefix:@"local_file_"]) {
-            
             [self removePrepareState];
-            
             NSString *localCachePath = [[GJCFCachePathManager shareManager] mainImageCacheFilePathForUrl:[NSString stringWithFormat:@"%@-thumb",chatContentModel.imageMessageUrl]];
             self.contentImageView.image = GJCFQuickImageByFilePath(localCachePath);
-        
-            self.contentSize = theContentSize;
+            
+            //图片比率（先根据宽度设置为80，若高度小于80，根据高度80适配）
+            float tupianbili = 80.0/self.contentImageView.image.size.width;
+            if (tupianbili*self.contentImageView.image.size.height<80.0) {
+                tupianbili = 80.0/self.contentImageView.image.size.height;
+                if (tupianbili*self.contentImageView.image.size.width>APPWIDTH/3.0) {
+                    tupianbili = APPWIDTH/(3.0*self.contentImageView.image.size.width);
+                    theContentSize = CGSizeMake(APPWIDTH/3.0, tupianbili*self.contentImageView.image.size.height);
+                    if (tupianbili*self.contentImageView.image.size.height<40) {
+                        theContentSize = CGSizeMake(APPWIDTH/3.0, 40);
+                    }
+                }
+                else
+                {
+                    theContentSize = CGSizeMake(tupianbili*self.contentImageView.image.size.width, 80);
+                }
+                
+            }
+            else
+            {
+                theContentSize = CGSizeMake(80, tupianbili*self.contentImageView.image.size.height);
+            }
+            
             self.contentImageView.gjcf_size = theContentSize;
+            self.contentSize = theContentSize;
             
         }else{
             
             self.imgUrl = chatContentModel.imageMessageUrl;
 
-            CGSize imageSize = CGSizeMake(100, 234);
-            CGSize thumbNoScaleSize = [GJGCImageResizeHelper getCutImageSize:imageSize maxSize:CGSizeMake(160, 160)];
-            CGSize thumbSize = [GJGCImageResizeHelper getCutImageSizeWithScreenScale:imageSize maxSize:CGSizeMake(160, 160)];
-
-            self.contentSize = CGSizeMake(80, 140);
-            [self resetStateWithPrepareSize:thumbNoScaleSize];
             
             NSString *thumbImageUrl =@"";
             
@@ -135,41 +152,79 @@
                 UIImage *cacheImage =  GJCFQuickImageByFilePath(localCachePath);
                 self.contentImageView.image = cacheImage;
                 
-                /* 重设图片大小 */
-                self.contentImageView.gjcf_size = thumbNoScaleSize;
-                
             }
             else
             {
-                [[ToolManager shareInstance] imageView:self.contentImageView setImageWithURL:self.imgUrl placeholderType:PlaceholderTypeImageProcessing];
-                
+                [self removePrepareState];
                 /* 重设图片大小 */
-                self.contentSize = theContentSize;
-                self.contentImageView.gjcf_size = theContentSize;
+                [self.contentImageView sd_setImageWithURL:[NSURL URLWithString:self.imgUrl] placeholderImage:[UIImage imageNamed:@"icon_placeholder"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                    //图片比率（先根据宽度设置为80，若高度小于80，根据高度80适配）
+                    if (image) {
+                        CGSize imageSize = CGSizeZero;
+                        float tupianbili = 80.0/image.size.width;
+                        if (tupianbili*image.size.height<80.0) {
+                            tupianbili = 80.0/image.size.height;
+                            if (tupianbili*image.size.width>APPWIDTH/3.0) {
+                                tupianbili = APPWIDTH/(3.0*image.size.width);
+                                imageSize = CGSizeMake(APPWIDTH/3.0, tupianbili*image.size.height);
+                                if (tupianbili*self.contentImageView.image.size.height<40) {
+                                    imageSize = CGSizeMake(APPWIDTH/3.0, 40);
+                                }
+                            }
+                            else
+                            {
+                                imageSize = CGSizeMake(tupianbili*image.size.width, 80);
+                            }
+                            
+                        }
+                        else
+                        {
+                            imageSize = CGSizeMake(80, tupianbili*image.size.height);
+                        }
+                        
+                       
+                        self.contentImageView.gjcf_size = imageSize;
+                        self.contentSize =imageSize;
+                        [self retSetqipao];
+            
+                    }
+                    
+                    
+                }];
+                
             }
             
         }
-
+        
     }
     else
     {
-        [self resetStateWithPrepareSize:(CGSize){160,160}];
+        [self resetStateWithPrepareSize:(CGSize){80,140}];
     }
-    /* 重设气泡 */
-    self.bubbleBackImageView.gjcf_height = self.contentImageView.gjcf_height + 12;
-    self.bubbleBackImageView.gjcf_width = self.contentImageView.gjcf_width + 12 + 5;
+     /* 重设气泡 */
+     [self retSetqipao];
+   
+}
+ /* 重设气泡 */
+- (void)retSetqipao{
+     float bianju = 2.0;
+   
+    self.bubbleBackImageView.gjcf_height = self.contentImageView.gjcf_height + 2*bianju;
+    self.bubbleBackImageView.gjcf_width = self.contentImageView.gjcf_width + 2*bianju + 5;
     
     [self adjustContent];
     
-    self.contentImageView.gjcf_top = 6.f;
+    self.contentImageView.gjcf_top = bianju;
     if (self.isFromSelf) {
         
-        self.contentImageView.gjcf_left = 6.f;
+        self.contentImageView.gjcf_left = bianju;
         
     }else{
         
-        self.contentImageView.gjcf_right = self.bubbleBackImageView.gjcf_width - 6;
+        self.contentImageView.gjcf_right = self.bubbleBackImageView.gjcf_width - bianju;
     }
+   
+ 
 }
 
 - (void)setDownloadProgress:(CGFloat)downloadProgress
@@ -201,7 +256,7 @@
 //        smallWidth = imgRealSize.width * 160 / imgRealSize.height;
 //        self.imgUrl = [self.imgUrl gjim_restructImageUrlWithSize:CGSizeMake(smallWidth, smallHeight)];
 //    }
-//    
+//
 //}
 
 #pragma mark - 长按事件
@@ -237,7 +292,7 @@
         
     }else{
         
-        thumbNoScaleSize = (CGSize){160,160};
+        thumbNoScaleSize = (CGSize){80,140};
     }
     
     self.contentImageView.gjcf_size = thumbNoScaleSize;
