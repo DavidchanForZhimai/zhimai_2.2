@@ -148,17 +148,17 @@
         if (isTime) {
 
             if ((model.service.length==0)&&(model.resource.length==0)) {
-                _line2Rect  = CGRectMake(0, addressStorage.bottom + 10, APPWIDTH, 0.5);;
+                _line2Rect  = _line1Rect;
             }else{
                 _line2Rect  = CGRectMake(0, resourceTextStorageheight + 10, APPWIDTH, 0.5);
             }
             float distance=[model.distance floatValue]/1000.00;
             LWTextStorage* distanceLab=[[LWTextStorage alloc]initWithFrame:CGRectMake(_avatarStorage.left,_line2Rect.origin.y+10, nameTextStorage.width, CGFLOAT_MAX)];
-            distanceLab.text=[NSString stringWithFormat:@"%.2lfkm",distance];
+            distanceLab.text=[NSString stringWithFormat:@"离我%.2lfkm",distance];
             distanceLab.font=Size(24.0);
             distanceLab.textColor=[UIColor colorWithRed:0.549 green:0.5569 blue:0.5608 alpha:1.0];
             LWTextStorage* timerLab=[[LWTextStorage alloc]initWithFrame:CGRectMake(0,_line2Rect.origin.y+10, APPWIDTH-10, CGFLOAT_MAX)];
-            timerLab.text=[NSString stringWithFormat:@"%@有空",[model.time updateTimeForHourAndMiniter]];
+            timerLab.text=[NSString stringWithFormat:@"%@",[model.time updateTimeForHourAndMiniter]];
             
             timerLab.textAlignment=NSTextAlignmentRight;
             timerLab.textColor=[UIColor colorWithRed:0.549 green:0.5569 blue:0.5608 alpha:1.0];
@@ -169,7 +169,7 @@
         }
         if (reward) {
             if ((model.service.length==0)&&(model.resource.length==0)) {
-                _line2Rect  = CGRectMake(0, addressStorage.bottom + 10, APPWIDTH, 0.5);
+                _line2Rect  = _line1Rect;
             }else{
                 _line2Rect  = CGRectMake(0, resourceTextStorageheight + 10, APPWIDTH, 0.5);
             }

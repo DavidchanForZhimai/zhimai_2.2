@@ -169,7 +169,7 @@
         
         float distance=[model.distance floatValue]/1000.00;
         LWTextStorage* distanceLab=[[LWTextStorage alloc]initWithFrame:CGRectMake(_avatarStorage.left,_line2Rect.origin.y+10, nameTextStorage.width, nameTextStorage.height)];
-        distanceLab.text=[NSString stringWithFormat:@"%.2lfkm",distance];
+        distanceLab.text=[NSString stringWithFormat:@"离我%.2lfkm",distance];
         distanceLab.font=Size(24.0);
         distanceLab.textColor=[UIColor colorWithRed:0.482 green:0.486 blue:0.494 alpha:1.000];
         LWTextStorage* timerLab=[[LWTextStorage alloc]initWithFrame:CGRectMake(0, distanceLab.top, APPWIDTH-10, nameTextStorage.height)];

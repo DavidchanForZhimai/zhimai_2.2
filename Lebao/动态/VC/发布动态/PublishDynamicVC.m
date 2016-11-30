@@ -251,7 +251,7 @@
         }
 
     if ([self.tfView.text isEqualToString:@"分享我的服务和行业新鲜事(最多255个字)"]||self.tfView.text.length <1) {
-        HUDText(@"分享我的服务和行业新鲜事(最多255个字)");
+        HUDText(@"内容不能为空");
         return;
     }else {
         

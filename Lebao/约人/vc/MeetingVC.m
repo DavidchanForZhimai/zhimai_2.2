@@ -27,33 +27,26 @@
 @interface MeetingVC ()<UITableViewDelegate,UITableViewDataSource,MeetHeadVDelegate,EjectViewDelegate,MeettingTableViewDelegate,UIAlertViewDelegate>
 {
     float OffsetY;
-    //    NSTimer *timer_yk;
 }
 @property (nonatomic,strong)UITableView *yrTab;
-@property (nonatomic,strong)UIButton *yrBtn;
 @property (nonatomic,strong)MeetHeadV *headView;
 @property (nonatomic,assign)int page;
 @property (nonatomic,strong)NSMutableArray *nearByManArr;
 @property (nonatomic,strong)NSMutableArray *headimgArr;
 @property (nonatomic,strong)NSMutableArray *headUserIdArr;
-@property (nonatomic,assign)BOOL isopen;
+@property (nonatomic,assign)BOOL isopen;//是否给未认证提醒
 @end
-
 @implementation MeetingVC
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self shakeToShow:_yrBtn];
-    
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(refreshRow:) name:@"KRefreshMeetingViewNotifation" object:nil];
-    
     [self netWorkHearViewIsShouldClearData:YES];
     if (_headView) {
         [self.headView shakeToShow:self.headView.vlayer1];
         [self.headView shakeToShow:self.headView.vlayer2];
         [self.headView shakeToShow:self.headView.vlayer3];
     }
-    
 }
 -(void)refreshRow:(NSNotification *)notification
 {
@@ -61,8 +54,6 @@
         
         MeetingCellLayout *layout =_nearByManArr[i];
         if ([layout.model.userid isEqualToString:notification.object[@"userid"]]) {
-            
-            
             if([notification.object[@"operation"] isEqualToString:@"cancel"]){
                 layout.model.isappoint = 0;
             }else if([notification.object[@"operation"] isEqualToString:@"meet"]){
@@ -73,7 +64,6 @@
         }
     }
 }
-
 -(NSMutableArray *)nearByManArr
 {
     if (!_nearByManArr) {
@@ -101,42 +91,31 @@
     [[ToolManager shareInstance]update];
     self.view.backgroundColor=AppViewBGColor;
     [self addTabView];
-    [self addYrBtn];
     [self navViewTitle:@"约见"];
     _page = 1;
-    _isopen=NO;
-    
+    _isopen=YES;
     OffsetY=0;
-    
-
+    [self _yrNetWorkAndMessage:_isopen];//打开app,请求有空
     [self netWorkRefresh:NO andIsLoadMoreData:NO  isShouldClearData:NO];
-    
-    
 }
 - (void)netWorkHearViewIsShouldClearData:(BOOL)isShouldClearData//加载头部数据
 {
     NSMutableDictionary *param = [Parameter parameterWithSessicon];
     [XLDataService putWithUrl:WantURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        
-        
-        
         if (dataObj) {
             MeetNumModel *modal = [MeetNumModel mj_objectWithKeyValues:dataObj];
-//            NSLog(@"dataonj==%@",dataObj);
+            //            NSLog(@"dataonj==%@",dataObj);
             if (modal.rtcode==1) {
                 if (isShouldClearData) {
                     [self.headimgArr removeAllObjects];
                     [self.headUserIdArr removeAllObjects];
                 }
-                
                 if (modal.realname.length==0&&modal.realname) {
                     UIAlertView *alerView=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您没填写姓名哦" delegate:self cancelButtonTitle:nil otherButtonTitles:@"走起", nil];
                     alerView.tag=3333;
                     alerView.delegate=self;
                     [alerView show];
                 }
-                
-                
                 NSMutableAttributedString *text1 = [[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"%d\n我想约见",modal.invited]];
                 [text1 addAttribute:NSFontAttributeName value:Size(40) range:[[NSString stringWithFormat:@"%d\n我想约见",modal.invited] rangeOfString:[NSString stringWithFormat:@"%d",modal.invited]]];
                 [_headView.meWantBtn setAttributedTitle:text1 forState:UIControlStateNormal];
@@ -158,29 +137,23 @@
                         [self.headimgArr addObject:data.imgurl];
                         [self.headUserIdArr addObject:data.userid];
                     }
-                    
                 }
                 _headView.headimgsArr=[NSArray arrayWithArray:self.headimgArr];
                 _headView.userIdArr=[NSArray arrayWithArray:self.headUserIdArr];
                 [_headView addEightImgView];
             }
         }
-        
     }];
-    
 }
 - (void)netWorkRefresh:(BOOL)isRefresh andIsLoadMoreData:(BOOL)isMoreLoadMoreData isShouldClearData:(BOOL)isShouldClearData//加载数据
 {
-    
-//    [[LoCationManager shareInstance] creatLocationManager:self callBackLocation:^(CLLocationCoordinate2D location) {
+    [[LoCationManager shareInstance] creatLocationManager:self callBackLocation:^(CLLocationCoordinate2D location) {
         //            测试用,要删掉
-                            CLLocationCoordinate2D location;
-                            location.latitude=24.491534;
-                            location.longitude=118.180851;
-    
+        //                            CLLocationCoordinate2D location;
+        //                            location.latitude=24.491534;
+        //                            location.longitude=118.180851;
         if (location.latitude<=0&&location.longitude<=0) {
             if (isRefresh) {
-                
                 [[ToolManager shareInstance] endHeaderWithRefreshing:_yrTab];
             }
             if (isMoreLoadMoreData) {
@@ -191,8 +164,6 @@
         if (self.nearByManArr.count==0) {
             [[ToolManager shareInstance] showWithStatus];
         }
-        
-        
         NSMutableDictionary *param = [Parameter parameterWithSessicon];
         [param setObject:[NSString stringWithFormat:@"%.6f",location.latitude] forKey:@"latitude"];
         [param setObject:[NSString stringWithFormat:@"%.6f",location.longitude] forKey:@"longitude"];
@@ -201,76 +172,44 @@
         [XLDataService putWithUrl:MeetMainURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
             //        NSLog(@"param====%@",param);
             if (isRefresh) {
-                
                 [[ToolManager shareInstance] endHeaderWithRefreshing:_yrTab];
             }
             if (isMoreLoadMoreData) {
                 [[ToolManager shareInstance] endFooterWithRefreshing:_yrTab];
             }
-            
             if (dataObj) {
                 //         NSLog(@"meetObj====%@",dataObj);
-                
-                
                 MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
-                
                 if (_page ==1) {
                     [[ToolManager shareInstance] moreDataStatus:_yrTab];
                 }
                 if (!modal.datas||modal.datas.count==0) {
-                    
                     [[ToolManager shareInstance] noMoreDataStatus:_yrTab];
-                    
                 }
-                
                 if (modal.rtcode ==1) {
                     [[ToolManager shareInstance] dismiss];
                     if (isShouldClearData) {
                         [self.nearByManArr removeAllObjects];
-                        
                     }
                     for (MeetingData *data in modal.datas) {
                         data.isSelf = [data.userid  isEqualToString:modal.userid];
                         [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andMessageBtn:NO andOprationBtn:NO andTime:YES andReward:NO]];
                     }
-                    
-                    
-                    _headView.nearManLab.text=[NSString stringWithFormat:@"最近有空 %d人",modal.count];
-                    
+                    _headView.nearManLab.text=[NSString stringWithFormat:@"附近可约 %d人",modal.count];
                     [_yrTab reloadData];
-                    
                 }
                 else
                 {
                     [[ToolManager shareInstance] showAlertMessage:modal.rtmsg];
                 }
-                
             }
             else
             {
                 [[ToolManager shareInstance] showInfoWithStatus];
             }
-            
         }];
-        
-//    }];
+    }];
 }
-
--(void)addYrBtn
-{
-    _yrBtn=[[UIButton alloc]init];
-    _yrBtn.frame=CGRectMake(APPWIDTH-30-50, APPHEIGHT-124, 60, 60);
-    [_yrBtn setBackgroundImage:[UIImage imageNamed:@"youkong"] forState:UIControlStateNormal];
-    
-    [_yrBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    _yrBtn.clipsToBounds=YES;
-    _yrBtn.layer.cornerRadius=_yrBtn.width/2.0;
-    _yrBtn.tag=1000;
-    [_yrBtn addTarget:self action:@selector(_yrBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:_yrBtn];
-    
-}
-
 -(void)addTabView
 {
     _yrTab=[[UITableView alloc]init];
@@ -283,6 +222,7 @@
     [[ToolManager shareInstance] scrollView:_yrTab headerWithRefreshingBlock:^{
         _page =1;
         [self netWorkRefresh:YES andIsLoadMoreData:NO isShouldClearData:YES];
+        [self _yrNetWorkAndMessage:_isopen];
         [self netWorkHearViewIsShouldClearData:YES];
     }];
     [[ToolManager shareInstance] scrollView:_yrTab footerWithRefreshingBlock:^{
@@ -293,123 +233,54 @@
     _headView=[[MeetHeadV alloc]initWithFrame:CGRectMake(0, 0, APPWIDTH, 255)];
     _headView.delegate = self;
     self.yrTab.tableHeaderView=_headView;
-    
-    
-    
 }
 #pragma mark
 #pragma mark -MeetHeadV 代理方法
 - (void)pushView:(UIViewController *)viewC userInfo:(id)userInfo
 {
     PushView(self, viewC);
-    
 }
-- (void) shakeToShow:(UIView*)aView//放大缩小动画
+#pragma mark 有空网络请求
+-(void)_yrNetWorkAndMessage:(BOOL)message
 {
-    CAKeyframeAnimation* animation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
-    animation.duration = 0.5;
-    
-    NSMutableArray *values = [NSMutableArray array];
-    [values addObject:[NSValue valueWithCATransform3D:CATransform3DMakeScale(0.1, 0.1, 1.0)]];
-    [values addObject:[NSValue valueWithCATransform3D:CATransform3DMakeScale(1.2, 1.2, 1.0)]];
-    [values addObject:[NSValue valueWithCATransform3D:CATransform3DMakeScale(0.9, 0.9, 1.0)]];
-    [values addObject:[NSValue valueWithCATransform3D:CATransform3DMakeScale(1.0, 1.0, 1.0)]];
-    animation.values = values;
-    [aView.layer addAnimation:animation forKey:nil];
-}
-
-#pragma mark 有空按钮
--(void)_yrBtnClick:(UIButton *)sender
-{
-    [self shakeToShow:_yrBtn];
-    NSDate *date2= [[NSUserDefaults standardUserDefaults]objectForKey:@"dateForYoukong"];
-    NSDateComponents *d=[DateHelper calculatorExpireDatetimeWithData:date2];
-    if (date2!=nil&&[d minute]<5&&[d hour]<1&&[d day]<1&&[d month]<1&&[d year]<1) {
-        [[ToolManager shareInstance] showAlertMessage:[NSString stringWithFormat:@"您已点击有空,%ld分钟%ld秒内有效",4-[d minute],59-[d second]]];
-        return;
-    }
-    
-    
-    if (sender.tag==1000) {
-        
-        [[ToolManager shareInstance] showWithStatus];
-        NSMutableDictionary *param = [Parameter parameterWithSessicon];
-        [param setObject:@"append" forKey:@"type"];
-        [XLDataService putWithUrl:meetCheckedURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-            //                        NSLog(@"param====%@",param);
-            if (dataObj) {
-                //                                NSLog(@"meetObj====%@",dataObj);
-                MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
-                if (modal.rtcode ==1) {
-                    [[LoCationManager shareInstance] creatLocationManager:self callBackLocation:^(CLLocationCoordinate2D location) {
-                        if (location.latitude<=0&&location.longitude<=0) {
-                            return ;
-                        }
-                        
-                        NSMutableDictionary *param = [Parameter parameterWithSessicon];
-                        [param setObject:[NSString stringWithFormat:@"%.6f",location.latitude] forKey:@"latitude"];
-                        [param setObject:[NSString stringWithFormat:@"%.6f",location.longitude] forKey:@"longitude"];
-                        //                        NSLog(@"param====%@",param);
-                        [XLDataService putWithUrl:MeetAppendURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-                            if (dataObj) {
-                                //                                NSLog(@"dataobj=%@",dataObj);
-                                MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
-                                if (model.rtcode ==1) {
-                                    _isopen=YES;
-                                    NSDate *date=[NSDate date];
-                                    [[NSUserDefaults standardUserDefaults]setObject:date forKey:@"dateForYoukong"];
-                                    [[ToolManager shareInstance] showAlertMessage:model.rtmsg];
-                                }
-                                else{
-                                    if (model.remainder_at) {
-                                        [[ToolManager shareInstance] showAlertMessage:[NSString stringWithFormat:@"您已点击有空,%d分钟%d秒内有效",model.remainder_at/60,model.remainder_at%60]];
-                                        NSDate *date=[NSDate date];
-                                        NSDate *date1=[date dateByAddingTimeInterval:-1800+model.remainder_at];
-                                        [[NSUserDefaults standardUserDefaults]setObject:date1 forKey:@"dateForYoukong"];
-                                    }else{
-                                        [[ToolManager shareInstance] showAlertMessage:model.rtmsg];}
-                                }
-                                
-                            }else
-                            {
-                                [[ToolManager shareInstance] showInfoWithStatus];
-                                [_yrBtn setBackgroundImage:[UIImage imageNamed:@"youkong"] forState:UIControlStateNormal];
-                            }
-                        }];
+    NSMutableDictionary *param = [Parameter parameterWithSessicon];
+    [param setObject:@"append" forKey:@"type"];
+    [XLDataService putWithUrl:meetCheckedURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+        //                        NSLog(@"param====%@",param);
+        if (dataObj) {
+            //                                NSLog(@"meetObj====%@",dataObj);
+            _isopen=NO;
+            MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
+            if (modal.rtcode ==1) {
+                [[LoCationManager shareInstance] creatLocationManager:self callBackLocation:^(CLLocationCoordinate2D location) {
+                    if (location.latitude<=0&&location.longitude<=0) {
+                        return ;
+                    }
+                    NSMutableDictionary *param = [Parameter parameterWithSessicon];
+                    [param setObject:[NSString stringWithFormat:@"%.6f",location.latitude] forKey:@"latitude"];
+                    [param setObject:[NSString stringWithFormat:@"%.6f",location.longitude] forKey:@"longitude"];
+                    //                        NSLog(@"param====%@",param);
+                    [XLDataService putWithUrl:MeetAppendURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
                     }];
-                    
-                    
-                }else if (modal.rtcode ==4002){
-                    [[ToolManager shareInstance]dismiss];
+                }];
+            }else if (modal.rtcode ==4002){
+                if (message) {
                     UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"去身份认证吗?" message:modal.rtmsg delegate:self cancelButtonTitle:nil otherButtonTitles:@"不去",@"走起", nil];
                     alertView.tag=22221;
                     alertView.delegate=self;
                     [alertView show];
-                    
                 }
-                else if (modal.rtcode ==4001){
-                    [[ToolManager shareInstance]dismiss];
-                    
+            }
+            else if (modal.rtcode ==4001){
+                if (message) {
                     UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"去完善资料吗?" message:[NSString stringWithFormat:@"完善资料后才能约见他人哦\n(%@)",modal.rtmsg] delegate:self cancelButtonTitle:nil otherButtonTitles:@"不去",@"走起", nil];
                     alertView.tag=22222;
                     alertView.delegate=self;
                     [alertView show];
-                    
-                } else
-                {
-                    [[ToolManager shareInstance] showAlertMessage:modal.rtmsg];
                 }
-                [[ToolManager shareInstance]dismiss];
             }
-            else
-            {
-                [[ToolManager shareInstance] showInfoWithStatus];
-            }
-            
-        }];
-        
-    }
-
+        }
+    }];
 }
 
 #pragma mark----tableview代理
@@ -420,34 +291,25 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    
     MeetingCellLayout*layout =(MeetingCellLayout*)_nearByManArr[indexPath.row];
-    
     return layout.cellHeight;
-    
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    
     return self.nearByManArr.count;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-
     static NSString* cellIdentifier = @"MeettingTableViewCellID";
     MeettingTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
         cell = [[MeettingTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-            
     }
     MeetingCellLayout *layout=self.nearByManArr[indexPath.row];
     [cell setCellLayout:layout];
     [cell setIndexPath:indexPath];
     MeetingData *data=layout.model;
-    
     if(data.isappoint==1){
         [cell.meetingBtn setTitle:@"等待中" forState:UIControlStateNormal];
         cell.meetingBtn.titleLabel.font=[UIFont systemFontOfSize:13];
@@ -461,8 +323,6 @@
         cell.meetingBtn.userInteractionEnabled=YES;
         cell.meetingBtn.titleLabel.font=[UIFont systemFontOfSize:14];
     }
-    
-    
     if (data.isSelf) {
         cell.meetingBtn.hidden=YES;
     }else{
@@ -480,13 +340,11 @@
 #pragma mark - MeettingTableViewCellDelegate 约见按钮地点击
 - (void)tableViewCellDidSeleteMeetingBtn:(UIButton *)btn andIndexPath:(NSIndexPath *)indexPath
 {
-    //do something
-    
     [[ToolManager shareInstance] showWithStatus];
     NSMutableDictionary *param = [Parameter parameterWithSessicon];
     [param setObject:@"invited" forKey:@"type"];
     [XLDataService putWithUrl:meetCheckedURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-//        NSLog(@"dataObj====%@",dataObj);
+        //        NSLog(@"dataObj====%@",dataObj);
         if (dataObj) {
             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
             if (modal.rtcode ==1) {
@@ -505,7 +363,6 @@
                 alertView.tag=22221;
                 alertView.delegate=self;
                 [alertView show];
-                
             }
             else if (modal.rtcode ==4001){
                 [[ToolManager shareInstance]dismiss];
@@ -516,13 +373,11 @@
                 [alertView show];
             }else if (modal.rtcode ==4005){
                 [[ToolManager shareInstance]dismiss];
-                
                 UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"知脉君温馨提示" message:[NSString stringWithFormat:@"%@",modal.rtmsg] delegate:self cancelButtonTitle:nil otherButtonTitles:@"再看看",@"马上开通", nil];
                 alertView.tag=22223;
                 alertView.delegate=self;
                 [alertView show];
             }
-            
             else
             {
                 [[ToolManager shareInstance] showAlertMessage:modal.rtmsg];
@@ -532,15 +387,11 @@
         {
             [[ToolManager shareInstance] showInfoWithStatus];
         }
-        
     }];
-    
-    
 }
 #pragma mark - MeettingTableViewCellDelegate 头像按钮点击
 -(void)tableViewCellDidSeleteHeadImg:(LWImageStorage *)imageStoragen layout:(MeetingCellLayout *)layout
 {
-    
     MyDetialViewController *myDetialViewCT=[MyDetialViewController new];
     myDetialViewCT.userID=((MeetingData *)layout.model).userid;
     [self.navigationController pushViewController:myDetialViewCT animated:YES];
@@ -549,13 +400,9 @@
 #pragma mark - YXCustomAlertViewDelegate
 - (void) customAlertView:(EjectView *) customAlertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    
     if (buttonIndex==0) {
-        
         [customAlertView dissMiss];
         customAlertView = nil;
-        
-        
     }else
     {
         if ([customAlertView.money floatValue]>=1) {
@@ -567,10 +414,8 @@
             NSMutableDictionary *param=[Parameter parameterWithSessicon];
             [param setObject:model.userid forKey:@"userid"];
             [param setObject:[NSString stringWithFormat:@"%.2f",[customAlertView.money floatValue]] forKey:@"reward"];
-            
             [param setObject:customAlertView.logField.text forKey:@"remark"];
             [param setObject:model.distance forKey:@"distance"];
-            
             payVC.realname=model.realname;
             payVC.tel=model.tel;
             payVC.param=param;
@@ -578,14 +423,11 @@
             payVC.audioData=customAlertView.audioData;
             payVC.whatZfType=0;
             [self.navigationController pushViewController:payVC animated:YES];
-            
-            
             [customAlertView dissMiss];
             customAlertView = nil;
         }else{
             [[ToolManager shareInstance] showAlertMessage:@"金额格式不正确,必须大等于1元"];
         }
-        
     }
 }
 
@@ -609,17 +451,15 @@
         }else if(buttonIndex==1){
             PushView(self, allocAndInit(VIPPrivilegeVC));
         }
-    }else if(alertView.tag==3333){
-        PushView(self, allocAndInit(BasicInformationViewController));
-    }
+}else if(alertView.tag==3333){
+    PushView(self, allocAndInit(BasicInformationViewController));
+}
 }
 
 #pragma mark 滑动隐藏导航栏
 //滑动隐藏导航栏 LiXingLe
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    
-    
     if (scrollView.contentOffset.y>0&&scrollView.contentOffset.y-OffsetY>20&&(scrollView.contentSize.height-scrollView.height)>0)   {
         if (self.tabBarController.tabBar.y==(APPHEIGHT-self.tabBarController.tabBar.height)) {
             _yrTab.frame=CGRectMake(0,StatusBarHeight, APPWIDTH, APPHEIGHT-StatusBarHeight);
@@ -628,10 +468,8 @@
                                  [self.navigationController setNavigationBarHidden:YES animated:YES];
                                  self.tabBarController.tabBar.frame=CGRectMake(self.tabBarController.tabBar.x,APPHEIGHT, self.tabBarController.tabBar.width, self.tabBarController.tabBar.height);
                                  self.navigationBarView.frame=CGRectMake(self.navigationBarView.x, -self.navigationBarView.height, self.navigationBarView.width, self.navigationBarView.height);
-                                 self.yrBtn.frame=CGRectMake(self.yrBtn.x, APPHEIGHT, self.yrBtn.width, self.yrBtn.height);
                              }completion:^(BOOL finished) {
                              }];
-            
         }
         OffsetY=scrollView.contentOffset.y;
     }
@@ -644,7 +482,6 @@
                                  [self.navigationController setNavigationBarHidden:YES animated:YES];
                                  self.tabBarController.tabBar.frame=CGRectMake(self.tabBarController.tabBar.x,APPHEIGHT- self.tabBarController.tabBar.height, self.tabBarController.tabBar.width, self.tabBarController.tabBar.height);
                                  self.navigationBarView.frame=CGRectMake(self.navigationBarView.x,0, self.navigationBarView.width, self.navigationBarView.height);
-                                 self.yrBtn.frame=CGRectMake(self.yrBtn.x, APPHEIGHT-124, self.yrBtn.width, self.yrBtn.height);
                                  _yrTab.frame=CGRectMake(0, NavigationBarHeight, APPWIDTH, APPHEIGHT-( NavigationBarHeight + TabBarHeight));
                              }completion:^(BOOL finished) {
                                  
@@ -661,7 +498,19 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
+//- (void) shakeToShow:(UIView*)aView//放大缩小动画
+//{
+//    CAKeyframeAnimation* animation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+//    animation.duration = 0.5;
+//
+//    NSMutableArray *values = [NSMutableArray array];
+//    [values addObject:[NSValue valueWithCATransform3D:CATransform3DMakeScale(0.1, 0.1, 1.0)]];
+//    [values addObject:[NSValue valueWithCATransform3D:CATransform3DMakeScale(1.2, 1.2, 1.0)]];
+//    [values addObject:[NSValue valueWithCATransform3D:CATransform3DMakeScale(0.9, 0.9, 1.0)]];
+//    [values addObject:[NSValue valueWithCATransform3D:CATransform3DMakeScale(1.0, 1.0, 1.0)]];
+//    animation.values = values;
+//    [aView.layer addAnimation:animation forKey:nil];
+//}
 /*
  #pragma mark - Navigation
  
