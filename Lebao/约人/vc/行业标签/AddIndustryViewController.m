@@ -13,17 +13,18 @@
 #define FocusIndustryURL [NSString stringWithFormat:@"%@user/focus-industry",HttpURL]
 #define SaveFocusIndustryURL [NSString stringWithFormat:@"%@user/save-focusindustry",HttpURL]
 
-#define MininumTagWidth (APPWIDTH - 120)/5.0
-#define MaxinumTagWidth (APPWIDTH - 20)
+#define MininumTagWidth (APPWIDTH - 60)/3.0
+#define MaxinumTagWidth (APPWIDTH - 60)/3.0
 
-#define TagHeight 30
+#define TagHeight 30*ScreenMultiple
 #define ViewStartX StatusBarHeight + NavigationBarHeight
 @interface AddIndustryViewController ()<DWTagsViewDelegate>
 {
     UIScrollView *scrView;
 }
-@property(nonatomic,strong)DWTagsView *hasTagsView;//已关注标签
+
 @property(nonatomic,strong)NSMutableArray *hasTags;//已关注标签
+@property(nonatomic,strong)UIView *newsViews;
 @property(nonatomic,strong)DWTagsView *newsClassTagsView;//新热门标签 类型
 @property(nonatomic,strong)DWTagsView *newsTagsView;//新热门标签
 @property(nonatomic,copy)NSMutableArray *newsTags;//新标签
@@ -32,8 +33,6 @@
 @property(nonatomic,strong)BaseButton *finishBtn;//完成
 
 @property(nonatomic,strong)UIScrollView *bottomScrollView;//底层
-@property(nonatomic,strong)UILabel *message1Lab;//提醒字样
-@property(nonatomic,strong)UILabel *message2Lab;//提醒字样
 
 @property(nonatomic,strong)NSMutableArray *industry_label;
 @property(nonatomic,strong)NSMutableArray  *saveIndustry_label;
@@ -47,65 +46,29 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.view.backgroundColor = WhiteColor;
-    [self navViewTitleAndBackBtn:@"选择关注行业"];
+    [self navViewTitleAndBackBtn:@"添加行业"];
     [self.view addSubview:self.finishBtn];
-    if (_isShouldLoadData) {
-         [self netWorkIsSave:NO];
-    }
-   
-   
+    
+    
+    
 }
 #pragma mark
 #pragma mark netWork
-- (void)netWorkIsSave:(BOOL )isSave
+- (void)netWork
 {
     NSMutableDictionary *parame = [Parameter parameterWithSessicon];
-    NSString *url =@"";
-    NSMutableArray *industry;
-    NSMutableArray *industryname;
-    if (isSave) {
-        url = SaveFocusIndustryURL;
-        industry = [NSMutableArray new];
-        industryname = [NSMutableArray new];
-        for (id dic in industrys) {
-            if ([dic isKindOfClass:[NSDictionary class]]) {
-                for (NSString *str in _hasTags) {
-                    if ([dic[@"name"] isEqualToString:str]) {
-                        [industry addObject:dic[@"full_number"]];
-                        [industryname addObject:dic[@"name"]];
-                    }
-                }
-                
-            }
-        }
-    
-        [parame setValue:[industry componentsJoinedByString:@"/"] forKey:@"focus_industrys"];
-        [[ToolManager shareInstance] showWithStatus:@"保存行业..."];
-    }
-    else
-    {
-        url = FocusIndustryURL;
-        [[ToolManager shareInstance] showWithStatus];
+    [parame setValue:[_hasTags componentsJoinedByString:@"/"] forKey:@"focus_industrys"];
+    [[ToolManager shareInstance] showWithStatus:@"保存行业..."];
+//    NSLog(@"industrys------ =%@ [industry] ==%@",industrys,_hasTags);
+    [XLDataService postWithUrl:SaveFocusIndustryURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         
-    }
-    
-    [XLDataService postWithUrl:url param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-
         if (dataObj) {
             if ([dataObj[@"rtcode"] intValue] ==1) {
                 [[ToolManager shareInstance] dismiss];
-                
-                if (isSave) {
-                    if (self.addTagsfinishBlock) {
-                        self.addTagsfinishBlock(industry,industryname);
-                    }
-                    PopView(self);
+                if (self.addTagsfinishBlock) {
+                    self.addTagsfinishBlock(_hasTags);
                 }
-                else{
-                    self.data = dataObj;
-                   
-                }
+                PopView(self);
                 
             }
             else
@@ -128,77 +91,52 @@
 }
 - (void)setData:(id)data
 {
-        NSMutableArray *industryDic= data[@"industry_label"];
-        industrys = [NSMutableArray arrayWithArray:data[@"industrys"]];
-        NSArray *focus_industrys;
-        if (data[@"focus_industrys"]&&[data[@"focus_industrys"] isKindOfClass:[NSString class]]&&![data[@"focus_industrys"] isEqualToString:@""]) {
-            focus_industrys = [data[@"focus_industrys"] componentsSeparatedByString:@"/"];
-        }
-        for (id Value in industrys) {
-            if ([Value isKindOfClass:[NSDictionary class]]) {
-                
-                if ([focus_industrys containsObject:Value[@"full_number"]] ) {
-                    [self.hasTags addObject:Value[@"name"]];
-                }
-            }
-        }
-        
-        for (id value in industryDic) {
-            if ([value isKindOfClass:[NSDictionary class]]) {
-                
-                [self.industry_label  addObject:value];
-                [self.classNewsTags addObject:value[@"name"]];
-            }
-        }
-        
-        self.hasTagsView.tagsArray = self.hasTags;
-        self.newsClassTagsView.tagsArray = self.classNewsTags;
-    
-        scrView=[[UIScrollView alloc]init];
-        scrView.frame=CGRectMake(0,NavigationBarHeight+StatusBarHeight, APPWIDTH, APPHEIGHT-(NavigationBarHeight+StatusBarHeight));
-        scrView.contentSize=CGSizeMake(0, CGRectGetMaxY(self.newsTagsView.frame));
-    
-        [scrView addSubview:self.hasTagsView];
-        [scrView addSubview:self.newsLb];
-        [scrView addSubview:self.newsClassTagsView];
-        [scrView addSubview:self.newsTagsView];
-        [scrView addSubview:self.message1Lab];
-        [scrView addSubview:self.message2Lab];
-        [self.view addSubview:scrView];
-        [self resetFrame];
-        
-    
-}
-
--(UILabel *)message1Lab{
-    if (_message1Lab) {
-        return _message1Lab;
+   
+    NSMutableArray *industryDic= data[@"industry_label"];
+    industrys = [NSMutableArray arrayWithArray:data[@"industrys"]];
+    NSArray *focus_industrys;
+    if (data[@"focus_industrys"]&&[data[@"focus_industrys"] isKindOfClass:[NSString class]]&&![data[@"focus_industrys"] isEqualToString:@""]) {
+        focus_industrys =[data[@"focus_industrys"] componentsSeparatedByString:@"/"];
     }
-    _message1Lab=[UILabel new];
-    _message1Lab.font=[UIFont systemFontOfSize:14];
-    _message1Lab.frame=CGRectMake(10, CGRectGetMaxY(_newsTagsView.frame) + 20, APPWIDTH -20, 17);
-    _message1Lab.numberOfLines = 0;
-    _message1Lab.text=@"关注行业说明";
-    return _message1Lab;
-}
--(UILabel *)message2Lab{
-    if (_message2Lab) {
-        return _message2Lab;
+    //创建标签
+    [self.hasTags addObjectsFromArray:focus_industrys];
+    
+    for (id value in industryDic) {
+        if ([value isKindOfClass:[NSDictionary class]]) {
+            [self.industry_label  addObject:value];
+            [self.newsClassTagsView addTag:value[@"name"]];
+            [self.classNewsTags addObject:value[@"code"]];
+        }
     }
-    _message2Lab=[UILabel new];
-    _message2Lab.font=[UIFont systemFontOfSize:13];
-    _message2Lab.textColor=[UIColor grayColor];
-    _message2Lab.frame=CGRectMake(0, CGRectGetMaxY(_message1Lab.frame), APPWIDTH, 17);
-    
-    _message2Lab.text=@"1.首页“可添加人脉”和“动态”的数据与个人所关注的行业有关,关注的行业越多,其显示的数据越多\n2.用户没有关注任何行业时,“可添加人脉”和“动态”里默认显示全部的行业数据";
-    _message2Lab.numberOfLines = 0;
-    
-    
-    return _message2Lab;
-    
-    
-}
+    //默认选择
+    if (self.classNewsTags.count>0) {
+        [self.newsClassTagsView selectTagAtIndex:0 animate:YES];
+        [self tagsView:self.newsClassTagsView didSelectTagAtIndex:0];
 
+    }
+    
+    scrView=[[UIScrollView alloc]init];
+    scrView.frame=CGRectMake(0,NavigationBarHeight+StatusBarHeight, APPWIDTH, APPHEIGHT-(NavigationBarHeight+StatusBarHeight));
+    scrView.contentSize=CGSizeMake(0, CGRectGetMaxY(self.newsTagsView.frame));
+    
+    [scrView addSubview:self.newsViews];
+    [scrView addSubview:self.newsLb];
+    [scrView addSubview:self.newsClassTagsView];
+    [scrView addSubview:self.newsTagsView];
+    
+    [self.view addSubview:scrView];
+    [self resetFrame];
+  
+}
+- (UIView *)newsViews
+{
+    if (!_newsViews) {
+        _newsViews = [[UIView alloc]initWithFrame:CGRectZero];
+        _newsViews.backgroundColor = WhiteColor;
+    }
+    
+    return _newsViews;
+}
 - (BaseButton *)finishBtn
 {
     if (_finishBtn) {
@@ -209,47 +147,19 @@
     __weak typeof(self) weakSelf = self;
     _finishBtn.didClickBtnBlock = ^
     {
-      [weakSelf netWorkIsSave:YES];
-      PopView(weakSelf);
+        [weakSelf netWork];
+
     };
     return _finishBtn;
 }
 
-- (DWTagsView *)hasTagsView
-{
-    if (_hasTagsView) {
-        return _hasTagsView;
-    }
-    _hasTagsView = allocAndInitWithFrame(DWTagsView, frame(10, 10 , APPWIDTH -20, 70));
-    _hasTagsView.contentInsets = UIEdgeInsetsZero;
-    _hasTagsView.tagInsets = UIEdgeInsetsMake(5, 15, 5, 15);
-    _hasTagsView.tagBorderWidth = 0.5;
-    _hasTagsView.tagcornerRadius = 5;
-    _hasTagsView.mininumTagWidth = MininumTagWidth;
-    _hasTagsView.maximumTagWidth = MaxinumTagWidth;
-    _hasTagsView.tagHeight  = TagHeight;
-    _hasTagsView.tagBorderColor = LineBg;
-    _hasTagsView.tagSelectedBorderColor = LineBg;
-    _hasTagsView.tagBackgroundColor = [UIColor whiteColor];
-    _hasTagsView.lineSpacing = 5;
-    _hasTagsView.interitemSpacing = 5;
-    _hasTagsView.tagFont = [UIFont systemFontOfSize:14];
-    _hasTagsView.tagTextColor = BlackTitleColor;
-    _hasTagsView.tagSelectedBackgroundColor = _newsTagsView.tagBackgroundColor;
-    _hasTagsView.tagSelectedTextColor = _hasTagsView.tagTextColor;
-    _hasTagsView.tag = 888;
-    _hasTagsView.delegate = self;
-   
-    
-    return _hasTagsView;
-    
-}
+
 - (UILabel *)newsLb
 {
     if (_newsLb) {
         return _newsLb;
     }
-    _newsLb = [UILabel createLabelWithFrame:frame(0, _hasTagsView.height + _hasTagsView.y +10, APPWIDTH, 40) text:@"---------点击添加新的关注行业--------" fontSize:28*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter inView:nil];
+    _newsLb = [UILabel createLabelWithFrame:frame(0, 10, APPWIDTH, 40) text:@"---------点击添加行业小类--------" fontSize:28*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter inView:nil];
     return _newsLb;
 }
 
@@ -258,25 +168,27 @@
     if (_newsClassTagsView) {
         return _newsClassTagsView;
     }
-    _newsClassTagsView = allocAndInitWithFrame(DWTagsView, frame(10, CGRectGetMaxY(_newsLb.frame) , APPWIDTH -20, 70));
+    _newsClassTagsView = allocAndInitWithFrame(DWTagsView, frame(15, CGRectGetMaxY(_newsLb.frame) , APPWIDTH -30, 70));
     _newsClassTagsView.contentInsets = UIEdgeInsetsZero;
-    _newsClassTagsView.tagInsets = UIEdgeInsetsMake(5, 15, 5, 15);
+    _newsClassTagsView.tagInsets = UIEdgeInsetsMake(0, 0, 0, 0);
     _newsClassTagsView.tagBorderWidth = 0.5;
     _newsClassTagsView.tagcornerRadius = 5;
     _newsClassTagsView.mininumTagWidth = MininumTagWidth;
     _newsClassTagsView.maximumTagWidth = MaxinumTagWidth;
     _newsClassTagsView.tagHeight  = TagHeight;
     _newsClassTagsView.tagBorderColor = LineBg;
-    _newsClassTagsView.tagSelectedBorderColor = LineBg;
+    _newsClassTagsView.tagSelectedBorderColor = AppMainColor;
     _newsClassTagsView.tagBackgroundColor = [UIColor whiteColor];
-    _newsClassTagsView.lineSpacing = 5;
-    _newsClassTagsView.interitemSpacing = 5;
+    _newsClassTagsView.lineSpacing = 15;
+    _newsClassTagsView.interitemSpacing = 15;
     _newsClassTagsView.tagFont = [UIFont systemFontOfSize:14];
     _newsClassTagsView.tagTextColor = BlackTitleColor;
-    _newsClassTagsView.tagSelectedBackgroundColor = _newsClassTagsView.tagBackgroundColor;
-    _newsClassTagsView.tagSelectedTextColor = _newsClassTagsView.tagTextColor;
+    _newsClassTagsView.tagSelectedBackgroundColor = AppMainColor;
+    _newsClassTagsView.tagSelectedTextColor = WhiteColor;
+    _newsClassTagsView.allowEmptySelection = NO;
     _newsClassTagsView.delegate = self;
     _newsClassTagsView.tag = 8888;
+    _newsClassTagsView.backgroundColor = [UIColor clearColor];
     return _newsClassTagsView;
 }
 
@@ -285,26 +197,28 @@
     if (_newsTagsView) {
         return _newsTagsView;
     }
-    _newsTagsView = allocAndInitWithFrame(DWTagsView, frame(10, CGRectGetMaxY(_newsClassTagsView.frame) + 20, APPWIDTH -20, 70));
+    _newsTagsView = allocAndInitWithFrame(DWTagsView, frame(15, CGRectGetMaxY(_newsClassTagsView.frame) + 20, APPWIDTH -30, 70));
+    _newsTagsView.backgroundColor = [UIColor clearColor];
     _newsTagsView.contentInsets = UIEdgeInsetsZero;
-    _newsTagsView.tagInsets = UIEdgeInsetsMake(5, 15, 5, 15);
+    _newsTagsView.tagInsets = UIEdgeInsetsMake(0, 0, 0, 0);
     _newsTagsView.tagBorderWidth = 0.5;
     _newsTagsView.tagcornerRadius = 5;
     _newsTagsView.mininumTagWidth = MininumTagWidth;
     _newsTagsView.maximumTagWidth = MaxinumTagWidth;
     _newsTagsView.tagHeight  = TagHeight;
     _newsTagsView.tagBorderColor = LineBg;
-    _newsTagsView.tagSelectedBorderColor = LineBg;
+    _newsTagsView.tagSelectedBorderColor = AppMainColor;
     _newsTagsView.tagBackgroundColor = [UIColor whiteColor];
-    _newsTagsView.lineSpacing = 5;
-    _newsTagsView.interitemSpacing = 5;
+    _newsTagsView.lineSpacing = 15;
+    _newsTagsView.interitemSpacing = 15;
     _newsTagsView.tagFont = [UIFont systemFontOfSize:14];
-    _newsTagsView.tagTextColor = LightBlackTitleColor;
-    _newsTagsView.tagSelectedBackgroundColor = _newsTagsView.tagBackgroundColor;
-    _newsTagsView.tagSelectedTextColor = _newsTagsView.tagTextColor;
+    _newsTagsView.tagTextColor = BlackTitleColor;
+    _newsTagsView.tagSelectedBackgroundColor = WhiteColor;
+    _newsTagsView.tagSelectedTextColor = AppMainColor;
     _newsTagsView.delegate = self;
     _newsTagsView.tagsArray = self.newsTags;
-     _newsTagsView.tag = 88888;
+    _newsTagsView.tag = 88888;
+    _newsTagsView.allowsMultipleSelection = YES;
     return _newsTagsView;
 }
 
@@ -346,47 +260,114 @@
 }
 #pragma mark
 #pragma mark DWTagsViewDelegate
- - (void)tagsView:(DWTagsView *)tagsView didSelectTagAtIndex:(NSUInteger)index
+- (void)tagsView:(DWTagsView *)tagsView didSelectTagAtIndex:(NSUInteger)index
 {
-   
     if (tagsView.tag == 88888) {
-       
-        if ([_hasTags containsObject:_newsTags[index]]) {
+        //添加全部
+        if ([self.newsTags[index] isEqualToString:@"全部"]) {
+            for (int i = 0 ;i<self.newsTags.count;i++) {
+                id str =self.newsTags[i];
+                if (![self.hasTags containsObject:str]&&![str isEqualToString:@"全部"]) {
+                    [self.hasTags addObject:str];
+                }
+                 [_newsTagsView selectTagAtIndex:i animate:YES];
+            }
+            
+            return;
+            
+        }
+        if ([self.hasTags containsObject:_newsTags[index]]) {
             [[ToolManager shareInstance] showAlertMessage:@"标签已存在！"];
             return;
         }
-        [_hasTagsView addTag:_newsTags[index]];
-        [_hasTags addObject:_newsTags[index]];
-    }
-    else if (tagsView.tag == 888)
-    {
         
-        [_hasTagsView removeTagAtIndex:index];
-        [_hasTags removeObjectAtIndex:index];
+        [_hasTags addObject:_newsTags[index]];
+        int hatags = 0;
+        for (id str  in _hasTags) {
+            if ([_newsTags containsObject:str]) {
+                hatags++;
+            }
+        }
+        if (hatags==self.newsTags.count-1) {
+            [self.newsTagsView selectTagAtIndex:hatags animate:YES];
+        }
+        
     }
+    
     else
     {
-   
+        
         _saveIndustry_label = nil;
         [self.newsTags removeAllObjects];
-        [_newsTagsView removeAllTags];
+        [self.newsTagsView removeAllTags];
         _saveIndustry_label = _industry_label[index][@"son"];
         for (NSDictionary *dic in _saveIndustry_label) {
-            [self.newsTags addObject:dic[@"name"]];
-            [_newsTagsView addTag:dic[@"name"]];
+            [self.newsTags addObject:dic[@"code"]];
+            [self.newsTagsView addTag:dic[@"name"]];
         }
-
+        //添加全选
+        [self.newsTags addObject:@"全部"];
+        [self.newsTagsView addTag:@"全部"];
+        
+        //已选
+        int allSelected = 0;
+        for (int i=0;i<self.newsTags.count;i++) {
+            id object = self.newsTags[i];
+            if ([object isKindOfClass:[NSString class]]) {
+                if ([self.hasTags containsObject:object] ) {
+                    allSelected++;
+                    [_newsTagsView selectTagAtIndex:i animate:YES];
+                }
+                
+            }
+        }
+        //全选选中
+        if (allSelected ==self.newsTags.count-1) {
+            [_newsTagsView selectTagAtIndex:allSelected animate:YES];
+        }
+        
     }
-   
+    
     
     [self resetFrame];
     
 }
 - (BOOL)tagsView:(DWTagsView *)tagsView shouldSelectTagAtIndex:(NSUInteger)index
 {
-
+    
     return YES;
     
+}
+- (void)tagsView:(DWTagsView *)tagsView didDeSelectTagAtIndex:(NSUInteger)index
+{
+    if (tagsView.tag==88888) {
+        //取消全部
+        if ([self.newsTags[index] isEqualToString:@"全部"]) {
+            for (int i = 0 ;i<self.newsTags.count;i++) {
+                id str =self.newsTags[i];
+                if ([self.hasTags containsObject:str]) {
+                    [self.hasTags removeObject:str];
+                }
+                [self.newsTagsView deSelectTagAtIndex:i animate:YES];
+            }
+            
+            return;
+            
+        }
+        if ([self.hasTags containsObject:self.newsTags[index]]) {
+            [_hasTags removeObject:_newsTags[index]];
+            [self.newsTagsView deSelectTagAtIndex:self.newsTags.count-1 animate:YES];
+            return;
+        }
+    }
+    
+}
+- (BOOL)tagsView:(DWTagsView *)tagsView shouldDeselectItemAtIndex:(NSUInteger)index
+{
+    if (tagsView.tag==88888) {
+        return YES;
+    }
+    return NO;
 }
 #pragma mark
 #pragma mark buttons Aticon
@@ -398,17 +379,16 @@
 #pragma mark  setframe
 - (void)resetFrame
 {
-    _hasTagsView.frame =frame(10, 10 , APPWIDTH -20, [_hasTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
-    _newsLb.frame =frame(0, _hasTagsView.height + _hasTagsView.y +10, APPWIDTH, 40);
-    
-     _newsClassTagsView.frame = frame(10, CGRectGetMaxY(_newsLb.frame) , APPWIDTH -20, [_newsClassTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
-    
-    _newsTagsView.frame = frame(10, CGRectGetMaxY(_newsClassTagsView.frame) +20 , APPWIDTH -20, [_newsTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
-    
-    _message1Lab.frame = CGRectMake(10, CGRectGetMaxY(_newsTagsView.frame) + 20, APPWIDTH-20, 17);
-    _message2Lab.frame=CGRectMake(10, CGRectGetMaxY(_message1Lab.frame) , APPWIDTH-20, [_message2Lab.text sizeWithFont:[UIFont systemFontOfSize:13] maxSize:CGSizeMake(APPWIDTH-20,1000)].height+10);
 
-    scrView.contentSize=CGSizeMake(0, CGRectGetMaxY(self.message2Lab.frame) + 10);
+    _newsClassTagsView.frame = frame(15, 20 , APPWIDTH -30, [_newsClassTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
+    
+    _newsViews.frame = CGRectMake(0, 0, APPWIDTH, [_newsClassTagsView.collectionView.collectionViewLayout collectionViewContentSize].height + 40);
+    
+    _newsLb.frame =frame(0,CGRectGetMaxY(_newsViews.frame)+ 5, APPWIDTH, 40);
+    
+    _newsTagsView.frame = frame(15, CGRectGetMaxY(_newsLb.frame)+ 5 , APPWIDTH -30, [_newsTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
+    
+    scrView.contentSize=CGSizeMake(0, CGRectGetMaxY(self.newsTagsView.frame) + 10);
 }
 
 - (void)didReceiveMemoryWarning {

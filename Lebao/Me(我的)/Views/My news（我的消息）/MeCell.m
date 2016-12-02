@@ -41,7 +41,7 @@
         [_authen setBorder:LightBlackTitleColor width:0.5];
         _authen.hidden = YES;
         
-        _message  = [UILabel createLabelWithFrame:frame(cellWidth - image.size.width -25, (cellHeight - 5)/2.0, 5, 5) text:@"" fontSize:0 textColor:[UIColor colorWithRed:0.8667 green:0.0941 blue:0.1255 alpha:1.0] textAlignment:0 inView:self];
+        _message  = [UILabel createLabelWithFrame:frame(cellWidth - image.size.width -25, (cellHeight - 8)/2.0, 8, 8) text:@"" fontSize:0 textColor:[UIColor colorWithRed:0.8667 green:0.0941 blue:0.1255 alpha:1.0] textAlignment:0 inView:self];
         [_message setRound];
         _message.backgroundColor =[UIColor colorWithRed:0.8667 green:0.0941 blue:0.1255 alpha:1.0];
         _message.hidden = YES;

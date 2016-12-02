@@ -17,7 +17,7 @@
 #import "CoreArchive.h"
 #import "DWTagsView.h"
 #import "IndustrySelectionViewController.h"//选择行业
-#import "AddIndustryViewController.h"//选择关注行业
+#import "GzHyViewController.h"//选择关注行业
 #define TagHeight 22
 #define MininumTagWidth (APPWIDTH - 120)/5.0
 #define MaxinumTagWidth (APPWIDTH - 20)
@@ -160,6 +160,12 @@
             break;
         case 88888:
         {
+            for (int i=0; i<_currentDefalutTagsArray.count; i++) {
+                
+                if ([_currentDefalutTagsArray[i] isKindOfClass:[NSString class]]&&[_currentDefalutTagsArray[i] isEqualToString:_currentTagsArray[index]]) {
+                    [_addDefalutTagsView deSelectTagAtIndex:i animate:YES];
+                }
+            }
             
             [_addHasTagsView removeTagWithName:_currentTagsArray[index]];
             [_currentTagsView removeTagWithName:_currentTagsArray[index]];
@@ -232,6 +238,8 @@
         [_currentTagsView removeTagWithName:_currentDefalutTagsArray[index]];
         [_addHasTagsView removeTagWithName:_currentDefalutTagsArray[index]];
         [_currentTagsArray removeObject:_currentDefalutTagsArray[index]];
+        
+        
         //高度重新布局
         [self addTagsViewReSetFrame];
         [self tagsViewReSetFrame];
@@ -348,7 +356,17 @@
     };
     [self.addTagsView addSubview:self.addDefalutTagsView];
     _addDefalutTagsView.tagsArray = defalutDataSource;
-    
+    //已选
+    for (int i=0;i<defalutDataSource.count;i++) {
+        id object = defalutDataSource[i];
+        if ([object isKindOfClass:[NSString class]]) {
+            if ([dataSource containsObject:object] ) {
+                [_addDefalutTagsView selectTagAtIndex:i animate:YES];
+            }
+            
+        }
+       
+    }
     [self addTagsViewReSetFrame];
     
     _currentTagsView = type;
@@ -888,7 +906,7 @@
                 [self.productsTags addObjectsFromArray:[_modal.service componentsSeparatedByString:@","]];
                 
             }
-           
+            
             if (_modal.industry&&_modal.industry.length>0) {
                 NSMutableArray *array;
                 NSArray *arrayc = [_modal.industry componentsSeparatedByString:@"_"];
@@ -908,12 +926,12 @@
                                     
                                     
                                 }
-
+                                
                             }
                         }
                     }
                 }
-               
+                
             }
             
             if (![_modal.resource
@@ -1373,13 +1391,13 @@
                 break;
             case 4:
             {
-                AddIndustryViewController *industrySelectionVC = [[AddIndustryViewController alloc]init];
-                industrySelectionVC.addTagsfinishBlock = ^(NSMutableArray *tags,NSMutableArray*tagsName)
+                GzHyViewController *industrySelectionVC = [[GzHyViewController alloc]init];
+                industrySelectionVC.addTagsfinishBlock = ^(NSMutableArray *tags)
                 {
                     _modal.focus_industrys = [tags componentsJoinedByString:@"/"];
                     [_basicInfoTableView reloadData];
                 };
-                industrySelectionVC.isShouldLoadData = YES;
+              
                 PushView(self, industrySelectionVC);
             }
                 break;

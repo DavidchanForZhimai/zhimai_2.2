@@ -24,4 +24,6 @@ typedef NS_ENUM(NSInteger) {
 
 + (IndustryCode)industryCode:(NSString *)industry;
 + (NSString *)industryChinese:(NSString *)industry;
+
++ (NSString *)zhuanghuanHangye:(NSString *)hangye formdata:(NSMutableArray *)industrys;
 @end

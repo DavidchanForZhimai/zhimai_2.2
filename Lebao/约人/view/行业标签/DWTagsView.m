@@ -336,10 +336,48 @@ static NSString * const kTagCellID = @"TagCellID";
     [self.collectionView selectItemAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]
                                       animated:animate
                                 scrollPosition:UICollectionViewScrollPositionNone];
+    
+    //避免数组越狱
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+    if (self.tagModels.count>index) {
+        DWTagModel *tagModel = self.tagModels[index];
+        DWTagCell *cell = (DWTagCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
+        if (self.allowsMultipleSelection) {
+            tagModel.selected = YES;
+            [self setCell:cell selected:YES];
+            return;
+        }
+        
+        //修复单选情况下，无法取消选中的问题
+        if (tagModel.selected) {
+            //不允许空选，直接返回
+            if (!self.allowEmptySelection && self.collectionView.indexPathsForSelectedItems.count == 1) {
+                return;
+            }
+            
+            cell.selected = NO;
+            self.collectionView.allowsMultipleSelection = YES;
+            [self.collectionView deselectItemAtIndexPath:indexPath animated:NO];
+            [self collectionView:self.collectionView didDeselectItemAtIndexPath:indexPath];
+            self.collectionView.allowsMultipleSelection = NO;
+            return;
+        }
+        
+        tagModel.selected = YES;
+        [self setCell:cell selected:YES];
+    }
+
 }
 
 - (void)deSelectTagAtIndex:(NSUInteger)index animate:(BOOL)animate {
     [self.collectionView deselectItemAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0] animated:YES];
+    
+    //避免数组越狱
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+    DWTagModel *tagModel = self.tagModels[indexPath.row];
+    DWTagCell *cell = (DWTagCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
+    tagModel.selected = NO;
+    [self setCell:cell selected:NO];
 }
 
 #pragma mark - ......::::::: Edit :::::::......

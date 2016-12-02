@@ -116,4 +116,20 @@
     return str;
     
 }
+
+//转换行业
++ (NSString *)zhuanghuanHangye:(NSString *)hangye formdata:(NSMutableArray *)industrys
+{
+    NSString *hangye_zw = @"";
+    for (id Value in industrys) {
+        if ([Value isKindOfClass:[NSDictionary class]]) {
+            if ([hangye isEqualToString:Value[@"full_number"]] ) {
+                hangye_zw =  Value[@"name"];
+            }
+        }
+    }
+    return  hangye_zw;
+    
+}
+
 @end
