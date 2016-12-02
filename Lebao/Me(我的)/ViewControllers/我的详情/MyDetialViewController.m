@@ -892,38 +892,38 @@
 {
     
     if (buttonIndex==0) {
-        NSMutableDictionary *param=[Parameter parameterWithSessicon];
-        [param setObject:_userID forKey:@"beinvited"];
-        [[ToolManager shareInstance] showWithStatus];
-        [XLDataService putWithUrl:addConnectionsURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-            if(dataObj){
-//                NSLog(@"dataobj===%@",dataObj);
-                
-                MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
-                if (model.rtcode==1) {
-                    [[ToolManager shareInstance] dismiss];
-                    UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"添加人脉请求已发出,请耐心等待" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
-                     [[NSNotificationCenter defaultCenter]postNotificationName:@"KReflashCanMeet" object:@{@"userid":headerModel.Id,@"relation":@"1",@"reward":@"0"}];
-                    [successAlertV show];
-                    [connectionView.window removeGestureRecognizer:recognizerTap];
-                }else if (model.rtcode ==4005){
-                    [[ToolManager shareInstance]dismiss];
-                    
-                    UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"知脉君温馨提示" message:[NSString stringWithFormat:@"%@",model.rtmsg] delegate:self cancelButtonTitle:nil otherButtonTitles:@"再看看",@"马上开通", nil];
-                    alertView.tag=22223;
-                    alertView.delegate=self;
-                    [alertView show];
-                }
-                else
-                {
-                    [[ToolManager shareInstance] showAlertMessage:model.rtmsg];
-                }
-            }else
-            {
-                [[ToolManager shareInstance] showInfoWithStatus];
-            }
-            
-        }];
+//        NSMutableDictionary *param=[Parameter parameterWithSessicon];
+//        [param setObject:_userID forKey:@"beinvited"];
+//        [[ToolManager shareInstance] showWithStatus];
+//        [XLDataService putWithUrl:addConnectionsURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+//            if(dataObj){
+////                NSLog(@"dataobj===%@",dataObj);
+//                
+//                MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
+//                if (model.rtcode==1) {
+//                    [[ToolManager shareInstance] dismiss];
+//                    UIAlertView *successAlertV=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"添加人脉请求已发出,请耐心等待" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+//                     [[NSNotificationCenter defaultCenter]postNotificationName:@"KReflashCanMeet" object:@{@"userid":headerModel.Id,@"relation":@"1",@"reward":@"0"}];
+//                    [successAlertV show];
+//                    [connectionView.window removeGestureRecognizer:recognizerTap];
+//                }else if (model.rtcode ==4005){
+//                    [[ToolManager shareInstance]dismiss];
+//                    
+//                    UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"知脉君温馨提示" message:[NSString stringWithFormat:@"%@",model.rtmsg] delegate:self cancelButtonTitle:nil otherButtonTitles:@"再看看",@"马上开通", nil];
+//                    alertView.tag=22223;
+//                    alertView.delegate=self;
+//                    [alertView show];
+//                }
+//                else
+//                {
+//                    [[ToolManager shareInstance] showAlertMessage:model.rtmsg];
+//                }
+//            }else
+//            {
+//                [[ToolManager shareInstance] showInfoWithStatus];
+//            }
+//            
+//        }];
         [customAlertView dissMiss];
 
     }else
@@ -940,7 +940,7 @@
         [customAlertView dissMiss];
         [connectionView.window removeGestureRecognizer:recognizerTap];
         }else{
-            [[ToolManager shareInstance] showAlertMessage:@"金额格式不正确,必须大等于1元"];
+            [[ToolManager shareInstance] showAlertMessage:@"金额格式不正确,最低1元"];
         }
     }
 }

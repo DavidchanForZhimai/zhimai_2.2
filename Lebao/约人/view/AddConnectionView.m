@@ -101,7 +101,7 @@
         cancelBtn.frame =  CGRectMake(0, CGRectGetMaxY(_logField.frame)+15, frame.size.width/2, 42);
         
         [cancelBtn setTitleColor:rgb(0, 123, 251) forState:UIControlStateNormal];
-        [cancelBtn setTitle:@"不打赏" forState:UIControlStateNormal];
+        [cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
         cancelBtn.titleLabel.font = [UIFont boldSystemFontOfSize:18];
         [self addSubview:cancelBtn];
         [cancelBtn addTarget:self action:@selector(leftCancelClick) forControlEvents:UIControlEventTouchUpInside];

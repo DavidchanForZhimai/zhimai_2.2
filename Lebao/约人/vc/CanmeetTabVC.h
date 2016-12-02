@@ -9,5 +9,6 @@
 #import "BaseViewController.h"
 
 @interface CanmeetTabVC : BaseViewController
-@property (nonatomic,strong)UITableView *tableView;
+@property (nonatomic,strong)UITableView *authenTableView;
+@property (nonatomic,strong)UITableView *noAuthenTableView;
 @end

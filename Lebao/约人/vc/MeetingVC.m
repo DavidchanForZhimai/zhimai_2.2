@@ -426,7 +426,7 @@
             [customAlertView dissMiss];
             customAlertView = nil;
         }else{
-            [[ToolManager shareInstance] showAlertMessage:@"金额格式不正确,必须大等于1元"];
+            [[ToolManager shareInstance] showAlertMessage:@"金额格式不正确,最低1元"];
         }
     }
 }

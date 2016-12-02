@@ -430,12 +430,12 @@
     
     [UIView animateWithDuration:0.3f animations:^{
         if ((int)point.x % (int)SCREEN_WIDTH == 0) {
-            if (point.x/SCREEN_WIDTH ==0) {
+            if (point.x/SCREEN_WIDTH ==0&&!_oprationBtn.selected) {
                 [self oprationBtn:_oprationBtn];
-            }else if(point.x/SCREEN_WIDTH ==1) {
+            }else if(point.x/SCREEN_WIDTH ==1&&!_agreeBtn.selected) {
                 [self agreeBtn:_agreeBtn];
             }
-            else if(point.x/SCREEN_WIDTH ==2){
+            else if(point.x/SCREEN_WIDTH ==2&&!_refuseBtn.selected){
                 [self refuseBtn:_refuseBtn];
             }
         }

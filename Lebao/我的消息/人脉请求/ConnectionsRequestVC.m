@@ -19,6 +19,7 @@
 #import "NSString+Extend.h"
 #import "GJGCChatFriendViewController.h"
 #import "MyDetialViewController.h"
+#import "AuthenticationHomeViewController.h"
 @interface ConnectionsRequestVC ()<UITableViewDelegate,UITableViewDataSource,MeettingTableViewDelegate,UIAlertViewDelegate>
 {
     BOOL audioMark;
@@ -265,9 +266,15 @@
                     [self.nearByManArr removeObjectAtIndex:clickRow.row];
                     [self.yrTab deleteRowsAtIndexPaths:[NSArray arrayWithObjects:clickRow, nil] withRowAnimation:UITableViewRowAnimationRight];
                     successAlertV.cancelButtonIndex=1;
-                    successAlertV.delegate=self;
+                    successAlertV.tag=22222;
                     [successAlertV show];
                 }
+            } else if (model.rtcode==4001) {
+                [[ToolManager shareInstance]dismiss];
+                UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"去身份认证吗?" message:dataObj[@"rtmsg"] delegate:self cancelButtonTitle:nil otherButtonTitles:@"不去",@"走起", nil];
+                alertView.tag=22221;
+                [alertView show];
+
             }
             
             else
@@ -288,6 +295,13 @@
 }
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    if (alertView.tag==22221) {
+        if (buttonIndex==0) {
+            
+        }else if(buttonIndex==1){
+            PushView(self, allocAndInit(AuthenticationHomeViewController));
+        }
+    }else if (alertView.tag==22222) {
         if (buttonIndex==0) {
             GJGCChatFriendTalkModel *talk = [[GJGCChatFriendTalkModel alloc]init];
             talk.talkType = GJGCChatFriendTalkTypePrivate;
@@ -302,6 +316,7 @@
 //            [[UIApplication sharedApplication]openURL:url];
         }else if(buttonIndex==2){
         }
+    }
    
 }
 -(void)pushModel:(PushDataChat *)pushData{

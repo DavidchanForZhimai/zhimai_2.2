@@ -19,28 +19,41 @@
 #import "ViewController.h"
 #import "AuthenticationHomeViewController.h"
 #import "VIPPrivilegeVC.h"
-@interface CanmeetTabVC ()<UITableViewDelegate,UITableViewDataSource,MeettingTableViewDelegate,UIAlertViewDelegate,EjectViewDelegate,AddConnectionViewDelegate>
+@interface CanmeetTabVC ()<UITableViewDelegate,UITableViewDataSource,MeettingTableViewDelegate,UIAlertViewDelegate,EjectViewDelegate,AddConnectionViewDelegate,UIScrollViewDelegate>
 {
     AddConnectionView *connectionView;
-    
+    UIScrollView *bottomScrV;
 }
 @property(nonatomic,copy)NSString *keyword;
 @property(nonatomic,copy)NSString *city;
-@property(nonatomic,assign)NSInteger page;
-@property(nonatomic,strong)NSMutableArray *allMeetArr;
-
+@property(nonatomic,copy)NSString *state;
+@property(nonatomic,assign)int authenPage;
+@property(nonatomic,assign)int noAuthenPage;
+@property (nonatomic,strong)UIView *underLineV;//下划线v
+@property(nonatomic,strong)NSMutableArray *authenMeetArr;
+@property(nonatomic,strong)NSMutableArray *noAuthenMeetArr;
 @property(nonatomic, strong)BaseButton *selectedAddress;
 @property(nonatomic, strong)BaseButton  *search;
+@property(nonatomic,strong)UIButton *authenBtn;//认证按钮
+@property(nonatomic,strong)UIButton *noAuthenBtn;//未认证按钮
+
 @end
 
 @implementation CanmeetTabVC
 
--(NSMutableArray*)allMeetArr
+-(NSMutableArray*)authenMeetArr
 {
-    if (!_allMeetArr) {
-        _allMeetArr=[[NSMutableArray alloc]init];
+    if (!_authenMeetArr) {
+        _authenMeetArr=[[NSMutableArray alloc]init];
     }
-    return _allMeetArr;
+    return _authenMeetArr;
+}
+-(NSMutableArray*)noAuthenMeetArr
+{
+    if (!_noAuthenMeetArr) {
+        _noAuthenMeetArr=[[NSMutableArray alloc]init];
+    }
+    return _noAuthenMeetArr;
 }
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -51,22 +64,35 @@
 }
 -(void)reflash:(NSNotification *)notification
 {
-    for (int i=0;i<self.allMeetArr.count;i++) {
-        MeetingCellLayout *layout=self.allMeetArr[i];
+    NSMutableArray *arr;
+    UITableView *tab;
+    if (_authenBtn.selected) {
+        arr=_authenMeetArr;
+        tab=_authenTableView;
+    }
+    else if (_noAuthenBtn.selected){
+        arr=_noAuthenMeetArr;
+        tab=_noAuthenTableView;
+    }
+    for (int i=0;i<arr.count;i++) {
+        MeetingCellLayout *layout=arr[i];
         if ([layout.model.userid isEqualToString:notification.object[@"userid"]]) {
             if ([notification.object[@"relation"] isEqualToString:@"1"]) {
                 layout.model.relation=1;
-                [self.allMeetArr replaceObjectAtIndex:i withObject:layout];
-                [self.tableView reloadRowsAtIndexPaths: @[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:NO];
+                [arr replaceObjectAtIndex:i withObject:layout];
+                [tab reloadRowsAtIndexPaths: @[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:NO];
             }
         }
     }
+
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
     _keyword =@"";
     _city = @"";
-    _page=1;
+    _authenPage=1;
+    _noAuthenPage=1;
+    _state=@"3";
     [self navViewTitleAndBackBtn:@""];
         //搜索按钮
     
@@ -80,11 +106,25 @@
             search.searchResultBlock = ^(NSString *str)
             {
                 [weakSelf.search setTitle:str forState:UIControlStateNormal];
-                [weakSelf.allMeetArr removeAllObjects];
-                [weakSelf.tableView reloadData];
                  weakSelf.keyword = str;
-                 weakSelf.page = 1;
-                [weakSelf netWorkRefresh:NO andIsLoadMoreData:NO isShouldClearData:YES];
+                [weakSelf.authenMeetArr removeAllObjects];
+                [weakSelf.noAuthenMeetArr removeAllObjects];
+                [weakSelf.authenTableView reloadData];
+                [weakSelf.noAuthenTableView reloadData];
+                weakSelf.authenPage = 1;
+                weakSelf.noAuthenPage = 1;
+                
+                NSMutableArray *arr;
+                UITableView *tab;
+                if (weakSelf.authenBtn.selected) {
+                    arr=weakSelf.authenMeetArr;
+                    tab=weakSelf.authenTableView;
+                }
+                else if (weakSelf.noAuthenBtn.selected){
+                    arr=weakSelf.noAuthenMeetArr;
+                    tab=weakSelf.noAuthenTableView;
+                }
+                [weakSelf netWorkRefresh:NO andIsLoadMoreData:NO isShouldClearData:YES withState:weakSelf.state andTabView:tab andArr:arr andPage:1];
             };
 
              [weakSelf.navigationController pushViewController:search animated:NO];
@@ -118,11 +158,26 @@
                 str = [NSString stringWithFormat:@"   %@",[cityname substringWithRange:NSMakeRange(0, 2)]];
             }
             [weakSelf.selectedAddress setTitle:str forState:UIControlStateNormal];
-//            [weakSelf resetSeletedAddressFrameWithTitle:cityname];
-            [weakSelf.allMeetArr removeAllObjects];
-             [weakSelf.tableView reloadData];
-             weakSelf.page = 1;
-            [weakSelf netWorkRefresh:NO andIsLoadMoreData:NO isShouldClearData:YES];
+            [weakSelf resetSeletedAddressFrameWithTitle:cityname];
+            [weakSelf.authenMeetArr removeAllObjects];
+            [weakSelf.noAuthenMeetArr removeAllObjects];
+             [weakSelf.authenTableView reloadData];
+            [weakSelf.noAuthenTableView reloadData];
+             weakSelf.authenPage = 1;
+            weakSelf.noAuthenPage = 1;
+            
+            NSMutableArray *arr;
+            UITableView *tab;
+            if (weakSelf.authenBtn.selected) {
+                arr=weakSelf.authenMeetArr;
+                tab=weakSelf.authenTableView;
+            }
+            else if (weakSelf.noAuthenBtn.selected){
+                arr=weakSelf.noAuthenMeetArr;
+                tab=weakSelf.noAuthenTableView;
+            }
+            [weakSelf netWorkRefresh:NO andIsLoadMoreData:NO isShouldClearData:YES withState:weakSelf.state andTabView:tab andArr:arr andPage:1];
+            
         }];
         
         [weakSelf.navigationController pushViewController:vc animated:NO];
@@ -131,9 +186,9 @@
     
     [self.view addSubview:_selectedAddress];
     
-    [self addTabView];
-    
-    [self netWorkRefresh:NO andIsLoadMoreData:NO isShouldClearData:YES];
+    [self addBottomSrollView];
+    [self addTheBtnView];
+    [self netWorkRefresh:NO andIsLoadMoreData:NO isShouldClearData:YES withState:_state andTabView:_authenTableView andArr:self.authenMeetArr andPage:_authenPage ];
 }
 //选择地址重新设置frame
 - (void)resetSeletedAddressFrameWithTitle:(NSString *)title
@@ -159,77 +214,173 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+-(void)addBottomSrollView
+{
+    bottomScrV=[[UIScrollView alloc]initWithFrame:CGRectMake(0,StatusBarHeight + NavigationBarHeight + 36, SCREEN_WIDTH, SCREEN_HEIGHT-(StatusBarHeight + NavigationBarHeight + 36))];
+    bottomScrV.contentSize = CGSizeMake(SCREEN_WIDTH*2, frameHeight(bottomScrV));
+    bottomScrV.backgroundColor = [UIColor clearColor];
+    bottomScrV.scrollEnabled = YES;
+    bottomScrV.delegate = self;
+    bottomScrV.alwaysBounceHorizontal = NO;
+    bottomScrV.alwaysBounceVertical = NO;
+    bottomScrV.showsHorizontalScrollIndicator = NO;
+    bottomScrV.showsVerticalScrollIndicator = NO;
+    bottomScrV.pagingEnabled = YES;
+    bottomScrV.bounces = NO;
+    
+    [self.view addSubview:bottomScrV];
+    [self addTabView];
+
+
+}
+/**
+ *  上面的3个按钮
+ */
+-(void)addTheBtnView
+{
+    _authenBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    _authenBtn.frame = CGRectMake(0, 65, SCREEN_WIDTH/2, 35);
+    [_authenBtn.titleLabel setFont:[UIFont systemFontOfSize:16]];
+    [_authenBtn setTitle:@"认证" forState:UIControlStateNormal];
+    [_authenBtn setTitleColor:[UIColor colorWithRed:0.298 green:0.627 blue:0.996 alpha:1.000] forState:UIControlStateSelected];
+    [_authenBtn setTitleColor:[UIColor colorWithWhite:0.514 alpha:1.000] forState:UIControlStateNormal];
+    _authenBtn.backgroundColor = [UIColor whiteColor];
+    _authenBtn.selected = YES;
+    [_authenBtn.titleLabel setTextAlignment:NSTextAlignmentCenter];
+    [_authenBtn addTarget:self action:@selector(authenBtn:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_authenBtn];
+    
+    _noAuthenBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    _noAuthenBtn.frame = CGRectMake(SCREEN_WIDTH/2, 65, SCREEN_WIDTH/2, 35);
+    [_noAuthenBtn setTitle:@"未认证" forState:UIControlStateNormal];
+    [_noAuthenBtn.titleLabel setFont:[UIFont systemFontOfSize:16]];
+    [_noAuthenBtn setTitleColor:[UIColor colorWithRed:0.298 green:0.627 blue:0.996 alpha:1.000] forState:UIControlStateSelected];
+    [_noAuthenBtn setTitleColor:[UIColor colorWithWhite:0.514 alpha:1.000] forState:UIControlStateNormal];
+    _noAuthenBtn.backgroundColor = [UIColor whiteColor];
+    [_noAuthenBtn.titleLabel setTextAlignment:NSTextAlignmentCenter];
+    [_noAuthenBtn addTarget:self action:@selector(noAuthenBtn:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_noAuthenBtn];
+    
+    _underLineV = [[UIView alloc]initWithFrame:CGRectMake((SCREEN_WIDTH/2-50)/2, 65+35-2, 50, 2)];
+    _underLineV.backgroundColor = [UIColor colorWithRed:0.298 green:0.627 blue:0.996 alpha:1.000];
+    [self.view addSubview:_underLineV];
+
+}
+#pragma mark - 头部2个按钮点击切换事件
+-(void)authenBtn:(UIButton *)sender//认证
+{
+    sender.selected = YES;
+    _noAuthenBtn.selected = NO;
+    _state=@"3";
+    [UIView animateWithDuration:0.3f animations:^{
+        [_underLineV setFrame:CGRectMake((SCREEN_WIDTH/2-50)/2, 65+35-2, 50, 2)];
+        [bottomScrV setContentOffset:CGPointMake(0, 0)];
+    }];
+    if (_authenMeetArr.count==0) {
+        [self netWorkRefresh:NO andIsLoadMoreData:NO isShouldClearData:NO withState:_state andTabView:_authenTableView andArr:self.authenMeetArr andPage:_authenPage];
+    }
+   
+}
+-(void)noAuthenBtn:(UIButton *)sender//未认证
+{
+    sender.selected = YES;
+    _authenBtn.selected = NO;
+    _state=@"1";
+    [UIView animateWithDuration:0.3f animations:^{
+        [_underLineV setFrame:CGRectMake((SCREEN_WIDTH/2-50)/2+SCREEN_WIDTH/2, 65+35-2, 50, 2)];
+        [bottomScrV setContentOffset:CGPointMake(SCREEN_WIDTH, 0)];
+    }];
+    if (_noAuthenMeetArr.count==0) {
+        [self netWorkRefresh:NO andIsLoadMoreData:NO isShouldClearData:NO withState:_state andTabView:_noAuthenTableView andArr:self.noAuthenMeetArr andPage:_noAuthenPage];
+    }
+   
+}
 -(void)addTabView
 {
-    self.tableView=[[UITableView alloc]initWithFrame:CGRectMake(0,StatusBarHeight + NavigationBarHeight, APPWIDTH, APPHEIGHT-(StatusBarHeight + NavigationBarHeight) ) style:UITableViewStyleGrouped];
-    
-    self.tableView.delegate=self;
-    self.tableView.dataSource=self;
-    self.tableView.backgroundColor=[UIColor clearColor];
-    self.tableView.tableFooterView=[[UIView alloc]init];
-    self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;//去掉cell间的白线
-    [[ToolManager shareInstance] scrollView:self.tableView headerWithRefreshingBlock:^{
-        
-        _page =1;
-        [self netWorkRefresh:YES andIsLoadMoreData:NO isShouldClearData:YES];
-        
+    self.authenTableView=[[UITableView alloc]initWithFrame:CGRectMake(0,0, SCREEN_WIDTH, bottomScrV.frame.size.height) style:UITableViewStyleGrouped];
+    self.authenTableView.delegate=self;
+    self.authenTableView.dataSource=self;
+    self.authenTableView.backgroundColor=[UIColor clearColor];
+    self.authenTableView.tableFooterView=[[UIView alloc]init];
+    self.authenTableView.separatorStyle=UITableViewCellSeparatorStyleNone;//去掉cell间的白线
+    [[ToolManager shareInstance] scrollView:self.authenTableView headerWithRefreshingBlock:^{
+        _authenPage =1;
+        [self netWorkRefresh:YES andIsLoadMoreData:NO isShouldClearData:YES withState:_state andTabView:self.authenTableView andArr:self.authenMeetArr andPage:self.authenPage];
     }];
-    [[ToolManager shareInstance] scrollView:self.tableView footerWithRefreshingBlock:^{
-        _page ++;
-        [self netWorkRefresh:NO andIsLoadMoreData:YES isShouldClearData:NO];
-        
+    [[ToolManager shareInstance] scrollView:self.authenTableView footerWithRefreshingBlock:^{
+        _authenPage ++;
+        [self netWorkRefresh:NO andIsLoadMoreData:YES isShouldClearData:NO withState:_state andTabView:_authenTableView andArr:self.authenMeetArr andPage:_authenPage];
     }];
+    self.authenTableView.delegate = self;
+    self.authenTableView.dataSource=self;
+    [bottomScrV addSubview:self.authenTableView];
     
-    self.tableView.delegate = self;
-    self.tableView.dataSource=self;
-    [self.view addSubview:self.tableView];
+    self.noAuthenTableView=[[UITableView alloc]initWithFrame:CGRectMake(SCREEN_WIDTH,0, SCREEN_WIDTH, bottomScrV.frame.size.height) style:UITableViewStyleGrouped];
+    self.noAuthenTableView.delegate=self;
+    self.noAuthenTableView.dataSource=self;
+    self.noAuthenTableView.backgroundColor=[UIColor clearColor];
+    self.noAuthenTableView.tableFooterView=[[UIView alloc]init];
+    self.noAuthenTableView.separatorStyle=UITableViewCellSeparatorStyleNone;//去掉cell间的白线
+    [[ToolManager shareInstance] scrollView:self.noAuthenTableView headerWithRefreshingBlock:^{
+        _noAuthenPage =1;
+        [self netWorkRefresh:YES andIsLoadMoreData:NO isShouldClearData:YES withState:_state andTabView:self.noAuthenTableView andArr:self.noAuthenMeetArr andPage:_noAuthenPage];
+    }];
+    [[ToolManager shareInstance] scrollView:self.noAuthenTableView footerWithRefreshingBlock:^{
+        _noAuthenPage ++;
+        [self netWorkRefresh:NO andIsLoadMoreData:YES isShouldClearData:NO withState:_state andTabView:self.noAuthenTableView andArr:self.noAuthenMeetArr andPage:_noAuthenPage];
+    }];
+    self.noAuthenTableView.delegate = self;
+    self.noAuthenTableView.dataSource=self;
+    [bottomScrV addSubview:self.noAuthenTableView];
+    
     
     
 }
 
-- (void)netWorkRefresh:(BOOL)isRefresh andIsLoadMoreData:(BOOL)isMoreLoadMoreData isShouldClearData:(BOOL)isShouldClearData//加载数据
+-(void)netWorkRefresh:(BOOL)isRefresh andIsLoadMoreData:(BOOL)isMoreLoadMoreData isShouldClearData:(BOOL)isShouldClearData withState:(NSString *)state andTabView:(UITableView *)tabView andArr:(NSMutableArray *)arr andPage:(int)page//加载数据
 {
     
     NSMutableDictionary *param = [Parameter parameterWithSessicon];
-    if (self.allMeetArr.count==0) {
+    if (arr.count==0) {
         [[ToolManager shareInstance] showWithStatus];
     }
-    [param setObject:@(_page) forKey:@"page"];
+    [param setObject:@(page) forKey:@"page"];
     [param setObject:_keyword forKey:@"keyword"];
      [param setObject:_city forKey:@"city"];
     [param setObject:@"" forKey:@"industrys"];
+    [param setObject:_state forKey:@"authen"];
 //    NSLog(@"param====%@",param);
     [XLDataService putWithUrl:canseeURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        
+//         NSLog(@"param====%@",param);
         if (isRefresh) {
-            
-            [[ToolManager shareInstance] endHeaderWithRefreshing:self.tableView];
+            [[ToolManager shareInstance] endHeaderWithRefreshing:tabView];
         }
         if (isMoreLoadMoreData) {
-            [[ToolManager shareInstance] endFooterWithRefreshing:self.tableView];
+            [[ToolManager shareInstance] endFooterWithRefreshing:tabView];
         }
         
         if (dataObj) {
 //            NSLog(@"meetObj====%@",dataObj);
             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
-            if (_page ==1) {
-                [[ToolManager shareInstance] moreDataStatus:self.tableView];
+            if (page ==1) {
+                [[ToolManager shareInstance] moreDataStatus:tabView];
             }
             if (!modal.datas||modal.datas.count==0) {
                 
-                [[ToolManager shareInstance] noMoreDataStatus:self.tableView];
+                [[ToolManager shareInstance] noMoreDataStatus:tabView];
                 
             }
             
             if (modal.rtcode ==1) {
                 [[ToolManager shareInstance]dismiss];
                 if (isShouldClearData) {
-                    [self.allMeetArr removeAllObjects];
+                    [arr removeAllObjects];
                 }
                 for (MeetingData *data in modal.datas) {
-                    [self.allMeetArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andMessageBtn:YES andOprationBtn:NO andTime:NO andReward:NO]];
+                    [arr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:NO andMessageBtn:YES andOprationBtn:NO andTime:NO andReward:NO]];
                 }
-                [self.tableView reloadData];
+                [tabView reloadData];
             }
             else
             {
@@ -249,15 +400,26 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    MeetingCellLayout*layout =(MeetingCellLayout*)_allMeetArr[indexPath.row];
-    
-    return layout.cellHeight;
+    if (tableView==_authenTableView) {
+        MeetingCellLayout*layout =(MeetingCellLayout*)self.authenMeetArr[indexPath.row];
+        
+        return layout.cellHeight;
+    }else if (tableView==_noAuthenTableView) {
+        MeetingCellLayout*layout =(MeetingCellLayout*)self.noAuthenMeetArr[indexPath.row];
+        
+        return layout.cellHeight;
+    }
+    return 170;
     
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.allMeetArr.count;
+    if (tableView==_authenTableView) {
+        return self.authenMeetArr.count;
+    }else if (tableView==_noAuthenTableView) {
+        return self.noAuthenMeetArr.count;
+    }
+    return 0;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
@@ -275,7 +437,12 @@
         cell.backgroundColor=[UIColor clearColor];
         
     }
-    MeetingCellLayout *layout=self.allMeetArr[indexPath.row];
+    MeetingCellLayout *layout;
+    if (tableView==_authenTableView) {
+        layout=self.authenMeetArr[indexPath.row];
+    }else if(tableView==_noAuthenTableView){
+    layout=self.noAuthenMeetArr[indexPath.row];
+    }
     [cell setCellLayout:layout];
     [cell setIndexPath:indexPath];
     
@@ -312,11 +479,11 @@
     [[ToolManager shareInstance] showWithStatus];
     NSMutableDictionary *param=[Parameter parameterWithSessicon];
     [param setObject:@"connection_add" forKey:@"type"];
-    NSLog(@"param===%@",param);
+//    NSLog(@"param===%@",param);
     [XLDataService putWithUrl:connetionCheckedURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         if(dataObj){
       
-                            NSLog(@"dataobj===%@",dataObj);
+//                            NSLog(@"dataobj===%@",dataObj);
             if ([dataObj[@"rtcode"] intValue]==1) {
           [[ToolManager shareInstance] dismiss];
     CGFloat dilX = 25;
@@ -355,44 +522,51 @@
 #pragma mark - YXCustomAlertViewDelegate
 - (void) customAlertView:(AddConnectionView *) customAlertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    MeetingCellLayout *layout=self.allMeetArr[customAlertView.indexth.row];
+    MeetingCellLayout *layout;
+    if (_authenBtn.selected) {
+         layout=self.authenMeetArr[customAlertView.indexth.row];
+    }else if(_noAuthenBtn.selected){
+         layout=self.noAuthenMeetArr[customAlertView.indexth.row];
+    }
+   
     MeetingData *model=layout.model;
     if (buttonIndex==0) {
-        [[ToolManager shareInstance] showWithStatus];
-        NSMutableDictionary *param=[Parameter parameterWithSessicon];
-        [param setObject:model.userid forKey:@"beinvited"];
-        [XLDataService putWithUrl:addConnectionsURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-            if(dataObj){
-//                NSLog(@"dataobj===%@",dataObj);
-                MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
-                if (model.rtcode==1) {
-                    [[ToolManager shareInstance] showAlertMessage:@"添加人脉请求已发出,请耐心等待"];
-                    layout.model.relation=1;
-                    [self.allMeetArr replaceObjectAtIndex:customAlertView.indexth.row withObject:layout];
-                    [self.tableView reloadRowsAtIndexPaths: @[[NSIndexPath indexPathForRow:customAlertView.indexth.row inSection:0]] withRowAnimation:NO];
-                    
-                }else if (model.rtcode ==4005){
-                    [[ToolManager shareInstance]dismiss];
-                    
-                    UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"知脉君温馨提示" message:[NSString stringWithFormat:@"%@",model.rtmsg] delegate:self cancelButtonTitle:nil otherButtonTitles:@"再看看",@"马上开通", nil];
-                    alertView.tag=22223;
-                    alertView.delegate=self;
-                    [alertView show];
-                }
-                else
-                {
-                    [[ToolManager shareInstance] showAlertMessage:model.rtmsg];
-                }
-                
-            }else
-            {
-                [[ToolManager shareInstance] showInfoWithStatus];
-                
-            }
-            
-        }];
+//        [[ToolManager shareInstance] showWithStatus];
+//        NSMutableDictionary *param=[Parameter parameterWithSessicon];
+//        [param setObject:model.userid forKey:@"beinvited"];
+//        [XLDataService putWithUrl:addConnectionsURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+//            if(dataObj){
+////                NSLog(@"dataobj===%@",dataObj);
+//                MeetingModel *model=[MeetingModel mj_objectWithKeyValues:dataObj];
+//                if (model.rtcode==1) {
+//                    [[ToolManager shareInstance] showAlertMessage:@"添加人脉请求已发出,请耐心等待"];
+//                    layout.model.relation=1;
+//                    [self.allMeetArr replaceObjectAtIndex:customAlertView.indexth.row withObject:layout];
+//                    [self.tableView reloadRowsAtIndexPaths: @[[NSIndexPath indexPathForRow:customAlertView.indexth.row inSection:0]] withRowAnimation:NO];
+//                    
+//                }else if (model.rtcode ==4005){
+//                    [[ToolManager shareInstance]dismiss];
+//                    
+//                    UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"知脉君温馨提示" message:[NSString stringWithFormat:@"%@",model.rtmsg] delegate:self cancelButtonTitle:nil otherButtonTitles:@"再看看",@"马上开通", nil];
+//                    alertView.tag=22223;
+//                    alertView.delegate=self;
+//                    [alertView show];
+//                }
+//                else
+//                {
+//                    [[ToolManager shareInstance] showAlertMessage:model.rtmsg];
+//                }
+//                
+//            }else
+//            {
+//                [[ToolManager shareInstance] showInfoWithStatus];
+//                
+//            }
+//            
+//        }];
         [customAlertView dissMiss];
         customAlertView = nil;
+        
     }else
     {
         if ([customAlertView.money floatValue]>=1) {
@@ -407,7 +581,7 @@
             [customAlertView dissMiss];
             customAlertView = nil;
         }else{
-            [[ToolManager shareInstance] showAlertMessage:@"金额格式不正确,必须大等于1元"];
+            [[ToolManager shareInstance] showAlertMessage:@"金额格式不正确,最低1元"];
         }
        
         
@@ -427,6 +601,25 @@
             PushView(self, allocAndInit(VIPPrivilegeVC));
         }
     }
+}
+#pragma mark- scrollview代理方法
+/**
+ *  @param scrollView <#scrollView description#>
+ */
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    
+    CGPoint point = bottomScrV.contentOffset;
+    [UIView animateWithDuration:0.3f animations:^{
+        if ((int)point.x % (int)SCREEN_WIDTH == 0) {
+            if (point.x/SCREEN_WIDTH ==0&&_noAuthenBtn.selected) {
+                [self authenBtn:_authenBtn];
+            }else if(point.x/SCREEN_WIDTH ==1&&_authenBtn.selected) {
+                [self noAuthenBtn:_noAuthenBtn];
+            }
+                    }
+    }];
+    
 }
 -(void)tableViewCellDidSeleteHeadImg:(LWImageStorage *)imageStoragen layout:(MeetingCellLayout *)layout{
     MyDetialViewController *myDetialViewCT=allocAndInit(MyDetialViewController);
