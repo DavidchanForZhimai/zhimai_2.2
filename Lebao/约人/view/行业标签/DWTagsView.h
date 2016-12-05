@@ -8,12 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+
 @protocol DWTagsViewDelegate;
 
 @interface DWTagsView : UIView
 
-@property (strong, nonatomic) UICollectionView *collectionView;
 
+@property (strong, nonatomic) UICollectionView *collectionView;
+@property (nonatomic,copy) void(^reloadDataFinish)();
 @property (nonatomic) UIEdgeInsets contentInsets; //default is (10,10,10,10)
 
 @property (nonatomic) NSArray *tagsArray;   //数据源
@@ -76,5 +78,29 @@
 
 - (BOOL)tagsView:(DWTagsView *)tagsView shouldDeselectItemAtIndex:(NSUInteger)index;
 - (void)tagsView:(DWTagsView *)tagsView didDeSelectTagAtIndex:(NSUInteger)index;
+
+@end
+
+
+
+@interface DWTagModel : NSObject
+
+@property (strong, nonatomic) id name;
+@property (nonatomic) BOOL selected;
+//用于计算文字大小
+@property (strong, nonatomic) UIFont *font;
+
+@property (nonatomic, readonly) CGSize contentSize;
+
+- (instancetype)initWithName:(id)name font:(UIFont *)font;
+
+@end
+
+@interface DWTagCell : UICollectionViewCell
+
+@property (strong, nonatomic) UILabel *tagLabel;
+@property (strong, nonatomic) UILabel *countLabel;
+@property (nonatomic) DWTagModel *tagModel;
+@property (nonatomic) UIEdgeInsets contentInsets;
 
 @end

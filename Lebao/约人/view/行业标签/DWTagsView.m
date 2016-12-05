@@ -10,19 +10,6 @@
 
 static NSString * const kTagCellID = @"TagCellID";
 
-@interface DWTagModel : NSObject
-
-@property (strong, nonatomic) id name;
-@property (nonatomic) BOOL selected;
-//用于计算文字大小
-@property (strong, nonatomic) UIFont *font;
-
-@property (nonatomic, readonly) CGSize contentSize;
-
-- (instancetype)initWithName:(id)name font:(UIFont *)font;
-
-@end
-
 @implementation DWTagModel
 
 - (instancetype)initWithName:(id)name font:(UIFont *)font {
@@ -65,14 +52,7 @@ static NSString * const kTagCellID = @"TagCellID";
 
 @end
 
-@interface DWTagCell : UICollectionViewCell
 
-@property (strong, nonatomic) UILabel *tagLabel;
-@property (strong, nonatomic) UILabel *countLabel;
-@property (nonatomic) DWTagModel *tagModel;
-@property (nonatomic) UIEdgeInsets contentInsets;
-
-@end
 
 @implementation DWTagCell
 
@@ -450,6 +430,11 @@ static NSString * const kTagCellID = @"TagCellID";
     return self.tagModels.count;
 }
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    //reloaddata后 刷新
+    if (_reloadDataFinish) {
+        _reloadDataFinish();
+    }
+    
     DWTagCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kTagCellID forIndexPath:indexPath];
     
     DWTagModel *tagModel = self.tagModels[indexPath.row];
@@ -472,6 +457,7 @@ static NSString * const kTagCellID = @"TagCellID";
     cell.layer.borderWidth = self.tagBorderWidth;
     [self setCell:cell selected:tagModel.selected];
     
+    NSLog(@"222222");
     return cell;
 }
 

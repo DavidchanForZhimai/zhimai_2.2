@@ -21,6 +21,8 @@
 @interface AddIndustryViewController ()<DWTagsViewDelegate>
 {
     UIScrollView *scrView;
+    //选中类别的索引
+    NSUInteger seletedClassIndex;
 }
 
 @property(nonatomic,strong)NSMutableArray *hasTags;//已关注标签
@@ -91,7 +93,6 @@
 }
 - (void)setData:(id)data
 {
-   
     NSMutableArray *industryDic= data[@"industry_label"];
     industrys = [NSMutableArray arrayWithArray:data[@"industrys"]];
     NSArray *focus_industrys;
@@ -106,7 +107,9 @@
             [self.industry_label  addObject:value];
             [self.newsClassTagsView addTag:value[@"name"]];
             [self.classNewsTags addObject:value[@"code"]];
+           
         }
+       
     }
     //默认选择
     if (self.classNewsTags.count>0) {
@@ -114,7 +117,14 @@
         [self tagsView:self.newsClassTagsView didSelectTagAtIndex:0];
 
     }
-    
+    //默认已选行业类别加颜色
+    seletedClassIndex = 0;
+    __weak  typeof(self) weakself = self;
+    self.newsClassTagsView.reloadDataFinish = ^
+    {
+        [weakself hasClassSelected];
+    };
+
     scrView=[[UIScrollView alloc]init];
     scrView.frame=CGRectMake(0,NavigationBarHeight+StatusBarHeight, APPWIDTH, APPHEIGHT-(NavigationBarHeight+StatusBarHeight));
     scrView.contentSize=CGSizeMake(0, CGRectGetMaxY(self.newsTagsView.frame));
@@ -296,6 +306,7 @@
     
     else
     {
+         seletedClassIndex = index;
         
         _saveIndustry_label = nil;
         [self.newsTags removeAllObjects];
@@ -328,9 +339,8 @@
         
     }
     
-    
     [self resetFrame];
-    
+    [self hasClassSelected];
 }
 - (BOOL)tagsView:(DWTagsView *)tagsView shouldSelectTagAtIndex:(NSUInteger)index
 {
@@ -360,6 +370,7 @@
             return;
         }
     }
+    [self hasClassSelected];
     
 }
 - (BOOL)tagsView:(DWTagsView *)tagsView shouldDeselectItemAtIndex:(NSUInteger)index
@@ -375,6 +386,26 @@
 {
     PopView(self);
 }
+#pragma mark
+#pragma mark 判断是否选的行业类别
+- (void)hasClassSelected
+{
+    for (int i = 0; i<self.classNewsTags.count; i++) {
+        DWTagCell *cell =(DWTagCell *) [self.newsClassTagsView.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+        cell.tagLabel.textColor = BlackTitleColor;
+        for (NSString *hasfix in self.hasTags) {
+            if ([hasfix hasPrefix:self.classNewsTags[i]]) {
+                cell.tagLabel.textColor = AppMainColor;
+            }
+        }
+        if (i==seletedClassIndex) {
+            cell.tagLabel.textColor = WhiteColor;
+        }
+        
+    }
+
+}
+
 #pragma mark
 #pragma mark  setframe
 - (void)resetFrame
