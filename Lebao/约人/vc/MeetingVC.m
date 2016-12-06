@@ -149,9 +149,9 @@
 {
     [[LoCationManager shareInstance] creatLocationManager:self callBackLocation:^(CLLocationCoordinate2D location) {
         //            测试用,要删掉
-        //                            CLLocationCoordinate2D location;
-        //                            location.latitude=24.491534;
-        //                            location.longitude=118.180851;
+//                                    CLLocationCoordinate2D location;
+//                                    location.latitude=24.491534;
+//                                    location.longitude=118.180851;
         if (location.latitude<=0&&location.longitude<=0) {
             if (isRefresh) {
                 [[ToolManager shareInstance] endHeaderWithRefreshing:_yrTab];
@@ -164,6 +164,7 @@
         if (self.nearByManArr.count==0) {
             [[ToolManager shareInstance] showWithStatus];
         }
+    
         NSMutableDictionary *param = [Parameter parameterWithSessicon];
         [param setObject:[NSString stringWithFormat:@"%.6f",location.latitude] forKey:@"latitude"];
         [param setObject:[NSString stringWithFormat:@"%.6f",location.longitude] forKey:@"longitude"];
@@ -178,8 +179,12 @@
                 [[ToolManager shareInstance] endFooterWithRefreshing:_yrTab];
             }
             if (dataObj) {
-                //         NSLog(@"meetObj====%@",dataObj);
+                         NSLog(@"meetObj====%@",dataObj);
                 MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
+                
+                
+                
+                
                 if (_page ==1) {
                     [[ToolManager shareInstance] moreDataStatus:_yrTab];
                 }
@@ -192,8 +197,10 @@
                         [self.nearByManArr removeAllObjects];
                     }
                     for (MeetingData *data in modal.datas) {
-                        data.isSelf = [data.userid  isEqualToString:modal.userid];
-                        [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andMessageBtn:NO andOprationBtn:NO andTime:YES andReward:NO]];
+                            if (![self.nearByManArr containsObject:data]) {
+                                data.isSelf = [data.userid  isEqualToString:modal.userid];
+                                 [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andMessageBtn:NO andOprationBtn:NO andTime:YES andReward:NO]];
+                            }
                     }
                     _headView.nearManLab.text=[NSString stringWithFormat:@"附近可约 %d人",modal.count];
                     [_yrTab reloadData];
@@ -265,18 +272,22 @@
                 }];
             }else if (modal.rtcode ==4002){
                 if (message) {
-                    UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"去身份认证吗?" message:modal.rtmsg delegate:self cancelButtonTitle:nil otherButtonTitles:@"不去",@"走起", nil];
-                    alertView.tag=22221;
-                    alertView.delegate=self;
-                    [alertView show];
+                    UIAlertController *alertC=[UIAlertController  alertControllerWithTitle:@"去身份认证吗?" message:modal.rtmsg preferredStyle:UIAlertControllerStyleAlert];
+                    [alertC addAction:[UIAlertAction actionWithTitle:@"走起" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                        PushView(self, allocAndInit(AuthenticationHomeViewController));
+                    }]];
+                    [alertC addAction:[UIAlertAction actionWithTitle:@"不去" style:UIAlertActionStyleCancel handler:nil]];
+                    [self.navigationController presentViewController:alertC animated:YES completion:nil];
                 }
             }
             else if (modal.rtcode ==4001){
                 if (message) {
-                    UIAlertView *alertView=[[UIAlertView alloc]initWithTitle:@"去完善资料吗?" message:[NSString stringWithFormat:@"完善资料后才能约见他人哦\n(%@)",modal.rtmsg] delegate:self cancelButtonTitle:nil otherButtonTitles:@"不去",@"走起", nil];
-                    alertView.tag=22222;
-                    alertView.delegate=self;
-                    [alertView show];
+                    UIAlertController *alertC=[UIAlertController  alertControllerWithTitle:@"去完善资料吗?" message:[NSString stringWithFormat:@"完善资料后才能约见他人哦\n(%@)",modal.rtmsg] preferredStyle:UIAlertControllerStyleAlert];
+                    [alertC addAction:[UIAlertAction actionWithTitle:@"走起" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                        PushView(self, allocAndInit(BasicInformationViewController));
+                    }]];
+                    [alertC addAction:[UIAlertAction actionWithTitle:@"不去" style:UIAlertActionStyleCancel handler:nil]];
+                    [self.navigationController presentViewController:alertC animated:YES completion:nil];
                 }
             }
         }
