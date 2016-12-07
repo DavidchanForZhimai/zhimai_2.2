@@ -12,6 +12,7 @@
 @implementation D3RecordButton
 
 -(void)initRecord:(id<D3RecordDelegate>)delegate maxtime:(int)_maxTime title:(NSString *)_title{
+    
     self.delegate = delegate;
     maxTime = _maxTime;
     title = _title;
@@ -37,13 +38,12 @@
     
     if (avSession && [avSession respondsToSelector:@selector(requestRecordPermission:)]) {
         
-        __block BOOL isPermission;
+        __block BOOL isPermission =NO;
         
         [avSession requestRecordPermission:^(BOOL granted) {
             
             if (!granted) {
-                
-                UIAlertView *alertV= [[UIAlertView alloc] initWithTitle:@"无法打开照片" message:@"请在“请在“设置-隐私-麦克风”选项中允许知脉访问您的麦克风" delegate:self cancelButtonTitle:nil otherButtonTitles:@"取消",@"设置",nil];
+                UIAlertView *alertV= [[UIAlertView alloc] initWithTitle:@"无法打开麦克风" message:@"请在“请在“设置-隐私-麦克风”选项中允许知脉访问您的麦克风" delegate:self cancelButtonTitle:nil otherButtonTitles:@"取消",@"设置",nil];
                 alertV.tag=333;
                 [alertV show];
                 return ;
@@ -146,7 +146,9 @@
             NSURL *url = [NSURL URLWithString:@"prefs:root=Privacy&path=MICROPHONE"];
             if ([[UIApplication sharedApplication] canOpenURL:url])
             {
+                
                 [[UIApplication sharedApplication] openURL:url];
+                
             }
         }
     }

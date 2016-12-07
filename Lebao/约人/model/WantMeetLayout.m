@@ -138,7 +138,7 @@
             LWTextStorage *meetReason=[[LWTextStorage alloc]init];
             meetReason.text=model.remark;
             meetReason.font=Size(26.0);
-            meetReason.frame=CGRectMake(meetReasonTextStorage.right+10, _line1Rect.origin.y+10, [meetReason.text sizeWithFont:[UIFont systemFontOfSize:13] maxSize:CGSizeMake(APPWIDTH,13)].width+5, CGFLOAT_MAX);
+            meetReason.frame=CGRectMake(meetReasonTextStorage.right+10, _line1Rect.origin.y+10, [meetReason.text sizeWithFont:[UIFont systemFontOfSize:13] maxSize:CGSizeMake(APPWIDTH-meetReasonTextStorage.right-10,13)].width+5, CGFLOAT_MAX);
             meetReason.textColor = [UIColor colorWithRed:0.522 green:0.525 blue:0.529 alpha:1.000];
             meetReasonStorageheight = meetReason.bottom;
             [self addStorage:meetReason];

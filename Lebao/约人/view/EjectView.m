@@ -357,7 +357,8 @@
 }
 #pragma mark - 播放器代理方法
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
-{   NSLog(@"播放完成!");
+{
+//    NSLog(@"播放完成!");
     
     audioBtn.tag=12;
     [audioBtn setImage:[UIImage imageNamed:@"yuejian_luyinhou"] forState:UIControlStateNormal];
