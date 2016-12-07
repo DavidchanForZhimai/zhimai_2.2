@@ -34,6 +34,7 @@
 @property (nonatomic,strong)NSMutableArray *nearByManArr;
 @property (nonatomic,strong)NSMutableArray *headimgArr;
 @property (nonatomic,strong)NSMutableArray *headUserIdArr;
+@property (nonatomic,strong)NSMutableArray *nearByManUserIdArr;
 @property (nonatomic,assign)BOOL isopen;//是否给未认证提醒
 @end
 @implementation MeetingVC
@@ -70,6 +71,12 @@
         _nearByManArr=[[NSMutableArray alloc]init];
     }
     return _nearByManArr;
+}
+-(NSMutableArray *)nearByManUserIdArr{
+    if (!_nearByManUserIdArr) {
+        _nearByManUserIdArr=[[NSMutableArray alloc]init];
+    }
+    return _nearByManUserIdArr;
 }
 -(NSMutableArray *)headimgArr
 {
@@ -195,10 +202,12 @@
                     [[ToolManager shareInstance] dismiss];
                     if (isShouldClearData) {
                         [self.nearByManArr removeAllObjects];
+                        [self.nearByManUserIdArr removeAllObjects];
                     }
                     for (MeetingData *data in modal.datas) {
-                            if (![self.nearByManArr containsObject:data]) {
+                            if (![self.nearByManUserIdArr containsObject:data.userid]) {
                                 data.isSelf = [data.userid  isEqualToString:modal.userid];
+                                [self.nearByManUserIdArr addObject:data.userid];
                                  [self.nearByManArr addObject:[[MeetingCellLayout alloc]initCellLayoutWithModel:data andMeetBtn:YES andMessageBtn:NO andOprationBtn:NO andTime:YES andReward:NO]];
                             }
                     }
