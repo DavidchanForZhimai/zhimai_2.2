@@ -49,7 +49,7 @@
     [self navViewTitleAndBackBtn:self.title rightBtn:_rightBtn];
     // 进度条
     UIProgressView *progressView = [[UIProgressView alloc] initWithFrame:CGRectMake(0,StatusBarHeight + NavigationBarHeight -2, self.view.frame.size.width, 0)];
-    progressView.tintColor = hexColor(3cb8b6);
+    progressView.tintColor = AppMainColor;
     progressView.trackTintColor =WhiteColor;
     [self.view addSubview:progressView];
     self.progressView = progressView;
@@ -63,6 +63,8 @@
         [self.view addSubview:wkWebView];
         
         [wkWebView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:nil];
+        
+        [wkWebView addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew context:NULL];
         NSURLRequest *request = [NSURLRequest requestWithURL:_homeUrl];
         [wkWebView loadRequest:request];
         self.wkWebView = wkWebView;
@@ -194,7 +196,7 @@
 
 // 如果不添加这个，那么wkwebview跳转不了AppStore
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
-    
+
     if ([webView.URL.absoluteString hasPrefix:@"https://itunes.apple.com"]) {
         [[UIApplication sharedApplication] openURL:navigationAction.request.URL];
         decisionHandler(WKNavigationActionPolicyCancel);
@@ -215,12 +217,27 @@
             [self.progressView setProgress:newprogress animated:YES];
         }
     }
+    else if ([keyPath isEqualToString:@"title"])
+    {
+        if (object == self.webView) {
+        
+            
+        }
+        else
+        {
+            
+            self.navTitle.text = [change objectForKey:NSKeyValueChangeNewKey];
+      
+        }
+    }
+    
 }
 
 // 记得取消监听
 - (void)dealloc {
     if (ios8x) {
         [self.wkWebView removeObserver:self forKeyPath:@"estimatedProgress"];
+        [self.wkWebView removeObserver:self forKeyPath:@"title"];
     }
 }
 
@@ -244,10 +261,16 @@
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView {
+    
     self.loadCount ++;
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
+   
+    if (!self.title||self.title.length==0) {
+        self.title = [webView stringByEvaluatingJavaScriptFromString:@"document.title"];
+    }
+    
     self.loadCount --;
 }
 

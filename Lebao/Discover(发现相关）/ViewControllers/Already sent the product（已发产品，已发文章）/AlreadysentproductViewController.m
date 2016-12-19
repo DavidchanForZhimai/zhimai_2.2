@@ -21,7 +21,7 @@
 #define ArticleDelURL [NSString stringWithFormat:@"%@release/del",HttpURL]
 
 #define DynamicWriteURL [NSString stringWithFormat:@"%@dynamic/write",HttpURL]
-#define cellH 114
+#define cellH 115
 @interface AlreadysentproductViewController ()<UITableViewDataSource,UITableViewDelegate>
 
 @end
@@ -38,7 +38,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self navViewTitleAndBackBtn:@"已发文章"];
+    
+    [self navViewTitleAndBackBtn:_isRedActicleAddPush?@"设置红包文章":@"我的文章"];
+    
     _page =1;
     [self addTableView];
     [self netWork:NO isFooter:NO isShouldClear:NO];
@@ -128,16 +130,6 @@
                 [[ToolManager shareInstance] showInfoWithStatus:modal.rtmsg];
             }
             
-            
-            if (_productArray.count==0) {
-                [self isShowEmptyStatus:YES];
-            }
-            else
-            {
-                [self isShowEmptyStatus:NO];
-                
-            }
-            
             [_productView reloadData];
         }
         else
@@ -166,8 +158,10 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    
-    return 10.0f;
+    if (section==0) {
+        return 10;
+    }
+    return _isRedActicleAddPush?0.01:10.0;
 }
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
@@ -186,8 +180,8 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    return cellH;
+   
+    return _isRedActicleAddPush?75:cellH;
     
     
 }
@@ -197,7 +191,7 @@
     static NSString *cellID =@"MyContentsArticleCell";
     MyContentsArticleCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
     if (!cell) {
-        cell = [[MyContentsArticleCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID cellHeight:cellH cellWidth:frameWidth(_productView)];
+        cell = [[MyContentsArticleCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID cellHeight:_isRedActicleAddPush?75:cellH cellWidth:frameWidth(_productView) isRedAdd:_isRedActicleAddPush];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
     }

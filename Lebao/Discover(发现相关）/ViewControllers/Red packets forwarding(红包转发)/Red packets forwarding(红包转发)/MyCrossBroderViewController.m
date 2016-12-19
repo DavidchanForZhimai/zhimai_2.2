@@ -44,9 +44,9 @@
 #pragma mark - main_view
 - (void)mainview{
     
-    _hasEarnMoney = [[BaseButton alloc]initWithFrame:frame(0, NavigationBarHeight + StatusBarHeight, APPWIDTH/tabsTotal, tabsHeight) setTitle:@"已赚00.00元" titleSize:28*SpacedFonts titleColor:[UIColor redColor] backgroundImage:nil iconImage:[UIImage imageNamed:@"me_mycross_icon_hasreward_press"] highlightImage:[UIImage imageNamed:@"me_mycross_icon_hasreward_normal"] setTitleOrgin:CGPointMake(12,(APPWIDTH/tabsTotal - 12 - 6*24*SpacedFonts)/2.0 + 3 ) setImageOrgin:CGPointMake(12,(APPWIDTH/tabsTotal - 12 - 6*24*SpacedFonts)/2.0 ) inView:self.view];
+    _hasEarnMoney = [[BaseButton alloc]initWithFrame:frame(0, NavigationBarHeight + StatusBarHeight, APPWIDTH/tabsTotal, tabsHeight) setTitle:@"已赚00.00元" titleSize:28*SpacedFonts titleColor:AppMainColor backgroundImage:nil iconImage:[UIImage imageNamed:@"me_mycross_icon_hasreward_press"] highlightImage:[UIImage imageNamed:@"me_mycross_icon_hasreward_normal"] setTitleOrgin:CGPointMake(12,(APPWIDTH/tabsTotal - 12 - 6*24*SpacedFonts)/2.0 + 5 ) setImageOrgin:CGPointMake(12,(APPWIDTH/tabsTotal - 12 - 6*24*SpacedFonts)/2.0 ) inView:self.view];
  
-    _hasReward = [[BaseButton alloc]initWithFrame:frame(APPWIDTH/tabsTotal, NavigationBarHeight + StatusBarHeight, APPWIDTH/tabsTotal, tabsHeight) setTitle:@"已发00.00元" titleSize:28*SpacedFonts titleColor:BlackTitleColor backgroundImage:nil iconImage:[UIImage imageNamed:@"me_mycross_icon_hasfa_normal"] highlightImage: [UIImage imageNamed:@"me_mycross_icon_hasfa_press"]setTitleOrgin:CGPointMake(12,(APPWIDTH/tabsTotal - 12 - 6*24*SpacedFonts)/2.0 + 3 ) setImageOrgin:CGPointMake(12,(APPWIDTH/tabsTotal - 12 - 6*24*SpacedFonts)/2.0 ) inView:self.view];
+    _hasReward = [[BaseButton alloc]initWithFrame:frame(APPWIDTH/tabsTotal, NavigationBarHeight + StatusBarHeight, APPWIDTH/tabsTotal, tabsHeight) setTitle:@"已发00.00元" titleSize:28*SpacedFonts titleColor:hexColor(838383) backgroundImage:nil iconImage:[UIImage imageNamed:@"me_mycross_icon_hasfa_normal"] highlightImage: [UIImage imageNamed:@"me_mycross_icon_hasfa_press"]setTitleOrgin:CGPointMake(12,(APPWIDTH/tabsTotal - 12 - 6*24*SpacedFonts)/2.0 + 3 ) setImageOrgin:CGPointMake(12,(APPWIDTH/tabsTotal - 12 - 6*24*SpacedFonts)/2.0 ) inView:self.view];
     
      _hasReward.backgroundColor = _hasEarnMoney.backgroundColor =[UIColor whiteColor];
     
@@ -62,10 +62,7 @@
    _hasEarnMoneyView = [[MyCrossBroderView alloc]initWithFrame:frame(0, 0, APPWIDTH, frameHeight(_mainScrollView)) selectedIndex:0 moneyBlock:^(NSString *rewardreleasesum,NSString *rewardforwardsum) {
 //       NSLog(@"str =%@",rewardreleasesum);
        [weakSelf.hasEarnMoney setTitle:[NSString stringWithFormat:@"已赚%@元",rewardforwardsum] forState:UIControlStateNormal];
-       CGSize size = [weakSelf.hasReward.titleLabel.text sizeWithFont:Size(28) maxSize:CGSizeMake(APPWIDTH - 20, 28*SpacedFonts)];
-       weakSelf.hasEarnMoney.imagePoint = CGPointMake(12,(APPWIDTH/tabsTotal - 12 -size.width)/2.0 );
-       weakSelf.hasEarnMoney.titlePoint = CGPointMake(12,(APPWIDTH/tabsTotal - 12 -size.width)/2.0 + 3 );
-       
+       [_hasEarnMoney textAndImageCenter];
     } didCellBlock:^(MyCrossBroderRelease *myCrossBroderRelease,MyCrossBroderRewardforwards*myCrossBroderRewardforwards,MyCrossBroderCell *cell){
         
         if ([myCrossBroderRewardforwards.actype isEqualToString:@"article"]) {
@@ -103,9 +100,8 @@
         
         [weakSelf.hasReward setTitle:[NSString stringWithFormat:@"已发%@元",rewardreleasesum] forState:UIControlStateNormal];
         
-        CGSize size = [weakSelf.hasEarnMoney.titleLabel.text sizeWithFont:Size(28) maxSize:CGSizeMake(APPWIDTH - 20, 28*SpacedFonts)];
-        weakSelf.hasReward.imagePoint = CGPointMake(12,(APPWIDTH/tabsTotal - 12 -size.width)/2.0 );
-        weakSelf.hasReward.titlePoint = CGPointMake(12,(APPWIDTH/tabsTotal - 12 -size.width)/2.0 + 3 );
+        [_hasReward textAndImageCenter];
+      
 
         
     } didCellBlock:^(MyCrossBroderRelease *myCrossBroderRelease,MyCrossBroderRewardforwards*myCrossBroderRewardforwards,MyCrossBroderCell *cell){
@@ -143,8 +139,6 @@
     [_mainScrollView addSubview:_hasRewardView];
     
     
-    
-
     _hasEarnMoney.didClickBtnBlock = ^
     {
         [weakSelf.hasEarnMoney setImage:[UIImage imageNamed:@"me_mycross_icon_hasreward_press"] forState:UIControlStateNormal];
@@ -152,10 +146,10 @@
         [weakSelf.hasReward setImage:[UIImage imageNamed:@"me_mycross_icon_hasfa_normal"] forState:UIControlStateNormal];
         [weakSelf.hasReward setImage:[UIImage imageNamed:@"me_mycross_icon_hasfa_press"] forState:UIControlStateHighlighted];
         
-        [weakSelf.hasEarnMoney setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-        [weakSelf.hasEarnMoney setTitleColor:BlackTitleColor forState:UIControlStateHighlighted];
-        [weakSelf.hasReward setTitleColor:BlackTitleColor forState:UIControlStateNormal];
-        [weakSelf.hasReward setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
+        [weakSelf.hasEarnMoney setTitleColor:AppMainColor forState:UIControlStateNormal];
+        [weakSelf.hasEarnMoney setTitleColor:hexColor(838383) forState:UIControlStateHighlighted];
+        [weakSelf.hasReward setTitleColor:hexColor(838383) forState:UIControlStateNormal];
+        [weakSelf.hasReward setTitleColor:AppMainColor forState:UIControlStateHighlighted];
         
         [weakSelf.mainScrollView scrollRectToVisible:frame(0, frameX(weakSelf.mainScrollView), frameWidth(weakSelf.mainScrollView), frameHeight(weakSelf.mainScrollView)) animated:YES];
         
@@ -167,12 +161,15 @@
         [weakSelf.hasReward setImage:[UIImage imageNamed:@"me_mycross_icon_hasfa_press"] forState:UIControlStateNormal];
         [weakSelf.hasReward setImage:[UIImage imageNamed:@"me_mycross_icon_hasfa_normal"] forState:UIControlStateHighlighted];
         
-        [weakSelf.hasEarnMoney setTitleColor:BlackTitleColor forState:UIControlStateNormal];
-        [weakSelf.hasEarnMoney setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
-        [weakSelf.hasReward setTitleColor:[UIColor redColor]forState:UIControlStateNormal];
-        [weakSelf.hasReward setTitleColor:BlackTitleColor forState:UIControlStateHighlighted];
+        [weakSelf.hasEarnMoney setTitleColor:hexColor(838383) forState:UIControlStateNormal];
+        [weakSelf.hasEarnMoney setTitleColor:AppMainColor forState:UIControlStateHighlighted];
+        [weakSelf.hasReward setTitleColor:AppMainColor forState:UIControlStateNormal];
+        [weakSelf.hasReward setTitleColor:hexColor(838383) forState:UIControlStateHighlighted];
         [weakSelf.mainScrollView scrollRectToVisible:frame(APPWIDTH, frameX(weakSelf.mainScrollView), frameWidth(weakSelf.mainScrollView), frameHeight(weakSelf.mainScrollView)) animated:YES];
     };
+    UIView *line =[[UIView alloc]initWithFrame:CGRectMake(APPWIDTH/2.0,_hasEarnMoney.y ,0.5, _hasEarnMoney.height)];
+    line.backgroundColor = AppViewBGColor;
+    [self.view addSubview:line];
 }
 #pragma mark UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -183,10 +180,10 @@
         [self.hasReward setImage:[UIImage imageNamed:@"me_mycross_icon_hasfa_normal"] forState:UIControlStateNormal];
         [self.hasReward setImage:[UIImage imageNamed:@"me_mycross_icon_hasfa_press"] forState:UIControlStateHighlighted];
         
-        [self.hasEarnMoney setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-        [self.hasEarnMoney setTitleColor:BlackTitleColor forState:UIControlStateHighlighted];
-        [self.hasReward setTitleColor:BlackTitleColor forState:UIControlStateNormal];
-        [self.hasReward setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
+        [self.hasEarnMoney setTitleColor:AppMainColor forState:UIControlStateNormal];
+        [self.hasEarnMoney setTitleColor:hexColor(838383) forState:UIControlStateHighlighted];
+        [self.hasReward setTitleColor:hexColor(838383) forState:UIControlStateNormal];
+        [self.hasReward setTitleColor:AppMainColor  forState:UIControlStateHighlighted];
         
     }
     else if (scrollView.contentOffset.x/APPWIDTH ==1) {
@@ -195,11 +192,13 @@
         [self.hasReward setImage:[UIImage imageNamed:@"me_mycross_icon_hasfa_press"] forState:UIControlStateNormal];
         [self.hasReward setImage:[UIImage imageNamed:@"me_mycross_icon_hasfa_normal"] forState:UIControlStateHighlighted];
         
-        [self.hasEarnMoney setTitleColor:BlackTitleColor forState:UIControlStateNormal];
-        [self.hasEarnMoney setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
-        [self.hasReward setTitleColor:[UIColor redColor]forState:UIControlStateNormal];
-        [self.hasReward setTitleColor:BlackTitleColor forState:UIControlStateHighlighted];
+        [self.hasEarnMoney setTitleColor:hexColor(838383) forState:UIControlStateNormal];
+        [self.hasEarnMoney setTitleColor:AppMainColor forState:UIControlStateHighlighted];
+        [self.hasReward setTitleColor:AppMainColor forState:UIControlStateNormal];
+        [self.hasReward setTitleColor:hexColor(838383) forState:UIControlStateHighlighted];
     }
+    
+    
     
 }
 #pragma mark

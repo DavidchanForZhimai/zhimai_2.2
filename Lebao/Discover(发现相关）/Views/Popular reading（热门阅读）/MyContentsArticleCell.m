@@ -18,17 +18,14 @@
  
     DWLable *_descrip;
     UILabel *_time;
-    UILabel      *_clueNum;
-    UILabel      *_readsNum;
-    
-    
-    UIButton   *_shareImage;
+
+    BaseButton *_browse;
     BaseButton *_pathBtn;
     BaseButton *_editBtn;
-    BaseButton *_shareBtn;
+    BaseButton *_read;
 }
 
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier cellHeight:(float)cellHeight cellWidth:(float)cellWidth
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier cellHeight:(float)cellHeight cellWidth:(float)cellWidth isRedAdd:(BOOL)isRedAdd
 {
     self  = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
@@ -38,64 +35,61 @@
         cell.backgroundColor = WhiteColor;
         [self addSubview:cell];
         
-        _icon = allocAndInitWithFrame(UIImageView, frame(10, (78 - 60)/2.0, 65, 60));
+        _icon = allocAndInitWithFrame(UIImageView, frame(10, 10, 76, 56));
         _icon.contentMode =ViewContentMode;
-        [_icon setRadius:5.0];
         [cell addSubview:_icon];
         
         
-        _descrip = [DWLable createLabelWithFrame:frame(CGRectGetMaxX(_icon.frame) + 6, frameY(_icon), cellWidth - (CGRectGetMaxX(_icon.frame) + 18), 48.0*SpacedFonts+5) text:@"" fontSize:24.0*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentLeft inView:cell];
+        _descrip = [DWLable createLabelWithFrame:frame(CGRectGetMaxX(_icon.frame) + 6, frameY(_icon), cellWidth - (CGRectGetMaxX(_icon.frame) + 18), 56.0*SpacedFonts+10) text:@"" fontSize:28.0*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentLeft inView:cell];
         _descrip.numberOfLines = 0;
         _descrip.verticalAlignment = VerticalAlignmentTop;
         
         
-        _time = [UILabel createLabelWithFrame:frame(frameX(_descrip), cellHeight -66, 150*SpacedFonts, 20*SpacedFonts) text:@"2015- 11- 19" fontSize:20*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:cell];
-        CGSize sizeTime = [_time sizeWithContent:_time.text font:[UIFont systemFontOfSize:20*SpacedFonts]];
+        _time = [UILabel createLabelWithFrame:frame(frameX(_descrip), CGRectGetMaxY(_icon.frame) - 20*SpacedFonts , 150*SpacedFonts, 22*SpacedFonts) text:@"2015- 11- 19" fontSize:22*SpacedFonts textColor:hexColor(c9c9c9) textAlignment:NSTextAlignmentLeft inView:cell];
+        CGSize sizeTime = [_time sizeWithContent:_time.text font:[UIFont systemFontOfSize:22*SpacedFonts]];
         _time.frame = frame(frameX(_time), frameY(_time), sizeTime.width, frameHeight(_time));
         
-        UIImage *readImage =[UIImage imageNamed:@"icon_exhibition_mycontent_read"];
-        
-        _readsNum =[UILabel createLabelWithFrame:CGRectZero text:@"158人" fontSize:18.0*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:self];
-        CGSize size2 = [_readsNum sizeWithContent:_readsNum.text font:[UIFont systemFontOfSize:18.0*SpacedFonts]];
-        _readsNum.frame =frame(cellWidth -size2.width - 10, frameY(_time), size2.width, 20.0*SpacedFonts);
-        
-        UIImageView *readImageView = allocAndInitWithFrame(UIImageView, frame(frameX(_readsNum) - 5 - 16, frameY(_readsNum) - (16 - frameHeight(_readsNum))/2.0, 16, 16));
-        readImageView.image = readImage;
-        [cell addSubview:readImageView];
-
         
         //line
-        [UILabel CreateLineFrame:frame(0,78, cellWidth, 0) inView:cell];
+        UIView *line = [[UIView alloc]initWithFrame:CGRectMake(0, 74.5, cellWidth, 0.5)];
+        line.backgroundColor = AppViewBGColor;
+        [cell addSubview:line];
         
-        UIImage *_path = [UIImage imageNamed:@"icon_exhibition_mycontent_path_normal"];
-        UIImage *_pathPress = [UIImage imageNamed:@"icon_exhibition_mycontent_path_press"];
-        UIImage *_share = [UIImage imageNamed:@"discover_clue_normal"];
-        UIImage *_sharePress = [UIImage imageNamed:@"discover_clue_selected"];
-        UIImage *_edit = [UIImage imageNamed:@"iconfont-shezhi"];
-       
-
-        //路径
+        if (!isRedAdd) {
+            UIImage *_collectionImage =[UIImage imageNamed:@"exhibition_home_zhuanfa"];
+            
+            _browse = [[BaseButton alloc]initWithFrame:frame(_descrip.x, CGRectGetMaxY(_icon.frame) - _collectionImage.size.height, (cellWidth - CGRectGetMaxX(_icon.frame))/3.0, _collectionImage.size.height)  setTitle:@"22" titleSize:22*SpacedFonts titleColor:hexColor(c9c9c9) backgroundImage:nil iconImage:_collectionImage highlightImage:nil setTitleOrgin:CGPointMake(0,5) setImageOrgin:CGPointMake(0,0)  inView:self];
+            _browse.shouldAnmial = NO;
+            
         
-        _pathBtn = [[BaseButton alloc]initWithFrame:frame(0, 78, cellWidth/3.0, cellHeight - 78)backgroundImage:nil iconImage:_path highlightImage:_pathPress inView:self];
-        _pathBtn.exclusiveTouch = YES;
+            UIImage *_readIamge =[UIImage imageNamed:@"exhibition_home_yuedu"];
+            
+            _read = [[BaseButton alloc]initWithFrame:frame(CGRectGetMaxX(_browse.frame) , frameY(_browse), _browse.width, _collectionImage.size.height)  setTitle:@"22" titleSize:22*SpacedFonts titleColor:hexColor(c9c9c9) backgroundImage:nil iconImage:_readIamge highlightImage:nil setTitleOrgin:CGPointMake(0,5) setImageOrgin:CGPointMake(0,0)  inView:self];
+            _read.shouldAnmial = NO;
+            
+             _time.frame = frame(cellWidth -sizeTime.width - 10 , frameY(_time), sizeTime.width, frameHeight(_time));
+            _time.textAlignment = NSTextAlignmentRight;
         
-        UILabel *line1 =allocAndInitWithFrame(UILabel, frame(CGRectGetMaxX(_pathBtn.frame), frameY(_pathBtn) + 7, 0.5,frameHeight(_pathBtn) -14 ));
-        line1.backgroundColor = LineBg;
-        [cell addSubview:line1];
+            UIImage *_path = [UIImage imageNamed:@"icon_exhibition_mycontent_path_normal"];
+            UIImage *_edit = [UIImage imageNamed:@"icon_exhibition_mycontent_shezhi"];
+            
+            //路径
+            
+            _pathBtn = [[BaseButton alloc]initWithFrame:frame(0, 75, cellWidth/2.0, cellHeight - 75) setTitle:@"路径设置" titleSize:14 titleColor:hexColor(838383) backgroundImage:nil iconImage:_path highlightImage:_path setTitleOrgin:CGPointMake(0,8) setImageOrgin:CGPointMake(0,0) inView:self];
+            _pathBtn.exclusiveTouch = YES;
+            
+            UILabel *line1 =allocAndInitWithFrame(UILabel, frame(APPWIDTH/2.0, frameY(_pathBtn) + 3, 0.5,frameHeight(_pathBtn) -6 ));
+            line1.backgroundColor = AppViewBGColor;
+            [cell addSubview:line1];
+            
+            //编辑
+            
+            _editBtn = [[BaseButton alloc]initWithFrame:frame(APPWIDTH/2.0, frameY(_pathBtn),frameWidth(_pathBtn), frameHeight(_pathBtn)) setTitle:@"设置" titleSize:14 titleColor:hexColor(838383) backgroundImage:nil iconImage:_edit highlightImage:_edit setTitleOrgin:CGPointMake(0,8) setImageOrgin:CGPointMake(0,0) inView:self];
+            _editBtn.exclusiveTouch = YES;
+            [_pathBtn textAndImageCenter];
+            [_editBtn textAndImageCenter];
+        }
         
-        //影响
-        
-        _shareBtn = [[BaseButton alloc]initWithFrame:frame(CGRectGetMaxX(_pathBtn.frame), frameY(_pathBtn), frameWidth(_pathBtn), frameHeight(_pathBtn))backgroundImage:nil iconImage:_share highlightImage:_sharePress inView:self];
-        _shareBtn.exclusiveTouch = YES;
-        
-        UILabel *line2 =allocAndInitWithFrame(UILabel, frame(CGRectGetMaxX(_shareBtn.frame), frameY(_shareBtn) + 7, 0.5,frameHeight(_shareBtn) -14 ));
-        line2.backgroundColor = LineBg;
-        [cell addSubview:line2];
-       
-        //编辑
-
-       _editBtn = [[BaseButton alloc]initWithFrame:frame(CGRectGetMaxX(_shareBtn.frame), frameY(_pathBtn),frameWidth(_pathBtn), frameHeight(_pathBtn)) backgroundImage:nil iconImage:_edit highlightImage:_edit inView:self];
-        _editBtn.exclusiveTouch = YES;
        
         
     }
@@ -111,8 +105,10 @@
     [[ToolManager shareInstance] imageView:_icon setImageWithURL:modal.imgurl placeholderType:PlaceholderTypeOther];
     _descrip.text = modal.title;
     _time.text = [modal.createdate timeformatString:@"yyyy-MM-dd"];
-    _readsNum.text = modal.readcount;
-    _clueNum.text = modal.readcover;
+    [_browse setTitle:[NSString stringWithFormat:@"%@人",modal.readcount] forState:UIControlStateNormal];
+    [_read setTitle:[NSString stringWithFormat:@"%@人",modal.readcount] forState:UIControlStateNormal];
+//    [_browse textAndImageCenter];
+//    [_read textAndImageCenter];
     
     __weak typeof(self) weakSelf = self;
     _editBtn.didClickBtnBlock = ^
@@ -121,17 +117,13 @@
         [actionSheet showInView:weakSelf];
       
     };
+
     _pathBtn.didClickBtnBlock = ^
     {
         pathBlock(modal);
     };
-//    __weak MyContentsArticleCell *weakSelf =self;
-    _shareBtn.didClickBtnBlock = ^{
-      
-//        [[WetChatShareManager shareInstance] shareToWeixinApp:modal.title desc:@"" image:weakSelf.icon.image  shareID:modal.ID isWxShareSucceedShouldNotice:NO isAuthen:modal.isgetclue];
-        myfluence(modal);
-    };
 
+   
     
 }
 #pragma mark
@@ -143,9 +135,7 @@
         _editBlock(_model,(EditType)buttonIndex);
     }
 }
-- (void)awakeFromNib {
-    // Initialization code
-}
+
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

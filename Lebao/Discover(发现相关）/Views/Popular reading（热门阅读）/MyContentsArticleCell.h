@@ -22,7 +22,7 @@ typedef void (^EditBlock)(MyContentDataModal *modal,EditType type);
 @property(nonatomic,copy) EditBlock editBlock;
 @property(nonatomic,strong) MyContentDataModal *model;
 
- - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier cellHeight:(float)cellHeight cellWidth:(float)cellWidth;
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier cellHeight:(float)cellHeight cellWidth:(float)cellWidth isRedAdd:(BOOL)isRedAdd;
 
 - (void)dataModal:(MyContentDataModal *)modal editBlock:(EditBlock)block pathBlock:(void(^)(MyContentDataModal *modal))pathBlock myfluence:(void(^)(MyContentDataModal *modal))myfluence;
 @end

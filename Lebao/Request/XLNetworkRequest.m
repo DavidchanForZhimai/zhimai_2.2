@@ -229,7 +229,10 @@
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     // 请求超时设定
     manager.requestSerializer.timeoutInterval = 10;
-
+    // 2.设置非校验证书模式
+    manager.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeNone];
+    manager.securityPolicy.allowInvalidCertificates = YES;
+    [manager.securityPolicy setValidatesDomainName:NO];
     return manager;
 }
 

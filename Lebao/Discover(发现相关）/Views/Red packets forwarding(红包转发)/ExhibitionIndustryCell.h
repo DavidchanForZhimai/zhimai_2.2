@@ -10,9 +10,9 @@
 #import "ExhibitionIndustryModel.h"
 @interface ExhibitionIndustryCell : UITableViewCell
 @property(nonatomic,strong)UIImageView *icon;
- - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier cellHeight:(float)cellHeight cellWidth:(float)cellWidth;
-
-- (void)setData:(ExhibitionIndustryReadmost *)model;
+// - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier cellHeight:(float)cellHeight cellWidth:(float)cellWidth;
+//
+//- (void)setData:(ExhibitionIndustryReadmost *)model;
 @end
 
 @interface ExhibitionRedPaperCell : UITableViewCell

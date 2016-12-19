@@ -63,7 +63,7 @@
 {
     _navigationBarView = [[UIView alloc]initWithFrame:frame(0, 0, APPWIDTH, StatusBarHeight + NavigationBarHeight)];
     _navigationBarView.backgroundColor = WhiteColor;
-    [_navigationBarView setBorder:LineBg width:0.5];
+    [_navigationBarView setBorder:AppViewBGColor width:0.5];
     [self.view addSubview:_navigationBarView];
     
     _navTitle = [UILabel createLabelWithFrame:frame(50, StatusBarHeight, APPWIDTH - 100, NavigationBarHeight) text:title fontSize:34*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentCenter inView:_navigationBarView];

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "BaseButton.h"
 #import "UILabel+Extend.h"
-@class MyCrossBroderRelease,MyCrossBroderRewardforwards,MyCrossBroderCell;
+@class MyCrossBroderRelease,MyCrossBroderRewardforwards,Rewardforwardinfo,MyCrossBroderCell;
 
 typedef void (^MoneyBlock)(NSString *rewardreleasesum,NSString *rewardforwardsum);
 typedef void (^DidCellBlock)(MyCrossBroderRelease *myCrossBroderRelease,MyCrossBroderRewardforwards*myCrossBroderRewardforwards,MyCrossBroderCell *cell);
@@ -73,6 +73,21 @@ typedef void (^CommunityBlock)(MyCrossBroderRewardforwards*myCrossBroderRewardfo
 
 @property (nonatomic, assign) NSInteger rewardforwardcount;
 
+@property (nonatomic, strong) NSArray<Rewardforwardinfo *> *rewardforwardinfo;
+
+@property (nonatomic, assign) BOOL  isOpen;
+@end
+
+@interface Rewardforwardinfo : NSObject
+@property (nonatomic, copy) NSString *ratio;
+
+@property (nonatomic, copy) NSString *readcount;
+
+@property (nonatomic, copy) NSString *realname;
+
+@property (nonatomic, copy) NSString *reward;
+
+
 @end
 
 @interface MyCrossBroderRewardforwards : NSObject
@@ -111,6 +126,7 @@ typedef void (^CommunityBlock)(MyCrossBroderRewardforwards*myCrossBroderRewardfo
     
     int releasePage;
     int releasepNowPage;
+    
 }
 @property(nonatomic,assign)int selectedIndex;
 @property(nonatomic,copy)MoneyBlock moneyBlock;

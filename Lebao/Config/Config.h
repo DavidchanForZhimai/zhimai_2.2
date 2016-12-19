@@ -10,13 +10,13 @@
 #ifndef Config_h
 #define Config_h
 //网络请求
-//请求URL
+//32URL
 //测试
 //#define ImageURLS @"http://pic.lmlm.cn"
-//#define HttpURL @"http://api.lmlm.cn/v1/"
+//#define HttpURL @"https://api.lmlm.cn/v1/"
 //////正式
 #define ImageURLS @"http://pic.any98.com"
-#define HttpURL @"http://api.any98.com/v1/"
+#define HttpURL @"https://api.any98.com/v1/"
 //约见接口
 #define MeetMainURL [NSString stringWithFormat:@"%@meet/nearby",HttpURL]
 //有空按钮

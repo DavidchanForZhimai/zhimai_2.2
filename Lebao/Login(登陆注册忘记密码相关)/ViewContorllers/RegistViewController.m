@@ -246,7 +246,8 @@ typedef enum {
         switch ([msg[@"rtcode"] integerValue]) {
             case 1:
             [[ToolManager shareInstance] dismiss];
-            { RegistNextViewController *next = allocAndInit(RegistNextViewController);
+            {
+                RegistNextViewController *next = allocAndInit(RegistNextViewController);
                 next.phoneNum = _userName.text;
                 next.password = _passWord.text;
                 next.invCode = _verificationCode.text;

@@ -83,7 +83,6 @@
     [XLDataService postWithUrl:AuthenURL param:[Parameter parameterWithSessicon] modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         if (dataObj) {
             _modal = [AuthenticationModal mj_objectWithKeyValues:dataObj];
-                        NSLog(@"dataObj =%@",dataObj);
             if (_modal.rtcode ==1) {
                 _authenticationHomeView.userInteractionEnabled = YES;
                 [[ToolManager shareInstance] dismiss];
@@ -315,48 +314,80 @@
     __weak typeof(self) weakSelf = self;
     _upload.didClickBtnBlock = ^
     {
-        
         if (!weakSelf.parame||weakSelf.parame.allKeys.count<[Parameter parameterWithSessicon].allKeys.count + 1) {
             
             [[ToolManager shareInstance] showAlertMessage:@"请上传图片"];
             return ;
         }
-        
-        [XLDataService postWithUrl:SaveAuthenURL param:weakSelf.parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+
+        UIAlertController *alertControl = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"请确保上传的认证资料中姓名/手机号码与已注册信息徐俊华18650121828一致，否则审核会失败" preferredStyle:UIAlertControllerStyleAlert];
+        [alertControl addAction:[UIAlertAction actionWithTitle:@"先去修改 " style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             
-            if (dataObj) {
-                if ([dataObj[@"rtcode"] integerValue]==1) {
-                    
-                    [[ToolManager shareInstance] showSuccessWithStatus:@"上传成功！"];
-                    [weakSelf.upload setTitle:@"审核中" forState:UIControlStateNormal];
-                    weakSelf.edit.enabled = NO;
-                    [weakSelf.edit setTitle:@"审核中" forState:UIControlStateNormal];
-                    [weakSelf.edit setTitleColor:lightGrayTitleColor forState:UIControlStateNormal];
-                    weakSelf.upload.enabled = NO;
-                    weakSelf.modal.datas.authen = 2;
-                     weakSelf.xinxi.text = @"我的认证信息";
-                    weakSelf.upload.backgroundColor = rgba(210, 210, 210, 0.8);
+            BasicInformationViewController *info = [[BasicInformationViewController alloc] init];
+            info.authenBlock = ^(NSString *imgurl,NSString *realname,NSString *position, NSString *address)
+            {
+                [[ToolManager shareInstance] imageView:weakSelf.userIcon setImageWithURL:imgurl placeholderType:PlaceholderTypeUserHead];
+                weakSelf.username.text = realname;
+                NSString *positions;
+                if (position.length>0) {
+                    positions = [NSString stringWithFormat:@"%@  %@\n",position,_modal.datas.tel];
                     
                 }
                 else
                 {
-                    [[ToolManager shareInstance]showInfoWithStatus:dataObj[@"rtmsg"]];
+                    positions = _modal.datas.tel;
+                    if (positions.length>0) {
+                        positions = [NSString stringWithFormat:@"%@/n",_modal.datas.tel];
+                    }
+                }
+                weakSelf.userOtherInfo.text = [NSString stringWithFormat:@"%@%@",positions,address];
+            };
+            [weakSelf.navigationController pushViewController:info animated:YES];
+            
+        }]];
+        
+        [alertControl addAction:[UIAlertAction actionWithTitle:@"立即认证" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+            [XLDataService postWithUrl:SaveAuthenURL param:weakSelf.parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+                
+                if (dataObj) {
+                    if ([dataObj[@"rtcode"] integerValue]==1) {
+                        
+                        [[ToolManager shareInstance] showSuccessWithStatus:@"上传成功！"];
+                        [weakSelf.upload setTitle:@"审核中" forState:UIControlStateNormal];
+                        weakSelf.edit.enabled = NO;
+                        [weakSelf.edit setTitle:@"审核中" forState:UIControlStateNormal];
+                        [weakSelf.edit setTitleColor:lightGrayTitleColor forState:UIControlStateNormal];
+                        weakSelf.upload.enabled = NO;
+                        weakSelf.modal.datas.authen = 2;
+                        weakSelf.xinxi.text = @"我的认证信息";
+                        weakSelf.upload.backgroundColor = rgba(210, 210, 210, 0.8);
+                        
+                    }
+                    else
+                    {
+                        [[ToolManager shareInstance]showInfoWithStatus:dataObj[@"rtmsg"]];
+                        [weakSelf.upload setTitle:@"上传失败 重新上传" forState:UIControlStateNormal];
+                        weakSelf.upload.enabled = YES;
+                        weakSelf.upload.backgroundColor = AppMainColor;
+                    }
+                    
+                }
+                else
+                {
                     [weakSelf.upload setTitle:@"上传失败 重新上传" forState:UIControlStateNormal];
                     weakSelf.upload.enabled = YES;
-                    weakSelf.upload.backgroundColor = AppMainColor;
+                    [[ToolManager shareInstance]showInfoWithStatus];
                 }
                 
-            }
-            else
-            {
-                [weakSelf.upload setTitle:@"上传失败 重新上传" forState:UIControlStateNormal];
-                weakSelf.upload.enabled = YES;
-                [[ToolManager shareInstance]showInfoWithStatus];
-            }
+                
+                
+            }];
+
             
-            
-            
-        }];
+        }]];
+        [weakSelf.navigationController presentViewController:alertControl animated:YES completion:nil];
+        
+        
         
         
     };

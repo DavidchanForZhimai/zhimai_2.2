@@ -10,4 +10,5 @@
 
 @interface AlreadysentproductViewController : BaseViewController
 @property(nonatomic,assign)BOOL ispopToRoot;
+@property(nonatomic,assign)BOOL isRedActicleAddPush;
 @end

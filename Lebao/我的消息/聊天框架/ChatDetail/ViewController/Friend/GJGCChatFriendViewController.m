@@ -21,7 +21,7 @@
 #import "GJGCDrfitBottleDetailViewController.h"
 #import "GJGCChatFriendDriftBottleCell.h"
 #import "GJCFAssetsPickerViewControllerDelegate.h"
-#import "GJGCWebViewController.h"
+
 #import "GJCFAssetsPickerViewController.h"
 
 #import "MP3PlayerManager.h"//上传音频
@@ -742,9 +742,9 @@ GJCUCaptureViewControllerDelegate>
 
 - (void)textMessageCellDidTapOnUrl:(GJGCChatBaseCell *)tapedCell withUrl:(NSString *)url
 {
-    GJGCWebViewController *webView = [[GJGCWebViewController alloc]init];
-    [self.navigationController pushViewController:webView animated:YES];
-    [webView setUrl:url];
+    NSLog(@"url =%@",url);
+     [[ToolManager shareInstance] loadWebViewWithUrl:url title:nil pushView:self rightBtn:nil];
+
 }
 
 - (void)chatCellDidChooseDeleteMessage:(GJGCChatBaseCell *)tapedCell

@@ -202,15 +202,6 @@
             
         }
         
-        //字自己显示白
-        
-//        UIColor *color  = BlackTitleColor;
-//        if (chatContentModel.isFromSelf) {
-//            color = WhiteColor;
-//            
-//        }
-//        
-//        [attributedString addAttribute:(__bridge id)kCTForegroundColorAttributeName value:color range:NSMakeRange(0, attributedString.string.length)];
         self.contentLabel.contentAttributedString = attributedString;
        
         

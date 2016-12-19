@@ -14,8 +14,9 @@
 #import "WetChatShareManager.h"
 #import "MyCrossBroderViewController.h"
 #import "CoreArchive.h"
+#import "AlreadysentproductViewController.h"
 #define RID  @"rid"
-#define cellH 153.0/2
+#define cellH 88*ScreenMultiple
 #define RewardURL [NSString stringWithFormat:@"%@release/reward",HttpURL]
 @interface RedpacketsforwardingViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -34,14 +35,25 @@
     // Do any additional setup after loading the view.
     page = 1;
    [self navViewTitleAndBackBtn:@"红包转发"];
-    BaseButton *redpaper = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 50, StatusBarHeight, 50, NavigationBarHeight) backgroundImage:nil iconImage:[UIImage imageNamed:@"icon_red_packets_forwarding"] highlightImage:nil inView:self.view];
+    float btnW = 40*ScreenMultiple;
+    BaseButton *redpaper = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - btnW, StatusBarHeight, btnW, NavigationBarHeight) backgroundImage:nil iconImage:[UIImage imageNamed:@"exhibition_redPaper_light"] highlightImage:nil inView:self.view];
     __weak RedpacketsforwardingViewController *weakSelf =self;
     redpaper.didClickBtnBlock = ^
     {
         PushView(weakSelf, allocAndInit(MyCrossBroderViewController));
     };
+    //添加
+    BaseButton *redAdd = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 2*btnW, StatusBarHeight, btnW, NavigationBarHeight) backgroundImage:nil iconImage:[UIImage imageNamed:@"exhibition_home_tianjia"] highlightImage:nil inView:self.view];
+   
+    redAdd.didClickBtnBlock = ^
+    {
+        AlreadysentproductViewController *redArticle = [[AlreadysentproductViewController alloc]init];
+        redArticle.isRedActicleAddPush = YES;
+        PushView(weakSelf, redArticle);
+    };
 
-    [self addTableView];
+
+   [self addTableView];
    [self netWorkIsRefresh:NO isLoadMore:NO shouldClearData:YES];
 
 
@@ -60,7 +72,7 @@
     _exhibitionRedPaperView.delegate = self;
     _exhibitionRedPaperView.dataSource = self;
     _exhibitionRedPaperView.backgroundColor =[UIColor clearColor];
-    
+    _exhibitionRedPaperView.separatorColor = [UIColor clearColor];
     [[ToolManager shareInstance] scrollView:_exhibitionRedPaperView headerWithRefreshingBlock:^{
         page =nowPage;
         [self netWorkIsRefresh:YES isLoadMore:NO shouldClearData:YES];
@@ -98,7 +110,7 @@
         if (dataObj) {
             
             if ([dataObj[@"rtcode"] integerValue]==1) {
-//                NSLog(@"dataObj =%@",dataObj);
+             
                 [CoreArchive setStr:dataObj[@"rid"] key:RID];
                 [[ToolManager shareInstance] dismiss];
                 if (shouldClearData) {
@@ -147,7 +159,7 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 10.0;
+    return 10.0*ScreenMultiple;
 }
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {

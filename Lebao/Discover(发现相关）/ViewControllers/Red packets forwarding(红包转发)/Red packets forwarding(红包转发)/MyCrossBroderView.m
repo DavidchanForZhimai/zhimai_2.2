@@ -76,6 +76,7 @@
     
     return self;
 }
+
 - (void)netWorkisRefresh:(BOOL)isRefresh isLoadMore:(BOOL)isLoadMore ShouldClearData:(BOOL)shouldClearData
 {
     if (_myCrossBroderArray.count ==0) {
@@ -86,6 +87,7 @@
     [parameter setObject:@(releasePage) forKey:@"releasepage"];
      [parameter setObject:@(rewardPage) forKey:@"rewardpage"];
     [XLDataService postWithUrl:PersonalURL param:parameter modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+      
         if (dataObj) {
         
             if (isRefresh) {
@@ -125,7 +127,7 @@
                     }
                     
                     for (MyCrossBroderRelease *myCrossBroderRelease in  modal.myCrossBroderRelease) {
-                        
+                        myCrossBroderRelease.isOpen = NO;
                         [_myCrossBroderArray addObject:myCrossBroderRelease];
                     }
                 }
@@ -149,14 +151,6 @@
                 [_crossBroderView reloadData];
                 
                 
-                if (_myCrossBroderArray.count==0) {
-                    [self isShowEmptyStatus:YES];
-                }
-                else
-                {
-                    [self isShowEmptyStatus:NO];
-                    
-                }
             }
             else
             {
@@ -186,12 +180,13 @@
 #pragma mark - UITableViewDelegate and UITableDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _myCrossBroderArray.count;
+    return 1;
 }
 
  - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    
+    return _myCrossBroderArray.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -200,7 +195,56 @@
 }
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    return allocAndInit(UIView);
+    UIView *view  = [[UIView alloc]init];
+    if (_selectedIndex ==1) {
+        MyCrossBroderRelease *myCrossBroderRelease = _myCrossBroderArray[section];
+        if (myCrossBroderRelease.isOpen) {
+            
+            if (myCrossBroderRelease.rewardforwardinfo.count>0) {
+                view.frame = CGRectMake(0, 0, APPWIDTH, 30*(myCrossBroderRelease.rewardforwardinfo.count + 1) + 4);
+                
+                UIView *cellView = [[UIView alloc]initWithFrame:CGRectMake(view.x, 4, APPWIDTH, view.height - 4)];
+                cellView.backgroundColor = WhiteColor;
+                [view addSubview:cellView];
+                float cellW = APPWIDTH/4.0;
+                for (int i = 0; i<myCrossBroderRelease.rewardforwardinfo.count + 1; i++) {
+                    
+                    
+                    UIView *cell = [[UIView alloc]initWithFrame:CGRectMake(0, i*30, APPWIDTH, 30)];
+                    UILabel *name =[UILabel createLabelWithFrame:CGRectMake(0, 0, cellW, cell.height) text:@"姓名" fontSize:12 textColor:BlackTitleColor textAlignment:NSTextAlignmentCenter inView:cell];
+                    UILabel *gerenYX =[UILabel createLabelWithFrame:CGRectMake(cellW, 0, cellW, cell.height) text:@"个人影响" fontSize:12 textColor:BlackTitleColor textAlignment:NSTextAlignmentCenter inView:cell];
+                    UILabel *zongYX =[UILabel createLabelWithFrame:CGRectMake(2*cellW, 0, cellW, cell.height) text:@"总影响" fontSize:12 textColor:BlackTitleColor textAlignment:NSTextAlignmentCenter inView:cell];
+                    UILabel *zhanbi =[UILabel createLabelWithFrame:CGRectMake(3*cellW, 0, cellW, cell.height) text:@"占比(%)" fontSize:12 textColor:BlackTitleColor textAlignment:NSTextAlignmentCenter inView:cell];
+                    if (i>0) {
+                        Rewardforwardinfo *info =  myCrossBroderRelease.rewardforwardinfo[i-1];
+                        name.text =info.realname;
+                        name.textColor = hexColor(838383);
+                        name.font = [UIFont systemFontOfSize:14.0];
+                        
+                        gerenYX.text =[NSString stringWithFormat:@"%@",info.readcount];
+                        gerenYX.textColor = hexColor(838383);
+                        gerenYX.font = [UIFont systemFontOfSize:14.0];
+                        
+                        zongYX.text =[NSString stringWithFormat:@"%ld",myCrossBroderRelease.rewardreadsum];
+                        zongYX.textColor = hexColor(838383);
+                        zongYX.font = [UIFont systemFontOfSize:14.0];
+                        zhanbi.text =[NSString stringWithFormat:@"%@",info.ratio];
+                        zhanbi.textColor = hexColor(838383);
+                        zhanbi.font = [UIFont systemFontOfSize:14.0];
+                        
+                    }
+                    
+                    
+                    [cellView addSubview:cell];
+                }
+                
+                
+            }
+            
+        }
+        
+    }
+    return view;
 }
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
@@ -209,10 +253,22 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
+    if (_selectedIndex ==1) {
+        MyCrossBroderRelease *myCrossBroderRelease = _myCrossBroderArray[section];
+        if (myCrossBroderRelease.isOpen) {
+
+            if (myCrossBroderRelease.rewardforwardinfo.count>0) {
+                 return 30*(myCrossBroderRelease.rewardforwardinfo.count + 1) + 4;
+            }
+           
+        }
+        
+    }
     return 0.01;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
+
     return 0.01f;
 }
 
@@ -226,14 +282,12 @@
             cell = [[MyCrossBroderCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID cellHeights:cellH cellWidths:frameWidth(_crossBroderView)];
         }
         
-    
-        MyCrossBroderRelease *modal = _myCrossBroderArray[indexPath.row];
+        MyCrossBroderRelease *modal = _myCrossBroderArray[indexPath.section];
             [cell setRelease:modal communityBlock:^(MyCrossBroderRewardforwards *myCrossBroderRewardforwards, MyCrossBroderRelease *myCrossBroderRelease) {
-                if (_communityBlock) {
-                    _communityBlock(nil,myCrossBroderRelease);
-                }
+                modal.isOpen = !modal.isOpen;
+                [tableView reloadData];
             }];
-                return cell;
+            return cell;
 
     }
     else
@@ -245,7 +299,7 @@
         }
         
         
-        MyCrossBroderRewardforwards *modal = _myCrossBroderArray[indexPath.row];
+        MyCrossBroderRewardforwards *modal = _myCrossBroderArray[indexPath.section];
             [cell setRewardforwards:modal communityBlock:^(MyCrossBroderRewardforwards *myCrossBroderRewardforwards,MyCrossBroderRelease *relese) {
                 if (_communityBlock) {
                     _communityBlock(myCrossBroderRewardforwards,nil);
@@ -263,13 +317,13 @@
     if (_didCellBlock) {
         
         if (_selectedIndex ==0) {
-            MyCrossBroderRewardforwards *modal = _myCrossBroderArray[indexPath.row];
+            MyCrossBroderRewardforwards *modal = _myCrossBroderArray[indexPath.section];
           
             _didCellBlock(nil,modal,(MyCrossBroderCell *)[tableView cellForRowAtIndexPath:indexPath]);
         }
         else
         {
-            MyCrossBroderRelease *modal = _myCrossBroderArray[indexPath.row];
+            MyCrossBroderRelease *modal = _myCrossBroderArray[indexPath.section];
          
             _didCellBlock(modal,nil,(MyCrossBroderCell *)[tableView cellForRowAtIndexPath:indexPath]);
         }
@@ -288,62 +342,62 @@
         
         self.backgroundColor =[UIColor clearColor];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        UIView *cell = allocAndInitWithFrame(UIView, frame(7, 10, cellWidth - 14, cellheight - 10));
+        UIView *cell = allocAndInitWithFrame(UIView, frame(0, 10, cellWidth, cellheight - 10));
         cell.backgroundColor = WhiteColor;
-//        [cell setRadius:8.0];
         
-        _cellIcon = allocAndInitWithFrame(UIImageView, frame(10, 10, 60, 60));
+        _cellIcon = allocAndInitWithFrame(UIImageView, frame(10, 10, 78, 57));
         [cell addSubview:_cellIcon];
-        [_cellIcon setRadius:5];
+     
         
         _celltitle = [DWLable createLabelWithFrame:frame(CGRectGetMaxX(_cellIcon.frame) + 10, frameY(_cellIcon),frameWidth(cell) - CGRectGetMaxX(_cellIcon.frame) - 20, 35) text:@"" fontSize:28*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentLeft inView:cell];
         _celltitle.numberOfLines = 0;
         _celltitle.verticalAlignment = VerticalAlignmentTop;
         
         UIImage *image =[UIImage imageNamed:@"exhibition_redPaper"];
-        CGSize sizebrowse = [_celltitle sizeWithContent:@"¥2015" font:[UIFont systemFontOfSize:22*SpacedFonts]];
-        
-        _redPaper = [[BaseButton alloc]initWithFrame:frame(frameX(_celltitle), CGRectGetMaxY(_celltitle.frame) + 10, image.size.width + 5 + sizebrowse.width, image.size.height)  setTitle:@"¥20" titleSize:22*SpacedFonts titleColor:[UIColor redColor] backgroundImage:nil iconImage:image highlightImage:nil setTitleOrgin:CGPointMake(1,5) setImageOrgin:CGPointMake(0,0)  inView:cell];
+
+        _redPaper = [[BaseButton alloc]initWithFrame:frame(cellWidth - 100, CGRectGetMaxY(_celltitle.frame) + 10, 100, image.size.height)  setTitle:@"¥20" titleSize:14 titleColor:[UIColor redColor] backgroundImage:nil iconImage:image highlightImage:nil setTitleOrgin:CGPointMake(0,5) setImageOrgin:CGPointMake(0,0)  inView:cell];
         _redPaper.shouldAnmial = NO;
-
-        
-//        UIImage *_communicationImgs =[UIImage imageNamed:@"across_home_communication"];
-//        CGSize size  =[[NSString stringWithFormat:@"(1234)"] sizeWithFont:Size(20) maxSize:CGSizeMake(0, _communicationImgs.size.height)];
-//        
-//        _communicationsBtn = [[BaseButton alloc]initWithFrame:frame(cellWidth - 25- size.width - _communicationImgs.size.width, frameY(_redPaper), 15 +size.width + _communicationImgs.size.width , _communicationImgs.size.height) setTitle:@"(20)" titleSize:20*SpacedFonts titleColor:LightBlackTitleColor backgroundImage:nil iconImage:_communicationImgs highlightImage:nil setTitleOrgin:CGPointMake(0, 17) setImageOrgin:CGPointMake(0, 10 ) inView:cell ];
-//        _communicationsBtn.exclusiveTouch = YES;
-
-        
-        [UILabel CreateLineFrame:frame(0, frameHeight(cell) - 40, frameWidth(cell), 0.5) inView:cell];
-        
+        _redPaper.clipsToBounds = YES;
+    
+        UIView *cellline = [[UIView alloc]initWithFrame:frame(0, frameHeight(cell) - 40.5, frameWidth(cell), 0.5)];
+        cellline.backgroundColor = AppViewBGColor;
+        [cell addSubview:cellline];
         
         UIImage *imagetime =[UIImage imageNamed:@"exhibition_createtime"];
-        UILabel *time =allocAndInit(UILabel);
-        CGSize sizeTime = [time sizeWithContent:@" 22:00 " font:[UIFont systemFontOfSize:22*SpacedFonts]];
-        
-        _time = [[BaseButton alloc]initWithFrame:frame(0, frameHeight(cell) - 40,frameWidth(cell)/4.0, 40)  setTitle:@"" titleSize:22*SpacedFonts titleColor:LightBlackTitleColor backgroundImage:nil iconImage:imagetime highlightImage:nil setTitleOrgin:CGPointMake(imagetime.size.height,5 - image.size.width) setImageOrgin:CGPointMake(0,(sizeTime.width - imagetime.size.width)/2.0)  inView:cell];
+
+        _time = [[BaseButton alloc]initWithFrame:frame(_celltitle.x, _redPaper.y,frameWidth(cell)/4.0, _redPaper.height)  setTitle:@"" titleSize:12 titleColor:hexColor(c9c9c9) backgroundImage:nil iconImage:imagetime highlightImage:nil setTitleOrgin:CGPointMake(0,5*ScreenMultiple) setImageOrgin:CGPointMake(0,0)  inView:cell];
         _time.shouldAnmial = NO;
         
         
+        float iconW = frameWidth(cell)/3.0;
         UIImage *imageEyes =[UIImage imageNamed:@"me_mycross_icon_eyes"];
-        CGSize sizeEyes = [_celltitle sizeWithContent:@"0" font:[UIFont systemFontOfSize:22*SpacedFonts]];
-        
-        _eyes = [[BaseButton alloc]initWithFrame:frame(frameWidth(cell)/4.0, frameHeight(cell) - 40,frameWidth(cell)/4.0, 40)  setTitle:@"0" titleSize:22*SpacedFonts titleColor:LightBlackTitleColor backgroundImage:nil iconImage:imageEyes highlightImage:nil setTitleOrgin:CGPointMake(10 + imageEyes.size.height,(frameWidth(cell)/4.0 - sizeEyes.width)/2.0 - imageEyes.size.width) setImageOrgin:CGPointMake(10,(frameWidth(cell)/4.0 - sizeEyes.width)/2.0)  inView:cell];
+      
+
+        _eyes = [[BaseButton alloc]initWithFrame:frame(0, frameHeight(cell) - 40,iconW, 40)  setTitle:@"0" titleSize:14 titleColor:hexColor(838383) backgroundImage:nil iconImage:imageEyes highlightImage:nil setTitleOrgin:CGPointMake((40 - imageEyes.size.height)/2.0,5) setImageOrgin:CGPointMake((40 - imageEyes.size.height)/2.0,0)  inView:cell];
         _eyes.titleLabel.textAlignment = NSTextAlignmentCenter;
         _eyes.shouldAnmial = NO;
         
+        UIImage *imagemoney =[UIImage imageNamed:@"me_mycross_icon_hasreward"];
+      
+        _money = [[BaseButton alloc]initWithFrame:frame(iconW, _eyes.y,_eyes.width, _eyes.height)  setTitle:@"0" titleSize:14 titleColor:hexColor(838383) backgroundImage:nil iconImage:imagemoney highlightImage:nil setTitleOrgin:CGPointMake((40 - imageEyes.size.height)/2.0,5) setImageOrgin:CGPointMake((40 - imageEyes.size.height)/2.0,0)  inView:cell];
+        _money.shouldAnmial = NO;
+
+        
         
         UIImage *imagepercent =[UIImage imageNamed:@"me_mycross_icon_percent"];
-        CGSize sizepercent = [_celltitle sizeWithContent:@"0" font:[UIFont systemFontOfSize:22*SpacedFonts]];
+       
         
-        _percent = [[BaseButton alloc]initWithFrame:frame(2*frameWidth(cell)/4.0, frameHeight(cell) - 40,frameWidth(cell)/4.0, 40)  setTitle:@"0" titleSize:22*SpacedFonts titleColor:LightBlackTitleColor backgroundImage:nil iconImage:imagepercent highlightImage:nil setTitleOrgin:CGPointMake(10 + imagepercent.size.height,(frameWidth(cell)/4.0 - sizepercent.width)/2.0 - imagepercent.size.width) setImageOrgin:CGPointMake(10,(frameWidth(cell)/4.0 - sizepercent.width)/2.0)  inView:cell];
+        _percent = [[BaseButton alloc]initWithFrame:frame(2*iconW, _eyes.y,_eyes.width, _eyes.height)  setTitle:@"0" titleSize:14 titleColor:hexColor(838383) backgroundImage:nil iconImage:imagepercent highlightImage:nil setTitleOrgin:CGPointMake((40 - imageEyes.size.height)/2.0,5) setImageOrgin:CGPointMake((40 - imageEyes.size.height)/2.0,0)  inView:cell];
         _percent.shouldAnmial = NO;
         
-        UIImage *imagemoney =[UIImage imageNamed:@"me_mycross_icon_hasreward_momey"];
-        CGSize sizemoney = [_celltitle sizeWithContent:@"0" font:[UIFont systemFontOfSize:22*SpacedFonts]];
         
-        _money = [[BaseButton alloc]initWithFrame:frame(3*frameWidth(cell)/4.0, frameHeight(cell) - 40,frameWidth(cell)/4.0, 40)  setTitle:@"0" titleSize:22*SpacedFonts titleColor:LightBlackTitleColor backgroundImage:nil iconImage:imagemoney highlightImage:nil setTitleOrgin:CGPointMake(10 + imagemoney.size.height,(frameWidth(cell)/4.0 - sizemoney.width)/2.0 - imagemoney.size.width) setImageOrgin:CGPointMake(10,(frameWidth(cell)/4.0 - sizemoney.width)/2.0)  inView:cell];
-        _money.shouldAnmial = NO;
+         UIView *line1 = [[UIView alloc]initWithFrame:CGRectMake(iconW, _eyes.y + 3, 0.5, _eyes.height - 6)];
+        line1.backgroundColor = AppViewBGColor;
+        [cell addSubview:line1];
+        
+        UIView *line2 = [[UIView alloc]initWithFrame:CGRectMake(2*iconW, _eyes.y + 3, 0.5, _eyes.height - 6)];
+        line2.backgroundColor = AppViewBGColor;
+        [cell addSubview:line2];
         
         [self addSubview:cell];
         
@@ -358,12 +412,11 @@
         
         self.backgroundColor =[UIColor clearColor];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        UIView *cell = allocAndInitWithFrame(UIView, frame(7, 10, cellWidth - 14, cellheight - 10));
+        UIView *cell = allocAndInitWithFrame(UIView, frame(0, 10, cellWidth, cellheight - 10));
         cell.backgroundColor = WhiteColor;
-//        [cell setRadius:8.0];
         
         _cellIcon = allocAndInitWithFrame(UIImageView, frame(10, 10, 60, 60));
-        [_cellIcon setRadius:5];
+
         [cell addSubview:_cellIcon];
         
         _celltitle = [DWLable createLabelWithFrame:frame(CGRectGetMaxX(_cellIcon.frame) + 10, frameY(_cellIcon),frameWidth(cell) - CGRectGetMaxX(_cellIcon.frame) - 20, 35) text:@"" fontSize:28*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentLeft inView:cell];
@@ -371,43 +424,43 @@
         _celltitle.verticalAlignment = VerticalAlignmentTop;
         
         UIImage *image =[UIImage imageNamed:@"exhibition_redPaper"];
-        CGSize sizebrowse = [_celltitle sizeWithContent:@"¥2015" font:[UIFont systemFontOfSize:22*SpacedFonts]];
         
-        _redPaper = [[BaseButton alloc]initWithFrame:frame(frameX(_celltitle), CGRectGetMaxY(_celltitle.frame) + 10, image.size.width + 5 + sizebrowse.width, image.size.height)  setTitle:@"¥20" titleSize:22*SpacedFonts titleColor:[UIColor redColor] backgroundImage:nil iconImage:image highlightImage:nil setTitleOrgin:CGPointMake(1,5) setImageOrgin:CGPointMake(0,0)  inView:cell];
+        _redPaper = [[BaseButton alloc]initWithFrame:frame(cellWidth - 100, CGRectGetMaxY(_celltitle.frame) + 10, 100, image.size.height)  setTitle:@"¥20" titleSize:14 titleColor:[UIColor redColor] backgroundImage:nil iconImage:image highlightImage:nil setTitleOrgin:CGPointMake(0,5) setImageOrgin:CGPointMake(0,0)  inView:cell];
         _redPaper.shouldAnmial = NO;
+        _redPaper.clipsToBounds = YES;
         
         
-//        UIImage *_communicationImgs =[UIImage imageNamed:@"across_home_communication"];
-//        CGSize size  =[[NSString stringWithFormat:@"(1234)"] sizeWithFont:Size(20) maxSize:CGSizeMake(0, _communicationImgs.size.height)];
-//        
-//        _communicationsBtn = [[BaseButton alloc]initWithFrame:frame(cellWidth - 25- size.width - _communicationImgs.size.width, frameY(_redPaper), 15 +size.width + _communicationImgs.size.width , _communicationImgs.size.height) setTitle:@"(20)" titleSize:20*SpacedFonts titleColor:LightBlackTitleColor backgroundImage:nil iconImage:_communicationImgs highlightImage:nil setTitleOrgin:CGPointMake(0, 17) setImageOrgin:CGPointMake(0, 10 ) inView:cell ];
-//        _communicationsBtn.exclusiveTouch = YES;
         
-        
-        [UILabel CreateLineFrame:frame(0, frameHeight(cell) - 40, frameWidth(cell), 0.5) inView:cell];
+        UIView *cellline = [[UIView alloc]initWithFrame:frame(0, frameHeight(cell) - 40.5, frameWidth(cell), 0.5)];
+        cellline.backgroundColor = AppViewBGColor;
+        [cell addSubview:cellline];
         
         
         UIImage *imagetime =[UIImage imageNamed:@"exhibition_createtime"];
-//        UILabel *time =allocAndInit(UILabel);
         
-        _time = [[BaseButton alloc]initWithFrame:frame(0, frameHeight(cell) - 40,frameWidth(cell)/3.0, 40)  setTitle:@"" titleSize:22*SpacedFonts titleColor:LightBlackTitleColor backgroundImage:nil iconImage:imagetime highlightImage:nil setTitleOrgin:CGPointMake(0,5) setImageOrgin:CGPointMake(0,0)  inView:cell];
+        _time = [[BaseButton alloc]initWithFrame:frame(_celltitle.x, _redPaper.y,frameWidth(cell)/4.0, _redPaper.height)  setTitle:@"" titleSize:12 titleColor:hexColor(c9c9c9) backgroundImage:nil iconImage:imagetime highlightImage:nil setTitleOrgin:CGPointMake(0,5*ScreenMultiple) setImageOrgin:CGPointMake(0,0)  inView:cell];
         _time.shouldAnmial = NO;
+        float iconW = frameWidth(cell)/2.0;
         
-        UIImage *imagepercent =[UIImage imageNamed:@"exhibition_clueNum"];
-        CGSize sizepercent = [_celltitle sizeWithContent:@"0" font:[UIFont systemFontOfSize:22*SpacedFonts]];
         
-        _share = [[BaseButton alloc]initWithFrame:frame(frameWidth(cell)/3.0, frameHeight(cell) - 40,frameWidth(cell)/3.0, 40)  setTitle:@"0" titleSize:22*SpacedFonts titleColor:LightBlackTitleColor backgroundImage:nil iconImage:imagepercent highlightImage:nil setTitleOrgin:CGPointMake(10 + imagepercent.size.height,(frameWidth(cell)/3.0 - sizepercent.width)/2.0 - imagepercent.size.width) setImageOrgin:CGPointMake(10,(frameWidth(cell)/3.0 - sizepercent.width)/2.0)  inView:cell];
+        UIImage *imageShare =[UIImage imageNamed:@"exhibition_clueNum"];
+        
+        _share = [[BaseButton alloc]initWithFrame:frame(0, frameHeight(cell) - 40,iconW, 40)  setTitle:@"0" titleSize:14 titleColor:hexColor(838383) backgroundImage:nil iconImage:imageShare highlightImage:nil setTitleOrgin:CGPointMake((40 - imageShare.size.height)/2.0,5) setImageOrgin:CGPointMake((40 - imageShare.size.height)/2.0,0)  inView:cell];
         _share.shouldAnmial = NO;
         
-    
-        UIImage *imageEyes =[UIImage imageNamed:@"me_mycross_icon_eyes"];
-        CGSize sizeEyes = [_celltitle sizeWithContent:@"0" font:[UIFont systemFontOfSize:22*SpacedFonts]];
         
-        _eyes = [[BaseButton alloc]initWithFrame:frame(2*frameWidth(cell)/3.0, frameHeight(cell) - 40,frameWidth(cell)/3.0, 40)  setTitle:@"0" titleSize:22*SpacedFonts titleColor:LightBlackTitleColor backgroundImage:nil iconImage:imageEyes highlightImage:nil setTitleOrgin:CGPointMake(10 + imageEyes.size.height,(frameWidth(cell)/3.0 - sizeEyes.width)/2.0 - imageEyes.size.width) setImageOrgin:CGPointMake(10,(frameWidth(cell)/3.0 - sizeEyes.width)/2.0)  inView:cell];
+        UIImage *imageEyes =[UIImage imageNamed:@"me_mycross_icon_eyes"];
+        
+        
+        _eyes = [[BaseButton alloc]initWithFrame:frame(iconW,_share.y,_share.width, _share.height)  setTitle:@"0" titleSize:14 titleColor:hexColor(838383) backgroundImage:nil iconImage:imageEyes highlightImage:nil setTitleOrgin:CGPointMake((40 - imageEyes.size.height)/2.0,5) setImageOrgin:CGPointMake((40 - imageEyes.size.height)/2.0,0)  inView:cell];
+        _eyes.titleLabel.textAlignment = NSTextAlignmentCenter;
         _eyes.shouldAnmial = NO;
         
         
-        
+
+        UIView *line2 = [[UIView alloc]initWithFrame:CGRectMake(iconW - 0.5, _eyes.y + 3, 0.5, _eyes.height - 6)];
+        line2.backgroundColor = AppViewBGColor;
+        [cell addSubview:line2];
         
         [self addSubview:cell];
         
@@ -476,15 +529,25 @@
     
     
     [_communicationsBtn setTitle:[NSString stringWithFormat:@"(%@)",modal.comsum] forState:UIControlStateNormal];
-    _communicationsBtn.didClickBtnBlock = ^
+    
+
+    [_eyes setTitle:[NSString stringWithFormat:@"%i",(int)modal.rewardreadsum] forState:UIControlStateNormal];
+    [_eyes textAndImageCenter];
+    [_share setTitle:[NSString stringWithFormat:@"%ld",modal.rewardforwardcount] forState:UIControlStateNormal];
+    _share.didClickBtnBlock = ^
     {
         communityBlock(nil,modal);
     };
-//    [_communicationsBtn setTitle:[NSString stringWithFormat:@"(%@)",modal.comsum] forState:UIControlStateNormal];
-    [_eyes setTitle:[NSString stringWithFormat:@"%i",(int)modal.rewardreadsum] forState:UIControlStateNormal];
-    [_eyes textAndImageCenter];
-    [_share setTitle:[NSString stringWithFormat:@"%.2f",(float)modal.rewardforwardcount] forState:UIControlStateNormal];
-     [_share textAndImageCenter];
+    if (!modal.isOpen) {
+        [_share setImage:[UIImage imageNamed:@"exhibition_clueNum"] forState:UIControlStateNormal];
+        [_share setBackgroundColor:WhiteColor];
+    }
+    else
+    {
+        [_share setImage:[UIImage imageNamed:@"exhibition_clueNum_selected"] forState:UIControlStateNormal];
+        [_share setBackgroundColor:AppViewBGColor];
+    }
+    [_share textAndImageCenter];
 }
 @end
 
@@ -501,12 +564,18 @@
 + (NSDictionary *)mj_objectClassInArray
 {
     
+    
     return @{
              @"myCrossBroderRelease":@"MyCrossBroderRelease",
              @"rewardforwards":@"MyCrossBroderRewardforwards",
              };
-    
+
 }
+
+@end
+
+@implementation Rewardforwardinfo
+
 
 @end
 @implementation MyCrossBroderRelease
@@ -514,6 +583,15 @@
 {
     return @{@"ID" : @"id",
              };
+}
+
++ (NSDictionary *)mj_objectClassInArray
+{
+    
+    return @{
+             @"rewardforwardinfo":@"Rewardforwardinfo",
+             };
+    
 }
 
 @end

@@ -9,7 +9,6 @@
 #import "DiscoverHomePageViewController.h"
 #import "DiscoverViewController.h"//精选文章
 #import "RedpacketsforwardingViewController.h"//红包转发
-#import "ReadhotViewController.h"//热门阅读
 #import "AlreadysentproductViewController.h"//已发产品
 #import "ReadMeMostViewController.h"//读我最多
 #import "CoreArchive.h"
