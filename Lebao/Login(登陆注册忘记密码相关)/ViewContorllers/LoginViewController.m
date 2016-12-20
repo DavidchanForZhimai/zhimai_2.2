@@ -264,7 +264,7 @@ typedef enum {
                 [[ToolManager shareInstance] showSuccessWithStatus:@"登录成功！"];
                 //兼容旧用户推送
                 [CoreArchive setStr:@"push" key:@"once"];
-                
+//
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 
                      [[ToolManager shareInstance] LoginmianView];

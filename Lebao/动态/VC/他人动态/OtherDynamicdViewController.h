@@ -11,4 +11,5 @@
 @interface OtherDynamicdViewController : BaseViewController
 @property(nonatomic,strong)NSString *dynamicdName;
 @property(nonatomic,strong)NSString *dynamicdID;
+
 @end

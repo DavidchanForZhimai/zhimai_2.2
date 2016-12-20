@@ -14,12 +14,14 @@
 #import "CoreArchive.h"
 #import "ReleaseDocumentsPackagetViewController.h"//封装链接
 #import "EditArticlesViewController.h"//编辑文章
+
+#import "XLDataService.h"
 @interface DiscoverHomePageViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 @property(nonatomic,strong)NSMutableArray *collections;
 @property(nonatomic,strong)UICollectionView *collectionView;
 @property(nonatomic,strong)UIView *fristSection;
 @property(nonatomic,strong)UIView *secondSection;
-
+@property(nonatomic,assign)BOOL isNewRedArticle;
 @end
 
 @implementation DiscoverHomePageViewController
@@ -31,8 +33,26 @@
     [self.view addSubview:self.collectionView];
     [self.view addSubview:self.fristSection];
     [self.view addSubview:self.secondSection];
+    
 }
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    if (![CoreArchive strForKey:@"rid"]) {
+        [CoreArchive setStr:@"0" key:@"rid"];
+    }
+   
+    _isNewRedArticle = NO;
+    [XLDataService postWithUrl:[NSString stringWithFormat:@"%@library/home",HttpURL] param:[Parameter parameterWithSessicon] modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+        if ([dataObj[@"rtcode"] integerValue]==1) {
+            _isNewRedArticle = ![[NSString stringWithFormat:@"%@",dataObj[@"rid"]]  isEqualToString:[CoreArchive strForKey:@"rid"]];
+            [CoreArchive setStr:[NSString stringWithFormat:@"%@",dataObj[@"rid"]] key:@"rid"];
+            [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]]];
+        }
+       
+    }];
 
+}
 #pragma mark
 #pragma mark UICollectionDelegate
 //返回分区个数
@@ -55,6 +75,7 @@
 //返回每个item
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     UICollectionViewCell * cell  = [collectionView dequeueReusableCellWithReuseIdentifier:@"DiscoverHomePageView" forIndexPath:indexPath];
+    
     cell.backgroundColor = WhiteColor;
     NSString *imagesName = _collections[indexPath.section][indexPath.row][@"image"];
     NSString *name = _collections[indexPath.section][indexPath.row][@"name"];
@@ -63,6 +84,18 @@
     imageView.image = image;
     [cell addSubview:imageView];
     [UILabel createLabelWithFrame:frame(0, image.size.height + 20, APPWIDTH/3.0, 26*SpacedFonts) text:name fontSize:26*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentCenter inView:cell];
+//    红包红点
+    UIView *red= [[UIView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(imageView.frame) - 3, imageView.y-3, 8, 8)];
+    red.backgroundColor = [UIColor clearColor];
+    [red setRound];
+    [cell addSubview:red];
+    if (_isNewRedArticle &&indexPath.section==0&&indexPath.row==1) {
+        red.backgroundColor = [UIColor redColor];
+    }
+    else
+    {
+        red.backgroundColor = [UIColor clearColor];
+    }
     
     return cell;
 }
@@ -130,16 +163,15 @@
     layout.itemSize = CGSizeMake(APPWIDTH/3, 70*ScreenMultiple);
     layout.sectionInset = UIEdgeInsetsMake(50,0,0,0);
     //创建collectionView 通过一个布局策略layout来创建
-    UICollectionView * collect = [[UICollectionView alloc]initWithFrame:frame(0, StatusBarHeight + NavigationBarHeight, APPWIDTH,100 + 210*ScreenMultiple)collectionViewLayout:layout];
+    _collectionView = [[UICollectionView alloc]initWithFrame:frame(0, StatusBarHeight + NavigationBarHeight, APPWIDTH,100 + 210*ScreenMultiple)collectionViewLayout:layout];
     //代理设置
-    collect.delegate=self;
-    collect.dataSource=self;
+    _collectionView.delegate=self;
+    _collectionView.dataSource=self;
     //注册item类型 这里使用系统的类型
-    [collect registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"DiscoverHomePageView"];
+    [_collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"DiscoverHomePageView"];
     
-    collect.backgroundColor = WhiteColor;
+    _collectionView.backgroundColor = WhiteColor;
     
-    _collectionView = collect;
     return _collectionView;
 }
 - (UIView *)fristSection

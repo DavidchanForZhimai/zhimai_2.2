@@ -275,6 +275,7 @@ static dispatch_once_t once;
     if (getAppDelegate().window.rootViewController) {
         [getAppDelegate().window.rootViewController removeFromParentViewController];
     }
+   
     //设置App底栏
     getAppDelegate().mainTab = allocAndInit(MPHomeViewController);
     
@@ -301,7 +302,7 @@ static dispatch_once_t once;
         
     }];
 
-    
+
     UINavigationController * rightSideNavController = [[UINavigationController alloc] initWithRootViewController:allocAndInit(MeViewController)];
     [rightSideNavController setRestorationIdentifier:@"MMExampleRightNavigationControllerRestorationKey"];
     _drawerController = [[MMDrawerController alloc]
@@ -323,11 +324,11 @@ static dispatch_once_t once;
              block(drawerController, drawerSide, percentVisible);
          }
      }];
-    
-    
+  
     getAppDelegate().window.rootViewController = _drawerController;
     
     [getAppDelegate().window.layer transitionWithAnimType:TransitionAnimTypeRippleEffect subType:TransitionSubtypesFromRight curve:TransitionCurveEaseInEaseOut duration:1.0f];
+   
 }
 #pragma mark
 #pragma mark push
