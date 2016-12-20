@@ -75,7 +75,7 @@
             
             //路径
             
-            _pathBtn = [[BaseButton alloc]initWithFrame:frame(0, 75, cellWidth/2.0, cellHeight - 75) setTitle:@"路径设置" titleSize:14 titleColor:hexColor(838383) backgroundImage:nil iconImage:_path highlightImage:_path setTitleOrgin:CGPointMake(0,8) setImageOrgin:CGPointMake(0,0) inView:self];
+            _pathBtn = [[BaseButton alloc]initWithFrame:frame(0, 75, cellWidth/2.0, cellHeight - 75) setTitle:@"路径分析" titleSize:14 titleColor:hexColor(838383) backgroundImage:nil iconImage:_path highlightImage:_path setTitleOrgin:CGPointMake(0,8) setImageOrgin:CGPointMake(0,0) inView:self];
             _pathBtn.exclusiveTouch = YES;
             
             UILabel *line1 =allocAndInitWithFrame(UILabel, frame(APPWIDTH/2.0, frameY(_pathBtn) + 3, 0.5,frameHeight(_pathBtn) -6 ));

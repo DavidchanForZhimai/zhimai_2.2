@@ -18,7 +18,6 @@
 #define MyreleaseURL [NSString stringWithFormat:@"%@release/save",HttpURL]
 //发布文章
 #define CreatearticleUrl  [NSString stringWithFormat:@"%@release/create",HttpURL]
-#define BottomH 55
 #define myDotNumbers     @"0123456789.\n"
 #define myNumbers          @"0123456789\n"
 
@@ -122,7 +121,7 @@ typedef NS_ENUM(int,SwitchActionTag) {
 #pragma mark - mian_View
 - (void)mainView
 {
-    _mainScrollView = allocAndInitWithFrame(UIScrollView, frame(0,StatusBarHeight  + NavigationBarHeight, frameWidth(self.view), APPHEIGHT - StatusBarHeight - NavigationBarHeight -BottomH));
+    _mainScrollView = allocAndInitWithFrame(UIScrollView, frame(0,StatusBarHeight  + NavigationBarHeight, frameWidth(self.view), APPHEIGHT - StatusBarHeight - NavigationBarHeight));
     _mainScrollView.userInteractionEnabled = YES;
     _mainScrollView.backgroundColor =[UIColor clearColor];
     [self.view addSubview:_mainScrollView];
@@ -175,8 +174,8 @@ typedef NS_ENUM(int,SwitchActionTag) {
     [_contentTextView loadHTMLString:_data.content baseURL:nil];
     [_bg addSubview:_contentTextView];
     
-    BaseButton *clickBtn = [[BaseButton alloc]initWithFrame:_contentTextView.frame setTitle:@"" titleSize:0 titleColor:WhiteColor textAlignment:0 backgroundColor:WhiteColor inView:_bg];
-    clickBtn.backgroundColor = [UIColor clearColor];
+    
+    BaseButton *clickBtn = [[BaseButton alloc]initWithFrame:_contentTextView.frame setTitle:@"点击编辑图文内容" titleSize:16 titleColor:WhiteColor textAlignment:NSTextAlignmentCenter backgroundColor:rgba(0, 0, 0, 0.2) inView:_contentTextView];
     clickBtn.didClickBtnBlock = ^
     {
         EditWebDetailViewController *edit = allocAndInit(EditWebDetailViewController);
@@ -192,18 +191,14 @@ typedef NS_ENUM(int,SwitchActionTag) {
         PushView(self, edit);
     };
     
-    UILabel *line = allocAndInitWithFrame(UILabel , frame(10,CGRectGetMaxY(_bg.frame)+ 10, 3, 28*SpacedFonts));
-    line.backgroundColor = AppMainColor;
-    [_mainScrollView addSubview:line];
-    [UILabel createLabelWithFrame:frame(CGRectGetMaxX(line.frame) + 4, frameY(line), 150,  28*SpacedFonts) text:@"添加封面" fontSize:28*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentLeft inView:_mainScrollView];
-    
-    UIView *_coverView = allocAndInitWithFrame(UIView , frame(0, CGRectGetMaxY(line.frame) + 10, APPWIDTH, 90));
+    UIView *_coverView = allocAndInitWithFrame(UIView , frame(0, CGRectGetMaxY(_bg.frame)+ 10, APPWIDTH, 130));
     _coverView.backgroundColor = WhiteColor;
     [_mainScrollView addSubview:_coverView];
     
-    _coverImage = [[BaseButton alloc]initWithFrame:frame(frameX(line), 10, 60, 60) backgroundImage:[UIImage imageNamed:@"addition"] iconImage:nil highlightImage:nil inView:_coverView];
+    UILabel *fengmian =  [UILabel createLabelWithFrame:frame(10, 0 , 150,  40) text:@"添加文章封面" fontSize:28*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentLeft inView:_coverView];
     
-//    [UILabel createLabelWithFrame:frame(0,CGRectGetMaxY(_coverImage.frame), 80, 20) text:@"选择图片相册" fontSize:24*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter inView:_coverView];
+    _coverImage = [[BaseButton alloc]initWithFrame:frame(frameX(fengmian), CGRectGetMaxY(fengmian.frame), 60, 60) backgroundImage:nil iconImage:[UIImage imageNamed:@"addition"] highlightImage:nil inView:_coverView];
+    [UILabel createLabelWithFrame:frame(10,CGRectGetMaxY(_coverImage.frame), 200, 30) text:@"点击添加(修改)封面" fontSize:22*SpacedFonts textColor:hexColor(c9c9c9) textAlignment:NSTextAlignmentLeft inView:_coverView];
     
     if (_data.imageurl&&![_data.imageurl isEqualToString:@""]) {
         [[ToolManager shareInstance] imageView:_coverImage setImageWithURL:_data.imageurl placeholderType:PlaceholderTypeImageProcessing];
@@ -258,7 +253,7 @@ typedef NS_ENUM(int,SwitchActionTag) {
         _collectColor = LightBlackTitleColor;
     }
     
-    _collectLb = [UILabel createLabelWithFrame:frame(10, 0, 200, cellHeight) text:@"收集传播路径" fontSize:28*SpacedFonts textColor:_collectColor textAlignment:NSTextAlignmentLeft inView:_collect];
+    _collectLb = [UILabel createLabelWithFrame:frame(10, 0, 200, cellHeight) text:@"收集文章传播路径" fontSize:28*SpacedFonts textColor:_collectColor textAlignment:NSTextAlignmentLeft inView:_collect];
     
     _collectSwitch =allocAndInitWithFrame(UISwitch, frame(frameWidth(_businessCard) -60, 5, 50, 30));
     _collectSwitch.on =_data.isgetclue;
@@ -310,7 +305,7 @@ typedef NS_ENUM(int,SwitchActionTag) {
     [_redViewBg addSubview:_redTextFieldView];
     
     _redTextField= allocAndInitWithFrame(UITextField, frame(10 ,0, frameWidth(_redViewBg)-20, 42));
-    _redTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"请输入红包金额，最大可输入%@元",_data.amount] attributes:@{NSForegroundColorAttributeName:LightBlackTitleColor }];
+    _redTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"设置红包金额(最少5元,当前账户余额%@元)",_data.amount] attributes:@{NSForegroundColorAttributeName:LightBlackTitleColor }];
     [_redTextFieldView addSubview:_redTextField];
     _redTextField.textColor = BlackTitleColor;
     _redTextField.font = Size(24);
@@ -318,27 +313,23 @@ typedef NS_ENUM(int,SwitchActionTag) {
     _redTextField.backgroundColor = WhiteColor;
     _redTextField.delegate = self;
 //    _redTextField.text = _data.amount;
-    UILabel *desc = [UILabel createLabelWithFrame:frame(0 ,CGRectGetMaxY(_redTextField.frame) + 10, frameWidth(_redViewBg), 0) text:@"红包转发内容规范：\n1、标题不含有诱导分享的字眼，如转发就给红包、转发有现金等\n2、所发内容不含涉黄、涉暴、涉谣等信息\n3、文章内容可以为自己产品的介绍，可以显示自己的微名片\n4、红包转发的文章需通过知脉后台审核，审核通过后才能显示在“发现-红包转发”\n5、若内容被驳回，所扣红包金额会全额退回到红包账户中" fontSize:24*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:_redViewBg];
+    UILabel *desc = [UILabel createLabelWithFrame:frame(0 ,CGRectGetMaxY(_redTextField.frame) + 10, frameWidth(_redViewBg), 0) text:@"红包转发说明：\n1、红包分配规则：\n发布者设置红包金额\n转发者（从“红包转发”进行转发的知脉用户）根据自己带来的阅读者数量，按比例分得红包金额\n2、标题不含诱导分享字眼，内容不能涉黄、涉暴、涉谣\n3、通过知脉审核后才可以显示在“发现-红包转发”，未通过审核，扣除的金额会自动返还到个人钱包账户。" fontSize:24*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:_redViewBg];
     desc.numberOfLines = 0;
-    CGSize size = [desc sizeWithMultiLineContent:desc.text rowWidth:frameWidth(desc) font:Size(24)];
+    NSMutableAttributedString *string = [[NSMutableAttributedString alloc]initWithString:desc.text];
+    [string addAttribute:NSForegroundColorAttributeName value:BlackTitleColor range:[desc.text rangeOfString:@"红包转发说明："]];
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc]init];
+    [style setLineSpacing: 3.0f];
+    [string addAttribute:NSParagraphStyleAttributeName value:style range:[desc.text rangeOfString:desc.text]];
+    desc.attributedText = string;
+    CGSize size = [desc sizeWithMultiLineContent:desc.text rowWidth:frameWidth(desc) font:Size(30)];
     desc.frame = frame(frameX(desc), frameY(desc), frameWidth(desc), size.height);
     _redViewBg.frame = frame(frameX(_redViewBg), frameY(_redViewBg), frameWidth(desc), size.height + 10 + frameHeight(_redViewBg));
     
-    if (_data.isreward) {
-        
-        if (CGRectGetMaxY(_redViewBg.frame) +10>frameHeight(_mainScrollView)) {
+    if (CGRectGetMaxY(_redView.frame) +10>frameHeight(_mainScrollView)) {
             
-            _mainScrollView.contentSize =CGSizeMake(frameWidth(_mainScrollView), CGRectGetMaxY(_redViewBg.frame) +10);
+            _mainScrollView.contentSize =CGSizeMake(frameWidth(_mainScrollView), CGRectGetMaxY(_redView.frame) +10);
         }
 
-    }
-    else
-    {
-    if (CGRectGetMaxY(_redView.frame) +10>frameHeight(_mainScrollView)) {
-        
-        _mainScrollView.contentSize =CGSizeMake(frameWidth(_mainScrollView), CGRectGetMaxY(_redView.frame) +10);
-    }
-    }
     
 }
 #pragma mark - UITextField delegate
@@ -350,6 +341,10 @@ typedef NS_ENUM(int,SwitchActionTag) {
     if (money>[_data.amount floatValue]) {
         
         [[ToolManager shareInstance] showInfoWithStatus:[NSString stringWithFormat:@"最大金额%@",_data.amount]];
+        return NO;
+    }
+    if (money<5.0) {
+        [[ToolManager shareInstance] showInfoWithStatus:@"最小金额5元"];
         return NO;
     }
     
@@ -446,23 +441,16 @@ typedef NS_ENUM(int,SwitchActionTag) {
             
             _redLb.textColor = BlackTitleColor;
             
-            if (CGRectGetMaxY(_redViewBg.frame) +10>frameHeight(_mainScrollView)) {
+            _mainScrollView.contentSize =CGSizeMake(frameWidth(_mainScrollView), CGRectGetMaxY(_redViewBg.frame) +10);
                 
-                _mainScrollView.contentSize =CGSizeMake(frameWidth(_mainScrollView), CGRectGetMaxY(_redViewBg.frame) +10);
-                
-                [_mainScrollView scrollRectToVisible:frame(frameX(_mainScrollView), frameY(_mainScrollView), frameWidth(_mainScrollView), _mainScrollView.contentSize.height) animated:YES];
-            }
+            [_mainScrollView scrollRectToVisible:frame(frameX(_mainScrollView), frameY(_mainScrollView), frameWidth(_mainScrollView), _mainScrollView.contentSize.height) animated:YES];
             
-
         }
         else
         {
             _redLb.textColor = LightBlackTitleColor;
-    
-            if (CGRectGetMaxY(_redView.frame) +10>frameHeight(_mainScrollView)) {
-                
-                _mainScrollView.contentSize =CGSizeMake(frameWidth(_mainScrollView), CGRectGetMaxY(_redView.frame) +10);
-            }
+            _mainScrollView.contentSize =CGSizeMake(frameWidth(_mainScrollView), CGRectGetMaxY(_redView.frame) +10);
+
 
         }
     }
@@ -481,14 +469,8 @@ typedef NS_ENUM(int,SwitchActionTag) {
 #pragma mark - BottomView
 - (void)bottomViews
 {
-    UIView *_botoomView = allocAndInitWithFrame(UIView, frame(0, APPHEIGHT - 50, APPWIDTH, 50));
-    _botoomView.backgroundColor = WhiteColor;
-    [_botoomView setBorder:LineBg width:0.5];
-    [self.view addSubview:_botoomView];
-    
-    BaseButton *_save = [[BaseButton alloc]initWithFrame:frame((APPWIDTH - 115*ScreenMultiple)/2.0, 8, 115*ScreenMultiple, 34) setTitle:@"保存" titleSize:26*SpacedFonts titleColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:WhiteColor inView:_botoomView];
-    [_save setBorder:LineBg width:0.5];
-    [_save setRoundWithfloat:frameWidth(_save)/8.0];
+
+    BaseButton *_save = [[BaseButton alloc]initWithFrame:frame(APPWIDTH-50, StatusBarHeight, 50, NavigationBarHeight) setTitle:@"保存" titleSize:30*SpacedFonts titleColor:BlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:WhiteColor inView:self.view];
     _save.didClickBtnBlock = ^
     {
         NSMutableDictionary *parameter = [Parameter parameterWithSessicon];
@@ -568,15 +550,6 @@ typedef NS_ENUM(int,SwitchActionTag) {
         }];
         
     };
-    
-//    BaseButton *_share = [[BaseButton alloc]initWithFrame:frame(frameWidth(_botoomView) - CGRectGetMaxX(_save.frame), frameY(_save), frameWidth(_save), frameHeight(_save)) setTitle:@"保存并分享" titleSize:26*SpacedFonts titleColor:BlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:WhiteColor inView:_botoomView];
-//    [_share setBorder:LightBlackTitleColor width:0.5];
-//    [_share setRoundWithfloat:frameWidth(_share)/8.0];
-//    
-//    _share.didClickBtnBlock = ^{
-//        
-//        
-//    };
     
     
 }
