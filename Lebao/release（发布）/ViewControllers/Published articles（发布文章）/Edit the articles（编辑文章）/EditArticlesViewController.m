@@ -343,10 +343,7 @@ typedef NS_ENUM(int,SwitchActionTag) {
         [[ToolManager shareInstance] showInfoWithStatus:[NSString stringWithFormat:@"最大金额%@",_data.amount]];
         return NO;
     }
-    if (money<5.0) {
-        [[ToolManager shareInstance] showInfoWithStatus:@"最小金额5元"];
-        return NO;
-    }
+    
     
     if ([textField.text rangeOfString:@"."].location == NSNotFound) {
         isHaveDian = NO;
@@ -517,6 +514,10 @@ typedef NS_ENUM(int,SwitchActionTag) {
             if ([_redTextField.text floatValue]<=0.01) {
                 [[ToolManager shareInstance] showInfoWithStatus:@"请输入红包金额"];
                 return ;
+            }
+            if ([_redTextField.text floatValue]<5.0) {
+                [[ToolManager shareInstance] showInfoWithStatus:@"最小金额5元"];
+                return;
             }
            [parameter setObject:_redTextField.text forKey:@"reward"];
         }

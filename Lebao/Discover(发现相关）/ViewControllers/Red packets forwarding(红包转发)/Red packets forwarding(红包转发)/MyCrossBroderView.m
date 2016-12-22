@@ -485,7 +485,7 @@
         _timeStr =[[NSString stringWithFormat:@"%i",(int)modal.createtime] countdownFormTimeInterval];
         [_time setTitle:_timeStr forState:UIControlStateNormal];
         [_time setImage:[UIImage imageNamed:@"exhibition_createtime"] forState:UIControlStateNormal];
-         [_time textAndImageCenter];
+//         [_time textAndImageCenter];
         
     }
     
@@ -521,7 +521,7 @@
         _timeStr =[[NSString stringWithFormat:@"%i",(int)modal.createtime] countdownFormTimeInterval];
         [_time setTitle:_timeStr forState:UIControlStateNormal];
         [_time setImage:[UIImage imageNamed:@"exhibition_createtime"] forState:UIControlStateNormal];
-        [_time textAndImageCenter];
+//        [_time textAndImageCenter];
         
     }
     

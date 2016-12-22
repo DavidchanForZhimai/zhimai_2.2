@@ -10,7 +10,7 @@
 #import "DiscoverViewController.h"//精选文章
 #import "RedpacketsforwardingViewController.h"//红包转发
 #import "AlreadysentproductViewController.h"//已发产品
-#import "ReadMeMostViewController.h"//读我最多
+//#import "ReadMeMostViewController.h"//读我最多
 #import "CoreArchive.h"
 #import "ReleaseDocumentsPackagetViewController.h"//封装链接
 #import "EditArticlesViewController.h"//编辑文章
@@ -21,7 +21,7 @@
 @property(nonatomic,strong)UICollectionView *collectionView;
 @property(nonatomic,strong)UIView *fristSection;
 @property(nonatomic,strong)UIView *secondSection;
-@property(nonatomic,assign)BOOL isNewRedArticle;
+@property(nonatomic,strong)UIView *red;
 @end
 
 @implementation DiscoverHomePageViewController
@@ -39,19 +39,43 @@
 {
     [super viewWillAppear:animated];
     if (![CoreArchive strForKey:@"rid"]) {
-        [CoreArchive setStr:@"0" key:@"rid"];
+        [CoreArchive setInt:0 key:@"rid"];
     }
-   
-    _isNewRedArticle = NO;
+
     [XLDataService postWithUrl:[NSString stringWithFormat:@"%@library/home",HttpURL] param:[Parameter parameterWithSessicon] modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         if ([dataObj[@"rtcode"] integerValue]==1) {
-            _isNewRedArticle = ![[NSString stringWithFormat:@"%@",dataObj[@"rid"]]  isEqualToString:[CoreArchive strForKey:@"rid"]];
-            [CoreArchive setStr:[NSString stringWithFormat:@"%@",dataObj[@"rid"]] key:@"rid"];
-            [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]]];
+            BOOL isNewRedArticle = YES;
+            if ([dataObj[@"rid"] integerValue]==0||[dataObj[@"rid"] integerValue]==[CoreArchive intForKey:@"rid"]) {
+                isNewRedArticle = NO;
+            }
+            [CoreArchive setInt:[dataObj[@"rid"] integerValue] key:@"rid"];
+
+            if (isNewRedArticle) {
+                self.red.backgroundColor = [UIColor redColor];
+               
+            }
+            else
+            {
+                self.red.backgroundColor = [UIColor clearColor];
+            }
+
+           
         }
        
     }];
 
+}
+- (UIView *)red
+{
+    if (_red) {
+        return _red;
+    }
+    //    红包红点
+    UIView *red= [[UIView alloc]initWithFrame:CGRectMake(APPWIDTH/3.0*1.6,40 + 10*ScreenMultiple, 8, 8)];
+    red.backgroundColor = [UIColor clearColor];
+    [red setRound];
+    [self.collectionView addSubview:red];
+    return _red = red;
 }
 #pragma mark
 #pragma mark UICollectionDelegate
@@ -84,19 +108,6 @@
     imageView.image = image;
     [cell addSubview:imageView];
     [UILabel createLabelWithFrame:frame(0, image.size.height + 20, APPWIDTH/3.0, 26*SpacedFonts) text:name fontSize:26*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentCenter inView:cell];
-//    红包红点
-    UIView *red= [[UIView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(imageView.frame) - 3, imageView.y-3, 8, 8)];
-    red.backgroundColor = [UIColor clearColor];
-    [red setRound];
-    [cell addSubview:red];
-    if (_isNewRedArticle &&indexPath.section==0&&indexPath.row==1) {
-        red.backgroundColor = [UIColor redColor];
-    }
-    else
-    {
-        red.backgroundColor = [UIColor clearColor];
-    }
-    
     return cell;
 }
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
@@ -142,9 +153,9 @@
         
     }
     _collections = [NSMutableArray new];
-    NSArray *title1 = [NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"线索大厅",@"name",@"icon_discover_xiansuo",@"image",@"WBHomePageVC",@"viewController", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"红包转发",@"name",@"icon_discover_hongbao",@"image",@"RedpacketsforwardingViewController",@"viewController", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"封装链接",@"name",@"icon_discover_fengzhuanglianjie",@"image",@"ReleaseDocumentsPackagetViewController",@"viewController", nil], nil];
+    NSArray *title1 = [NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"线索大厅",@"name",@"icon_discover_xiansuo",@"image",@"WBHomePageVC",@"viewController", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"红包转发",@"name",@"icon_discover_hongbao",@"image",@"RedpacketsforwardingViewController",@"viewController", nil], nil];
 
-    NSArray *title2 =[NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"编辑文章",@"name",@"icon_discover_liaoku",@"image",@"EditArticlesViewController",@"viewController", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"我的内容",@"name",@"icon_discover_wodewnzhang",@"image",@"AlreadysentproductViewController",@"viewController", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"读我最多",@"name",@"icon_discover_duwozuiduo",@"image",@"ReadMeMostViewController",@"viewController", nil], [NSDictionary dictionaryWithObjectsAndKeys:@"读者属性",@"name",@"icon_discover_shuju",@"image",@"ReaderAttributesViewController",@"viewController", nil],nil];
+    NSArray *title2 =[NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"封装链接",@"name",@"icon_discover_fengzhuanglianjie",@"image",@"ReleaseDocumentsPackagetViewController",@"viewController", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"编辑文章",@"name",@"icon_discover_liaoku",@"image",@"EditArticlesViewController",@"viewController", nil],[NSDictionary dictionaryWithObjectsAndKeys:@"我的内容",@"name",@"icon_discover_wodewnzhang",@"image",@"AlreadysentproductViewController",@"viewController", nil],nil];
     [_collections  addObject:title1];
     [_collections addObject:title2];
     return _collections;
@@ -163,7 +174,7 @@
     layout.itemSize = CGSizeMake(APPWIDTH/3, 70*ScreenMultiple);
     layout.sectionInset = UIEdgeInsetsMake(50,0,0,0);
     //创建collectionView 通过一个布局策略layout来创建
-    _collectionView = [[UICollectionView alloc]initWithFrame:frame(0, StatusBarHeight + NavigationBarHeight, APPWIDTH,100 + 210*ScreenMultiple)collectionViewLayout:layout];
+    _collectionView = [[UICollectionView alloc]initWithFrame:frame(0, StatusBarHeight + NavigationBarHeight, APPWIDTH,100 + 140*ScreenMultiple)collectionViewLayout:layout];
     //代理设置
     _collectionView.delegate=self;
     _collectionView.dataSource=self;

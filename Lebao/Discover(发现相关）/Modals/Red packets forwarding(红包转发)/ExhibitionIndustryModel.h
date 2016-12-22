@@ -95,6 +95,8 @@
 
 @property (nonatomic, copy) NSString *rewardforward;
 
+@property (nonatomic, copy) NSString *readcount;
+
 @property (nonatomic, assign) BOOL isgetclue;
 
 @property (nonatomic, assign) BOOL isreward;

@@ -101,12 +101,13 @@
     
     [_browse setTitle:[NSString stringWithFormat:@"%@人",model.rewardforward] forState:UIControlStateNormal];
     [_browse textAndImageCenter];
-    [_read setTitle:[NSString stringWithFormat:@"%@人",model.rewardforward] forState:UIControlStateNormal];
+    [_read setTitle:[NSString stringWithFormat:@"%@人",model.readcount] forState:UIControlStateNormal];
     [_read textAndImageCenter];
     
     [_redPaper setTitle:model.reward forState:UIControlStateNormal];
     [_redPaper textAndImageCenter];
-    
+    _redPaper.frame = CGRectMake(APPWIDTH - [_redPaper textAndImageCenter] - 5, _redPaper.y, [_redPaper textAndImageCenter], _redPaper.height);
+    _descrip.frame = CGRectMake(_descrip.x, _descrip.y, APPWIDTH -_descrip.x- [_redPaper textAndImageCenter] -5 , _descrip.height);
     
 }
 

@@ -108,7 +108,7 @@
             [[ToolManager shareInstance] endFooterWithRefreshing:_exhibitionRedPaperView];
         }
         if (dataObj) {
-            
+//            NSLog(@"data =%@",dataObj);
             if ([dataObj[@"rtcode"] integerValue]==1) {
              
                 [CoreArchive setStr:dataObj[@"rid"] key:RID];

@@ -105,7 +105,7 @@
     [[ToolManager shareInstance] imageView:_icon setImageWithURL:modal.imgurl placeholderType:PlaceholderTypeOther];
     _descrip.text = modal.title;
     _time.text = [modal.createdate timeformatString:@"yyyy-MM-dd"];
-    [_browse setTitle:[NSString stringWithFormat:@"%@人",modal.readcount] forState:UIControlStateNormal];
+    [_browse setTitle:[NSString stringWithFormat:@"%@人",modal.forwardcount] forState:UIControlStateNormal];
     [_read setTitle:[NSString stringWithFormat:@"%@人",modal.readcount] forState:UIControlStateNormal];
 //    [_browse textAndImageCenter];
 //    [_read textAndImageCenter];

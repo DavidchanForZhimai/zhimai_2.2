@@ -22,6 +22,7 @@
 @property(nonatomic,strong)NSString *readcount;
 @property(nonatomic,strong)NSString *readcover;
 @property(nonatomic,strong)NSString *createdate;
+@property(nonatomic,strong)NSString *forwardcount;
 @property(nonatomic,strong)NSString *uid;
 @property(nonatomic,strong)NSString *title;
 @property(nonatomic,strong)NSString *ID;

@@ -59,12 +59,13 @@
     
 }
 
-- (void)textAndImageCenter
+- (float)textAndImageCenter
 {
     CGSize sizeTime = [self.titleLabel sizeWithContent:self.titleLabel.text font:self.titleLabel.font];
     self.imagePoint = CGPointMake((self.height - self.imageView.image.size.height)/2.0,(self.width - sizeTime.width - self.imageView.image.size.width - 5)/2.0);
     self.titlePoint = CGPointMake((self.height - self.imageView.image.size.height)/2.0,(self.width - sizeTime.width - self.imageView.image.size.width -  5)/2.0 + 5);
     
+    return sizeTime.width + 5 + self.imageView.image.size.width;
 }
 - (void)textCenter
 {

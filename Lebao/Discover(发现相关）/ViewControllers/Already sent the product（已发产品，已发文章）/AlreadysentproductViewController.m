@@ -99,7 +99,7 @@
     
     [XLDataService postWithUrl:ArticleURL param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         [[ToolManager shareInstance] dismiss];
-        //        NSLog(@"data =%@",dataObj);
+//                NSLog(@"data =%@",dataObj);
         if (isRefresh) {
             [[ToolManager shareInstance]endHeaderWithRefreshing
              :_productView];
