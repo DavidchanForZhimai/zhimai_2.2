@@ -10,32 +10,19 @@
 #import "WithdrawalViewController.h"//提现
 #import "EarnestRecodeViewController.h"//记录
 #import "XLDataService.h"
-#import "WetChatPayManager.h"
-//////// 特殊字符的限制输入，价格金额的有效性判断
-#define myDotNumbers     @"0123456789.\n"
-#define myNumbers          @"0123456789\n"
+#import "RechargeViewController.h"
 #define KNotificationWetChatWithdraw @"KNotificationWetChatWithdraw"
 #define WalletURL [NSString stringWithFormat:@"%@user/wallet",HttpURL]
-@interface EarnestMoneyViewController ()<UITextFieldDelegate>
+@interface EarnestMoneyViewController ()
 
 @end
-typedef enum {
-    
-   ButtonActionTagWithdraw =2,
-   ButtonActionTagRecharge,
-    ButtonActionTagRecode
-    
-}ButtonActionTag;
 
 @implementation EarnestMoneyViewController
 {
     
     UIScrollView *_mainScrollView;
-    UILabel *_rechargeLb;
-    UITextField *_rechargeTextField;
-    
+
     UILabel *allAmount;
-    UIView *_rechargeView;
     UILabel *_rechargeiInstructions;
     
     UILabel *_canCarry;
@@ -63,8 +50,19 @@ typedef enum {
 - (void)navView
 {
     [self navViewTitleAndBackBtn:@"我的钱包" ];
-    
-    
+    //充值
+    BaseButton *chongzhi = [[BaseButton alloc]initWithFrame:CGRectMake(APPWIDTH - 50, StatusBarHeight, 50, NavigationBarHeight) setTitle:@"充值" titleSize:15 titleColor:BlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:[UIColor clearColor] inView:self.view];
+    __weak typeof(self) weakSelf = self;
+    chongzhi.didClickBtnBlock = ^
+    {
+        RechargeViewController *rechargeVC = [[RechargeViewController alloc]init];
+        rechargeVC.moneyPayCallBack = ^(float money)
+        {
+         allAmount.text = [NSString stringWithFormat:@"%.2f",[allAmount.text floatValue] + money];
+         _canCarry.text =[NSString stringWithFormat:@"%.2f",[_canCarry.text floatValue] + money];
+        };
+        PushView(weakSelf, rechargeVC);
+    };
 }
 #pragma mark
 #pragma mark - mainView
@@ -75,104 +73,69 @@ typedef enum {
     [self.view addSubview:_mainScrollView];
     _mainScrollView.alwaysBounceVertical = YES;
     
-    UIView *headView = allocAndInitWithFrame(UIView, frame(0, 0, frameWidth(_mainScrollView), 125.0f));
+    UIView *headView = allocAndInitWithFrame(UIView, frame(0, 0, frameWidth(_mainScrollView), 172.0f));
     headView.backgroundColor = AppMainColor;
     [_mainScrollView addSubview:headView];
     
-    UIButton *_recodeBtn = [UIButton createButtonWithfFrame:frame(frameWidth(_mainScrollView) -40, 0, 40, 40) title:nil backgroundImage:nil iconImage:[UIImage imageNamed:@"iconfont-chengyijinjilu"] highlightImage:nil tag:ButtonActionTagRecode inView:headView];
-    [_recodeBtn addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
     
+    [UILabel createLabelWithFrame:frame(0, 34, frameWidth(_mainScrollView) , 24*SpacedFonts) text:@"总金额(元)" fontSize:24*SpacedFonts textColor:hexColor(f2f2f2) textAlignment:NSTextAlignmentCenter inView:headView];
     
-    UIButton *_withdrawBtn =[UIButton createButtonWithfFrame:frame(frameWidth(_mainScrollView) -80, 0, 40, 40) title:@"提现" backgroundImage:nil iconImage:nil highlightImage:nil tag:ButtonActionTagWithdraw inView:headView];
-    _withdrawBtn.titleLabel.font = Size(24);
-    [_withdrawBtn addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
+    allAmount =  [UILabel createLabelWithFrame:frame(0,65, frameWidth(_mainScrollView) , 60*SpacedFonts) text:@"00.00" fontSize:60*SpacedFonts textColor:WhiteColor textAlignment:NSTextAlignmentCenter inView:headView];
     
-    [UILabel createLabelWithFrame:frame(0, 65, frameWidth(_mainScrollView) , 24*SpacedFonts) text:@"总金额(元)" fontSize:24*SpacedFonts textColor:WhiteColor textAlignment:NSTextAlignmentCenter inView:headView];
-    
-    allAmount =  [UILabel createLabelWithFrame:frame(0,87, frameWidth(_mainScrollView) , 26*SpacedFonts) text:@"00.00" fontSize:26*SpacedFonts textColor:WhiteColor textAlignment:NSTextAlignmentCenter inView:headView];
-    
-    UIView *footView = allocAndInitWithFrame(UIView, frame(frameX(headView), CGRectGetMaxY(headView.frame), frameWidth(headView), 50));
-    footView.backgroundColor = WhiteColor;
+    UIView *footView = allocAndInitWithFrame(UIView, frame(frameX(headView), 119.0f, frameWidth(headView), 53));
+    footView.backgroundColor = rgba(255, 255, 255, 0.2);
     
     [_mainScrollView addSubview:footView];
     
-    [UILabel createLabelWithFrame:frame(0, 10, frameWidth(_mainScrollView)/2.0 , 24*SpacedFonts) text:@"可提现(元)" fontSize:24*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter inView:footView];
+    [UILabel createLabelWithFrame:frame(0, 10, frameWidth(_mainScrollView)/2.0 , 24*SpacedFonts) text:@"可提现(元)" fontSize:24*SpacedFonts textColor:hexColor(f2f2f2) textAlignment:NSTextAlignmentCenter inView:footView];
     
-    _canCarry =  [UILabel createLabelWithFrame:frame(0,15 + 24*SpacedFonts, frameWidth(_mainScrollView)/2.0 , 26*SpacedFonts) text:@"00.00" fontSize:26*SpacedFonts textColor:AppMainColor textAlignment:NSTextAlignmentCenter inView:footView];
+    _canCarry =  [UILabel createLabelWithFrame:frame(0,15 + 24*SpacedFonts, frameWidth(_mainScrollView)/2.0 , 28*SpacedFonts) text:@"00.00" fontSize:28*SpacedFonts textColor:WhiteColor textAlignment:NSTextAlignmentCenter inView:footView];
     
-    [UILabel createLabelWithFrame:frame(frameWidth(_mainScrollView)/2.0, 10, frameWidth(_mainScrollView)/2.0 , 24*SpacedFonts) text:@"红包(元)" fontSize:24*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter inView:footView];
+    [UILabel createLabelWithFrame:frame(frameWidth(_mainScrollView)/2.0, 10, frameWidth(_mainScrollView)/2.0 , 24*SpacedFonts) text:@"红包(元)" fontSize:24*SpacedFonts textColor:hexColor(f2f2f2) textAlignment:NSTextAlignmentCenter inView:footView];
     
-     _redEnvelope =  [UILabel createLabelWithFrame:frame(frameWidth(_mainScrollView)/2.0,15 + 24*SpacedFonts, frameWidth(_mainScrollView)/2.0 , 26*SpacedFonts) text:@"00.00" fontSize:26*SpacedFonts textColor:AppMainColor textAlignment:NSTextAlignmentCenter inView:footView];
+     _redEnvelope =  [UILabel createLabelWithFrame:frame(frameWidth(_mainScrollView)/2.0,15 + 24*SpacedFonts, frameWidth(_mainScrollView)/2.0 , 28*SpacedFonts) text:@"00.00" fontSize:28*SpacedFonts textColor:WhiteColor textAlignment:NSTextAlignmentCenter inView:footView];
     
+   
+    UIImage *tixianWXImage = [UIImage imageNamed:@"iconfont-tixian"];
     
-    UILabel *lineb=  [UILabel createLabelWithFrame:frame(frameWidth(_mainScrollView)/2.0, 5, 0.5, frameHeight(footView) - 10) text:@"" fontSize:0 textColor:LineBg textAlignment:0 inView:footView];
-    lineb.backgroundColor = LineBg;
-    
-    UILabel *line = allocAndInitWithFrame(UILabel, frame(10,CGRectGetMaxY(footView.frame) + 10, 2, 16));
-    line.backgroundColor= AppMainColor;
-    [_mainScrollView addSubview:line];
-    
-    [UILabel createLabelWithFrame:frame(16, CGRectGetMaxY(footView.frame), 150, 36) text:@"我要充值" fontSize:26*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentLeft inView:_mainScrollView];
-    
-    _rechargeView = allocAndInitWithFrame(UIView, frame(0, CGRectGetMaxY(line.frame) + 10, frameWidth(_mainScrollView), APPHEIGHT - (CGRectGetMaxY(line.frame) + 10)));
-    _rechargeView.backgroundColor = WhiteColor;
-    [_mainScrollView addSubview:_rechargeView];
-    
-    UIView *_rechargeTextView = allocAndInitWithFrame(UIView, frame(30*ScreenMultiple, 18, frameWidth(_rechargeView) - 60*ScreenMultiple, 41));
-    _rechargeTextView.layer.masksToBounds =YES;
-    _rechargeTextView.layer.cornerRadius = 5;
-    _rechargeTextView.layer.borderColor = LineBg.CGColor;
-    _rechargeTextView.layer.borderWidth = 0.5;
-    [_rechargeView addSubview:_rechargeTextView];
-    
-    _rechargeTextField = allocAndInitWithFrame(UITextField, frame(10, 0, frameWidth(_rechargeTextView) - 20, frameHeight(_rechargeTextView)));
-    _rechargeTextField.placeholder = @"请输入金额";
-    _rechargeTextField.delegate =self;
-//    _rechargeTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
-    _rechargeTextField.textColor = BlackTitleColor;
-    _rechargeTextField.font = [UIFont systemFontOfSize:26*SpacedFonts];
-//    _rechargeTextField.keyboardType =UIKeyboardTypeNumberPad;
-    [_rechargeTextView addSubview:_rechargeTextField];
-    
-    
-     _rechargeLb =[UILabel createLabelWithFrame:frame(0, CGRectGetMaxY(_rechargeTextView.frame) + 13, frameWidth(_rechargeTextView), 24*SpacedFonts) text:@"本次充值需支付人民币 0.00 元" fontSize:24*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentCenter inView:_rechargeView];
-    NSMutableAttributedString *_rechargeLbString =[[NSMutableAttributedString alloc]initWithString:_rechargeLb.text];
-    [_rechargeLbString addAttribute:NSForegroundColorAttributeName value:AppMainColor range:[_rechargeLb.text rangeOfString:@"0.00"]];
-    [_rechargeLbString addAttribute:NSFontAttributeName value:Size(28) range:[_rechargeLb.text rangeOfString:@"0.00"]];
-    _rechargeLb.attributedText = _rechargeLbString;
-    [_rechargeView addSubview:_rechargeLb];
-    
-    BaseButton *_rechargeBtn = [[BaseButton alloc]initWithFrame:frame(frameX(_rechargeTextView), CGRectGetMaxY(_rechargeLb.frame) + 30, frameWidth(_rechargeTextView), 40) setTitle:@"充值" titleSize:28*SpacedFonts titleColor:WhiteColor textAlignment:NSTextAlignmentCenter backgroundColor:AppMainColor inView:_rechargeView];
-    [_rechargeBtn setRadius:8.0];
-    _rechargeBtn.didClickBtnBlock = ^
+    float btnH = 41*ScreenMultiple;
+    BaseButton *tixianWX = [[BaseButton alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(footView.frame) +  10, APPWIDTH, btnH) setTitle:@"提现到微信钱包" titleSize:13 titleColor:BlackTitleColor backgroundImage:nil iconImage:tixianWXImage highlightImage:tixianWXImage setTitleOrgin:CGPointMake((btnH - 13)/2.0 , 20) setImageOrgin:CGPointMake((btnH -tixianWXImage.size.height)/2.0 , 10) inView:_mainScrollView];
+    tixianWX.backgroundColor = WhiteColor;
+    __weak typeof(self) weakSelf = self;
+    tixianWX.didClickBtnBlock =^
     {
-//        NSLog(@"ButtonActionTagRecharge");
-        if ([_rechargeTextField.text floatValue]<=0.00) {
-            [[ToolManager shareInstance] showInfoWithStatus:@"充值必需大于0.01（元）"];
-            return;
-        }
-        [[WetChatPayManager shareInstance] jumpToBizPay:_rechargeTextField.text wetChatPaySucceed:^(NSString *payMoney) {
-            allAmount.text = [NSString stringWithFormat:@"%.2f",[allAmount.text floatValue] + payMoney.floatValue];
-            _canCarry.text =[NSString stringWithFormat:@"%.2f",[_canCarry.text floatValue] + payMoney.floatValue];
-        }];
-    
+        WithdrawalViewController *withdrawalVC = [[WithdrawalViewController alloc]init];
+        PushView(weakSelf, withdrawalVC);
     };
+    
+    UIImage *jiaoyiImage = [UIImage imageNamed:@"iconfont-chengyijinjilu"];
+    BaseButton *jiaoyi = [[BaseButton alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(tixianWX.frame)+0.5, APPWIDTH, btnH) setTitle:@"交易记录" titleSize:13 titleColor:BlackTitleColor backgroundImage:nil iconImage:jiaoyiImage highlightImage:jiaoyiImage setTitleOrgin:CGPointMake((btnH - 13)/2.0 , 20) setImageOrgin:CGPointMake((btnH -jiaoyiImage.size.height)/2.0 , 10) inView:_mainScrollView];
+    jiaoyi.backgroundColor = WhiteColor;
+    jiaoyi.didClickBtnBlock =^
+    {
+        EarnestRecodeViewController *earnestRecodeVC =[[EarnestRecodeViewController alloc]init];
+        PushView(weakSelf, earnestRecodeVC);
 
-   UILabel *_instructions = [UILabel createLabelWithFrame:frame(16, CGRectGetMaxY(_rechargeBtn.frame) +33, 150 , 24*SpacedFonts) text:@"充值说明" fontSize:24*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentLeft inView:_rechargeView];
+    };
+    UIImage *imageAssorry1 =[UIImage imageNamed:@"option"];
+    UIImageView *assorry1 =allocAndInitWithFrame(UIImageView, frame(jiaoyi.width - 13 - imageAssorry1.size.width, (jiaoyi.height - imageAssorry1.size.height)/2.0, imageAssorry1.size.width, imageAssorry1.size.height));
+    assorry1.image = imageAssorry1;
     
+    UIImage *imageAssorry2 =[UIImage imageNamed:@"option"];
+    UIImageView *assorry2 =allocAndInitWithFrame(UIImageView, frame(jiaoyi.width - 13 - imageAssorry2.size.width, (jiaoyi.height - imageAssorry2.size.height)/2.0, imageAssorry2.size.width, imageAssorry2.size.height));
+    assorry2.image = imageAssorry2;
     
-    _rechargeiInstructions = [UILabel createLabelWithFrame:frame(16, CGRectGetMaxY(_instructions.frame) + 10, frameWidth(_rechargeView) - 30 , 36) text:@"1、知脉目前仅支持微信支付充值\n2、充值的金额主要用于平台的打赏、购买会员等消费，也可以再次提现到微信钱包\n3、红包中的金额只能用于平台消费，无法提现" fontSize:24*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:_rechargeView];
+    [tixianWX  addSubview:assorry1];
+    [jiaoyi  addSubview:assorry2];
     
+    UILabel *_instructions = [UILabel createLabelWithFrame:frame(16, CGRectGetMaxY(jiaoyi.frame) + 20, 150 , 24*SpacedFonts) text:@"知脉钱包说明" fontSize:24*SpacedFonts textColor:BlackTitleColor textAlignment:NSTextAlignmentLeft inView:_mainScrollView];
+    
+    _rechargeiInstructions = [UILabel createLabelWithFrame:frame(15, CGRectGetMaxY(_instructions.frame) + 10, frameWidth(_mainScrollView) - 30 , 36) text:@"1、知脉目前仅支持微信支付充值\n2、充值的金额主要用于平台的打赏、购买会员等消费，也可以再次提现到微信钱包\n3、红包中的金额只能用于平台消费，无法提现" fontSize:24*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:_mainScrollView];
     _rechargeiInstructions.numberOfLines = 0;
     CGSize size = [_rechargeiInstructions sizeWithMultiLineContent:_rechargeiInstructions.text rowWidth:frameWidth(_rechargeiInstructions) font:Size(24)];
     _rechargeiInstructions.frame = frame(frameX(_rechargeiInstructions), frameY(_rechargeiInstructions), frameWidth(_rechargeiInstructions), size.height);
-    
-    _rechargeView.frame = frame(frameX(_rechargeView), frameY(_rechargeView), frameWidth(_rechargeView), CGRectGetMaxY(_rechargeiInstructions.frame )+ 10);
-    
-    if (CGRectGetMaxY(_rechargeView.frame) + 10 >frameHeight(_mainScrollView)) {
-       
-        _mainScrollView.contentSize =CGSizeMake(frameWidth(_mainScrollView), CGRectGetMaxY(_rechargeView.frame) + 10);
-    }
+    _mainScrollView.contentSize =CGSizeMake(frameWidth(_mainScrollView), CGRectGetMaxY(_rechargeiInstructions.frame) + 10);
+   
     
 }
 - (void)netWork
@@ -191,15 +154,17 @@ typedef enum {
                 _redEnvelope.text = dataObj[@"repackets"];
                 _rechargeiInstructions.text = dataObj[@"desc"];
                 {
-                    CGSize size = [_rechargeiInstructions sizeWithMultiLineContent:_rechargeiInstructions.text rowWidth:frameWidth(_rechargeiInstructions) font:Size(24)];
+                    NSMutableAttributedString *string = [[NSMutableAttributedString alloc]initWithString:_rechargeiInstructions.text];
+                    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc]init];
+                    [style setLineSpacing:3.0];
+                    [string addAttribute:NSParagraphStyleAttributeName value:style range:[_rechargeiInstructions.text rangeOfString:_rechargeiInstructions.text]];
+                    _rechargeiInstructions.attributedText =string;
+                    
+                    CGSize size = [_rechargeiInstructions sizeWithMultiLineContent:_rechargeiInstructions.text rowWidth:frameWidth(_rechargeiInstructions) font:Size(30)];
                     _rechargeiInstructions.frame = frame(frameX(_rechargeiInstructions), frameY(_rechargeiInstructions), frameWidth(_rechargeiInstructions), size.height);
                     
-                    _rechargeView.frame = frame(frameX(_rechargeView), frameY(_rechargeView), frameWidth(_rechargeView), CGRectGetMaxY(_rechargeiInstructions.frame )+ 10);
+                    _mainScrollView.contentSize =CGSizeMake(frameWidth(_mainScrollView), CGRectGetMaxY(_rechargeiInstructions.frame) + 10);
                     
-                    if (CGRectGetMaxY(_rechargeView.frame) + 10 >frameHeight(_mainScrollView)) {
-                        
-                       _mainScrollView.contentSize =CGSizeMake(frameWidth(_mainScrollView), CGRectGetMaxY(_rechargeView.frame) + 10);
-                    }
 
                 }
             }
@@ -216,52 +181,6 @@ typedef enum {
     }];
 }
 #pragma mark
-#pragma mark - UITextFieldDelegete -
-//- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
-//{
-
-//    
-//    return YES;
-//}
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    
-    NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    
-    if ([text floatValue]>10000000.00) {
-            [[ToolManager shareInstance] showInfoWithStatus:@"不能超过10000000元"];
-            return NO;
-    }
-    _rechargeLb.text = [NSString stringWithFormat:@"本次充值需支付人名币 %.2f 元",[text floatValue]];
-    NSMutableAttributedString *_rechargeLbString =[[NSMutableAttributedString alloc]initWithString:_rechargeLb.text];
-    [_rechargeLbString addAttribute:NSForegroundColorAttributeName value:AppMainColor range:[_rechargeLb.text rangeOfString:[NSString stringWithFormat:@"%.2f",[text floatValue]]]];
-        _rechargeLb.attributedText = _rechargeLbString;
-    
-    NSCharacterSet *cs;
-    NSUInteger nDotLoc = [textField.text rangeOfString:@"."].location;
-    if (NSNotFound == nDotLoc && 0 != range.location) {
-        cs = [[NSCharacterSet characterSetWithCharactersInString:myDotNumbers] invertedSet];
-    }
-    else {
-        cs = [[NSCharacterSet characterSetWithCharactersInString:myNumbers] invertedSet];
-    }
-    NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
-    BOOL basicTest = [string isEqualToString:filtered];
-    if (!basicTest) {
-        
- 
-        [[ToolManager shareInstance] showInfoWithStatus:@"只能输入数字和小数点"];
-        return NO;
-    }
-    if (NSNotFound != nDotLoc && range.location > nDotLoc + 2) {
-        [[ToolManager shareInstance] showInfoWithStatus:@"小数点后最多两位"];
-       
-        return NO;
-    }
-    
-    return YES;
-
-}
-#pragma mark
 #pragma mark - buttonAction -
 - (void)buttonAction:(UIButton *)sender
 {
@@ -269,15 +188,6 @@ typedef enum {
         PopView(self);
     }
   
-    else if (sender.tag == ButtonActionTagWithdraw)
-    {
-        PushView(self, allocAndInit(WithdrawalViewController));
-    }
-    else if (sender.tag == ButtonActionTagRecode)
-    {
-        PushView(self, allocAndInit(EarnestRecodeViewController));
-    }
-    
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

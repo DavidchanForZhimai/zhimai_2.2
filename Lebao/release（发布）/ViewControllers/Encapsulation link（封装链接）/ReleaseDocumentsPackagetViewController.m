@@ -9,6 +9,7 @@
 #import "ReleaseDocumentsPackagetViewController.h"
 #import "EncapsulationViewController.h"
 #import "XLDataService.h"
+#import "NSString+Extend.h"
 //封装链接release/curl
 #define LinkEncapsulation  [NSString stringWithFormat:@"%@release/curl",HttpURL]
 
@@ -59,10 +60,13 @@ typedef NS_ENUM(int,ButtonActionTag) {
     _mainScrollView.backgroundColor =[UIColor clearColor];
     [self.view addSubview:_mainScrollView];
 
-    [UILabel createLabelWithFrame:frame(9, 15, frameWidth(_mainScrollView) - 10, 24*SpacedFonts) text:@"把一个网页通过封装转化为自己的文章" fontSize:24*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:_mainScrollView];
+    UILabel *text =  [UILabel createLabelWithFrame:frame(9, 15, frameWidth(_mainScrollView) - 10, 24*SpacedFonts) text:@"复制一篇文章的链接，通过一键封装可以重新编辑该文章，编辑时也可以添加自己的微名片" fontSize:24*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:_mainScrollView];
+    text.numberOfLines= 0;
+    
+    text.frame = CGRectMake(text.x, text.y, text.width, [text.text sizeWithFont:text.font maxSize:CGSizeMake(text.width, 100)].height);
     NSArray *arrayTitle = @[@"复制\n链接",@"封装\n预览",@"提交\n发布"];
     float iconX = 30*ScreenMultiple;
-    float iconY = 50;
+    float iconY = CGRectGetMaxY(text.frame) + 20;
     float iconW = 50*ScreenMultiple;
     float iconBT = (frameWidth(_mainScrollView) -2*iconX -3*iconW)/(arrayTitle.count-1);
     for (int i =0; i<arrayTitle.count; i++) {
@@ -100,7 +104,7 @@ typedef NS_ENUM(int,ButtonActionTag) {
     _linkAddressTextView.delegate =self;
     [_linkView addSubview:_linkAddressTextView];
     
-    _linklB = [UILabel createLabelWithFrame:frame(10,10, frameWidth(_linkAddressTextView), 28*SpacedFonts) text:@"请输入以http://开头的链接" fontSize:28*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:_linkView];
+    _linklB = [UILabel createLabelWithFrame:frame(10,10, frameWidth(_linkAddressTextView), 28*SpacedFonts) text:@"请粘贴以http://开头的链接" fontSize:28*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:_linkView];
     _linklB.enabled = NO;
     
    UIButton *_nextBtn =  [UIButton createButtonWithfFrame:frame(12, CGRectGetMaxY(_copyLink.frame) + 35, frameWidth(_mainScrollView) -24, 40) title:@"下一步" backgroundImage:nil iconImage:nil highlightImage:nil tag:ButtonActionTagNextStep inView:_mainScrollView];
@@ -123,7 +127,7 @@ typedef NS_ENUM(int,ButtonActionTag) {
     if ([textView.text isEqualToString:@""]
         ) {
         
-        _linklB.text =@"请输入以http://开头的链接";
+        _linklB.text =@"请粘贴以http://开头的链接";
     }
     else
     {
@@ -143,7 +147,7 @@ typedef NS_ENUM(int,ButtonActionTag) {
     if (sender.tag ==ButtonActionTagNextStep ) {
         if (![_linkAddressTextView.text hasPrefix:@"http://"]) {
             
-            [[ToolManager shareInstance] showInfoWithStatus:@"请输入以http://开头的链接"];
+            [[ToolManager shareInstance] showInfoWithStatus:@"请粘贴以http://开头的链接"];
             return;
         }
         [[ToolManager shareInstance] showWithStatus:@"读取数据..."];

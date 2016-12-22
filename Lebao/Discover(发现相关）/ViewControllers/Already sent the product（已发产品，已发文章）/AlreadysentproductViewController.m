@@ -12,7 +12,8 @@
 #import "MyContentDetailViewController.h"
 #import "WetChatShareManager.h"
 #import "CooperateView.h"//发布分享文章
-
+#import "MyArticleDetailModal.h"
+#import "EditArticlesViewController.h"//编辑文章
 #define ReleaseCollectURL [NSString stringWithFormat:@"%@release/collect",HttpURL]
 //路径
 #define ReadrouteURL [NSString stringWithFormat:@"%@release/readroute",HttpURL]
@@ -333,9 +334,59 @@
 {
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+     _modal = _productArray[indexPath.section];
+    if (_isRedActicleAddPush) {
+        NSMutableDictionary *parame = [Parameter parameterWithSessicon];
+        [parame setObject:_modal.uid forKey:@"uid"];
+        [parame setObject:_modal.ID forKey:@"acid"];
+        [[ToolManager shareInstance] showWithStatus];
+        __weak typeof(self) weakSelf = self;
+        [[ToolManager shareInstance] showWithStatus:@"读取文章编辑数据..."];
+        [XLDataService postWithUrl:[NSString stringWithFormat:@"%@release/detail",HttpURL] param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+            //        NSLog(@"data =%@",dataObj);
+            if (dataObj) {
+                if ([dataObj[@"rtcode"] integerValue]==1) {
+                    [[ToolManager shareInstance] dismiss];
+                    MyArticleDetailModal* modal = [MyArticleDetailModal mj_objectWithKeyValues:dataObj];
+                    EditArticlesViewController *edit =allocAndInit(EditArticlesViewController);
+                    EditArticlesData *data = allocAndInit(EditArticlesData);
+                    data.content = modal.datas.content;
+                    data.documentID = modal.datas.ID;
+                    data.isAddress = modal.datas.isaddress ;
+                    data.isgetclue = modal.datas.isgetclue;
+                    data.isRanking = modal.datas.isranking;
+                    data.title =modal.datas.title;
+                    data.author =modal.datas.author;
+                    data.isreward =modal.datas.isreward;
+                    data.reward = modal.datas.reward;
+                    data.imageurl = _modal.imgurl;
+                    data.amount = modal.datas.amount;
+                    data.product = modal.product;
+                    data.productID = modal.datas.productid;
+                    data.product_imgurl = modal.datas.product_imgurl;
+                    data.product_isgetclue = modal.datas.product_isgetclue;
+                    data.product_uid = modal.datas.product_uid;
+                    data.product_actype = modal.datas.product_actype;
+                    data.product_industry = modal.datas.product_industry;
+                    edit.data = data;
+                    PushView(weakSelf, edit);
+                }
+                else
+                {
+                    [[ToolManager shareInstance]showInfoWithStatus:@"读取文章编辑数据失败"];
+                }
+              
+                
+            }
+            else
+            {
+                [[ToolManager shareInstance]showInfoWithStatus:@"读取文章编辑数据失败"];
+            }
+        }];
+        
+        return;
+    }
     _cell = [tableView cellForRowAtIndexPath:indexPath];
-    _modal = _productArray[indexPath.section];
-    
     MyContentDetailViewController *detail = allocAndInit(MyContentDetailViewController);
     detail.shareImage = _cell.icon.image;
     detail.ID =_modal.ID;
