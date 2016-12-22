@@ -42,8 +42,8 @@
 @property(nonatomic,strong)NSString* tel;//是否邀请了
 @property(nonatomic,strong)NSString* evaluate;//是否评价了
 @property(nonatomic,assign)int relation;//是否添加好友
-
-
+@property(nonatomic,copy)NSString* updatetime;//我的访客 访问时间
+@property(nonatomic,copy)NSString* abstract;
 //约见评价
 @property(nonatomic,copy)NSString *create_at;//时间
 @property(nonatomic,assign)int scord;//分值

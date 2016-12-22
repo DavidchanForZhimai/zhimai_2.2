@@ -29,7 +29,7 @@
     
     UITextField *_userName;  //userName
     UIScrollView *mainScrollView;
-    NSArray *_arrayTitle;
+//    NSArray *_arrayTitle;
     UIButton *industry;
     UILabel *industryLab;
     UITextField *vocational;
@@ -37,24 +37,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSMutableDictionary *sendcaptchaParam = [NSMutableDictionary dictionary];
-    if ([CoreArchive strForKey:DeviceToken]) {
-        [sendcaptchaParam setObject:[CoreArchive strForKey:DeviceToken] forKey:@"channelid"];
-    }
-    
-    [sendcaptchaParam setObject:_phoneNum forKey:KuserName];
-    [sendcaptchaParam setObject:[_password md5]   forKey:passWord];
-    [sendcaptchaParam setObject:@"2" forKey:@"type"];
-    //          NSLog(@"sendcaptchaParam =%@",sendcaptchaParam);
-    [XLDataService postWithUrl:LoginURL param:sendcaptchaParam modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        if (error) {
-            [[ToolManager shareInstance] showInfoWithStatus];
-            PushView(self, allocAndInit(LoginViewController));
-        }
-    }];
+
     _selectedArray = allocAndInit(NSMutableArray);
     _selectedindex= 0;
-    _arrayTitle = @[@"保险",@"房产",@"车行",@"金融",@"其他"];
+//    _arrayTitle = @[@"保险",@"房产",@"车行",@"金融",@"其他"];
     // Do any additional setup after loading the view.
     [self navViewTitle:@"完善资料"];
     self.homePageBtn.hidden = YES;
@@ -71,7 +57,7 @@
         
         [[ToolManager shareInstance] showWithStatus:@"资料完善中..."];
         NSMutableDictionary * sendcaptchaParam = allocAndInit(NSMutableDictionary);
-        [sendcaptchaParam setObject:[Parameter industryForCode:_arrayTitle[_selectedindex]] forKey:Industry];
+//        [sendcaptchaParam setObject:[Parameter industryForCode:_arrayTitle[_selectedindex]] forKey:Industry];
         [sendcaptchaParam setObject:_userName.text forKey:@"realname"];
         [sendcaptchaParam setObject:_phoneNum forKey:KuserName];
         [sendcaptchaParam setObject:[_password md5]   forKey:passWord];
@@ -277,6 +263,23 @@
 -(void)industryClick:(UIButton *)sender
 {
   
+    NSMutableDictionary *sendcaptchaParam = [NSMutableDictionary dictionary];
+    if ([CoreArchive strForKey:DeviceToken]) {
+        [sendcaptchaParam setObject:[CoreArchive strForKey:DeviceToken] forKey:@"channelid"];
+    }
+    
+    [sendcaptchaParam setObject:_phoneNum forKey:KuserName];
+    [sendcaptchaParam setObject:[_password md5]   forKey:passWord];
+    [sendcaptchaParam setObject:@"2" forKey:@"type"];
+    //          NSLog(@"sendcaptchaParam =%@",sendcaptchaParam);
+    [[ToolManager shareInstance] showWithStatus];
+    [XLDataService postWithUrl:LoginURL param:sendcaptchaParam modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+        if (error) {
+            [[ToolManager shareInstance] showInfoWithStatus:@"获取数据失败,请重新请求或查看网络状态"];
+            return ;
+        }
+        [[ToolManager shareInstance]dismiss];
+    }];
     NSMutableDictionary *parame = [Parameter parameterWithSessicon];
     
 //    NSLog(@"parame=====%@",parame);

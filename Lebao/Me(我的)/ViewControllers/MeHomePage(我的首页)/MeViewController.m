@@ -20,9 +20,10 @@
 #import "MyFansVC.h"//我的粉丝
 #import "MyDetialViewController.h"
 #import "AuthenticationHomeViewController.h"
-#import "OtherDynamicdViewController.h"
+//#import "OtherDynamicdViewController.h"
 #import "MeetSucceedVC.h"
 #import "VIPPrivilegeVC.h"
+#import "MyVisitorVC.h"
 #import "InviteFriendsViewController.h"
 #define cellH  40
 #define PersonalURL [NSString stringWithFormat:@"%@user/index",HttpURL]
@@ -108,7 +109,7 @@
     if (_datas) {
         return _datas;
     }
-//    [NSDictionary dictionaryWithObjectsAndKeys:@"会员特权",@"name",@"icon_me_VIP",@"image",@"1",@"show",@"VIPPrivilegeVC",@"viewController",nil]
+    //    [NSDictionary dictionaryWithObjectsAndKeys:@"会员特权",@"name",@"icon_me_VIP",@"image",@"1",@"show",@"VIPPrivilegeVC",@"viewController",nil]
     _datas =[NSMutableArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"我的钱包",@"name",@"icon_me_qianbao",@"image",@"1",@"show",@"EarnestMoneyViewController",@"viewController",nil],[NSDictionary dictionaryWithObjectsAndKeys:@"我的资料",@"name",@"icon_me_zhiliao",@"image",@"1",@"show",@"BasicInformationViewController",@"viewController",nil],[NSDictionary dictionaryWithObjectsAndKeys:@"身份认证",@"name",@"icon_me_renzheng",@"image",@"1",@"show",@"AuthenticationHomeViewController",@"viewController",nil],[NSDictionary dictionaryWithObjectsAndKeys:@"活跃值",@"name",@"icon_me_huoyuezhi",@"image",@"1",@"show",@"ActiveValueViewController",@"viewController",nil],[NSDictionary dictionaryWithObjectsAndKeys:@"好友印象",@"name",@"icon_me_yinxiang",@"image",@"1",@"show",@"FriendImpressionViewController",@"viewController",nil],[NSDictionary dictionaryWithObjectsAndKeys:@"邀请好友",@"name",@"icon_me_yaoqinghaoyou",@"image",@"1",@"show",@"InviteFriendsViewController",@"viewController",nil],[NSDictionary dictionaryWithObjectsAndKeys:@"我的客服",@"name",@"icon_me_kefu",@"image",@"0",@"show",@"CustomerServiceViewController",@"viewController",nil],nil];
     
     
@@ -140,7 +141,7 @@
     userIcon.layer.borderColor = rgba(255, 255, 255, 0.5).CGColor;
     userIcon.layer.masksToBounds =YES;
     userIcon.layer.cornerRadius = frameWidth(userIcon)/2.0;
-   
+    
     [view addSubview:userIcon];
     UITapGestureRecognizer *tap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(userIconTap)];
     userIcon.image = [UIImage imageNamed:@"defaulthead"];
@@ -234,7 +235,7 @@
         [view addSubview:line];
         NSString *str = @"0";
         
-       
+        
         BaseButton *attention = [[BaseButton alloc]initWithFrame:frame(0, 0, frameWidth(attentionAndfensView)/2.0, frameHeight(attentionAndfensView)) setTitle:[NSString stringWithFormat:@"%@\n约见成功",modal.invitednum?modal.invitednum:str] titleSize:24*SpacedFonts titleColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:WhiteColor inView:attentionAndfensView];
         attention.titleLabel.numberOfLines = 0;
         
@@ -252,7 +253,7 @@
                 UINavigationController *nav =(UINavigationController *)tabBar.viewControllers[getAppDelegate().mainTab.selectedIndex];
                 
                 MeetSucceedVC *otherDynamicdVC = allocAndInit(MeetSucceedVC);
-//
+                //
                 [nav pushViewController:otherDynamicdVC animated:YES];
                 
             }];
@@ -261,14 +262,14 @@
             
         };
         
-        BaseButton *fens = [[BaseButton alloc]initWithFrame:frame(CGRectGetMaxX(attention.frame), frameY(attention), frameWidth(attention), frameHeight(attention)) setTitle:[NSString stringWithFormat:@"%@\n我的动态",modal.dynamicnum?modal.dynamicnum:str] titleSize:24*SpacedFonts titleColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:WhiteColor inView:attentionAndfensView];
+        BaseButton *fens = [[BaseButton alloc]initWithFrame:frame(CGRectGetMaxX(attention.frame), frameY(attention), frameWidth(attention), frameHeight(attention)) setTitle:[NSString stringWithFormat:@"%@\n我的访客",modal.visitorscount?modal.visitorscount:str] titleSize:24*SpacedFonts titleColor:LightBlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:WhiteColor inView:attentionAndfensView];
         fens.titleLabel.numberOfLines = 0;
         
         NSMutableAttributedString *attributedString1 = [[NSMutableAttributedString alloc]initWithString:fens.titleLabel.text];
-        [attributedString1 addAttribute:NSForegroundColorAttributeName value:AppMainColor range:[fens.titleLabel.text rangeOfString:modal.dynamicnum?modal.dynamicnum:str]];
+        [attributedString1 addAttribute:NSForegroundColorAttributeName value:AppMainColor range:[fens.titleLabel.text rangeOfString:modal.visitorscount?modal.visitorscount:str]];
         
-        [attributedString1 addAttribute:NSFontAttributeName value:Size(28) range:[fens.titleLabel.text rangeOfString:modal.dynamicnum?modal.dynamicnum:str]];
-         [fens setAttributedTitle:attributedString1 forState:UIControlStateNormal];
+        [attributedString1 addAttribute:NSFontAttributeName value:Size(28) range:[fens.titleLabel.text rangeOfString:modal.visitorscount?modal.visitorscount:str]];
+        [fens setAttributedTitle:attributedString1 forState:UIControlStateNormal];
         fens.didClickBtnBlock = ^
         {
             [[ToolManager shareInstance].drawerController closeDrawerAnimated:YES completion:^(BOOL finished) {
@@ -276,10 +277,12 @@
                 UITabBarController *tabBar = (UITabBarController *)[ToolManager shareInstance].drawerController.centerViewController;
                 UINavigationController *nav =(UINavigationController *)tabBar.viewControllers[getAppDelegate().mainTab.selectedIndex];
                 
-                OtherDynamicdViewController *otherDynamicdVC = allocAndInit(OtherDynamicdViewController);
-                otherDynamicdVC.dynamicdID = modal.ID;
-                otherDynamicdVC.dynamicdName = modal.realname;
+                MyVisitorVC *otherDynamicdVC = allocAndInit(MyVisitorVC);
+                //                otherDynamicdVC.dynamicdID = modal.ID;
+                //                otherDynamicdVC.dynamicdName = modal.realname;
+                modal.ID=nil;modal.realname=nil;
                 [nav pushViewController:otherDynamicdVC animated:YES];
+                
                 
             }];
             
@@ -381,20 +384,20 @@
             if ([dict[@"viewController"] isEqualToString:@"BasicInformationViewController"]) {
                 
                 BasicInformationViewController *basicInformationViewController = allocAndInit(BasicInformationViewController);
-
+                
                 [nav pushViewController:basicInformationViewController animated:YES];
                 return ;
             }
-
+            
             if ([dict[@"viewController"] isEqualToString:@"VIPPrivilegeVC"]){
                 VIPPrivilegeVC *vipVC=allocAndInit(VIPPrivilegeVC);
-//                vipVC.modal=modal;/
+                //                vipVC.modal=modal;/
                 [nav pushViewController:vipVC animated:YES];
                 return ;
             }
             if ([dict[@"viewController"] isEqualToString:@"AuthenticationHomeViewController"]) {
                 AuthenticationHomeViewController *authen = allocAndInit(AuthenticationHomeViewController);
-//                authen.authen = modal.authen;
+                //                authen.authen = modal.authen;
                 [nav pushViewController:authen animated:YES];
                 return ;
             }

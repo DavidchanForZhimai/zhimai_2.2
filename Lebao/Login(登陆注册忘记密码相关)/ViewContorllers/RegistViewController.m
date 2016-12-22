@@ -225,7 +225,7 @@ typedef enum {
         [XLDataService postWithUrl:SendcaptchaURL param:sendcaptchaParam modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         
             if (error) {
-            [[ToolManager shareInstance] showInfoWithStatus];
+            [[ToolManager shareInstance] showInfoWithStatus:dataObj[@"rtmsg"]];
             }
             
             [self dealWithCode:dataObj type:0];

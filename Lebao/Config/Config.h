@@ -12,11 +12,13 @@
 //网络请求
 //32URL
 //测试
-//#define ImageURLS @"http://pic.lmlm.cn"
-//#define HttpURL @"https://api.lmlm.cn/v1/"
+
+#define ImageURLS @"http://pic.lmlm.cn"
+#define HttpURL @"https://api.lmlm.cn/v1/"
 //////正式
-#define ImageURLS @"http://pic.any98.com"
-#define HttpURL @"https://api.any98.com/v1/"
+//#define ImageURLS @"http://pic.any98.com"
+//#define HttpURL @"https://api.any98.com/v1/"
+
 //约见接口
 #define MeetMainURL [NSString stringWithFormat:@"%@meet/nearby",HttpURL]
 //有空按钮
@@ -65,6 +67,11 @@
 #define dynamicCheckedURL [NSString stringWithFormat:@"%@dynamic/checked",HttpURL]
 //添加人脉是否认证
 #define  connetionCheckedURL [NSString stringWithFormat:@"%@connection/checked",HttpURL]
+//人脉推荐
+#define  connetionReplacementURL [NSString stringWithFormat:@"%@connection/replacement",HttpURL]
+//访客
+#define  brokerAgentdetailURL [NSString stringWithFormat:@"%@broker/agentdetail",HttpURL]
+
 //请求参数
 #define DeviceToken @"deviceToken"
 #define KuserName @"username"

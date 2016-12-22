@@ -194,7 +194,7 @@ typedef enum {
             
             if (error) {
                 [self timeOut];
-                [[ToolManager shareInstance] showInfoWithStatus];
+                [[ToolManager shareInstance] showInfoWithStatus:dataObj[@"rtmsg"]];
             }
             
             [self dealWithCode:dataObj type:RequestTypeVerificationCode];

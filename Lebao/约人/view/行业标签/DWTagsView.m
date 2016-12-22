@@ -457,7 +457,7 @@ static NSString * const kTagCellID = @"TagCellID";
     cell.layer.borderWidth = self.tagBorderWidth;
     [self setCell:cell selected:tagModel.selected];
     
-    NSLog(@"222222");
+//    NSLog(@"222222");
     return cell;
 }
 

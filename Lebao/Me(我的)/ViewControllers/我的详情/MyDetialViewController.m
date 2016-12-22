@@ -24,6 +24,10 @@
 #import "VIPPrivilegeVC.h"
 #import "AuthenticationHomeViewController.h"
 #import "NSString+Extend.h"
+#import "RecommendView.h"//推荐人脉
+#import "MyConnectionsVC.h"
+#import "MeetSucceedVC.h"
+#import "MyVisitorVC.h"
 #define TagHeight 22
 #define MininumTagWidth (APPWIDTH - 120)/5.0
 #define MaxinumTagWidth (APPWIDTH - 20)
@@ -34,10 +38,12 @@
 @property(nonatomic,strong)NSString *connection_count;
 @property(nonatomic,strong)NSString *dynamic_count;
 @property(nonatomic,strong)NSString *near_count;
+@property(nonatomic,strong)NSString *visitorscount;
 @property(nonatomic,strong)NSString *realname;
 @property(nonatomic,strong)NSString *Id;
 @property(nonatomic,strong)NSString *imgurl;
 @property(nonatomic,strong)NSMutableArray *impression;
+
 
 @property(nonatomic,strong)NSString *labels;
 @property(nonatomic,strong)NSString *address;
@@ -59,6 +65,7 @@
              };
 }
 @end
+
 
 @interface HeaderViewLayout : LWLayout
 @property(nonatomic,assign)float height;
@@ -158,7 +165,7 @@
 }
 @end
 
-@interface MyDetialViewController ()<UITableViewDelegate,UITableViewDataSource,DWTagsViewDelegate,AddConnectionViewDelegate,UIAlertViewDelegate>
+@interface MyDetialViewController ()<UITableViewDelegate,UITableViewDataSource,DWTagsViewDelegate,AddConnectionViewDelegate,UIAlertViewDelegate,RecommendViewDelegate>
 
 @property(nonatomic,strong)UITableView *myDetailTV;
 @property(nonatomic,strong)LWAsyncDisplayView *userView;
@@ -168,17 +175,19 @@
 @property(nonatomic,strong)UIView *viewHeader;
 @property(nonatomic,strong)UIView *viewFooter;
 
+@property(nonatomic,strong)UIScrollView *recommendScrV;//推荐访客
 @property(nonatomic,strong)DWTagsView *productTagsView;//产品标签
 @property(nonatomic,strong)DWTagsView *resourseTagsView;//资源标签
 @property(nonatomic,copy)NSMutableArray *productsTags;//产品标签array
 @property(nonatomic,copy)NSMutableArray *resourseaTags;//资源标签array
 @property(nonatomic,strong)DWTagsView *personsTagsView;//个人标签
 @property(nonatomic,copy)NSMutableArray *personsTags;//个人标签array
+@property(nonatomic,strong)UILabel *recommendLb;//推荐访客
 @property(nonatomic,strong)UILabel *productTagsLb;//产品标签
 @property(nonatomic,strong)UILabel *resourseTagsLb;//资源标签
 @property(nonatomic,strong)UILabel *personsTagsLb;//个人标签
 @property(nonatomic,strong)UIView *line1;//间隔
-
+@property(nonatomic,strong)UIView *line2;//间隔
 @property(nonatomic,strong)DWTagsView *impressionTagsView;//好友印象
 @property(nonatomic,strong)UILabel *impressionTagsLb;//个人标签
 @property(nonatomic,copy)NSMutableArray *impressionTags;
@@ -187,6 +196,7 @@
 @property(nonatomic,assign)BOOL islookMore;
 
 @property(nonatomic,strong)HeaderModel *model;
+@property(nonatomic,strong)NSMutableArray *visitorsArr;
 
 
 @end
@@ -209,6 +219,7 @@
     [self navViewTitleAndBackBtn:@"个人详情"];
     [self.view addSubview:self.myDetailTV];
     [self netWork];
+    
    
 }
 
@@ -269,10 +280,12 @@
     if (indexPath.row==0) {
         if (headerModel.isme) {
             title = @"我的动态";
+            _recommendLb.text=@"看了我的人还看了";
         }
         else
         {
             title = @"他的动态";
+            _recommendLb.text=@"看了他的人还看了";
         }
         
         dt.text = title;
@@ -366,26 +379,38 @@
     //人脉
     
     BaseButton *renmai = [self addViewWithFrame:frame(0, self.userView.y + self.userView.height + 10, APPWIDTH/3, 40) andTitle:@"人脉" rangeText:headerModel.connection_count andView:_viewHeader];
+    __weak typeof (self)weakSelf = self;
     renmai.didClickBtnBlock = ^
     {
         //        NSLog(@"人脉");
+        if (headerModel.isme) {
+            [weakSelf.navigationController pushViewController:allocAndInit(MyConnectionsVC) animated:YES];
+        }
         
     };
+    //访客
+    BaseButton *fangke = [self addViewWithFrame:frame(CGRectGetMaxX(renmai.frame),renmai.y,renmai.width, renmai.height) andTitle:@"访客" rangeText:headerModel.visitorscount andView:_viewHeader];
+    fangke.didClickBtnBlock = ^
+    {
+        //        NSLog(@"访客");
+
+        if (headerModel.isme) {
+        MyVisitorVC *myVisitorVC = allocAndInit(MyVisitorVC);
+        [weakSelf.navigationController pushViewController:myVisitorVC animated:YES];
+        }
+    };
+
     //约见成功
-    BaseButton *yuejian = [self addViewWithFrame:frame(CGRectGetMaxX(renmai.frame),renmai.y,renmai.width, renmai.height) andTitle:@"约见成功" rangeText:headerModel.success_count andView:_viewHeader];
+    BaseButton *yuejian = [self addViewWithFrame:frame(CGRectGetMaxX(fangke.frame),fangke.y,fangke.width, fangke.height) andTitle:@"约见成功" rangeText:headerModel.success_count andView:_viewHeader];
     yuejian.didClickBtnBlock = ^
     {
         //        NSLog(@"约见成功");
-        
+        if (headerModel.isme) {
+        MeetSucceedVC *otherDynamicdVC = allocAndInit(MeetSucceedVC);
+        [weakSelf.navigationController pushViewController:otherDynamicdVC animated:YES];
+        }
     };
     
-    //想约
-    BaseButton *xiangyue = [self addViewWithFrame:frame(CGRectGetMaxX(yuejian.frame),yuejian.y,yuejian.width, yuejian.height) andTitle:@"想约" rangeText:headerModel.want_count andView:_viewHeader];
-    xiangyue.didClickBtnBlock = ^
-    {
-        //        NSLog(@"想约");
-        
-    };
     
     [self addLine:frame(0, self.userView.y + self.userView.height + 10, APPWIDTH, 0.5) andView:_viewHeader];
     
@@ -472,7 +497,51 @@
     
 }
 
-#pragma mark
+#pragma mark - 推荐访客
+-(NSMutableArray *)visitorsArr{
+    if (!_visitorsArr) {
+        _visitorsArr=[NSMutableArray new];
+    }
+    return _visitorsArr;
+}
+
+-(UILabel *)recommendLb
+{
+    if (!_recommendLb) {
+        _recommendLb=[[UILabel alloc]init];
+        _recommendLb.backgroundColor=[UIColor whiteColor];
+        _recommendLb.font=[UIFont systemFontOfSize:14];
+    }
+    return _recommendLb;
+}
+-(UIScrollView *)recommendScrV
+{
+    if (!_recommendScrV) {
+    _recommendScrV=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 35,APPWIDTH, APPWIDTH/2.0-30)];
+    float scrWidth=0;
+    for (int i=0; i<self.visitorsArr.count; i++) {
+        RecommendView *reView=[[RecommendView alloc]initWithFrame:CGRectMake(15+i*(APPWIDTH -60)/3.0+15*i, 10, (APPWIDTH-60)/3.0, _recommendScrV.height-20)];
+        MeetingData *visitorsModel=[MeetingData mj_objectWithKeyValues:self.visitorsArr[i]];
+        [reView configWithData:visitorsModel];
+        reView.delegate=self;
+        scrWidth = CGRectGetMaxX(reView.frame)+10;
+        [_recommendScrV addSubview:reView];
+    }
+    _recommendScrV.showsVerticalScrollIndicator = FALSE;
+    _recommendScrV.showsHorizontalScrollIndicator = FALSE;
+    _recommendScrV.contentSize=CGSizeMake(scrWidth, 0);
+        
+    }
+    return _recommendScrV;
+}
+#pragma mark - 推荐人脉点击
+-(void)didSelectRecommendViewWithModel:(MeetingData *)data
+{
+    MyDetialViewController *myDetialViewCT=[MyDetialViewController new];
+    myDetialViewCT.userID=data.userid;
+    [self.navigationController pushViewController:myDetialViewCT animated:YES];
+}
+
 #pragma mark getter tagsView
 
 - (UIView *)viewFooter
@@ -484,7 +553,13 @@
     _viewFooter = [[UIView alloc]initWithFrame:CGRectZero];
     _viewFooter.backgroundColor = WhiteColor;
     
+    //推荐访客
+    [self.viewFooter addSubview:self.recommendLb];
+    [self.viewFooter addSubview:self.recommendScrV];
+
     //产品标签
+    [self.viewFooter addSubview:self.line2];
+    
     [self.viewFooter addSubview:self.productTagsLb];
     
     [self.viewFooter addSubview:self.productTagsView];
@@ -515,7 +590,7 @@
     if (_productTagsLb) {
         return  _productTagsLb;
     }
-    _productTagsLb =[UILabel createLabelWithFrame:CGRectMake(20, 10, APPWIDTH - 40, 35) text:@"产品服务" fontSize:14 textColor:AppMainColor textAlignment:NSTextAlignmentLeft inView:nil];
+    _productTagsLb =[UILabel createLabelWithFrame:CGRectMake(20, 15, APPWIDTH - 40, 35) text:@"产品服务" fontSize:14 textColor:AppMainColor textAlignment:NSTextAlignmentLeft inView:nil];
     
     return  _productTagsLb;
     
@@ -525,7 +600,7 @@
     if (_productTagsView) {
         return _productTagsView;
     }
-    _productTagsView = allocAndInitWithFrame(DWTagsView, CGRectMake(20, 45, APPWIDTH - 40, 2*(TagHeight+10)));
+    _productTagsView = allocAndInitWithFrame(DWTagsView, CGRectMake(20, CGRectGetMaxY(_productTagsLb.frame)+10, APPWIDTH - 40, 2*(TagHeight+10)));
     _productTagsView.contentInsets = UIEdgeInsetsZero;
     _productTagsView.tagInsets = UIEdgeInsetsMake(5, 15, 5, 15);
     _productTagsView.tagcornerRadius = 2;
@@ -594,6 +669,15 @@
     _line1 = [[UIView alloc]initWithFrame:CGRectZero];
     _line1.backgroundColor = self.view.backgroundColor;
     return _line1;
+}
+- (UIView *)line2
+{
+    if (_line2) {
+        return _line2;
+    }
+    _line2 = [[UIView alloc]initWithFrame:CGRectZero];
+    _line2.backgroundColor = self.view.backgroundColor;
+    return _line2;
 }
 - (UILabel *)personsTagsLb
 {
@@ -735,8 +819,17 @@
 #pragma mark resetFrame
 - (void)tagsViewReSetFrame
 {
-    
-    _productTagsView.frame = CGRectMake(20, 45, APPWIDTH - 40, [_productTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
+    if (self.visitorsArr.count>=3) {
+        self.recommendLb.frame=CGRectMake(20, 10, APPWIDTH-40, 15);
+        self.recommendScrV.frame=CGRectMake(0, 35,APPWIDTH, APPWIDTH/2.0-30);
+        self.line2.frame = CGRectMake(0, APPWIDTH/2.0+15, APPWIDTH, 10);
+    }else{
+        [self.recommendLb removeFromSuperview];
+        [self.recommendScrV removeFromSuperview];
+        self.line2.frame =CGRectMake(0, 0, 0, 0);
+    }
+    _productTagsLb.frame =CGRectMake(20, CGRectGetMaxY(_line2.frame), APPWIDTH - 40, 35);
+    _productTagsView.frame = CGRectMake(20,CGRectGetMaxY(_productTagsLb.frame), APPWIDTH - 40, [_productTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
     _resourseTagsLb.frame = CGRectMake(20, CGRectGetMaxY(_productTagsView.frame), APPWIDTH, 35);
     _resourseTagsView.frame = CGRectMake(20, CGRectGetMaxY(_resourseTagsLb.frame), APPWIDTH - 40,[_resourseTagsView.collectionView.collectionViewLayout collectionViewContentSize].height);
     _line1.frame = CGRectMake(0, CGRectGetMaxY(_resourseTagsView.frame) + 10, APPWIDTH, 10);
@@ -953,11 +1046,12 @@
    
     [[ToolManager shareInstance] showWithStatus];
     [XLDataService putWithUrl:detailManURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-        NSLog(@"dataObj =%@",dataObj);
+        NSLog(@"detailManURLdataObj =%@",dataObj);
         if (dataObj) {
             headerModel = [HeaderModel mj_objectWithKeyValues:dataObj[@"data"]];
             if ([dataObj[@"rtcode"] integerValue]==1) {
                 [[ToolManager shareInstance] dismiss];
+                self.visitorsArr=dataObj[@"visitors"];
                 self.headerViewLayout = [[HeaderViewLayout alloc]initCellLayoutWithModel:headerModel];
                 if (![headerModel.labels isEqualToString:@""]) {
                     [self.personsTags addObjectsFromArray:[headerModel.labels componentsSeparatedByString:@","]];

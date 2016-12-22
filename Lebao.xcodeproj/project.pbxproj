@@ -712,6 +712,13 @@
 		701C25B61D8668600099F644 /* WantMeetTabCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 701C25B51D8668600099F644 /* WantMeetTabCell.m */; };
 		701C25C81D86AC220099F644 /* MeetPaydingVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 701C25C61D86AC220099F644 /* MeetPaydingVC.m */; };
 		701C25C91D86AC220099F644 /* MeetPaydingVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 701C25C71D86AC220099F644 /* MeetPaydingVC.xib */; };
+		701F00271E0A50E900771F35 /* UIView+Boom.m in Sources */ = {isa = PBXBuildFile; fileRef = 701F00261E0A50E900771F35 /* UIView+Boom.m */; };
+		701F00331E0A63A600771F35 /* JiKeScrollImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 701F002B1E0A63A600771F35 /* JiKeScrollImageView.m */; };
+		701F00341E0A63A600771F35 /* JiKeScrollLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 701F002D1E0A63A600771F35 /* JiKeScrollLabel.m */; };
+		701F00351E0A63A600771F35 /* JiKeScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 701F002F1E0A63A600771F35 /* JiKeScrollView.m */; };
+		701F00361E0A63A600771F35 /* JiKeSignalScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 701F00311E0A63A600771F35 /* JiKeSignalScrollView.m */; };
+		701F003A1E0A6AB300771F35 /* UIView+Frame.m in Sources */ = {isa = PBXBuildFile; fileRef = 701F00391E0A6AB300771F35 /* UIView+Frame.m */; };
+		701F003F1E0A6AD400771F35 /* LLTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 701F003D1E0A6AD400771F35 /* LLTool.m */; };
 		7026E8561D790D03005D6396 /* WBHomePageVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 7026E84F1D790D03005D6396 /* WBHomePageVC.m */; };
 		7026E8571D790D03005D6396 /* WBHomePageVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7026E8501D790D03005D6396 /* WBHomePageVC.xib */; };
 		7026E8581D790D03005D6396 /* JJRCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7026E8531D790D03005D6396 /* JJRCell.m */; };
@@ -733,6 +740,8 @@
 		7035414B1DAA510C0010767C /* [weixuanpingjia]@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 703541461DAA510C0010767C /* [weixuanpingjia]@2x.png */; };
 		7035414C1DAA510C0010767C /* [weixuanpingjia]@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 703541471DAA510C0010767C /* [weixuanpingjia]@3x.png */; };
 		703652351D41AF3800E62006 /* LoCationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 703652341D41AF3800E62006 /* LoCationManager.m */; };
+		70470A7E1E090A2600BC7917 /* MyVisitorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 70470A7B1E090A2600BC7917 /* MyVisitorCell.m */; };
+		70470A7F1E090A2600BC7917 /* MyVisitorVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 70470A7D1E090A2600BC7917 /* MyVisitorVC.m */; };
 		705423FD1D991B210071E6E2 /* ExtAudioConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 705423FC1D991B210071E6E2 /* ExtAudioConverter.m */; };
 		7055225A1D9BB1100069F89B /* keyuejianjiarenmai@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 705522581D9BB1100069F89B /* keyuejianjiarenmai@2x.png */; };
 		7055225B1D9BB1100069F89B /* keyuejianjiarenmai@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 705522591D9BB1100069F89B /* keyuejianjiarenmai@3x.png */; };
@@ -894,6 +903,9 @@
 		70CB3E661DAE3ED8004927B9 /* hezuochenggong@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 70CB3E641DAE3ED8004927B9 /* hezuochenggong@3x.png */; };
 		70CD1DF11D8292FC001FC873 /* WantMeetMeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 70CD1DF01D8292FC001FC873 /* WantMeetMeVC.m */; };
 		70CD1DF71D82A56C001FC873 /* MeettingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 70CD1DF61D82A56C001FC873 /* MeettingTableViewCell.m */; };
+		70CD65FD1E07C7D100A2E381 /* RecommendView.m in Sources */ = {isa = PBXBuildFile; fileRef = 70CD65FC1E07C7D100A2E381 /* RecommendView.m */; };
+		70CD66001E07CDDA00A2E381 /* Fny_shuaxin@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 70CD65FE1E07CDDA00A2E381 /* Fny_shuaxin@2x.png */; };
+		70CD66011E07CDDA00A2E381 /* Fny_shuaxin@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 70CD65FF1E07CDDA00A2E381 /* Fny_shuaxin@3x.png */; };
 		70DC49EF1DE2D5A800319241 /* NSString+IsEomji.m in Sources */ = {isa = PBXBuildFile; fileRef = 70DC49EE1DE2D5A800319241 /* NSString+IsEomji.m */; };
 		70E0F70C1DE586EE003B0F67 /* icon_discover_duwozuiduo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 70E0F6C41DE586EE003B0F67 /* icon_discover_duwozuiduo@2x.png */; };
 		70E0F70D1DE586EE003B0F67 /* icon_discover_duwozuiduo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 70E0F6C51DE586EE003B0F67 /* icon_discover_duwozuiduo@3x.png */; };
@@ -2118,6 +2130,23 @@
 		701C25C51D86AC220099F644 /* MeetPaydingVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeetPaydingVC.h; sourceTree = "<group>"; };
 		701C25C61D86AC220099F644 /* MeetPaydingVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeetPaydingVC.m; sourceTree = "<group>"; };
 		701C25C71D86AC220099F644 /* MeetPaydingVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MeetPaydingVC.xib; sourceTree = "<group>"; };
+		701F00251E0A50E900771F35 /* UIView+Boom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Boom.h"; sourceTree = "<group>"; };
+		701F00261E0A50E900771F35 /* UIView+Boom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Boom.m"; sourceTree = "<group>"; };
+		701F00291E0A63A600771F35 /* JiKeAnimationStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JiKeAnimationStatus.h; sourceTree = "<group>"; };
+		701F002A1E0A63A600771F35 /* JiKeScrollImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JiKeScrollImageView.h; sourceTree = "<group>"; };
+		701F002B1E0A63A600771F35 /* JiKeScrollImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JiKeScrollImageView.m; sourceTree = "<group>"; };
+		701F002C1E0A63A600771F35 /* JiKeScrollLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JiKeScrollLabel.h; sourceTree = "<group>"; };
+		701F002D1E0A63A600771F35 /* JiKeScrollLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JiKeScrollLabel.m; sourceTree = "<group>"; };
+		701F002E1E0A63A600771F35 /* JiKeScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JiKeScrollView.h; sourceTree = "<group>"; };
+		701F002F1E0A63A600771F35 /* JiKeScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JiKeScrollView.m; sourceTree = "<group>"; };
+		701F00301E0A63A600771F35 /* JiKeSignalScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JiKeSignalScrollView.h; sourceTree = "<group>"; };
+		701F00311E0A63A600771F35 /* JiKeSignalScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JiKeSignalScrollView.m; sourceTree = "<group>"; };
+		701F00381E0A6AB300771F35 /* UIView+Frame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Frame.h"; sourceTree = "<group>"; };
+		701F00391E0A6AB300771F35 /* UIView+Frame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Frame.m"; sourceTree = "<group>"; };
+		701F003B1E0A6AD400771F35 /* Cionfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cionfig.h; sourceTree = "<group>"; };
+		701F003C1E0A6AD400771F35 /* LLTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLTool.h; sourceTree = "<group>"; };
+		701F003D1E0A6AD400771F35 /* LLTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLTool.m; sourceTree = "<group>"; };
+		701F003E1E0A6AD400771F35 /* LxDBAnything.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LxDBAnything.h; sourceTree = "<group>"; };
 		7026E84E1D790D03005D6396 /* WBHomePageVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBHomePageVC.h; sourceTree = "<group>"; };
 		7026E84F1D790D03005D6396 /* WBHomePageVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBHomePageVC.m; sourceTree = "<group>"; };
 		7026E8501D790D03005D6396 /* WBHomePageVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WBHomePageVC.xib; sourceTree = "<group>"; };
@@ -2153,6 +2182,10 @@
 		703541471DAA510C0010767C /* [weixuanpingjia]@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "[weixuanpingjia]@3x.png"; sourceTree = "<group>"; };
 		703652331D41AF3800E62006 /* LoCationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoCationManager.h; sourceTree = "<group>"; };
 		703652341D41AF3800E62006 /* LoCationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoCationManager.m; sourceTree = "<group>"; };
+		70470A7A1E090A2600BC7917 /* MyVisitorCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyVisitorCell.h; sourceTree = "<group>"; };
+		70470A7B1E090A2600BC7917 /* MyVisitorCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyVisitorCell.m; sourceTree = "<group>"; };
+		70470A7C1E090A2600BC7917 /* MyVisitorVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyVisitorVC.h; sourceTree = "<group>"; };
+		70470A7D1E090A2600BC7917 /* MyVisitorVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyVisitorVC.m; sourceTree = "<group>"; };
 		705423FB1D991B210071E6E2 /* ExtAudioConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExtAudioConverter.h; sourceTree = "<group>"; };
 		705423FC1D991B210071E6E2 /* ExtAudioConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExtAudioConverter.m; sourceTree = "<group>"; };
 		705522581D9BB1100069F89B /* keyuejianjiarenmai@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "keyuejianjiarenmai@2x.png"; sourceTree = "<group>"; };
@@ -2407,6 +2440,10 @@
 		70CD1DF21D829E21001FC873 /* MeetingCellLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeetingCellLayout.h; sourceTree = "<group>"; };
 		70CD1DF51D82A56C001FC873 /* MeettingTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeettingTableViewCell.h; sourceTree = "<group>"; };
 		70CD1DF61D82A56C001FC873 /* MeettingTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeettingTableViewCell.m; sourceTree = "<group>"; };
+		70CD65FB1E07C7D100A2E381 /* RecommendView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecommendView.h; sourceTree = "<group>"; };
+		70CD65FC1E07C7D100A2E381 /* RecommendView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecommendView.m; sourceTree = "<group>"; };
+		70CD65FE1E07CDDA00A2E381 /* Fny_shuaxin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Fny_shuaxin@2x.png"; sourceTree = "<group>"; };
+		70CD65FF1E07CDDA00A2E381 /* Fny_shuaxin@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Fny_shuaxin@3x.png"; sourceTree = "<group>"; };
 		70DC49ED1DE2D5A800319241 /* NSString+IsEomji.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+IsEomji.h"; sourceTree = "<group>"; };
 		70DC49EE1DE2D5A800319241 /* NSString+IsEomji.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+IsEomji.m"; sourceTree = "<group>"; };
 		70E0F6C41DE586EE003B0F67 /* icon_discover_duwozuiduo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_discover_duwozuiduo@2x.png"; sourceTree = "<group>"; };
@@ -2761,6 +2798,8 @@
 		63237D421D8F790B00F4ED60 /* 消息 */ = {
 			isa = PBXGroup;
 			children = (
+				70CD65FE1E07CDDA00A2E381 /* Fny_shuaxin@2x.png */,
+				70CD65FF1E07CDDA00A2E381 /* Fny_shuaxin@3x.png */,
 				63237D431D8F791C00F4ED60 /* icon_message_xitongxiaoxi@3x.png */,
 				63237D441D8F791C00F4ED60 /* icon_message_xitongxiaoxi@2x.png */,
 				63237D451D8F791C00F4ED60 /* icon_message_woderenmai@3x.png */,
@@ -2861,6 +2900,7 @@
 			children = (
 				63302C7C1D921FA50019E9D6 /* MyConnectionsVC.h */,
 				63302C7D1D921FA50019E9D6 /* MyConnectionsVC.m */,
+				70CD65FA1E07C7D100A2E381 /* 推荐人脉 */,
 				702763441DC9BD7B00708756 /* 我的人脉申请 */,
 			);
 			path = "我的人脉";
@@ -4826,6 +4866,7 @@
 		638468541D0813E800A80223 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				70CD65EA1E07717800A2E381 /* 我的访客 */,
 				638468721D0813E800A80223 /* my profile（我的资料） */,
 				7091146F1D938690008CB7F9 /* 会员特权 */,
 				632EFAF31D90DAE500C8D47A /* 好友印象 */,
@@ -5405,6 +5446,28 @@
 			name = "主页面的支付";
 			sourceTree = "<group>";
 		};
+		701F00281E0A63A600771F35 /* JiKeScrollShow */ = {
+			isa = PBXGroup;
+			children = (
+				701F003B1E0A6AD400771F35 /* Cionfig.h */,
+				701F003C1E0A6AD400771F35 /* LLTool.h */,
+				701F003D1E0A6AD400771F35 /* LLTool.m */,
+				701F003E1E0A6AD400771F35 /* LxDBAnything.h */,
+				701F00381E0A6AB300771F35 /* UIView+Frame.h */,
+				701F00391E0A6AB300771F35 /* UIView+Frame.m */,
+				701F00291E0A63A600771F35 /* JiKeAnimationStatus.h */,
+				701F002A1E0A63A600771F35 /* JiKeScrollImageView.h */,
+				701F002B1E0A63A600771F35 /* JiKeScrollImageView.m */,
+				701F002C1E0A63A600771F35 /* JiKeScrollLabel.h */,
+				701F002D1E0A63A600771F35 /* JiKeScrollLabel.m */,
+				701F002E1E0A63A600771F35 /* JiKeScrollView.h */,
+				701F002F1E0A63A600771F35 /* JiKeScrollView.m */,
+				701F00301E0A63A600771F35 /* JiKeSignalScrollView.h */,
+				701F00311E0A63A600771F35 /* JiKeSignalScrollView.m */,
+			);
+			path = JiKeScrollShow;
+			sourceTree = "<group>";
+		};
 		7026E84C1D790D03005D6396 /* 线索 */ = {
 			isa = PBXGroup;
 			children = (
@@ -5968,6 +6031,29 @@
 			path = "我的详情";
 			sourceTree = "<group>";
 		};
+		70CD65EA1E07717800A2E381 /* 我的访客 */ = {
+			isa = PBXGroup;
+			children = (
+				70470A7A1E090A2600BC7917 /* MyVisitorCell.h */,
+				70470A7B1E090A2600BC7917 /* MyVisitorCell.m */,
+				70470A7C1E090A2600BC7917 /* MyVisitorVC.h */,
+				70470A7D1E090A2600BC7917 /* MyVisitorVC.m */,
+			);
+			path = "我的访客";
+			sourceTree = "<group>";
+		};
+		70CD65FA1E07C7D100A2E381 /* 推荐人脉 */ = {
+			isa = PBXGroup;
+			children = (
+				701F00281E0A63A600771F35 /* JiKeScrollShow */,
+				70CD65FB1E07C7D100A2E381 /* RecommendView.h */,
+				70CD65FC1E07C7D100A2E381 /* RecommendView.m */,
+				701F00251E0A50E900771F35 /* UIView+Boom.h */,
+				701F00261E0A50E900771F35 /* UIView+Boom.m */,
+			);
+			path = "推荐人脉";
+			sourceTree = "<group>";
+		};
 		70E0F6C31DE586EE003B0F67 /* 发现 */ = {
 			isa = PBXGroup;
 			children = (
@@ -6513,6 +6599,7 @@
 				63340B2D1CFBE3490010A596 /* dengdaixuanzhe@2x.png in Resources */,
 				63E9A5791D4EEF49008704CB /* dongtai_bianjie@2x.png in Resources */,
 				6303EEBF1CE5724600BEC470 /* icon_widelyspreaddetail_collect@2x.png in Resources */,
+				70CD66001E07CDDA00A2E381 /* Fny_shuaxin@2x.png in Resources */,
 				63302F6C1D921FA50019E9D6 /* 019[鄙视]@2x.png in Resources */,
 				707CCABE1D8FDED600E0E730 /* yuejian_luying@2x.png in Resources */,
 				70796E731D6B02CC005B8441 /* photo_original_def@2x.png in Resources */,
@@ -6942,6 +7029,7 @@
 				63302F8C1D921FA50019E9D6 /* 051[玫瑰]@2x.png in Resources */,
 				63ECBEDC1C4F8C2100D014E7 /* exhibition_Myacquisition@2x.png in Resources */,
 				70796E651D6B02CC005B8441 /* huati@2x.png in Resources */,
+				70CD66011E07CDDA00A2E381 /* Fny_shuaxin@3x.png in Resources */,
 				63302F5A1D921FA50019E9D6 /* 002[偷笑]@2x.png in Resources */,
 				63302FB81D921FA50019E9D6 /* 099[发抖]@2x.png in Resources */,
 				63340B551CFBE3490010A596 /* yilinqe@2x.png in Resources */,
@@ -7060,6 +7148,7 @@
 				638467861D07FD6200A80223 /* DiscoverModel.m in Sources */,
 				638467F81D080BA400A80223 /* TheSecondCarHomeModel.m in Sources */,
 				70796E841D6B02CC005B8441 /* UIView+Layout.m in Sources */,
+				701F00271E0A50E900771F35 /* UIView+Boom.m in Sources */,
 				63302EE61D921FA50019E9D6 /* GJGCLoadingStatusHUD.m in Sources */,
 				63302F4F1D921FA50019E9D6 /* GJGCChatInputExpandMenuPanelConfigModel.m in Sources */,
 				638468B71D0813E800A80223 /* CommunityMessageCell.m in Sources */,
@@ -7087,6 +7176,7 @@
 				70796E811D6B02CC005B8441 /* TZPhotoPreviewCell.m in Sources */,
 				63302F191D921FA50019E9D6 /* GJCFEncodeAndDecode.m in Sources */,
 				63302EBA1D921FA50019E9D6 /* NotificationViewController.m in Sources */,
+				70470A7E1E090A2600BC7917 /* MyVisitorCell.m in Sources */,
 				63302ED31D921FA50019E9D6 /* GJGCChatFriendTimeCell.m in Sources */,
 				703652351D41AF3800E62006 /* LoCationManager.m in Sources */,
 				63302EEA1D921FA50019E9D6 /* GJGCRefreshHeaderView.m in Sources */,
@@ -7108,6 +7198,7 @@
 				70796DDD1D6B024E005B8441 /* SDImageCache+Gallop.m in Sources */,
 				635D8EF51C116519006076D1 /* ViewPagerController.m in Sources */,
 				63B59A6D1D07B3BE0097B8F3 /* ModifiedViewController.m in Sources */,
+				701F003A1E0A6AB300771F35 /* UIView+Frame.m in Sources */,
 				63E278991C76FAFC00BED4D1 /* IMYWebView.m in Sources */,
 				63302F3E1D921FA50019E9D6 /* GJCUImageBrowserItemViewController.m in Sources */,
 				70796E7E1D6B02CC005B8441 /* TZImageManager.m in Sources */,
@@ -7123,6 +7214,7 @@
 				70796E961D6B0412005B8441 /* AppDelegate+WX.m in Sources */,
 				6379CBAF1DDD8005002AF557 /* JRSwizzle.m in Sources */,
 				63F0311C1C4E273200AAB82A /* CExpandHeader.m in Sources */,
+				701F00341E0A63A600771F35 /* JiKeScrollLabel.m in Sources */,
 				638467981D08028700A80223 /* MyContentDetailViewController.m in Sources */,
 				638467931D0801C700A80223 /* MyCollectionDetailViewController.m in Sources */,
 				6384677C1D07FC5C00A80223 /* DiscoverViewController.m in Sources */,
@@ -7260,6 +7352,7 @@
 				63B574681DDC637100D44F63 /* MPBaseNavigationController.m in Sources */,
 				63302EC41D921FA50019E9D6 /* GJGCChatContentBaseModel.m in Sources */,
 				638467F31D080BA400A80223 /* MyArticleDetailModal.m in Sources */,
+				70CD65FD1E07C7D100A2E381 /* RecommendView.m in Sources */,
 				63F141B41C8971C800479102 /* MCPieChartView.m in Sources */,
 				63302EDE1D921FA50019E9D6 /* GJGCChatSystemNotiRoleGroupView.m in Sources */,
 				63302F431D921FA50019E9D6 /* TKRoundedView.m in Sources */,
@@ -7279,6 +7372,7 @@
 				63B59A6C1D07B3BE0097B8F3 /* LoginViewController.m in Sources */,
 				634AD7E41C07F2470047C8D5 /* CALayer+Anim.m in Sources */,
 				70796E941D6B0412005B8441 /* AppDelegate+BDPush.m in Sources */,
+				701F00361E0A63A600771F35 /* JiKeSignalScrollView.m in Sources */,
 				634AD7ED1C07F2470047C8D5 /* UIFont+Extend.m in Sources */,
 				634AD7EC1C07F2470047C8D5 /* UIDevice+Extend.m in Sources */,
 				6384677A1D07FC5C00A80223 /* DiscoverDetailViewController.m in Sources */,
@@ -7286,6 +7380,7 @@
 				63302F441D921FA50019E9D6 /* GJGCChatInputBar.m in Sources */,
 				634AD7F41C07F2470047C8D5 /* UIView+Extend.m in Sources */,
 				701C25B01D8659CA0099F644 /* MeetingCellLayout.m in Sources */,
+				701F003F1E0A6AD400771F35 /* LLTool.m in Sources */,
 				706EA0491DC0AAAE000C34F3 /* EvaluateLayout.m in Sources */,
 				638468A41D0813E800A80223 /* MeViewController.m in Sources */,
 				70E66FB11DAB791F00B7539F /* MyXSDetailVC.m in Sources */,
@@ -7295,6 +7390,7 @@
 				70796DD51D6B024E005B8441 /* LWAsyncDisplayLayer.m in Sources */,
 				634AD7F11C07F2470047C8D5 /* UIImage+FixOrientation.m in Sources */,
 				63F141AF1C8971C800479102 /* MCChartInformationView.m in Sources */,
+				701F00351E0A63A600771F35 /* JiKeScrollView.m in Sources */,
 				634AD7F31C07F2470047C8D5 /* UITableViewCell+Extend.m in Sources */,
 				638468AE1D0813E800A80223 /* EarnestRecodeAllViewController.m in Sources */,
 				634AD7E61C07F2470047C8D5 /* NSArray+Extend.m in Sources */,
@@ -7323,6 +7419,7 @@
 				631774A71DAA3C0E0045924F /* HeadLineTwoCell.m in Sources */,
 				70281BC01DD5A9DC00560785 /* NavRootViewController.m in Sources */,
 				708A29A51D878EC30067DA0A /* SearchAndAddTagsViewController.m in Sources */,
+				70470A7F1E090A2600BC7917 /* MyVisitorVC.m in Sources */,
 				70796DD21D6B024E005B8441 /* CALayer+LWTransaction.m in Sources */,
 				70E66FD21DAB791F00B7539F /* PayDingJinVC.m in Sources */,
 				70E66FBF1DAB791F00B7539F /* ChineseInclude.m in Sources */,
@@ -7495,6 +7592,7 @@
 				638468B21D0813E800A80223 /* AbouthelpViewController.m in Sources */,
 				7002EDFD1DBA13EF00EFB9A9 /* DateHelper.m in Sources */,
 				638467B51D08046800A80223 /* EditArticlesViewController.m in Sources */,
+				701F00331E0A63A600771F35 /* JiKeScrollImageView.m in Sources */,
 				638467701D07FC5C00A80223 /* DiscoverHomePageViewController.m in Sources */,
 				6384678A1D07FEB900A80223 /* DiscoverCell.m in Sources */,
 				70E66FB31DAB791F00B7539F /* WBPingJiaVC.m in Sources */,

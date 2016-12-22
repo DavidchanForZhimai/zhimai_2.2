@@ -213,8 +213,8 @@
                     UIView *cell = [[UIView alloc]initWithFrame:CGRectMake(0, i*30, APPWIDTH, 30)];
                     UILabel *name =[UILabel createLabelWithFrame:CGRectMake(0, 0, cellW, cell.height) text:@"姓名" fontSize:12 textColor:BlackTitleColor textAlignment:NSTextAlignmentCenter inView:cell];
                     UILabel *gerenYX =[UILabel createLabelWithFrame:CGRectMake(cellW, 0, cellW, cell.height) text:@"个人影响" fontSize:12 textColor:BlackTitleColor textAlignment:NSTextAlignmentCenter inView:cell];
-                    UILabel *zongYX =[UILabel createLabelWithFrame:CGRectMake(2*cellW, 0, cellW, cell.height) text:@"总影响" fontSize:12 textColor:BlackTitleColor textAlignment:NSTextAlignmentCenter inView:cell];
-                    UILabel *zhanbi =[UILabel createLabelWithFrame:CGRectMake(3*cellW, 0, cellW, cell.height) text:@"占比(%)" fontSize:12 textColor:BlackTitleColor textAlignment:NSTextAlignmentCenter inView:cell];
+                    UILabel *zongYX =[UILabel createLabelWithFrame:CGRectMake(2*cellW, 0, cellW, cell.height) text:@"分得红包" fontSize:12 textColor:BlackTitleColor textAlignment:NSTextAlignmentCenter inView:cell];
+                    UILabel *zhanbi =[UILabel createLabelWithFrame:CGRectMake(3*cellW, 0, cellW, cell.height) text:@"占比" fontSize:12 textColor:BlackTitleColor textAlignment:NSTextAlignmentCenter inView:cell];
                     if (i>0) {
                         Rewardforwardinfo *info =  myCrossBroderRelease.rewardforwardinfo[i-1];
                         name.text =info.realname;
