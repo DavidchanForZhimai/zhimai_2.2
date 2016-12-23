@@ -42,9 +42,9 @@
 @property (nonatomic,strong)UILabel *recommendLab;
 @property (nonatomic,strong)BaseButton *recommendBtn;
 @property (nonatomic,strong)UIView *mainRecommendV;
-@property (nonatomic,strong)UIImageView *smallHeadV1;
-@property (nonatomic,strong)UIImageView *smallHeadV2;
-@property (nonatomic,strong)UIImageView *smallHeadV3;
+@property (nonatomic,strong)UIButton *smallHeadV1;
+@property (nonatomic,strong)UIButton *smallHeadV2;
+@property (nonatomic,strong)UIButton *smallHeadV3;
 @property (nonatomic,strong) JiKeScrollView *myJikeScrollView;
 //模拟数据
 @property (nonatomic,strong) NSArray *tempImageLinkDataArray;
@@ -260,10 +260,13 @@
                     _recommendBtn.hidden=NO;
                     MeetingData *data1=self.precommendArr[0];
                     [[ToolManager shareInstance]imageView:self.smallHeadV1 setImageWithURL:data1.imgurl placeholderType:PlaceholderTypeUserHead];
+                    self.smallHeadV1.tag=[data1.meetId intValue];
                     MeetingData *data2=self.precommendArr[1];
                     [[ToolManager shareInstance]imageView:self.smallHeadV2 setImageWithURL:data2.imgurl placeholderType:PlaceholderTypeUserHead];
+                    self.smallHeadV2.tag=[data2.meetId intValue];
                     MeetingData *data3=self.precommendArr[2];
                     [[ToolManager shareInstance]imageView:self.smallHeadV3 setImageWithURL:data3.imgurl placeholderType:PlaceholderTypeUserHead];
+                    self.smallHeadV3.tag=[data3.meetId intValue];
                     
                     [self btnOnClick];
                     [self addTabView];
@@ -297,13 +300,16 @@
     _recommendLab.text=@"推荐人脉";
     [_recommendView addSubview:_recommendLab];
     
-    _smallHeadV1 = [[UIImageView alloc]initWithFrame:CGRectMake(90, 10, 30, 30)];
+    _smallHeadV1 = [[UIButton alloc]initWithFrame:CGRectMake(90, 10, 30, 30)];
+    [_smallHeadV1 addTarget:self action:@selector(smallHeadVBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [_recommendView addSubview:_smallHeadV1];
-    
-    _smallHeadV2 = [[UIImageView alloc]initWithFrame:CGRectMake(130, 10, 30, 30)];
+
+    _smallHeadV2 = [[UIButton alloc]initWithFrame:CGRectMake(130, 10, 30, 30)];
+    [_smallHeadV2 addTarget:self action:@selector(smallHeadVBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [_recommendView addSubview:_smallHeadV2];
     
-    _smallHeadV3 = [[UIImageView alloc]initWithFrame:CGRectMake(170, 10, 30, 30)];
+    _smallHeadV3 = [[UIButton alloc]initWithFrame:CGRectMake(170, 10, 30, 30)];
+    [_smallHeadV3 addTarget:self action:@selector(smallHeadVBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [_recommendView addSubview:_smallHeadV3];
     
     _smallHeadV1.alpha=0;
@@ -323,7 +329,13 @@
     };
     
 }
+-(void)smallHeadVBtnClick:(UIButton *)btn
+{
+    MyDetialViewController *myDetialViewCT=allocAndInit(MyDetialViewController);
+    myDetialViewCT.userID=[NSString stringWithFormat:@"%ld", btn.tag];
+    [self.navigationController pushViewController:myDetialViewCT animated:YES];
 
+}
 
 -(UIView *)mainRecommendV
 {
