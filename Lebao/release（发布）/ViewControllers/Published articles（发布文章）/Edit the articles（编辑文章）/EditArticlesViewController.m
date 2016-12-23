@@ -14,6 +14,7 @@
 #import "WetChatShareManager.h"
 #import "UpLoadImageManager.h"
 #import "IMYWebView.h"
+#import "RechargeViewController.h"
 //我的内容
 #define MyreleaseURL [NSString stringWithFormat:@"%@release/save",HttpURL]
 //发布文章
@@ -336,15 +337,7 @@ typedef NS_ENUM(int,SwitchActionTag) {
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    float money = [[NSString stringWithFormat:@"%@%@",textField.text,string] floatValue];
-    
-    if (money>[_data.amount floatValue]) {
-        
-        [[ToolManager shareInstance] showInfoWithStatus:[NSString stringWithFormat:@"最大金额%@",_data.amount]];
-        return NO;
-    }
-    
-    
+   
     if ([textField.text rangeOfString:@"."].location == NSNotFound) {
         isHaveDian = NO;
     }
@@ -519,6 +512,23 @@ typedef NS_ENUM(int,SwitchActionTag) {
                 [[ToolManager shareInstance] showInfoWithStatus:@"最小金额5元"];
                 return;
             }
+            if ([_redTextField.text floatValue]>[_data.amount floatValue]) {
+                UIAlertController *alertControl = [UIAlertController alertControllerWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"您的账号余额(%.2f元)不足，是否充值",[_data.amount floatValue]] preferredStyle:UIAlertControllerStyleAlert];
+                [alertControl addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+                [alertControl addAction:[UIAlertAction actionWithTitle:@"立即充值" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+                    
+                    RechargeViewController *rechargeVC = [[RechargeViewController alloc]init];
+                    rechargeVC.moneyPayCallBack = ^(float money)
+                    {
+                        _data.amount =[NSString stringWithFormat:@"%f",[_data.amount floatValue] + money];
+                    };
+                    PushView(self, rechargeVC);
+                }]];
+                [self.navigationController presentViewController:alertControl animated:YES completion:nil];
+
+                return;
+            }
+
            [parameter setObject:_redTextField.text forKey:@"reward"];
         }
         [[ToolManager shareInstance] showWithStatus:@"保存中..."];

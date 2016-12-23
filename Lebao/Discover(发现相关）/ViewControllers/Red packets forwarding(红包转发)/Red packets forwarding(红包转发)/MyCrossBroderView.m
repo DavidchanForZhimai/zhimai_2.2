@@ -227,7 +227,7 @@
                         zongYX.text =[NSString stringWithFormat:@"%@",info.reward];
                         zongYX.textColor = hexColor(838383);
                         zongYX.font = [UIFont systemFontOfSize:14.0];
-                        zhanbi.text =[NSString stringWithFormat:@"%@",info.ratio];
+                        zhanbi.text =[NSString stringWithFormat:@"%.2f",[info.ratio floatValue]];
                         zhanbi.textColor = hexColor(838383);
                         zhanbi.font = [UIFont systemFontOfSize:14.0];
                         

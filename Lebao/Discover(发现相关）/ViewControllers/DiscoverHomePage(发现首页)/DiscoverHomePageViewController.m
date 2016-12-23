@@ -22,7 +22,7 @@
 @property(nonatomic,strong)UIView *fristSection;
 @property(nonatomic,strong)UIView *secondSection;
 @property(nonatomic,strong)UIView *red;
-@property(nonatomic,assign)NSUInteger rid;
+@property(nonatomic,strong)NSString *rid;
 @end
 
 @implementation DiscoverHomePageViewController
@@ -39,19 +39,15 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (![CoreArchive strForKey:@"rid"]) {
-        [CoreArchive setInt:0 key:@"rid"];
-    }
-
+ 
     [XLDataService postWithUrl:[NSString stringWithFormat:@"%@library/home",HttpURL] param:[Parameter parameterWithSessicon] modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         if ([dataObj[@"rtcode"] integerValue]==1) {
-         
-            BOOL isNewRedArticle = YES;
-            if ([dataObj[@"rid"] integerValue]==0||[dataObj[@"rid"] integerValue]==[CoreArchive intForKey:@"rid"]) {
-                isNewRedArticle = NO;
+            BOOL isNewRedArticle = NO;
+              _rid =[NSString stringWithFormat:@"%@",dataObj[@"rid"]] ;
+            if ([_rid intValue]!=0&&![_rid isEqualToString:[CoreArchive strForKey:@"red"]]) {
+                isNewRedArticle = YES;
             }
-            
-            _rid =[dataObj[@"rid"] integerValue];
+
             if (isNewRedArticle) {
                 self.red.backgroundColor = [UIColor redColor];
                
@@ -137,7 +133,9 @@
         }
         else if ([vcStr isEqualToString: @"RedpacketsforwardingViewController"])
         {
-            [CoreArchive setInt:_rid key:@"rid"];
+            
+            [CoreArchive setStr:_rid key:@"red"];
+          
             PushView(self, allocAndInit(NSClassFromString(vcStr)));
         }
         
