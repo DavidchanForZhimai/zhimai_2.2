@@ -250,6 +250,7 @@
 //            NSLog(@"Mydataobj====%@",dataObj);
             MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
             if (modal.rtcode ==1) {
+                
                 for (MeetingData* data in modal.datas) {
                     [self.precommendArr addObject:data];
                 }
@@ -274,6 +275,8 @@
                     _smallHeadV2.alpha=0;
                     _smallHeadV3.alpha=0;
                 }
+            }else{
+                _recommendBtn.userInteractionEnabled=YES;
             }
         }
     }];
@@ -306,16 +309,17 @@
     _smallHeadV1.alpha=0;
     _smallHeadV2.alpha=0;
     _smallHeadV3.alpha=0;
-    
-    _recommendBtn=[[BaseButton alloc]initWithFrame:frame(APPWIDTH-90, 10, 70, 30) setTitle:@"换一换" titleSize:24*SpacedFonts titleColor:BlackTitleColor backgroundImage:nil iconImage:[UIImage imageNamed:@"Fny_shuaxin"] highlightImage: [UIImage imageNamed:@"Fny_shuaxin"]setTitleOrgin:CGPointMake(7,10) setImageOrgin:CGPointMake(10,5) inView:_recommendView];
-    _recommendBtn.layer.borderWidth=1;
+    UIImage *image= [UIImage imageNamed:@"Fny_shuaxin"];
+    _recommendBtn=[[BaseButton alloc]initWithFrame:frame(APPWIDTH-90, 10, 70, 30) setTitle:@"换一换" titleSize:24*SpacedFonts titleColor:BlackTitleColor backgroundImage:nil iconImage:image highlightImage: image setTitleOrgin:CGPointMake((30 - 24*SpacedFonts)/2.0,11) setImageOrgin:CGPointMake((30 - image.size.height)/2.0,7) inView:_recommendView];
+    _recommendBtn.layer.borderWidth=0.5;
     _recommendBtn.layer.cornerRadius=15;
     _recommendBtn.layer.borderColor=[UIColor lightGrayColor].CGColor;
     __weak typeof(self) weakSelf = self;
     _recommendBtn.didClickBtnBlock=^{
-
+        [weakSelf addAnimal:weakSelf.recommendBtn.imageView];
         [weakSelf networkForRecommend];
-
+        weakSelf.recommendBtn.userInteractionEnabled=NO;
+        
     };
     
 }
@@ -388,6 +392,20 @@
     _myJikeScrollView.myNextShowImageLinkArray = self.tempImageLinkDataArray[0];
     _myJikeScrollView.myNextShowLabelDesArray = self.tempImageDesDataArray[0];
     _myJikeScrollView.myNextSecondShowLabelDesArray=self.tempImageDesDataArray1[0];
+
+
+    _recommendBtn.userInteractionEnabled=YES;
+}
+-(void)addAnimal:(UIView*)aview
+{
+    CABasicAnimation* rotationAnimation;
+    rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+    rotationAnimation.toValue = [NSNumber numberWithFloat: M_PI * 2.0 ];
+    rotationAnimation.duration = 1;
+    rotationAnimation.cumulative = YES;
+    rotationAnimation.repeatCount = 1;
+    
+    [aview.layer addAnimation:rotationAnimation forKey:@"rotationAnimation"];
 }
 
 #pragma mark -MeetHeadV 代理方法
