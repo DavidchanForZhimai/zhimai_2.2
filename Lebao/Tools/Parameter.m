@@ -16,6 +16,7 @@
     if ([CoreArchive strForKey:KuserName]&&[CoreArchive strForKey:passWord]) {
         [parameter setObject:[CoreArchive strForKey:KuserName] forKey:KuserName];
         [parameter setObject:[CoreArchive strForKey:passWord] forKey:passWord];
+        [parameter setObject:@"20" forKey:@"t"];
         if ([CoreArchive strForKey:DeviceToken]) {
             [parameter setObject:[CoreArchive strForKey:DeviceToken] forKey:@"channelid"];
         }
