@@ -208,8 +208,7 @@
                 [view addSubview:cellView];
                 float cellW = APPWIDTH/4.0;
                 for (int i = 0; i<myCrossBroderRelease.rewardforwardinfo.count + 1; i++) {
-                    
-                    
+                
                     UIView *cell = [[UIView alloc]initWithFrame:CGRectMake(0, i*30, APPWIDTH, 30)];
                     UILabel *name =[UILabel createLabelWithFrame:CGRectMake(0, 0, cellW, cell.height) text:@"姓名" fontSize:12 textColor:BlackTitleColor textAlignment:NSTextAlignmentCenter inView:cell];
                     UILabel *gerenYX =[UILabel createLabelWithFrame:CGRectMake(cellW, 0, cellW, cell.height) text:@"个人影响" fontSize:12 textColor:BlackTitleColor textAlignment:NSTextAlignmentCenter inView:cell];
@@ -225,7 +224,7 @@
                         gerenYX.textColor = hexColor(838383);
                         gerenYX.font = [UIFont systemFontOfSize:14.0];
                         
-                        zongYX.text =[NSString stringWithFormat:@"%ld",myCrossBroderRelease.rewardreadsum];
+                        zongYX.text =[NSString stringWithFormat:@"%@",info.reward];
                         zongYX.textColor = hexColor(838383);
                         zongYX.font = [UIFont systemFontOfSize:14.0];
                         zhanbi.text =[NSString stringWithFormat:@"%@",info.ratio];

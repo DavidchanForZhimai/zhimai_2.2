@@ -145,7 +145,7 @@ typedef NS_ENUM(int,ButtonActionTag) {
     
     else
     if (sender.tag ==ButtonActionTagNextStep ) {
-        if (![_linkAddressTextView.text hasPrefix:@"http://"]) {
+        if (![_linkAddressTextView.text hasPrefix:@"http://"]||[_linkAddressTextView.text hasPrefix:@"https://"]) {
             
             [[ToolManager shareInstance] showInfoWithStatus:@"请粘贴以http://开头的链接"];
             return;

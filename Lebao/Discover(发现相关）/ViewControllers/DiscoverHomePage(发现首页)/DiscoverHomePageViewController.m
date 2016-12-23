@@ -22,6 +22,7 @@
 @property(nonatomic,strong)UIView *fristSection;
 @property(nonatomic,strong)UIView *secondSection;
 @property(nonatomic,strong)UIView *red;
+@property(nonatomic,assign)NSUInteger rid;
 @end
 
 @implementation DiscoverHomePageViewController
@@ -44,12 +45,13 @@
 
     [XLDataService postWithUrl:[NSString stringWithFormat:@"%@library/home",HttpURL] param:[Parameter parameterWithSessicon] modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         if ([dataObj[@"rtcode"] integerValue]==1) {
+         
             BOOL isNewRedArticle = YES;
             if ([dataObj[@"rid"] integerValue]==0||[dataObj[@"rid"] integerValue]==[CoreArchive intForKey:@"rid"]) {
                 isNewRedArticle = NO;
             }
-            [CoreArchive setInt:[dataObj[@"rid"] integerValue] key:@"rid"];
-
+            
+            _rid =[dataObj[@"rid"] integerValue];
             if (isNewRedArticle) {
                 self.red.backgroundColor = [UIColor redColor];
                
@@ -132,6 +134,11 @@
         {
             AlreadysentproductViewController *article =allocAndInit(AlreadysentproductViewController);
             [self.navigationController pushViewController:article animated:YES];
+        }
+        else if ([vcStr isEqualToString: @"RedpacketsforwardingViewController"])
+        {
+            [CoreArchive setInt:_rid key:@"rid"];
+            PushView(self, allocAndInit(NSClassFromString(vcStr)));
         }
         
         else
