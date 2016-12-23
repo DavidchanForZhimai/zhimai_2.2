@@ -144,7 +144,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     MyDetialViewController *myDetialViewCT=[MyDetialViewController new];
     MeetingData *data=self.visitorsArr[indexPath.row];
-    myDetialViewCT.userID=data.userid;
+    myDetialViewCT.userID=data.meetId;
     [self.navigationController pushViewController:myDetialViewCT animated:YES];
 }
 //-(BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath//高亮

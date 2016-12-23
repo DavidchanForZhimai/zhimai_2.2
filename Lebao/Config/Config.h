@@ -13,11 +13,11 @@
 //32URL
 //测试
 
-#define ImageURLS @"http://pic.lmlm.cn"
-#define HttpURL @"https://api.lmlm.cn/v1/"
+//#define ImageURLS @"http://pic.lmlm.cn"
+//#define HttpURL @"https://api.lmlm.cn/v1/"
 //////正式
-//#define ImageURLS @"http://pic.any98.com"
-//#define HttpURL @"https://api.any98.com/v1/"
+#define ImageURLS @"http://pic.any98.com"
+#define HttpURL @"https://api.any98.com/v1/"
 
 //约见接口
 #define MeetMainURL [NSString stringWithFormat:@"%@meet/nearby",HttpURL]

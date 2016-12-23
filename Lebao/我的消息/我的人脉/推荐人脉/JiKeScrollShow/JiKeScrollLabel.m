@@ -85,7 +85,7 @@
     _myLabel0 = ({
         UILabel *label = self.myLabelArray[0];
         label.frame = (CGRect){0,_originalCenterY,labelW,labelH};
-        label.numberOfLines = 0;
+//        label.numberOfLines = 0;
         label.font = labelFont;
         label.textColor=_textColor;
         label.textAlignment=NSTextAlignmentCenter;
@@ -96,7 +96,7 @@
     _myLabel1 = ({
         UILabel *label = self.myLabelArray[1];
         label.frame = (CGRect){0,_originalTopY,labelW,labelH};
-        label.numberOfLines = 0;
+//        label.numberOfLines = 0;
         label.textAlignment=NSTextAlignmentCenter;
         [backView addSubview:label];
         label;

@@ -518,6 +518,9 @@
 {
     if (!_recommendScrV) {
     _recommendScrV=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 35,APPWIDTH, APPWIDTH/2.0-30)];
+        if (APPWIDTH<375) {
+            _recommendScrV.frame=CGRectMake(0, 35,APPWIDTH, APPWIDTH/2.0-20);
+        }
     float scrWidth=0;
     for (int i=0; i<self.visitorsArr.count; i++) {
         RecommendView *reView=[[RecommendView alloc]initWithFrame:CGRectMake(15+i*(APPWIDTH -60)/3.0+15*i, 10, (APPWIDTH-60)/3.0, _recommendScrV.height-20)];

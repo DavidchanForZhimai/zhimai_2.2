@@ -324,7 +324,7 @@
 -(UIView *)mainRecommendV
 {
     if(!_mainRecommendV){
-    _mainRecommendV=[[UIView alloc]initWithFrame:CGRectMake(0, 0, APPWIDTH, APPWIDTH/2-20)];
+    _mainRecommendV=[[UIView alloc]initWithFrame:CGRectMake(0, 0, APPWIDTH, (APPWIDTH/2-50)/2.0+106)];
     _mainRecommendV.backgroundColor=[UIColor whiteColor];
     
     _reView1=[[RecommendView alloc]initWithFrame:CGRectMake(15, 15, (APPWIDTH-60)/3.0, _mainRecommendV.height-30)];

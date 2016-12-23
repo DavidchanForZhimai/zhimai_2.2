@@ -39,7 +39,7 @@
     _companyLab.frame=CGRectMake(_nameLab.x, CGRectGetMaxY(_positionAndYearsLab.frame)+10, _nameLab.width, 13);
     _companyLab.textColor=[UIColor colorWithRed:0.549 green:0.5569 blue:0.5608 alpha:1.0];
     _companyLab.font=[UIFont systemFontOfSize:13];
-    _timeLab.frame=CGRectMake(APPWIDTH-80, 17, 65, 13);
+    _timeLab.frame=CGRectMake(APPWIDTH/2.0, 17,APPWIDTH/2.0-10, 13);
     _timeLab.textColor=[UIColor colorWithRed:0.549 green:0.5569 blue:0.5608 alpha:1.0];
     _timeLab.font=[UIFont systemFontOfSize:12];
     _timeLab.textAlignment=NSTextAlignmentRight;

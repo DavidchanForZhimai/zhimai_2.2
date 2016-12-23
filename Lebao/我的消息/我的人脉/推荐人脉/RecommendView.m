@@ -63,6 +63,9 @@
     }
     _nameLab.text=data.realname;
     _positionLab.text=data.position;
+    if (data.position.length>6) {
+        _positionLab.text=[data.position substringToIndex:6];
+    }
 
 }
 -(void)viewTouch
