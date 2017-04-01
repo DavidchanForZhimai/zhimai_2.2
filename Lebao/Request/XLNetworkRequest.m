@@ -55,6 +55,7 @@
      }success:^(NSURLSessionDataTask *task, id _Nullable responseObject) {
          
          successHandler(responseObject);
+         NSLog(@"responseObject====%@",responseObject);
      } failure:^(NSURLSessionDataTask * _Nullable task, NSError *error) {
          XLLog(@"------请求失败-------%@",error);
          failureHandler(error);

@@ -28,6 +28,19 @@ static dispatch_once_t once;
     return wetChatPayManager;
     
 }
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        if (![WXApi isWXAppInstalled]) {
+            
+            [[ToolManager shareInstance] showInfoWithStatus:@"未安装微信"];
+            
+        }
+        
+    }
+    return self;
+}
 - (void)jumpToBizPay:(NSString *)money wetChatPaySucceed:(WetChatPaySucceed)wetChatPaySucceed{
     [[ToolManager shareInstance] showWithStatus:@"微信冲值..."];
     NSDictionary *paramer = [Parameter parameterWithSessicon];
@@ -57,6 +70,12 @@ static dispatch_once_t once;
 
 -(void)wxPay:(NSDictionary *)dict succeedMeg:(NSString *)msg recharge:(NSString *)recharge wetChatPaySucceed:(WetChatPaySucceed)wetChatPaySucceed 
 {
+    if (![WXApi isWXAppInstalled]) {
+        
+        [[ToolManager shareInstance] showInfoWithStatus:@"未安装微信"];
+        
+    }
+
     _recharge = recharge;
     _wetChatPaySucceedMsg = msg;
     _wetChatPaySucceed = wetChatPaySucceed;

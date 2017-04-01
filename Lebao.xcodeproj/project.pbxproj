@@ -965,8 +965,6 @@
 		70E0F7431DE586EE003B0F67 /* luyinzhong@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 70E0F6FD1DE586EE003B0F67 /* luyinzhong@3x.png */; };
 		70E0F7441DE586EE003B0F67 /* mingpian_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 70E0F6FE1DE586EE003B0F67 /* mingpian_back.png */; };
 		70E0F7451DE586EE003B0F67 /* shouji(1).png in Resources */ = {isa = PBXBuildFile; fileRef = 70E0F6FF1DE586EE003B0F67 /* shouji(1).png */; };
-		70E0F7461DE586EE003B0F67 /* wancheng@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 70E0F7001DE586EE003B0F67 /* wancheng@2x.png */; };
-		70E0F7471DE586EE003B0F67 /* wancheng@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 70E0F7011DE586EE003B0F67 /* wancheng@3x.png */; };
 		70E0F7481DE586EE003B0F67 /* wodeBG@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 70E0F7021DE586EE003B0F67 /* wodeBG@2x.png */; };
 		70E0F7491DE586EE003B0F67 /* wodeBG@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 70E0F7031DE586EE003B0F67 /* wodeBG@3x.png */; };
 		70E0F74A1DE586EE003B0F67 /* yuying1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 70E0F7041DE586EE003B0F67 /* yuying1@2x.png */; };
@@ -2504,8 +2502,6 @@
 		70E0F6FD1DE586EE003B0F67 /* luyinzhong@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "luyinzhong@3x.png"; sourceTree = "<group>"; };
 		70E0F6FE1DE586EE003B0F67 /* mingpian_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mingpian_back.png; sourceTree = "<group>"; };
 		70E0F6FF1DE586EE003B0F67 /* shouji(1).png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shouji(1).png"; sourceTree = "<group>"; };
-		70E0F7001DE586EE003B0F67 /* wancheng@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wancheng@2x.png"; sourceTree = "<group>"; };
-		70E0F7011DE586EE003B0F67 /* wancheng@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wancheng@3x.png"; sourceTree = "<group>"; };
 		70E0F7021DE586EE003B0F67 /* wodeBG@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wodeBG@2x.png"; sourceTree = "<group>"; };
 		70E0F7031DE586EE003B0F67 /* wodeBG@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wodeBG@3x.png"; sourceTree = "<group>"; };
 		70E0F7041DE586EE003B0F67 /* yuying1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "yuying1@2x.png"; sourceTree = "<group>"; };
@@ -6131,8 +6127,6 @@
 				70E0F6FD1DE586EE003B0F67 /* luyinzhong@3x.png */,
 				70E0F6FE1DE586EE003B0F67 /* mingpian_back.png */,
 				70E0F6FF1DE586EE003B0F67 /* shouji(1).png */,
-				70E0F7001DE586EE003B0F67 /* wancheng@2x.png */,
-				70E0F7011DE586EE003B0F67 /* wancheng@3x.png */,
 				70E0F7021DE586EE003B0F67 /* wodeBG@2x.png */,
 				70E0F7031DE586EE003B0F67 /* wodeBG@3x.png */,
 				70E0F7041DE586EE003B0F67 /* yuying1@2x.png */,
@@ -6481,6 +6475,7 @@
 					63E00B641C07194C0097EDF5 = {
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = 8R9B8NBXS4;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -6823,7 +6818,6 @@
 				63340B5A1CFBE3490010A596 /* yuanxing@3x.png in Resources */,
 				631C3F9C1C97BB65003C67E6 /* icon_ me_invitefriends.png in Resources */,
 				633FCC061DED3215006353F0 /* 聊天键盘-icon-拍照-点击@2x.png in Resources */,
-				70E0F7461DE586EE003B0F67 /* wancheng@2x.png in Resources */,
 				633030151D9278C80019E9D6 /* icon_chat_jiazaishibai@3x.png in Resources */,
 				63EE3D101C574BA400D01AC6 /* icon_releseDocument_next@2x.png in Resources */,
 				63237D3F1D8E827B00F4ED60 /* [iconprofilevipweikaitong]@3x.png in Resources */,
@@ -7039,7 +7033,6 @@
 				7070E8761DB77C5F007793AF /* icon_penyouquan@3x.png in Resources */,
 				63EF3B851C5895E700BEEC59 /* icon_exhibition_mycontent_share_nomal@2x.png in Resources */,
 				63302F9A1D921FA50019E9D6 /* 065[胜利]@2x.png in Resources */,
-				70E0F7471DE586EE003B0F67 /* wancheng@3x.png in Resources */,
 				63302F691D921FA50019E9D6 /* 090[发呆]@2x.png in Resources */,
 				63302FBB1D921FA50019E9D6 /* 102[回头]@2x.png in Resources */,
 				63237D4E1D8F791C00F4ED60 /* icon_message_woderenmai@2x.png in Resources */,
@@ -7662,8 +7655,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Xiamen legend Interactive Network Technology Co. Ltd. (8R9B8NBXS4)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Xiamen legend Interactive Network Technology Co. Ltd. (8R9B8NBXS4)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Xiamen Zhixiao IOT Technology Service Co., Ltd. (8R9B8NBXS4)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: 3036068517@qq.com (X8GNKJR7DU)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -7683,7 +7676,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "b699b6e6-5342-4f8b-b5ad-ee2bc980365d";
@@ -7709,8 +7702,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Xiamen legend Interactive Network Technology Co. Ltd. (8R9B8NBXS4)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Xiamen legend Interactive Network Technology Co. Ltd. (8R9B8NBXS4)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Xiamen Zhixiao IOT Technology Service Co., Ltd. (8R9B8NBXS4)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: 3036068517@qq.com (X8GNKJR7DU)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -7724,7 +7717,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "b699b6e6-5342-4f8b-b5ad-ee2bc980365d";
@@ -7741,15 +7734,16 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = Lebao/Lebao.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Xiamen Zhixiao IOT Technology Service Co., Ltd. (8R9B8NBXS4)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 8R9B8NBXS4;
 				ENABLE_BITCODE = NO;
 				GCC_INPUT_FILETYPE = automatic;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/Lebao/Config/PrefixHeader.pch";
 				INFOPLIST_FILE = Lebao/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7761,6 +7755,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhimai;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -7772,15 +7767,16 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = Lebao/Lebao.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Xiamen Zhixiao IOT Technology Service Co., Ltd. (8R9B8NBXS4)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 8R9B8NBXS4;
 				ENABLE_BITCODE = NO;
 				GCC_INPUT_FILETYPE = automatic;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/Lebao/Config/PrefixHeader.pch";
 				INFOPLIST_FILE = Lebao/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7793,6 +7789,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhimai;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

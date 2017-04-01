@@ -186,7 +186,7 @@
                 [[ToolManager shareInstance] endFooterWithRefreshing:_yrTab];
             }
             if (dataObj) {
-                         NSLog(@"meetObj====%@",dataObj);
+//                         NSLog(@"meetObj====%@",dataObj);
                 MeetingModel *modal = [MeetingModel mj_objectWithKeyValues:dataObj];
                 
                 

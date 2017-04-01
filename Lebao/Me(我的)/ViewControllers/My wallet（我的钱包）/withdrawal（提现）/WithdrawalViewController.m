@@ -26,7 +26,7 @@ typedef enum {
 
 @implementation WithdrawalViewController
 {
-    
+    int poundage; //提现费率
     UIScrollView *_mainScrollView;
     UILabel *_wetchatLabel;
     UITextField *_rechargeTextField;
@@ -60,7 +60,7 @@ typedef enum {
     [[ToolManager shareInstance] showWithStatus];
     [XLDataService postWithUrl:CashURL param:[Parameter parameterWithSessicon] modelClass:nil responseBlock:^(id dataObj, NSError *error) {
         if (dataObj) {
-            NSLog(@"dataObj  %@",dataObj);
+//            NSLog(@"提现费率dataObj  %@",dataObj);
             if ([dataObj[@"rtcode"] integerValue]==1) {
                 [[ToolManager shareInstance] dismiss];
                 
@@ -95,12 +95,14 @@ typedef enum {
 //                _rechargeTextField.keyboardType =UIKeyboardTypeNumberPad;
                 [_rechargeTextView addSubview:_rechargeTextField];
                 
-                UILabel *cash =  [UILabel createLabelWithFrame:frame(0, CGRectGetMaxY(_rechargeView.frame) + 10, frameWidth(_mainScrollView) -14*ScreenMultiple, 26*SpacedFonts) text:[NSString stringWithFormat:@"可提现账户余额%@元(微信官方收取0.6％的提现手续费)",dataObj[@"amount"]] fontSize:26*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentRight inView:_mainScrollView];
+                poundage = [dataObj[@"poundage"] floatValue]*100;
                 
+                UILabel *cash =  [UILabel createLabelWithFrame:frame(0, CGRectGetMaxY(_rechargeView.frame) + 10, frameWidth(_mainScrollView) -14*ScreenMultiple, 26*SpacedFonts) text:[NSString stringWithFormat:@"可提现账户余额%@元(微信官方收取%d％的提现手续费)",dataObj[@"amount"],poundage] fontSize:26*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentRight inView:_mainScrollView];
+
                 NSMutableAttributedString *string = [[NSMutableAttributedString alloc]initWithString:cash.text];
                 [string addAttribute:NSForegroundColorAttributeName value:AppMainColor range:[cash.text rangeOfString:dataObj[@"amount"]]];
-                [string addAttribute:NSForegroundColorAttributeName value:AppMainColor range:[cash.text rangeOfString:@"(微信官方收取0.6％的提现手续费)"]];
-                [string addAttribute:NSFontAttributeName value:Size(20) range:[cash.text rangeOfString:@"(微信官方收取0.6％的提现手续费)"]];
+                [string addAttribute:NSForegroundColorAttributeName value:AppMainColor range:[cash.text rangeOfString:[NSString stringWithFormat:@"(微信官方收取%d％的提现手续费)",poundage]]];
+                [string addAttribute:NSFontAttributeName value:Size(20) range:[cash.text rangeOfString:[NSString stringWithFormat:@"(微信官方收取%d％的提现手续费)",poundage]]];
                 cash.attributedText = string;
                 
                 UIButton *_rechargeBtn = [UIButton createButtonWithfFrame:frame(frameX(_rechargeTextView), CGRectGetMaxY(_rechargeView.frame) + 45, frameWidth(_rechargeTextView), 40) title:@"提现" backgroundImage:nil iconImage:nil highlightImage:nil tag:ButtonActionTagWithdraw inView:_mainScrollView];
@@ -220,7 +222,10 @@ typedef enum {
             return;
         }
     
-        [[ToolManager shareInstance] showAlertViewTitle:@"提现提醒" contentText:[NSString stringWithFormat:@"扣手续费后实际到账%@元",  [self notRounding:_rechargeTextField.text.floatValue*0.994 afterPoint:2]] showAlertViewBlcok:^{
+        float poundaged = poundage;
+        
+        
+        [[ToolManager shareInstance] showAlertViewTitle:@"提现提醒" contentText:[NSString stringWithFormat:@"扣手续费后实际到账%@元",  [self notRounding:_rechargeTextField.text.floatValue*(1-poundaged/100) afterPoint:2]] showAlertViewBlcok:^{
 
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [[WetChatAuthenManager shareInstance]wetChatWithdrawAuthen:isAuthen withdrawMoney:_rechargeTextField.text];

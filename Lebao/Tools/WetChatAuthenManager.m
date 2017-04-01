@@ -42,6 +42,19 @@ static dispatch_once_t once;
     return wetChatAuthenManager;
     
 }
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        if (![WXApi isWXAppInstalled]) {
+            
+            [[ToolManager shareInstance] showInfoWithStatus:@"未安装微信"];
+          
+        }
+
+    }
+    return self;
+}
 //分享授权接口
 - (void)wetChatAuthen:(BOOL)isLocalShare isAuthen:(BOOL)isAuthen localshareParme:(NSMutableDictionary *)shareparme succeedBlock:(WetChatAuthenBlock)succeedBlock
 {
@@ -50,12 +63,7 @@ static dispatch_once_t once;
     _isLocalShare = isLocalShare;
     _shareparme = shareparme;
     
-    if (![WXApi isWXAppInstalled]) {
-        
-        [[ToolManager shareInstance] showInfoWithStatus:@"未安装微信"];
-        return;
-    }
-    if (![WXApi isWXAppSupportApi]) {
+        if (![WXApi isWXAppSupportApi]) {
         
         [[ToolManager shareInstance] showInfoWithStatus:@"此版本不支持微信分享"];
         return;
@@ -295,7 +303,7 @@ static dispatch_once_t once;
         [param setValue:_withdrawMoney forKey:@"amount"];
         [[ToolManager shareInstance] showWithStatus:@"提现..."];
         [XLDataService postWithUrl:WXWithdrawURL param:param modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-//            NSLog(@"dataObj =%@",dataObj);
+            NSLog(@"dataObj =%@",dataObj);
             if (dataObj) {
                 
                 if ([dataObj[@"rtcode"] integerValue] ==1) {
