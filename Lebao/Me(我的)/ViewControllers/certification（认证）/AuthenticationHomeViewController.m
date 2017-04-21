@@ -73,7 +73,7 @@
     [self.view addSubview:self.upload];
     [self netWork];
     
-     _parame = [Parameter parameterWithSessicon];
+    _parame = [Parameter parameterWithSessicon];
     
     
 }
@@ -109,7 +109,7 @@
                 
                 if (_modal.datas.authen ==9) {
                     
-                     [_parame setObject:url forKey:@"cardpic"];
+                    [_parame setObject:url forKey:@"cardpic"];
                     _returnLiyou.text =[NSString stringWithFormat:@"驳回理由:%@",_modal.datas.remark];
                     _returnLiyou.numberOfLines = 0;
                     _returnLiyou.frame = CGRectMake(_returnLiyou.x, _returnLiyou.y, _returnLiyou.width, [_returnLiyou.text sizeWithFont:[UIFont systemFontOfSize:12] maxSize:CGSizeMake(_returnLiyou.width, 1000)].height + 20);
@@ -271,13 +271,13 @@
 {
     if (_modal.datas.authen ==1||_modal.datas.authen==9) {
         [[ToolManager shareInstance] seleteImageFormSystem:self seleteImageFormSystemBlcok:^(UIImage *image) {
-           
+            
             [[UpLoadImageManager shareInstance] upLoadImageType:@"authen" image:image imageBlock:^(UpLoadImageModal * upLoadImageModal) {
                 [[ToolManager shareInstance] dismiss];
                 _upload.enabled = YES;
                 _upload.backgroundColor = AppMainColor;
                 [[ToolManager shareInstance] imageView:_imageView setImageWithURL:upLoadImageModal.imgurl placeholderType:PlaceholderTypeImageProcessing];
-            
+                
                 [_parame setObject:upLoadImageModal.imgurl forKey:@"cardpic"];
                 
             }];
@@ -319,8 +319,8 @@
             [[ToolManager shareInstance] showAlertMessage:@"请上传图片"];
             return ;
         }
-
-        UIAlertController *alertControl = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"请确保上传的认证资料中姓名/手机号码与已注册信息徐俊华18650121828一致，否则审核会失败" preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertController *alertControl = [UIAlertController alertControllerWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"请确保上传的认证资料中姓名/手机号码与已注册信息%@%@一致，否则审核会失败",weakSelf.modal.datas.realname,weakSelf.modal.datas.tel] preferredStyle:UIAlertControllerStyleAlert];
         [alertControl addAction:[UIAlertAction actionWithTitle:@"先去修改 " style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             
             BasicInformationViewController *info = [[BasicInformationViewController alloc] init];
@@ -382,7 +382,7 @@
                 
                 
             }];
-
+            
             
         }]];
         [weakSelf.navigationController presentViewController:alertControl animated:YES completion:nil];

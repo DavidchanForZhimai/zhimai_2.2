@@ -19,7 +19,7 @@
 typedef NS_ENUM(int,ButtonActionTag) {
     
     ButtonActionTagNextStep =2,
- 
+    
     
 };
 
@@ -33,8 +33,8 @@ typedef NS_ENUM(int,ButtonActionTag) {
 
 @implementation ReleaseDocumentsPackagetViewController
 {
-     UIScrollView *_mainScrollView;
-     UITextView *_linkAddressTextView;
+    UIScrollView *_mainScrollView;
+    UITextView *_linkAddressTextView;
     UILabel *_linklB;
 }
 
@@ -59,7 +59,7 @@ typedef NS_ENUM(int,ButtonActionTag) {
     _mainScrollView = allocAndInitWithFrame(UIScrollView, frame(0,StatusBarHeight + NavigationBarHeight, frameWidth(self.view), APPHEIGHT - StatusBarHeight - NavigationBarHeight));
     _mainScrollView.backgroundColor =[UIColor clearColor];
     [self.view addSubview:_mainScrollView];
-
+    
     UILabel *text =  [UILabel createLabelWithFrame:frame(9, 15, frameWidth(_mainScrollView) - 10, 24*SpacedFonts) text:@"复制一篇文章的链接，通过一键封装可以重新编辑该文章，编辑时也可以添加自己的微名片" fontSize:24*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:_mainScrollView];
     text.numberOfLines= 0;
     
@@ -78,8 +78,8 @@ typedef NS_ENUM(int,ButtonActionTag) {
         lb.numberOfLines = 0;
         lb.backgroundColor = WhiteColor;
         if (i>0) {
-        UIImage *_icon =[UIImage imageNamed:@"icon_releseDocument_next"];
-        UIImageView *icon = allocAndInitWithFrame(UIImageView, frame(frameX(lb) - _icon.size.width - (iconBT - 38)/2.0, iconY + (frameHeight(lb) - 14)/2.0, 38, 14));
+            UIImage *_icon =[UIImage imageNamed:@"icon_releseDocument_next"];
+            UIImageView *icon = allocAndInitWithFrame(UIImageView, frame(frameX(lb) - _icon.size.width - (iconBT - 38)/2.0, iconY + (frameHeight(lb) - 14)/2.0, 38, 14));
             icon.image = _icon;
             [_mainScrollView addSubview:icon];
         }
@@ -107,7 +107,7 @@ typedef NS_ENUM(int,ButtonActionTag) {
     _linklB = [UILabel createLabelWithFrame:frame(10,10, frameWidth(_linkAddressTextView), 28*SpacedFonts) text:@"请粘贴以http://开头的链接" fontSize:28*SpacedFonts textColor:LightBlackTitleColor textAlignment:NSTextAlignmentLeft inView:_linkView];
     _linklB.enabled = NO;
     
-   UIButton *_nextBtn =  [UIButton createButtonWithfFrame:frame(12, CGRectGetMaxY(_copyLink.frame) + 35, frameWidth(_mainScrollView) -24, 40) title:@"下一步" backgroundImage:nil iconImage:nil highlightImage:nil tag:ButtonActionTagNextStep inView:_mainScrollView];
+    UIButton *_nextBtn =  [UIButton createButtonWithfFrame:frame(12, CGRectGetMaxY(_copyLink.frame) + 35, frameWidth(_mainScrollView) -24, 40) title:@"下一步" backgroundImage:nil iconImage:nil highlightImage:nil tag:ButtonActionTagNextStep inView:_mainScrollView];
     _nextBtn.titleLabel.font =  Size(28);
     _nextBtn.backgroundColor = AppMainColor;
     _nextBtn.layer.masksToBounds = YES;
@@ -131,7 +131,7 @@ typedef NS_ENUM(int,ButtonActionTag) {
     }
     else
     {
-       _linklB.text =@"";
+        _linklB.text =@"";
     }
 }
 #pragma mark
@@ -145,7 +145,7 @@ typedef NS_ENUM(int,ButtonActionTag) {
     
     else
     if (sender.tag ==ButtonActionTagNextStep ) {
-        if (![_linkAddressTextView.text hasPrefix:@"http://"]||![_linkAddressTextView.text hasPrefix:@"https://"]) {
+        if (![_linkAddressTextView.text hasPrefix:@"http://"]&&![_linkAddressTextView.text hasPrefix:@"https://"]) {
             
             [[ToolManager shareInstance] showInfoWithStatus:@"请粘贴以http://开头的链接"];
             return;
@@ -153,15 +153,15 @@ typedef NS_ENUM(int,ButtonActionTag) {
         [[ToolManager shareInstance] showWithStatus:@"读取数据..."];
         NSMutableDictionary *parame = [Parameter parameterWithSessicon];
         [parame setObject:_linkAddressTextView.text forKey:@"url"];
-//        NSLog(@"parame =%@",parame);
+        //        NSLog(@"parame =%@",parame);
         __weak ReleaseDocumentsPackagetViewController *weakSelf =self;
         [XLDataService postWithUrl:LinkEncapsulation param:parame modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-//            NSLog(@"dataObj =%@",dataObj);
+            //            NSLog(@"dataObj =%@",dataObj);
             if (dataObj) {
                 
                 ReleaseDocumentsModal *modal = [ReleaseDocumentsModal mj_objectWithKeyValues:dataObj];
                 if (modal.rtcode ==1) {
-                     [[ToolManager shareInstance]dismiss];
+                    [[ToolManager shareInstance]dismiss];
                     EncapsulationData *data = allocAndInit(EncapsulationData);
                     data.title = modal.datas.title;
                     data.content = modal.datas.content;
@@ -183,21 +183,21 @@ typedef NS_ENUM(int,ButtonActionTag) {
                     data.product_industry = modal.datas.product_industry;
                     EncapsulationViewController *release =  allocAndInit(EncapsulationViewController);
                     release.data = data;
-                 
+                    
                     [weakSelf.navigationController pushViewController:release animated:NO];
-  
+                    
                 }
                 else
                 {
                     [[ToolManager shareInstance] showInfoWithStatus:modal.rtmsg];
                 }
-                }
+            }
             else
             {
                 [[ToolManager shareInstance] showInfoWithStatus];
             }
         }];
-            
+        
     }
 }
 - (void)didReceiveMemoryWarning {
@@ -206,13 +206,13 @@ typedef NS_ENUM(int,ButtonActionTag) {
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

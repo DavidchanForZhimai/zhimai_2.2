@@ -25,15 +25,15 @@
 @end
 typedef enum {
     
-  ButtonLoginActionTag  = 2,
-  ButtonForgetActionTag,
-//  ButtonRegirstActionTag
-
+    ButtonLoginActionTag  = 2,
+    ButtonForgetActionTag,
+    //  ButtonRegirstActionTag
+    
     
 }ButtonActionTag;
 
 @implementation LoginViewController{
-
+    
     
     UIScrollView *mainScrollView;
 }
@@ -94,7 +94,7 @@ typedef enum {
     if ([CoreArchive strForKey:rememberPassWord]) {
         _passWordtext.text = [CoreArchive strForKey:rememberPassWord];
     }
-
+    
     _passWordtext.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入密码" attributes:@{NSForegroundColorAttributeName: LightBlackTitleColor}];
     [mainScrollView addSubview:_passWordtext];
     
@@ -134,7 +134,7 @@ typedef enum {
         [weakSelf.remember setImage:highlightImage forState:UIControlStateHighlighted];
         
     }
-
+    
     _remember.didClickBtnBlock = ^
     {
         if (!weakSelf.isRemember) {
@@ -152,8 +152,8 @@ typedef enum {
         weakSelf.isRemember = !weakSelf.isRemember;
         
     };
-
-
+    
+    
     
     UIButton *loginBn = [UIButton createButtonWithfFrame:frame(cellX, CGRectGetMaxY(line2.frame) + 50*ScreenMultiple, frameWidth(line2), 40) title:nil backgroundImage:nil iconImage:nil highlightImage:nil tag:ButtonLoginActionTag];
     loginBn.backgroundColor = AppMainColor;
@@ -165,7 +165,7 @@ typedef enum {
     [mainScrollView addSubview:loginBn];
     
     
-   
+    
     
     UIButton *userforgetpassword = allocAndInitWithFrame(UIButton, frame(frameWidth(loginBn) - 72*ScreenMultiple, CGRectGetMaxY(loginBn.frame), 72*ScreenMultiple, frameHeight(loginBn)));
     [userforgetpassword setTitle:@"忘记密码？" forState:UIControlStateNormal];
@@ -180,60 +180,56 @@ typedef enum {
         mainScrollView.contentSize = CGSizeMake(frameWidth(mainScrollView), CGRectGetMaxY(userforgetpassword.frame) + 10);
         
     }
-
-
+    
+    
 }
 #pragma mark
 #pragma mark - buttonAction -
 - (void)buttonAction:(UIButton *)sender
 {
-  
-   if (sender.tag ==0) {
     
-       [self.navigationController popViewControllerAnimated:NO];
-      
+    if (sender.tag ==0) {
+        
+        [self.navigationController popViewControllerAnimated:NO];
+        
     }
-   else if (sender.tag ==ButtonForgetActionTag)
-   {
-       [self.navigationController pushViewController:allocAndInit(ForgetPasswordBeforeViewController) animated:NO];
-      
-   }
-
-  else if (sender.tag == ButtonLoginActionTag)
-  {
-      if (_userNametext.text.length!=11) {
-          [[ToolManager shareInstance] showInfoWithStatus:@"手机号码有误！"];
-          
-          return;
-      }
-      if (_passWordtext.text.length<
-          6) {
-          [[ToolManager shareInstance] showInfoWithStatus:@"请输入大于6位密码！"];
-          
-          return;
-      }
-      
-      [[ToolManager shareInstance] showWithStatus:@"登录..."];
-      NSMutableDictionary *sendcaptchaParam = [NSMutableDictionary dictionary];
-      if ([CoreArchive strForKey:DeviceToken]) {
-        [sendcaptchaParam setObject:[CoreArchive strForKey:DeviceToken] forKey:@"channelid"];
-       }
-      
-          [sendcaptchaParam setObject:_userNametext.text forKey:KuserName];
-          [sendcaptchaParam setObject:[_passWordtext.text md5]   forKey:passWord];
-          [sendcaptchaParam setObject:@"2" forKey:@"type"];
-          NSLog(@"sendcaptchaParam =%@",sendcaptchaParam);
-          [XLDataService postWithUrl:LoginURL param:sendcaptchaParam modelClass:nil responseBlock:^(id dataObj, NSError *error) {
-              if (error) {
-                  
-                  [[ToolManager shareInstance] showInfoWithStatus];
-              }
-              [self dealWithCode:dataObj];
-          }];
-     
-
-  }
-
+    else if (sender.tag ==ButtonForgetActionTag)
+    {
+        [self.navigationController pushViewController:allocAndInit(ForgetPasswordBeforeViewController) animated:NO];
+        
+    }
+    
+    else if (sender.tag == ButtonLoginActionTag)
+    {
+        if (_userNametext.text.length!=11) {
+            [[ToolManager shareInstance] showInfoWithStatus:@"手机号码有误！"];
+            
+            return;
+        }
+        if (_passWordtext.text.length<
+            6) {
+            [[ToolManager shareInstance] showInfoWithStatus:@"请输入大于6位密码！"];
+            
+            return;
+        }
+        
+        [[ToolManager shareInstance] showWithStatus:@"登录..."];
+        NSMutableDictionary *sendcaptchaParam = [Parameter parameterWithSessicon];
+        [sendcaptchaParam setObject:_userNametext.text forKey:KuserName];
+        [sendcaptchaParam setObject:[_passWordtext.text md5]   forKey:passWord];
+        [sendcaptchaParam setObject:@"2" forKey:@"type"];
+        NSLog(@"sendcaptchaParam =%@",sendcaptchaParam);
+        [XLDataService postWithUrl:LoginURL param:sendcaptchaParam modelClass:nil responseBlock:^(id dataObj, NSError *error) {
+            if (error) {
+                
+                [[ToolManager shareInstance] showInfoWithStatus];
+            }
+            [self dealWithCode:dataObj];
+        }];
+        
+        
+    }
+    
 }
 #pragma mark
 #pragma mark 验证
@@ -243,16 +239,16 @@ typedef enum {
         NSDictionary *msg = (NSDictionary *)dataObj;
         
         switch ([msg[@"rtcode"] integerValue]) {
-            case 1:
+                case 1:
             {
                 if (_isRemember) {
-                
+                    
                     [CoreArchive setStr:_passWordtext.text key:rememberPassWord];
                     
                 }
                 else
                 {
-                
+                    
                     [CoreArchive removeStrForKey:rememberPassWord];
                 }
                 [CoreArchive setStr:_userNametext.text key:rememberUserName];
@@ -260,14 +256,14 @@ typedef enum {
                 
                 [CoreArchive setStr:_userNametext.text key:KuserName];
                 [CoreArchive setStr:[_passWordtext.text md5] key:passWord];
-           
+                
                 [[ToolManager shareInstance] showSuccessWithStatus:@"登录成功！"];
                 //兼容旧用户推送
                 [CoreArchive setStr:@"push" key:@"once"];
-//
+                //
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-
-                     [[ToolManager shareInstance] LoginmianView];
+                    
+                    [[ToolManager shareInstance] LoginmianView];
                 });
                 
             }
@@ -287,13 +283,13 @@ typedef enum {
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

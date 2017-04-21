@@ -22,19 +22,19 @@
 typedef enum {
     
     ButtonVerificationCodeTag =2,
-
+    
     
 }ButtonActionTag;
 
 typedef enum {
     
     RequestTypeVerificationCode  = 0,
-  
+    
     
 }RequestType;
 @implementation RegistNextViewController
 {
- 
+    
     UITextField *_verificationCode;  //verificationCode
     UIButton    *_verificationCodeBtn; //verificationCodeBtn
     
@@ -49,7 +49,7 @@ typedef enum {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self navViewTitleAndBackBtn:@"注册"];
-   
+    
     
     BaseButton *next = [[BaseButton alloc]initWithFrame:frame(APPWIDTH - 60, StatusBarHeight, 60, NavigationBarHeight) setTitle:@"下一步" titleSize:28*SpacedFonts titleColor:BlackTitleColor textAlignment:NSTextAlignmentCenter backgroundColor:[UIColor clearColor] inView:self.view];
     
@@ -61,7 +61,7 @@ typedef enum {
             return;
         }
         [[ToolManager shareInstance] showWithStatus:@"注册提交..."];
-        NSMutableDictionary * sendcaptchaParam = allocAndInit(NSMutableDictionary);
+        NSMutableDictionary * sendcaptchaParam = [Parameter parameterWithSessicon];
         [sendcaptchaParam setObject:_phoneNum forKey:KuserName];
         [sendcaptchaParam setObject:[_password md5]  forKey:passWord];
         [sendcaptchaParam setObject:_verificationCode.text forKey:captchaCode];
@@ -79,12 +79,12 @@ typedef enum {
             }
             [weakSelf dealWithCode:dataObj];
         }];
-
+        
         
     };
-
-   
-
+    
+    
+    
     [self mainView];
 }
 - (void)dealWithCode:(id)dataObj
@@ -93,7 +93,7 @@ typedef enum {
         NSDictionary *msg = (NSDictionary *)dataObj;
         
         switch ([msg[@"rtcode"] integerValue]) {
-            case 1:
+                case 1:
             {
                 [CoreArchive setStr:_phoneNum key:KuserName];
                 [CoreArchive setStr:[_password md5] key:passWord];
@@ -101,7 +101,7 @@ typedef enum {
                 
                 [[ToolManager shareInstance] showSuccessWithStatus:@"注册成功！"];
                 
-
+                
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     RegistFinishViewController *finish = allocAndInit(RegistFinishViewController);
                     finish.invCode = _invCode;
@@ -212,7 +212,7 @@ typedef enum {
         NSDictionary *msg = (NSDictionary *)dataObj;
         
         switch ([msg[@"rtcode"] integerValue]) {
-            case 1:
+                case 1:
                 
                 [[ToolManager shareInstance] showInfoWithStatus:@"验证码已发，请查收！"];
                 [self uncannyClicker];
@@ -270,13 +270,13 @@ typedef enum {
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end
